@@ -1,0 +1,72 @@
+id: web_search
+name: Web Search
+type: tool_card
+version: "1.0.0"
+
+execution:
+  type: native
+  provider: openai
+  api_type: web_search_preview_2025_03_11
+  fallback_internal: google_search
+
+model_support:
+  gpt-5-nano: true
+  gpt-5-mini: true
+  gpt-5.1: true
+  all: false
+
+timing:
+  injection: false
+  function_calling: true
+  post_processing: false
+
+function_schema:
+  name: web_search
+  description: "Real-time web search executed natively by OpenAI during reasoning"
+  parameters:
+    type: object
+    properties:
+      query:
+        type: string
+        description: "Search query string"
+    required:
+      - query
+
+llm_guidance:
+  priority: high
+  value_proposition: "Real-time web search for current events, recent information, and live data"
+  usage_instructions: |
+    Use when user asks about:
+    - Current events or recent news
+    - Live data (stock prices, weather, etc.)
+    - Information that changes frequently
+    - URLs or specific websites
+  avoid_when: |
+    - Historical data that doesn't change
+    - Information already in context
+    - Internal company data
+
+cost:
+  per_call: 0.0
+  currency: USD
+
+performance:
+  avg_latency_ms: 500
+  timeout_ms: 5000
+
+validation:
+  required_params:
+    - query
+  param_rules:
+    query:
+      min_length: 1
+      max_length: 200
+
+metadata:
+  description: "OpenAI native web search tool"
+  category: search
+  status: stable
+  tags:
+    - native
+    - openai
+    - search

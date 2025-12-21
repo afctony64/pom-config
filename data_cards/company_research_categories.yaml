@@ -1,0 +1,134 @@
+id: company_research_categories
+collection: Company_source
+name: Company Research Categories
+type: data_card
+file: company_research_categories.yaml
+description: >
+  Fetch Company_source records with ONLY Cat (categorical) fields from all researchers.
+  Optimized for pivot tables and efficient data analysis with categorical dimensions.
+  Use this card when you need classifications without detailed LLM analysis.
+
+# Tagging system
+tags:
+  - research
+  - cat-fields
+  - categorical
+  - pivot-tables
+  - company-intelligence
+  - efficient
+
+target_scope: company_intelligence
+executor: graphql
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for efficient pivot tables
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql
+
+  # Root collection
+  collection: Company_source
+
+  # Use reverse traversal to fetch researcher collections
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Fetch one or more companies (high limit for full dataset queries)
+  limit: 10000
+  limit_default: 10000
+
+# 🎯 TAG-BASED FILTERING - Fetch ONLY Cat fields for efficient pivot tables
+# No explicit fields - let the system resolve based on tags!
+fields: {}
+
+# Specify tags to include for all researcher collections
+field_tags:
+  - Cat
+
+# Collection configuration: Company_source with auto-discovered nested references
+# System automatically discovers ALL 10 researcher references from Company_source schema
+# field_tags=[Cat] filters to only Cat fields across all discovered references
+collections:
+  - collection: Company_source
+    uses_field_set: standard  # Get minimal Company_source fields (identity only)
+    required: true
+    # ✅ AUTO-DISCOVERY: No need to list all researcher collections
+    # GraphQLGenerator automatically discovers all nested references:
+    # financial, industry, product, customer, leadership, competitor, partner, risk, journalist, social
+    # field_tags=[Cat] applied to all discovered references
+
+# Chat integration
+chat_integration:
+  best_for:
+    - "Pivot table analysis with categorical dimensions"
+    - "Classification-based filtering and grouping"
+    - "Efficient batch queries with minimal data transfer"
+    - "Quick categorical summaries"
+
+# Query behavior
+supports_relationships: true
+supports_aggregation: true
+supports_grouping: true
+requires_query_text: false
+
+# Performance settings
+default_limit: 100  # Higher default for categorical data (smaller payload)
+max_limit: 10000  # Allow full dataset queries for reports
+timeout_seconds: 30
+
+# Related collections
+related_collections:
+  - Company_source
+  - Company_research_financial
+  - Company_research_industry
+  - Company_research_product
+  - Company_research_customer
+  - Company_research_leadership
+  - Company_research_competitor
+  - Company_research_partner
+  - Company_research_risk
+  - Company_research_journalist
+  - Company_research_social
+
+# Documentation
+documentation:
+  overview: |
+    This data card fetches ONLY categorical (Cat) fields using tag-based filtering.
+    Optimized for pivot tables, cross-tabs, and efficient categorical analysis.
+    Smaller payload than full research data - ideal for dashboards and reports.
+
+  tag_strategy: |
+    CATEGORICAL FIELD SELECTION:
+
+    Company_source: uses_field_set='standard' (minimal identity fields)
+    Researcher collections: field_tags=[Cat]
+
+    This fetches ONLY:
+    - Company_source: Standard fields (accountName, accountType, state)
+    - Researchers: Cat fields (categorical classifications like useCaseCat, industryCat)
+
+    EXCLUDED:
+    - LLM fields (detailed analysis - use company_research_analysis instead)
+    - Research fields (raw data - use company_research instead)
+
+  usage_examples:
+    - name: "Pivot table: Industries by customer segment"
+      query: "data_card_id: company_research_categories, limit: 100"
+      notes: "Get all Cat fields for cross-tab analysis"
+
+    - name: "Filter by use case category"
+      query: "data_card_id: company_research_categories, where: {useCaseCat: 'Sales'}"
+
+    - name: "Quick categorical summary"
+      query: "data_card_id: company_research_categories, limit: 1000"
+      notes: "Efficient batch query with minimal data transfer"
+
+  comparison:
+    company_research: "All fields (Cat + LLM + research) - comprehensive but slower"
+    company_research_categories: "Cat fields only - fast and efficient for pivot tables"
+    company_research_analysis: "LLM fields only - detailed analysis without categories"
+

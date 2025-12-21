@@ -1,0 +1,198 @@
+# Fact Extraction Benchmark Results
+# Stores performance metrics and results from fact extraction tests
+# Used to compare models, chunk counts, and track improvements over time
+
+type: schema
+class: Fact_extraction_benchmark
+weaviate_instance: spark
+class_name: Fact_extraction_benchmark
+description: "Benchmark results for fact extraction across different models and configurations"
+
+vectorizer_config:
+  vectorizer: none  # No vectorization needed for benchmark metadata
+
+properties:
+  # Test Identification
+  - name: test_id
+    dataType: ["text"]
+    description: "Unique identifier for this test run (timestamp-based)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: domain
+    dataType: ["text"]
+    description: "Domain tested (e.g., yoco.com)"
+    index_filterable: true
+    index_searchable: true
+
+  - name: researcher_type
+    dataType: ["text"]
+    description: "Researcher type (product, industry, customer, etc.)"
+    index_filterable: true
+    index_searchable: false
+
+  # Model Configuration
+  - name: model_name
+    dataType: ["text"]
+    description: "LLM model used (e.g., llama3.1:70b-instruct-q4_K_M, mistral:7b-instruct)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: model_provider
+    dataType: ["text"]
+    description: "Model provider (ollama, openai, anthropic, etc.)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: chunk_count
+    dataType: ["int"]
+    description: "Number of chunks processed"
+    index_filterable: true
+    index_searchable: false
+
+  # Query Information
+  - name: query_text
+    dataType: ["text"]
+    description: "Semantic query used to retrieve chunks"
+    index_filterable: false
+    index_searchable: true
+
+  - name: query_vector_used
+    dataType: ["boolean"]
+    description: "Whether pre-computed query vector was used"
+    index_filterable: true
+    index_searchable: false
+
+  # Results
+  - name: facts
+    dataType: ["object[]"]
+    description: "Array of extracted facts"
+    nestedProperties:
+      - name: fact
+        dataType: ["text"]
+        description: "The extracted fact statement"
+      - name: category
+        dataType: ["text"]
+        description: "Fact category"
+      - name: confidence
+        dataType: ["text"]
+        description: "Confidence level"
+
+  - name: fact_count
+    dataType: ["int"]
+    description: "Total number of facts extracted"
+    index_filterable: true
+    index_searchable: false
+
+  - name: unique_fact_count
+    dataType: ["int"]
+    description: "Number of unique facts (after deduplication)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: duplicate_count
+    dataType: ["int"]
+    description: "Number of duplicate facts removed"
+    index_filterable: true
+    index_searchable: false
+
+  # Product/Entity Detection (for product researcher)
+  - name: products_found
+    dataType: ["text[]"]
+    description: "List of product names detected"
+    index_filterable: false
+    index_searchable: true
+
+  - name: product_count
+    dataType: ["int"]
+    description: "Number of unique products found"
+    index_filterable: true
+    index_searchable: false
+
+  # Performance Metrics
+  - name: processing_time_seconds
+    dataType: ["number"]
+    description: "Total processing time in seconds"
+    index_filterable: true
+    index_searchable: false
+
+  - name: facts_per_chunk
+    dataType: ["number"]
+    description: "Average facts per chunk (density)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: facts_per_minute
+    dataType: ["number"]
+    description: "Extraction rate (facts/minute)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: chunks_per_second
+    dataType: ["number"]
+    description: "Processing speed (chunks/second)"
+    index_filterable: true
+    index_searchable: false
+
+  # Comparison Metrics
+  - name: incremental_facts
+    dataType: ["int"]
+    description: "Facts gained from previous chunk count (e.g., 50 vs 25)"
+    index_filterable: false
+    index_searchable: false
+
+  - name: incremental_products
+    dataType: ["int"]
+    description: "Products gained from previous chunk count"
+    index_filterable: false
+    index_searchable: false
+
+  # Test Metadata
+  - name: test_timestamp
+    dataType: ["date"]
+    description: "When this test was run"
+    index_filterable: true
+    index_searchable: false
+
+  - name: baseline_test
+    dataType: ["boolean"]
+    description: "Whether this is a baseline test (for comparison)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: test_notes
+    dataType: ["text"]
+    description: "Optional notes about this test run"
+    index_filterable: false
+    index_searchable: true
+
+  # Configuration Details
+  - name: temperature
+    dataType: ["number"]
+    description: "LLM temperature setting"
+    index_filterable: false
+    index_searchable: false
+
+  - name: top_p
+    dataType: ["number"]
+    description: "LLM top_p setting"
+    index_filterable: false
+    index_searchable: false
+
+  - name: ollama_url
+    dataType: ["text"]
+    description: "Ollama endpoint used"
+    index_filterable: false
+    index_searchable: false
+
+multi_tenancy:
+  enabled: true
+  auto_tenant_creation: true
+  auto_tenant_activation: true
+
+replication_config:
+  factor: 1
+
+uuid_strategy:
+  strategy: timestamp
+  fields: [test_timestamp]

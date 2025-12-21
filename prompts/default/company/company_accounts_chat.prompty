@@ -1,0 +1,190 @@
+---
+# ⚠️ DEPRECATED: This prompt should move to Pomothy
+# Target location: Pomothy/core/config/prompts/company/company_accounts_chat.prompty
+# This file will be removed in a future release. Use the Pomothy version instead.
+deprecated: true
+deprecated_date: "2024-12"
+deprecated_canonical: "Pomothy/core/config/prompts/company/company_accounts_chat.prompty"
+
+$schema: ./openai-responses-schema.yaml
+description: "[DEPRECATED] Specialized AI assistant for answering questions about company account
+  data - SHOULD MOVE TO POMOTHY"
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: reasoning          # Primary: business question answering
+  complexity: medium            # Context-aware analysis
+  context_size: medium          # Search results and history
+  priority: quality             # Quality answers for business decisions
+file: core/config/prompts/company/company_accounts_chat.prompty
+group: company
+id: company_accounts_chat
+inputs:
+  collection_name:
+    default: Company_source
+    description: Collection name (should be Company_source)
+    type: string
+  conversation_history:
+    default: []
+    description: Previous conversation context
+    type: array
+  result_count:
+    default: 0
+    description: Number of search results found
+    type: integer
+  search_results:
+    default: []
+    description: Vector search results from Company_source
+    type: array
+  user_question:
+    default: What can you tell me about these companies?
+    description: Business question about company accounts
+    type: string
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-mini
+    type: pom-llm-proxy
+    tools: [web_search]  # Enable GPT-5 web search for source verification
+  parameters:
+    response_format:
+      json_schema:
+        name: CompanyAccountsChatResponse
+        schema:
+          additionalProperties: false
+          properties:
+            business_insights:
+              description: Key business insights derived from the data
+              items:
+                type: string
+              type: array
+            confidence:
+              description: Confidence level based on data quality and completeness
+              enum:
+              - high
+              - medium
+              - low
+              type: string
+            data_quality_notes:
+              description: Notes about data completeness or limitations
+              items:
+                type: string
+              type: array
+            recommended_actions:
+              description: Recommended business actions based on the analysis
+              items:
+                type: string
+              type: array
+            response:
+              description: Natural language response focused on business intelligence
+              type: string
+          required:
+          - response
+          - confidence
+          - business_insights
+          type: object
+        strict: true
+      type: json_schema
+name: Company Accounts Chat Assistant
+output_description: Chat responses for Company accounts data with business insights
+output_object: CompanyAccountsChatResponse
+system: 'You are a business intelligence assistant specializing in company account
+  analysis.
+
+
+  Your expertise includes:
+
+  - Company financial analysis (revenue, employees, growth patterns)
+
+  - Industry classification and market analysis
+
+  - Geographic and market segment insights
+
+  - Competitive landscape analysis
+
+  - Risk assessment and opportunity identification
+
+
+  Guidelines for Company Accounts analysis:
+
+  - Focus on business-relevant metrics (revenue, employees, industry, location)
+
+  - Identify patterns across companies (industry trends, geographic clusters)
+
+  - Highlight outliers or notable companies
+
+  - Provide context about market positioning
+
+  - Suggest business development opportunities
+
+  - Note data quality issues that might affect analysis
+
+
+  Always maintain a professional, analytical tone suitable for business decision-making.
+
+
+  CRITICAL: Return ONLY the JSON object. No additional text.
+
+  '
+schema_ids:
+- Company_source
+type: standard
+---
+
+user: |
+  Business Question: {{user_question}}
+  Collection: {{collection_name}}
+
+  {% if conversation_history and conversation_history|length > 0 %}
+  ## Previous Business Context:
+  {% for msg in conversation_history[-3:] %}
+  {{msg.type|upper}}: {{msg.content}}
+  {% endfor %}
+  {% endif %}
+
+  ## Company Data Analysis ({{result_count}} companies found):
+  {% if search_results and search_results|length > 0 %}
+  {% for result in search_results %}
+
+  ### Company {{loop.index}}:
+  {% if result._additional and result._additional.certainty %}
+  **Relevance Score:** {{(result._additional.certainty * 100)|round(1)}}%
+  {% endif %}
+
+  **Company Profile:**
+  {% for key, value in result.items() %}
+  {% if key != '_additional' and key != 'id' %}
+  {% if key == 'accountName' or key == 'name' %}
+  - **Company:** {{value}}
+  {% elif key == 'revenue' %}
+  - **Revenue:** ${{ "{:,}".format(value|int|default(0)) }}
+  {% elif key == 'employees' %}
+  - **Employees:** {{ "{:,}".format(value|int|default(0)) }}
+  {% elif key == 'industry' %}
+  - **Industry:** {{value}}
+  {% elif key == 'billingCountry' or key == 'country' %}
+  - **Country:** {{value}}
+  {% elif key == 'website' %}
+  - **Website:** {{value}}
+  {% else %}
+  - **{{key}}:** {{value}}
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {% else %}
+  No company data found matching your business question.
+  {% endif %}
+
+  ## Business Intelligence Task:
+  Analyze the company data above to answer: "{{user_question}}"
+
+  Consider:
+  - **Market Analysis:** What industries, company sizes, or geographic patterns emerge?
+  - **Growth Opportunities:** Which companies or segments show potential?
+  - **Competitive Landscape:** How do these companies compare in their markets?
+  - **Risk Assessment:** Any concerns about data quality or business risks?
+  - **Strategic Insights:** What business decisions could this data inform?
+
+  Provide actionable business intelligence that helps drive strategic decisions.

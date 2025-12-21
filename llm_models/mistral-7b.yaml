@@ -1,0 +1,165 @@
+id: "mistral:7b"
+name: Mistral 7B Instruct
+type: llm_model
+version: "1.0.0"
+provider:
+  name: ollama
+  api_type: ollama
+adapter_config:
+  type: ollama
+  model: mistral:7b-instruct
+  base_url: null
+  base_url_env: null
+parameters:
+  temperature: 0.7
+  max_tokens: 500
+  top_p: 0.9
+capabilities:
+  structured_output_json_basic: true
+  structured_output_json_strict: false
+  structured_output_other: []
+  structured_output: true
+  reasoning: false
+  tool_calling: false
+  streaming: true
+  vision: false
+  function_calling: false
+cost:
+  per_1m_input_tokens: 0.0
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: Free local inference
+performance:
+  avg_latency_ms: 2258.8
+  tokens_per_second: 29
+  context_window: 32768
+metadata:
+  description: Mistral 7B Instruct v0.2 - Local Ollama deployment
+  category: general
+  status: stable
+  release_date: '2024-01-01'
+  last_verified: '2025-11-05'
+  recommended_for:
+  - Fast local inference
+  - General text generation
+  - Development testing
+  - Privacy-sensitive tasks
+  not_recommended_for:
+  - Real-time applications
+  - Long context (>32K)
+  - Production at scale
+  last_benchmarked: '2025-11-12T14:06:51.895899'
+requirements:
+  gpu_vram_mb: 5000  # 7B model needs ~5GB VRAM (Q4 quantized)
+  system_ram_mb: 4000
+  cpu_cores: 2.0
+
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 24
+  max_concurrency: 48
+  # For 128GB DGX Spark: can run 20+ parallel requests easily
+  recommended_parallel_spark: 32
+  ollama_num_parallel: 32
+  ollama_max_loaded: 8  # Can load many 7B models simultaneously
+
+# === EXTERNAL MODEL CARDS (official sources) ===
+external_card:
+  huggingface: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3
+  ollama: https://ollama.ai/library/mistral
+  mistral: https://mistral.ai/news/announcing-mistral-7b/
+  paper: https://arxiv.org/abs/2310.06825
+
+# === VAST.AI SERVERLESS CONFIG ===
+vastai_config:
+  enabled: true
+  endpoint_name: "vLLM-Mistral-7B"
+  huggingface_model: "mistralai/Mistral-7B-Instruct-v0.3"
+  cold_workers: 0  # Cold start only - save costs
+  # NOTE: Disk must be generous on Vast.ai to avoid HF/vLLM download failures.
+  disk_space_gb: 100
+  gpu_requirements: "gpu_ram>=20 num_gpus=1 inet_down>100"
+  template_hash: "03fba9bdccaa8ace9ad931105d8e9eb4"  # pragma: allowlist secret
+  estimated_cold_start_seconds: 180
+  priority: 4  # Fast tier - lower priority
+
+# === RESOURCE CLASS (for benchmarking) ===
+resource_class:
+  class: B  # Balanced (6-11GB VRAM)
+  vram_gb: 5.0
+  parallel_capacity_spark: 20  # Max parallel on 128GB GPU
+  recommended_parallel: 16
+  throughput_tier: moderate
+  tokens_per_second_single: 29
+
+# === MODEL RANKING SYSTEM ===
+tier: C
+tier_rank: 4  # Fast C-tier
+
+# === BASE SCORES (from public benchmarks - DO NOT MODIFY) ===
+base_scores:
+  source: "Mistral AI Technical Report, October 2023"
+  source_url: "https://mistral.ai/news/announcing-mistral-7b/"
+  captured_date: "2025-12-05"
+  raw_benchmarks:
+    mmlu: 60.1
+    gsm8k: 47.5
+    arc_challenge: 55.2
+    hellaswag: 81.3
+    humaneval: 30.5
+    ifeval: 58.4
+    math: 28.6
+  notes: "Mistral 7B v0.2 - efficient 7B model"
+
+# === CALIBRATED DIMENSION SCORES (0-100 normalized) ===
+dimension_scores:
+  summarization: 65
+  reasoning: 55
+  instruction: 62
+  analysis: 58
+  coding: 48
+  speed: 82
+  context_efficiency: 65
+
+pom_benchmarks:
+  last_calibration: "2025-12-05"
+  calibration_version: "1.0"
+  prompts_tested: {}
+  aggregate:
+    avg_quality: 58
+    avg_latency_ms: 800
+    total_prompts_tested: 0
+
+benchmarks:
+  last_run: '2025-11-12T14:06:51.895886'
+  tests_passed: 5/5
+  summary:
+    avg_latency_ms: 2258.8
+    avg_tokens_per_second: 29.4
+    total_time_seconds: 11.29
+  tests:
+    simple_instruction:
+      latency_ms: 354.1
+      tokens_per_second: 24.0
+      time_seconds: 0.354
+      estimated_tokens: 8.5
+    structured_output:
+      latency_ms: 426.4
+      tokens_per_second: 15.8
+      time_seconds: 0.426
+      estimated_tokens: 6.8
+    reasoning:
+      latency_ms: 4427.0
+      tokens_per_second: 37.1
+      time_seconds: 4.427
+      estimated_tokens: 164.2
+    summarization:
+      latency_ms: 940.3
+      tokens_per_second: 38.6
+      time_seconds: 0.94
+      estimated_tokens: 36.2
+    code_generation:
+      latency_ms: 5146.0
+      tokens_per_second: 31.7
+      time_seconds: 5.146
+      estimated_tokens: 163.0

@@ -1,0 +1,159 @@
+# Data Card Template
+# Copy this template to create new data cards
+# IMPORTANT: Use 'graphql' executor as the standard for all data cards
+
+id: your_data_card_id
+collection: Your_Collection_Name
+name: Your Data Card Display Name
+type: data_card
+file: your_data_card_id.yaml
+description: >
+  Describe what this data card does, what data it returns, and when to use it.
+  Include information about field_set support if applicable.
+
+# 🎨 Frontend Display Control
+# Set to false for internal/technical cards that shouldn't appear in user dropdowns
+display: false  # This is a template, not a real card
+
+# Tagging system - helps with organization and discovery
+tags:
+  - your-domain
+  - data-type
+  - use-case
+
+target_scope: your_target_scope
+
+# ✅ STANDARD: Use 'graphql' for all data cards
+# GraphQL handles:
+# - Single and multi-target cross-references
+# - Large datasets without timeouts
+# - Consistent data structure
+# - Automatic optimization
+executor: graphql
+
+# Enable relationship traversal for cross-references
+relationship_support: true
+
+# Access control
+personas:
+  - "*"  # Or specify: ["admin", "analyst", etc.]
+
+# Query parameters
+parameters:
+  type: graphql  # Must match executor
+
+  # Root collection
+  collection: Your_Collection_Name
+
+  # Relationship traversal configuration
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Reference fields to include (if any)
+  references:
+    - reference_field_name
+
+  # Optional: Default filters
+  # filters:
+  #   - field: "status"
+  #     operator: "equal"
+  #     value: "active"
+
+  # Limits
+  limit: 50
+  limit_default: 50
+
+  # Field set configuration
+  field_set: standard
+  field_set_default: standard
+  field_set_options:
+    - standard
+    - extended
+
+# Field definitions for each field set
+field_sets:
+  standard:
+    fields:
+      - name: field1
+        type: text
+        source: property
+        description: Description of field1
+
+      - name: field2
+        type: number
+        source: property
+        description: Description of field2
+
+      # Reference fields (if applicable, flattened with underscore notation)
+      # - name: reference_field
+      #   type: text
+      #   source: reference
+      #   description: Field from referenced collection (underscore notation: reference_field)
+
+  extended:
+    fields:
+      # Include all standard fields
+      - name: field1
+        type: text
+        source: property
+        description: Description of field1
+
+      - name: field2
+        type: number
+        source: property
+        description: Description of field2
+
+      # Additional extended fields
+      - name: field3
+        type: text
+        source: property
+        description: Additional field for extended view
+
+# Model definitions for reference collections
+models:
+  Your_Collection_Name:
+    references:
+      reference_field_name:
+        target_collection: Referenced_Collection_Name
+        field_set: standard
+
+  Referenced_Collection_Name:
+    type: reference_model
+    fields:
+      - name: referenced_field1
+        type: text
+        source: property
+
+      - name: referenced_field2
+        type: text
+        source: property
+
+# Aggregation support (optional)
+aggregation_support:
+  group_by_fields:
+    - field1
+    - field2
+
+  aggregate_fields:
+    - field: field2
+      functions:
+        - count
+        - sum
+        - avg
+
+# Examples for documentation
+examples:
+  - description: Basic query with standard fields
+    code: |
+      result = await execute_data_card(
+          data_card_id="your_data_card_id",
+          limit=10
+      )
+
+  - description: Extended fields query
+    code: |
+      result = await execute_data_card(
+          data_card_id="your_data_card_id",
+          field_set="extended",
+          limit=10
+      )

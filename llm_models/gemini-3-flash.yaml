@@ -1,0 +1,49 @@
+# Gemini 3 Flash - LATEST Google fast model
+id: "gemini-3-flash"
+aliases:
+  - "gemini-2.5-flash"  # Cursor name
+name: Gemini 3 Flash
+type: llm_model
+version: "1.0.0"
+
+provider:
+  name: google
+  api_type: chat
+
+adapter_config:
+  type: google
+  model: gemini-2.5-flash  # Google API model name
+  base_url: null  # Handled by adapter
+
+parameters:
+  temperature: 0.7
+  max_tokens: 8192
+  top_p: 0.9
+
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: true
+  streaming: true
+  vision: true
+  function_calling: true
+  multimodal: true
+
+cost:
+  per_1m_input_tokens: 0.075
+  per_1m_output_tokens: 0.30
+  currency: USD
+
+performance:
+  avg_latency_ms: 400
+  tokens_per_second: 200
+  context_window: 1000000
+
+metadata:
+  description: "Google Gemini 3 Flash - fast and affordable"
+  category: general
+  status: stable
+  release_date: "2025-11-18"
+
+tier: A
+tier_rank: 3

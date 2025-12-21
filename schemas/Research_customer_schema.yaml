@@ -1,0 +1,891 @@
+type: research
+class: Research_customer
+id: Research_customer
+name: Research Customer
+description: "📚 RESEARCH REPOSITORY: Senior Customer Intelligence Intelligence\n\
+  \  \n  RESEARCHER: Senior Customer Intelligence Analyst (identity defined in seed\
+  \ data for researcher identity)\n  \n  KNOWLEDGE TYPE: Entity-specific customer\
+  \ research and analysis\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents\
+  \ one entity's complete customer intelligence\n  - Tenant Isolation: Complete data\
+  \ separation per entity\n  - Tenant Activation: Automatic tenant creation and activation\n\
+  \  - Scalability: Supports unlimited tenants with efficient partitioning\n  \n \
+  \ REPOSITORY CONTENTS:\n  - Senior Customer Intelligence Analysis: Comprehensive\
+  \ customer intelligence and insights\n  - Categorical Classifications: Machine-assigned\
+  \ categories for customer attributes\n  - Quality Metadata: Processing dates, source\
+  \ quality, review flags, confidence levels\n  - Evidence Links: References to supporting\
+  \ data and source materials\n  \n  DATA SOURCES:\n  - AI-analyzed entity websites\
+  \ and customer-specific content\n  - Industry reports and research publications\n\
+  \  - Public entity information and disclosures\n  - Validated against authoritative\
+  \ sources when available\n  \n  QUALITY STANDARDS:\n  - Confidence Scoring: High,\
+  \ Medium, Low, Inferred, Web-verified\n  - Evidence-Based Assessment: Classifications\
+  \ backed by concrete evidence\n  - Source Tracking: Links to originating Domain\
+  \ records\n  - Conservative Calibration: Prefer 'unknown' over incorrect data\n\
+  \  \n  INTEGRATION: Provides customer intelligence to support holistic entity analysis\n\
+  \  \n  VECTOR SEARCH CAPABILITIES: Named vectors for similarity search across key\
+  \ customer dimensions"
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+namedVectors:
+  useCaseVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - useCaseLLM
+    - valueProposition
+    - caseStudies
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  customerIndustrySegmentVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - customerSectorCat
+    - customerNAICS
+    - customerIndustrySegmentLLM
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: entityName
+  dataType:
+  - text
+  description: Entity name
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+- name: seed
+  dataType:
+  - boolean
+  description: Indicates if this record originated from seed data (true) or was generated
+    by research process (false)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: domain
+  dataType:
+  - text
+  description: Entity domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+- name: dataSource
+  dataType:
+  - text
+  description: Source of research data
+  sets:
+  - system
+- name: keyCustomers
+  dataType:
+  - text[]
+  description: Array of key customer names (publicly disclosed customer entities
+    with name and brief value summary)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - customer
+  - research
+  sets:
+  - extended
+  - prompt
+- name: keyCustomersIds
+  dataType:
+  - text[]
+  description: Parallel array of UUID5 IDs for keyCustomers (index-aligned, auto-generated)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - system
+  sets:
+  - extended
+  - prompt
+- name: keyCustomerSizeCat
+  dataType:
+  - text[]
+  description: Customer size segment for each keyCustomer (parallel to keyCustomers
+    array) - standardized size classification (e.g., "Enterprise", "SMB", "Mid-Market").
+    Use "Not disclosed" if segment unknown. MUST have same length as keyCustomers
+    array.
+  parallel_to: keyCustomers
+  enum:
+  - Enterprise
+  - Mid-Market
+  - SMB
+  - Startup
+  - Not disclosed
+  - Unknown
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - Cat
+  - research
+  sets:
+  - extended
+  - EnumCat
+- name: productUsed
+  dataType:
+  - text[]
+  description: Product or service each keyCustomer uses (parallel to keyCustomers
+    array) - e.g., "Premium Plan", "Professional Service", "Complete Package". Use
+    "Not disclosed" if product unknown. MUST have same length as keyCustomers array.
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: primaryUseCase
+  dataType:
+  - text[]
+  description: Primary use case for each keyCustomer (parallel to keyCustomers array)
+    - e.g., "Core operations", "Business management", "Service delivery". Use "Not
+    disclosed" if use case unknown. MUST have same length as keyCustomers array.
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: keyCustomerEvidence
+  dataType:
+  - text[]
+  description: Evidence/context found for each keyCustomer from page facts search
+    (parallel to keyCustomers array). Stores the factual basis for classifications
+    and extracted values.
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - evidence
+  sets:
+  - extended
+  - prompt
+- name: customerProfile
+  dataType:
+  - text
+  description: Detailed profile of typical customers including size, characteristics,
+    and demographics
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: useCaseLLM
+  dataType:
+  - text[]
+  description: Use Case Description - detailed descriptions for each classified use
+    case. Array supports multi-use-case classification (ordered by similarity score,
+    [0] is primary)
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+  metadata:
+    parallel_to: useCaseCat
+- name: primaryUseCases
+  dataType:
+  - text[]
+  description: Core use cases and applications - what customers actually use the product/service
+    for
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: valueProposition
+  dataType:
+  - text
+  description: Key value delivered to customers - why customers choose this solution
+  tags:
+  - research
+  - contextual
+  - extractable
+  sets:
+  - extended
+  - prompt
+- name: customerSuccess
+  dataType:
+  - text
+  description: Success metrics, satisfaction levels, and retention indicators
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: caseStudies
+  dataType:
+  - text[]
+  description: Array of concise case study summaries extracted from entity pages
+    - one line per customer success story with quantifiable results
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: growthOpportunity
+  dataType:
+  - text
+  description: Expansion and growth potential including new markets and upsell opportunities
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: customerSizeCat
+  dataType:
+  - text
+  description: Customer size category - best-fit representative value for the entity's
+    primary/dominant customer segment based on frequency, strategic importance, and
+    alignment with customer profile.
+  enum:
+  - Enterprise
+  - Mid-Market
+  - SMB
+  - Startup
+  - Unknown
+  tags:
+  - Cat
+  - customer
+  - size
+  - benchmark
+  sets:
+  - standard
+  - prompt
+  - EnumCat
+- name: customerSectorCat
+  dataType:
+  - text
+  description: Customer industry sector category - best-fit representative value for
+    the entity's primary customer industry sector based on frequency, strategic weighting,
+    and alignment with customer profile.
+  enum:
+  - Software
+  - Professional Services
+  - Financial Services
+  - Healthcare
+  - Manufacturing
+  - Construction
+  - Education
+  - Retail
+  - Agriculture
+  - Transportation
+  - Energy
+  - Real Estate
+  - Hospitality
+  - Media & Entertainment
+  - Telecommunications
+  - Government
+  - Non-Profit
+  - Multi-Vertical
+  - Unknown
+  tags:
+  - Cat
+  - customer
+  - industry
+  sets:
+  - standard
+  - prompt
+  - EnumCat
+- name: customerNAICS
+  dataType:
+  - text
+  description: 'Customer NAICS description - best-fit representative NAICS code/description
+    for the entity''s primary customer classification. Format: Full description with
+    code (e.g., "511210 - Software Publishers" or "722515 - Snack and Nonalcoholic
+    Beverage Bars"). LLM-generated, not a classification field.'
+  tags:
+  - customer
+  - industry
+  - LLM
+  sets:
+  - standard
+  - prompt
+- name: useCaseCat
+  dataType:
+  - text[]
+  description: Primary use case category - industry-specific semantic classification
+    using vector similarity with seed data. Use cases vary significantly by industry
+    (e.g., "Analytics" means different things in healthcare vs manufacturing vs financial
+    services). Requires quality seed examples covering target industries. Array supports
+    multi-use-case classification (ordered by similarity score, [0] is primary)
+  tags:
+  - Cat
+  - usecase
+  sets:
+  - standard
+  - VecCat
+  metadata:
+    parallel_anchor: true
+- name: useCaseSimilarities
+  dataType:
+  - number[]
+  description: Similarity scores for each classified use case (parallel to useCaseCat,
+    ordered highest to lowest, [0] is primary)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - classification
+  sets:
+  - system
+  metadata:
+    parallel_to: useCaseCat
+- name: useCaseMatchedSeeds
+  dataType:
+  - text[]
+  description: Names of seed records matched for each use case (parallel to useCaseCat,
+    [0] is primary)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - classification
+  sets:
+  - system
+  metadata:
+    parallel_to: useCaseCat
+- name: useCaseThreshold
+  dataType:
+  - number
+  description: Similarity threshold used for multi-use-case classification (typically
+    0.15)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - classification
+  sets:
+  - system
+- name: customerRegionCat
+  dataType:
+  - text
+  description: Primary geographic region where customers operate - assess based on
+    entity headquarters location, customer testimonials, currency indicators (USD,
+    EUR, GBP, etc.), regional regulatory mentions, and market focus statements. Select
+    the most prominent region, or 'Global' if serving multiple regions equally.
+  enum:
+  - North-America
+  - EMEA
+  - APAC
+  - Latin-America
+  - Global
+  - Unknown
+  tags:
+  - Cat
+  - region
+  - geography
+  sets:
+  - prompt
+  - system
+  - standard
+  - EnumCat
+- name: customerSector
+  dataType:
+  - text
+  description: Primary sector of entity's customer base (entity-level summary) -
+    top-level industry classification. Represents the dominant sector across all customers.
+    Mirrors Industry.sector field structure.
+  enum:
+  - Software
+  - Professional Services
+  - Financial Services
+  - Healthcare
+  - Manufacturing
+  - Construction
+  - Education
+  - Retail
+  - Agriculture
+  - Transportation
+  - Energy
+  - Real Estate
+  - Hospitality
+  - Media & Entertainment
+  - Telecommunications
+  - Government
+  - Nonprofit
+  - Unknown
+  tags:
+  - research
+  - industry
+  sets:
+  - prompt
+  - standard
+- name: customerIndustry
+  dataType:
+  - text
+  description: Primary industry of entity's customer base (entity-level summary)
+    - mid-level industry classification within sector. Represents the dominant industry
+    across all customers. Mirrors Industry.industry field structure.
+  enum:
+  - Enterprise Applications
+  - Data & AI Platforms
+  - Digital Workplace Collaboration
+  - Software Infrastructure & DevOps
+  - Cybersecurity & Privacy
+  - Payments & Fintech
+  - Vertical SaaS
+  - Developer Tools & Platforms
+  - Business Intelligence & Analytics
+  - IT Services & Consulting
+  - Management Consulting
+  - Legal Services
+  - Accounting & Tax Services
+  - Marketing & Advertising Services
+  - HR & Recruiting Services
+  - Engineering & Architecture Services
+  - Banking & Lending
+  - Investment Management
+  - Insurance
+  - Medical Devices & Equipment
+  - Pharmaceuticals & Biotechnology
+  - Healthcare Services & Facilities
+  - Health IT & Digital Health
+  - Unknown
+  tags:
+  - research
+  - industry
+  sets:
+  - prompt
+  - standard
+- name: customerIndustrySegmentLLM
+  dataType:
+  - text
+  description: Primary industry segment description for entity's customer base (entity-level
+    summary) - rich semantic description (50-150 words) of the primary customer segment.
+    Represents the most common or strategically important segment. Source for classification
+    to customerIndustrySegmentCat.
+  tags:
+  - LLM
+  - industry
+  - segment
+  sets:
+  - prompt
+  - extended
+- name: customerIndustrySegmentCat
+  dataType:
+  - text
+  description: Primary industry segment classification for entity's customer base
+    (entity-level summary) - standardized granular classification. Classified from
+    customerIndustrySegmentLLM using Industry collection as reference. Represents
+    the primary segment across all customers.
+  tags:
+  - Cat
+  - industry
+  - segment
+  sets:
+  - standard
+  - VecCat
+  metadata:
+    classifier_collection: Research_industry
+    classifier_vector: industrySegmentVector
+- name: valueDomain
+  dataType:
+  - text[]
+  description: Top-level business value classification for use cases. Categorizes
+    software by primary business outcome delivered (growth, efficiency, risk mitigation,
+    intelligence, etc.). Enables strategic analysis of value propositions across product
+    portfolio. Array supports multi-value-domain classification (ordered by similarity
+    score, [0] is primary)
+  enum:
+  - Growth_Revenue
+  - Efficiency_Automation
+  - Risk_Compliance
+  - Experience_Engagement
+  - Intelligence_Insights
+  - Innovation_Transformation
+  - Unknown
+  tags:
+  - Cat
+  - value
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    parallel_to: useCaseCat
+- name: keyCustomerSectorCat
+  dataType:
+  - text[]
+  description: Industry sector for each keyCustomer (parallel to keyCustomers array)
+    - Level 1 top-level industry classification (Software, Healthcare, Financial Services,
+    etc.). Enum values mirror Industry.sector field. Use "Unknown" if sector cannot
+    be determined. MUST have same length as keyCustomers array.
+  enum:
+  - Software
+  - Professional Services
+  - Financial Services
+  - Healthcare
+  - Manufacturing
+  - Construction
+  - Education
+  - Retail
+  - Agriculture
+  - Transportation
+  - Energy
+  - Real Estate
+  - Hospitality
+  - Media & Entertainment
+  - Telecommunications
+  - Government
+  - Nonprofit
+  - Unknown
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - Cat
+  - research
+  - industry
+  sets:
+  - extended
+  - prompt
+  - EnumCat
+- name: keyCustomerNAICS
+  dataType:
+  - text[]
+  description: NAICS description for each keyCustomer (parallel to keyCustomers array)
+    - 6-digit NAICS classification with name (e.g., "Software Publishers (511210)").
+    Use "Unknown" if NAICS cannot be determined. MUST have same length as keyCustomers
+    array.
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - industry
+  - LLM
+  sets:
+  - extended
+  - prompt
+- name: keyCustomerIndustryCat
+  dataType:
+  - text[]
+  description: Industry category for each keyCustomer (parallel to keyCustomers array)
+    - Level 2 mid-level industry classification within sector (e.g., "Enterprise Applications",
+    "Medical Devices", "Banking & Lending"). Enum values mirror Industry.industry
+    field. Use "Unknown" if industry cannot be determined. MUST have same length as
+    keyCustomers array.
+  enum:
+  - Enterprise Applications
+  - Data & AI Platforms
+  - Digital Workplace Collaboration
+  - Software Infrastructure & DevOps
+  - Cybersecurity & Privacy
+  - Payments & Fintech
+  - Vertical SaaS
+  - Developer Tools & Platforms
+  - Business Intelligence & Analytics
+  - IT Services & Consulting
+  - Management Consulting
+  - Legal Services
+  - Accounting & Tax Services
+  - Marketing & Advertising Services
+  - HR & Recruiting Services
+  - Engineering & Architecture Services
+  - Banking & Lending
+  - Investment Management
+  - Insurance
+  - Medical Devices & Equipment
+  - Pharmaceuticals & Biotechnology
+  - Healthcare Services & Facilities
+  - Health IT & Digital Health
+  - Unknown
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - Cat
+  - research
+  - industry
+  sets:
+  - extended
+  - prompt
+  - EnumCat
+- name: keyCustomerIndustrySegmentLLM
+  dataType:
+  - text[]
+  description: Specific industry segment/vertical for each keyCustomer (parallel to
+    keyCustomers array) - detailed categorization within the broader industry for
+    each customer. Array index aligns with keyCustomers array. Source for classification
+    to keyCustomerIndustrySegmentCat.
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - LLM
+  - industry
+  - segment
+  sets:
+  - extended
+  - prompt
+- name: keyCustomerIndustrySegmentCat
+  dataType:
+  - text[]
+  description: Granular industry segment classification for each keyCustomer (parallel
+    to keyCustomers array) - semantic classification using shared industrySegment
+    seed data from Industry research. Provides granular industry understanding across
+    hundreds of possible verticals (e.g., "Healthcare - Medical Devices" vs "Healthcare
+    - Telemedicine" vs "Healthcare - Pharma"). Uses same vector training as industrySegmentCat
+    for consistency. Array supports multi-segment classification (ordered by similarity
+    score, [0] is primary)
+  parallel_to: keyCustomers
+  tags:
+  - Cat
+  - industry
+  - segment
+  sets:
+  - standard
+  - VecCat
+  metadata:
+    parallel_to: keyCustomers
+    classifier_collection: Research_industry
+    classifier_vector: industrySegmentVector
+    source_llm: keyCustomerIndustrySegmentLLM
+- name: sourceQuality
+  dataType:
+  - text
+  description: 'Quality rating of external tool content provided for analysis [high,
+    medium, low, minimal]:
+
+    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
+    - "medium": Some pageData available but limited relevance or coverage
+
+    - "low": Minimal pageData, relying on source overview text only
+
+    - "minimal": No pageData, only basic entity metadata available
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - metadata
+  - system
+  tags:
+  - metadata
+- name: analysisConfidence
+  dataType:
+  - text
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
+    - "web_verified": Confirmed through web_search with multiple external sources
+
+    - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
+    - "medium": Based on indirect evidence or partial information
+
+    - "low": Limited information, educated guesses
+
+    - "inferred": No direct evidence, purely analytical inference
+
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - metadata
+  - system
+  - prompt
+  tags:
+  - confidence
+- name: reviewFlag
+  dataType:
+  - text
+  description: 'Review requirement [none, for_review, needs_verification]:
+
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
+    - no review needed
+
+    - "for_review": Medium confidence with some gaps, human validation helpful
+
+    - "needs_verification": Low confidence or pure inference, human review required
+
+
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
+    - these sources are reliable.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - metadata
+  - system
+  - prompt
+  tags:
+  - review
+- name: processedDate
+  dataType:
+  - text
+  description: Analysis completion date
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - metadata
+  - system
+  tags:
+  - metadata
+  - research
+  - timestamp
+- name: citations
+  dataType:
+  - text[]
+  description: URLs of sources used for analysis (from pageData and web_search)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: reasoning
+  dataType:
+  - text[]
+  description: AI reasoning steps and thought process for analysis
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: accountSizeScore
+  dataType:
+  - number[]
+  description: Account size/revenue potential score per key customer (1-10)
+  parallel_to: keyCustomers
+  sets:
+  - prompt
+- name: strategicValueScore
+  dataType:
+  - number[]
+  description: Strategic value score per key customer (1-10)
+  parallel_to: keyCustomers
+  sets:
+  - prompt
+- name: expansionPotentialScore
+  dataType:
+  - number[]
+  description: Expansion potential score per key customer (1-10)
+  parallel_to: keyCustomers
+  sets:
+  - prompt
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: uuid
+  description: UUID field
+  dataType:
+  - uuid
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: domain
+    dataType:
+    - uuid[]
+    description: Domain source UUIDs
+references:
+- name: domain
+  target_collection: Domain
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: Reference to the source Domain record for beacon traversal (uses research
+    record's own UUID)
+group: research
+weaviate_instance: cloud
+collection_name: Research_customer
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs
+reverse_references:
+- target_collection: Domain
+  target_property: customer
+  use_my_uuid: true
+  description: When this customer researcher is created, add its UUID to Domain.customer
+dependencies:
+- type: research
+data_sources:
+  primary: db:Domain
+  processor: prompty:entity_customer
+collection_groups:
+- research_collections

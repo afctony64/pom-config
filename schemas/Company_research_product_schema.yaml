@@ -1,0 +1,818 @@
+type: research
+class: Company_research_product
+description: '📚 RESEARCH REPOSITORY: Product & Technology Intelligence
+
+
+  RESEARCHER: Senior Product Intelligence Analyst (identity defined in seed data for
+  researcher identity)
+
+
+  KNOWLEDGE TYPE: Company-specific product analysis and technical intelligence
+
+
+  MULTI-TENANT ARCHITECTURE: Each tenant represents one company''s complete product
+  intelligence
+
+  - Tenant Isolation: Complete data separation per company
+
+  - Tenant Activation: Automatic tenant creation and activation
+
+  - Scalability: Supports unlimited tenants with efficient partitioning
+
+
+  REPOSITORY CONTENTS:
+
+  - Product Analysis: Core products, product categories, feature sets, value propositions
+
+  - Technology Stack: Technical architecture, frameworks, APIs, infrastructure, development
+  tools
+
+  - Implementation Profiles: Target audience, deployment patterns, integration requirements
+
+  - Pricing Models: Revenue models, pricing strategies, monetization approaches
+
+  - Product Maturity: Development stage, sophistication level, enterprise readiness
+
+  - Technical Complexity: Implementation difficulty, scalability, technical requirements
+
+  - Integration Ecosystem: API capabilities, connectors, partnership integrations
+
+  - Quality Metadata: Processing dates, source quality, review flags, confidence levels
+
+
+  DATA SOURCES:
+
+  - AI-analyzed product pages and technical documentation
+
+  - API documentation and developer resources
+
+  - Technology blogs and engineering content
+
+  - Technical specifications and architecture diagrams
+
+
+  QUALITY STANDARDS:
+
+  - Confidence Scoring: High, Medium, Low, Inferred, Web-verified
+
+  - Technical Validation: Evidence-based technical classifications
+
+  - Source Tracking: Links to originating Company_source records
+
+  - Balanced Calibration: Technical evidence-based assessment
+
+
+  INTEGRATION: Provides product intelligence to:
+
+  - Industry research (product-market fit validation, technical positioning)
+
+  - Customer research (product adoption patterns, use case analysis)
+
+  - Financial research (product revenue potential, pricing strategy)
+
+  - Partnership research (integration ecosystem, technical partnerships)
+
+  - Leadership research (product vision, technical expertise)
+
+
+  VECTOR SEARCH CAPABILITIES:
+
+  - productTypeVector: Find similar products by category and value proposition
+
+  - technicalComplexityVector: Match by technology stack and maturity
+
+  - implementationProfileVector: Discover similar target audiences and deployment
+  patterns
+
+  - pricingModelVector: Compare pricing and monetization strategies
+
+  - integrationProfileVector: Find companies with similar integration approaches
+
+  '
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+namedVectors:
+  productTypeVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - productTypeLLM
+    - valueProposition
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  technologyStackVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - technologyStackLLM
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  productMaturityVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - productMaturityLLM
+    - productMaturityCat
+    - productTypeLLM
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  pricingModelVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - pricingModelLLM
+    - productTypeLLM
+    - valueProposition
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  integrationProfileVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - integrationProfileLLM
+    - technologyStackLLM
+    - productTypeLLM
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: accountName
+  dataType:
+  - text
+  description: Company name
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+- name: seed
+  dataType:
+  - boolean
+  description: Indicates if this record originated from seed data (true) or was generated
+    by research process (false)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: domain
+  dataType:
+  - text
+  description: Company domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+- name: valueProposition
+  dataType:
+  - text
+  description: Value proposition for classification (supporting field)
+  tags:
+  - research
+  - contextual
+  - extractable
+  sets:
+  - extended
+  - prompt
+- name: dataSource
+  dataType:
+  - text
+  description: Source of classification data
+  sets:
+  - system
+- name: productTypeLLM
+  dataType:
+  - text[]
+  description: Product type description - detailed narrative explaining the product's
+    nature, capabilities, and how it delivers value. Single-element array containing
+    one comprehensive description paragraph.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: productTypeCat
+- name: productTypeCat
+  dataType:
+  - text[]
+  description: 'Primary product category - industry-specific semantic classification
+    using vector similarity. Product types vary dramatically by industry: software
+    platforms vs medical devices vs financial instruments vs manufacturing equipment.
+    Requires seed examples covering diverse product categories across target industries.
+    Array supports multi-product-type classification (ordered by similarity score,
+    [0] is primary)'
+  tags:
+  - Cat
+  - product
+  - benchmark
+  sets:
+  - VecCat
+  - array
+  metadata:
+    parallel_anchor: true
+- name: productTypeSimilarities
+  dataType:
+  - number[]
+  description: Similarity scores for each classified product type (parallel to productTypeCat,
+    ordered highest to lowest, [0] is primary)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - classification
+  sets:
+  - system
+  - array
+  metadata:
+    parallel_to: productTypeCat
+- name: productTypeMatchedSeeds
+  dataType:
+  - text[]
+  description: Names of seed records matched for each product type (parallel to productTypeCat,
+    [0] is primary)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - classification
+  sets:
+  - system
+  - array
+  metadata:
+    parallel_to: productTypeCat
+- name: productTypeThreshold
+  dataType:
+  - number
+  description: Similarity threshold used for multi-product-type classification (typically
+    0.15)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - classification
+  sets:
+  - system
+- name: productDomain
+  dataType:
+  - text[]
+  description: High-level product domain classification. Categorizes the company's
+    primary product offering by business domain. Array of 1-2 domains ordered by relevance.
+  enum:
+  - Application Software
+  - Data Analytics
+  - Infrastructure & DevOps
+  - Platform & Integration
+  - AI & ML
+  - Security & Compliance
+  - Professional Services
+  - Specialized Products
+  - Unknown
+  tags:
+  - Cat
+  - product
+  sets:
+  - EnumCat
+  - array
+  metadata:
+    parallel_to: productTypeCat
+    source_llm: productTypeLLM
+- name: technologyStackLLM
+  dataType:
+  - text[]
+  description: Technology Stack Description - detailed descriptions for each classified
+    technology stack. Array supports multi-stack classification (ordered by similarity
+    score, [0] is primary)
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: productTypeCat
+- name: technologyStackCat
+  dataType:
+  - text
+  description: Technical architecture approach - classify based on deployment model,
+    infrastructure requirements, and technology modernization. Consider cloud-native
+    vs legacy, containerization, serverless adoption, and tech stack modernity.
+  enum:
+  - Cloud-Native
+  - Serverless
+  - Containerized
+  - Modern-Stack
+  - Legacy-Modernized
+  - Enterprise-Stack
+  - Open-Source-Based
+  - Proprietary-Stack
+  - Unknown
+  tags:
+  - Cat
+  - technology
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: technologyStackLLM
+- name: pricingModelLLM
+  dataType:
+  - text
+  description: Pricing Model Description
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: pricingModelCat
+  dataType:
+  - text
+  description: 'Revenue and pricing structure. Requires EXPLICIT pricing evidence
+    - do not guess.
+
+
+    CLASSIFICATION RULES (explicit evidence required):
+
+    - Per-Seat-Subscription: Explicit "per seat", "per user", "per license" pricing
+    shown
+
+    - Usage-Based: Explicit "pay as you go", metered billing, stated API call pricing
+
+    - Tiered-Plans: Visible pricing tiers (Basic/Pro/Enterprise) with stated prices
+
+    - Enterprise-Custom: Explicit "Contact sales", "Custom pricing", stated enterprise-only
+
+    - Freemium: Explicit free tier + stated paid upgrade path
+
+    - Flat-Rate: Explicit single price shown for all features
+
+    - Credits-Based: Explicit credit/token system with stated pricing
+
+    - Revenue-Share: Explicit percentage fees, stated marketplace commission
+
+
+    USE Unknown WHEN:
+
+    - No pricing page found and no pricing mentioned
+
+    - Product type alone is NOT evidence of pricing model
+
+    - Missing pricing page does NOT automatically mean Enterprise-Custom
+
+    '
+  enum:
+  - Per-Seat-Subscription
+  - Usage-Based
+  - Tiered-Plans
+  - Enterprise-Custom
+  - Freemium
+  - Flat-Rate
+  - Credits-Based
+  - Revenue-Share
+  - Unknown
+  tags:
+  - Cat
+  - pricing
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: pricingModelLLM
+- name: integrationProfileLLM
+  dataType:
+  - text
+  description: Integration Profile Description
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: integrationProfileCat
+  dataType:
+  - text
+  description: 'Integration capability breadth. Requires EXPLICIT integration evidence
+    - do not guess.
+
+
+    CLASSIFICATION RULES (explicit evidence required):
+
+    - API-First: Visible public API docs, stated developer portal, explicit API focus
+
+    - Pre-Built-Integrations: Visible integration marketplace, stated 50+ connectors
+
+    - Standard-Integrations: Listed integrations (10-50), named platform connections
+
+    - Limited-Integrations: Few listed integrations (1-10), basic connectivity shown
+
+    - Custom-Development: Explicit SDK documentation, stated custom integration support
+
+    - Embedded-Platform: Explicit white-label offering, stated OEM partnerships
+
+    - Standalone-Only: Explicit standalone product, no integration mentions found
+
+
+    USE Unknown WHEN:
+
+    - No integration information found on website/docs
+
+    - Product category alone is NOT evidence of integration capability
+
+    - Absence of integration page does NOT automatically mean Standalone-Only
+
+    '
+  enum:
+  - API-First
+  - Pre-Built-Integrations
+  - Standard-Integrations
+  - Limited-Integrations
+  - Custom-Development
+  - Embedded-Platform
+  - Standalone-Only
+  - Unknown
+  tags:
+  - Cat
+  - integration
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: integrationProfileLLM
+- name: coreProducts
+  dataType:
+  - text
+  description: Primary/main product identification - which of their products is the
+    flagship or core offering (text summary for quick reference)
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: products
+  dataType:
+  - text[]
+  description: Array of product names (primary key for parallel product arrays)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  sets:
+  - prompt
+  - array
+- name: productsIds
+  dataType:
+  - text[]
+  description: Parallel array of UUID5 IDs for products (index-aligned, auto-generated)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - system
+  sets:
+  - prompt
+  - array
+- name: productEvidence
+  dataType:
+  - text[]
+  description: Evidence/context found for each product from page facts search (parallel
+    to products array). Stores the factual basis for classifications and extracted
+    values.
+  parallel_to: products
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - evidence
+  sets:
+  - prompt
+  - array
+- name: productCategories
+  dataType:
+  - text[]
+  description: Product category for each product (parallel to products array) - e.g.,
+    "Software", "Hardware", "Service", "Platform", "Tool". Use "Not disclosed" if
+    category unknown. MUST have same length as products array.
+  parallel_to: products
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  sets:
+  - prompt
+  - array
+- name: productPricing
+  dataType:
+  - text[]
+  description: Pricing information for each product (parallel to products array) -
+    e.g., "$99/mo", "One-time $499", "Usage-based". Use "Not disclosed" if pricing
+    unavailable for a product. MUST have same length as products array.
+  parallel_to: products
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  sets:
+  - prompt
+  - array
+- name: productFeatures
+  dataType:
+  - text[]
+  description: Key features summary for each product (parallel to products array)
+    - e.g., "Feature A, Feature B, Feature C", "Core functionality, automation, integrations",
+    "Standard tier, advanced tier, enterprise tier". Use "Not disclosed" if features
+    unknown. MUST have same length as products array.
+  parallel_to: products
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  sets:
+  - prompt
+  - array
+- name: productMaturityLLM
+  dataType:
+  - text
+  description: Descriptive analysis of product maturity stage and lifecycle position
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: productMaturityCat
+  dataType:
+  - text
+  description: 'Product lifecycle stage. Requires EXPLICIT product maturity evidence
+    - do not guess.
+
+
+    CLASSIFICATION RULES (explicit evidence required):
+
+    - Market-Leading: Explicit "market leader", stated dominant market share, analyst
+    rankings
+
+    - Mature: Stated 10+ years product history, explicit stable/maintenance mode
+
+    - Established: Explicit product-market fit claims, stated significant customer
+    numbers
+
+    - Growth: Explicit rapid feature development, stated customer growth metrics
+
+    - Emerging: Explicit MVP/beta status, stated "new product", early adopter program
+
+    - Declining: Explicit sunset/EOL announcements, stated migration path to alternatives
+
+
+    USE Unknown WHEN:
+
+    - No explicit product lifecycle stage mentioned
+
+    - Company age alone is NOT evidence of product maturity
+
+    - Funding stage alone is NOT evidence of product maturity
+
+    - Enterprise customers alone does NOT mean Established (they could be early adopters)
+
+    '
+  enum:
+  - Emerging
+  - Growth
+  - Established
+  - Mature
+  - Market-Leading
+  - Declining
+  - Unknown
+  tags:
+  - Cat
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: productMaturityLLM
+- name: processedDate
+  dataType:
+  - text
+  description: Date when the analysis was processed
+  sets:
+  - system
+  - metadata
+- name: sourceQuality
+  dataType:
+  - text
+  description: 'Quality rating of external tool content provided for analysis [high,
+    medium, low, minimal]:
+
+    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
+    - "medium": Some pageData available but limited relevance or coverage
+
+    - "low": Minimal pageData, relying on Company_source overview text only
+
+    - "minimal": No pageData, only basic company metadata available
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: reviewFlag
+  dataType:
+  - text
+  description: 'Review requirement [none, for_review, needs_verification]:
+
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
+    - no review needed
+
+    - "for_review": Medium confidence with some gaps, human validation helpful
+
+    - "needs_verification": Low confidence or pure inference, human review required
+
+
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
+    - these sources are reliable.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: analysisConfidence
+  dataType:
+  - text
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
+    - "web_verified": Confirmed through web_search with multiple external sources
+
+    - "llm_knowledge": Strong LLM training knowledge about well-known companies/entities
+
+    - "medium": Based on indirect evidence or partial information
+
+    - "low": Limited information, educated guesses
+
+    - "inferred": No direct evidence, purely analytical inference
+
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: citations
+  dataType:
+  - text[]
+  description: URLs of sources used for analysis (from pageData and web_search)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - array
+- name: reasoning
+  dataType:
+  - text[]
+  description: AI reasoning steps and thought process for analysis
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - array
+- name: homeProductPortfolioStrength
+  dataType:
+  - number
+  description: Overall product portfolio strength score (1-10)
+  sets:
+  - prompt
+  - extended
+- name: marketFitScore
+  dataType:
+  - number[]
+  description: Market fit score per product (1-10)
+  parallel_to: products
+  sets:
+  - prompt
+  - array
+- name: maturityAdoptionScore
+  dataType:
+  - number[]
+  description: Product maturity/adoption score per product (1-10)
+  parallel_to: products
+  sets:
+  - prompt
+  - array
+- name: revenueContributionScore
+  dataType:
+  - number[]
+  description: Revenue contribution score per product (1-10)
+  parallel_to: products
+  sets:
+  - prompt
+  - array
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: company
+    dataType:
+    - uuid[]
+    description: Company source UUIDs
+references:
+- name: company
+  target_collection: Company_source
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: Reference to the source company record for beacon traversal (uses research
+    record's own UUID)
+group: company
+weaviate_instance: cloud
+collection_name: Company_research_product
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs
+    fallback_to_uuid4: true
+reverse_references:
+- target_collection: Company_source
+  target_property: product
+  use_my_uuid: true
+  description: When this product researcher is created, add its UUID to Company_source.product
+dependencies:
+- type: research
+data_sources:
+  primary: db:Company_source
+  processor: prompty:company_product
+collection_groups:
+- company_collections
+id: Company_research_product
+name: Research Product

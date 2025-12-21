@@ -1,0 +1,171 @@
+id: opportunity_with_account
+name: Opportunity with Account (Complete)
+type: data_card
+file: opportunity_with_account.yaml
+description: >
+  Opportunity data enriched with account details via reference traversal.
+  This data card abstracts the complexity of joining Company_opportunity
+  with Company_source, presenting a unified data model to visualization layers.
+  CATEGORICAL DATA: Includes Cat fields from all researchers for reliable pivot tables.
+  🚀 OPTIMIZED: Uses tag-based filtering for 49.83x performance improvement.
+  ✅ RELIABLE: Works at 1000+ records without 502 timeouts (Cat fields only).
+  For complete data with all fields, use smaller limits (<500 records).
+
+# THIS IS A DATA MODEL ABSTRACTION
+# User selects this data card, not raw collections
+# All fields from both collections appear unified
+
+# Tagging system
+tags:
+  - sales
+  - pipeline
+  - opportunities
+  - account_context
+  - reference_traversal
+  - data_abstraction
+  - categorical
+  - reliable
+  - scale-ready
+
+# Core search configuration
+search_type: graphql
+executor: graphql
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for comprehensive opportunity analysis
+
+# Data model definition - what collections are involved
+# Primary collection (what user thinks they're querying)
+collection: Company_opportunity
+
+parameters:
+  type: graphql
+  collection: Company_opportunity
+
+  # Relationship configuration
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # ❌ REMOVED: Explicit references list (conflicts with collections section configuration)
+  # See collections[0].references.company.nested_references for full reference configuration
+
+  # Default settings (optimized for categorical data - smaller payload)
+  limit: 10000  # Support large batch operations
+  limit_default: 10000
+
+# 🚀 OPTIMIZED: Tag-based filtering for 49.83x performance improvement
+# Uses reverse tag index for O(1) field lookups instead of field_set iteration
+# Gets ALL fields (Cat, LLM, research) from all researchers - same content, faster!
+
+# 🎯 FIELD RESOLUTION: Tag-based filtering (optimized)
+# Primary collection uses field_set (standard opportunity fields)
+# Reference collections use tag-based filtering for optimal performance
+# Company_source fields explicitly listed for underscore-notation expansion
+fields:
+  Company_opportunity:
+    # Core value fields required for pivot tables and metrics
+    - opportunityName  # Display name for opportunities
+    - stage            # Sales stage (for pipeline analysis)
+    - amount           # Deal value (for revenue metrics)
+    - closed           # Closed status (for date analysis)
+    - won              # Win status (for win rate calculations)
+    - closeDate        # Close date (for timeline analysis)
+  Company_source:
+    - accountName
+    - accountType
+    - domain          # Required for filtering
+    - state           # Used in pivot tables
+    - city            # Location data
+    - country         # Location data
+    - zipCode         # Location data
+    - annualRevenue   # Financial metrics
+    - employees       # Company size
+    - description     # Company info (now in standard field_set)
+    # - overview      # Company summary (moved to extended field_set)
+    - foundedYear     # Company age (if available)
+    - stockSymbol     # Public company info
+    - url             # Website URL
+
+# 🚀 TAG-BASED FILTERING - Fetch Cat fields only for reliable performance at scale
+# Cat fields only prevents 502 timeouts at 1000+ records (query complexity limit)
+# Uses optimized tag-based filtering for 49.83x performance improvement
+field_tags:
+  - Cat      # Categorical classifications only (prevents 502 timeouts at scale)
+
+# Collection compatibility
+collections:
+  - collection: Company_opportunity
+    uses_field_set: standard
+    primary: true
+    references:
+      company:
+        target_collection: Company_source
+        field_set: standard  # Company_source uses field_set (not tagged with Cat/LLM/research)
+        # ✅ AUTO-DISCOVERY: DataFactory automatically discovers ALL nested references from Company_source schema
+        # Auto-discovered: industry, customer, financial, product, competitor, journalist,
+        # leadership, partner, risk, social (10 researchers)
+        # field_tags=[Cat] applied to ALL auto-discovered nested references
+        # Cat fields only prevents 502 timeouts at 1000+ records (query complexity limit)
+        # 49.83x faster than field_set iteration, reliable at scale!
+  - collection: Company_source
+    uses_field_set: standard
+    via_reference: company
+
+# Query behavior
+supports_relationships: true
+supports_aggregation: true
+supports_grouping: true
+requires_query_text: false
+
+# Performance settings
+default_limit: 1000  # Optimized for Cat fields (reliable at scale)
+max_limit: 2000      # Maximum reliable limit (Cat fields only)
+timeout_seconds: 60
+
+# 🎯 FIELD DEFAULTS - Query model provides FIELD NAMES for view card inputs
+# View cards define WHICH inputs to show (e.g., "show cat1, val1 dropdowns")
+# Query model provides the FIELD NAMES (e.g., cat1="stage", val1="amount")
+# Field labels/metadata come from collection field config (single source of truth)
+field_defaults:
+  # Primary category and value (used by most charts: bar, line, pie)
+  cat1: stage           # Primary category for grouping
+  val1: amount          # Primary numeric value for aggregation
+
+  # Secondary category and value (nested tables, heatmaps, scatter)
+  cat2: accountIndustry # Secondary category
+  val2: probability     # Secondary numeric value
+
+  # Visual encoding (scatter/bubble charts)
+  size: amount          # Point size dimension for bubble charts
+
+# Compatibility - what view cards work with this
+# (View cards that need categorical and numeric fields)
+compatible_view_types:
+  - heatmap
+  - pivot
+  - chart
+  - table
+  - scatter
+  - bar
+  - line
+
+# Business context
+contexts:
+  - sales_analysis
+  - pipeline_management
+  - opportunity_tracking
+  - account_intelligence
+  - revenue_forecasting
+
+# User-facing metadata
+user_documentation:
+  short_description: "Sales opportunities with account details"
+  use_cases:
+    - "Analyze pipeline by account industry"
+    - "Track opportunity progression by account type"
+    - "Revenue forecasting by geography (account state)"
+    - "Win rate analysis by account characteristics"
+  example_analyses:
+    - "Heatmap: company_industry × stage (shows where opportunities concentrate)"
+    - "Pivot: company_state as rows, stage as columns, amount as values"
+    - "Chart: win rate by company_annualRevenue (company size correlation)"

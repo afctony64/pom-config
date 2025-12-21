@@ -1,0 +1,316 @@
+type: visitor
+class: Visitor_tracking
+description: B2B visitor tracking events for identifying prospect companies visiting
+  your website
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: true
+  indexNullState: true
+  indexPropertyLength: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: uuid
+  description: Unique identifier for the visitor event
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - identity
+  - required
+- name: visitor_id
+  description: Anonymous visitor identifier (hashed for privacy)
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - identity
+  - privacy
+- name: session_id
+  description: Session identifier for grouping visits
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - identity
+  - session
+- name: timestamp
+  description: ISO 8601 timestamp of the visit
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - required
+  - temporal
+- name: ip_address
+  description: Hashed IP address for privacy compliance
+  dataType:
+  - text
+- name: company_domain
+  description: Identified company domain from reverse IP lookup
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - company
+  - identity
+- name: company_name
+  description: Identified company name from CRM match
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - company
+  - identity
+- name: company_uuid
+  description: UUID of matched company in Company_source collection
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - beacon
+  - company
+- name: is_prospect
+  description: Boolean indicating if visitor is from a known prospect/CRM company
+  dataType:
+  - boolean
+  sets:
+  - extended
+  tags:
+  - company
+  - sales
+- name: page_url
+  description: Full URL of the page visited
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - page
+  - required
+- name: page_path
+  description: Path portion of the URL
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - analytics
+  - page
+- name: page_title
+  description: Title of the page visited
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - metadata
+  - page
+- name: referrer_url
+  description: Referrer URL (where visitor came from)
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - analytics
+  - referrer
+- name: referrer_domain
+  description: Domain of the referrer
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - analytics
+  - referrer
+- name: user_agent
+  description: Browser user agent string
+  dataType:
+  - text
+- name: device_type
+  description: Device type (desktop, mobile, tablet)
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - analytics
+  - device
+- name: browser
+  description: Browser name
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - analytics
+  - device
+- name: os
+  description: Operating system
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - analytics
+  - device
+- name: country
+  description: Country from IP geolocation
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - location
+- name: city
+  description: City from IP geolocation
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - location
+- name: region
+  description: Region/state from IP geolocation
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - location
+- name: organization
+  description: Organization name from reverse IP lookup
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - company
+  - ip
+- name: isp
+  description: Internet service provider from IP lookup
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - ip
+  - network
+- name: connection_type
+  description: Connection type (corporate, residential, mobile, etc.)
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - ip
+  - network
+- name: time_on_page
+  description: Time spent on page in seconds
+  dataType:
+  - number
+  sets:
+  - extended
+  tags:
+  - behavior
+  - metrics
+- name: utm_source
+  description: UTM source parameter
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - campaign
+  - marketing
+- name: utm_medium
+  description: UTM medium parameter
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - campaign
+  - marketing
+- name: utm_campaign
+  description: UTM campaign parameter
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - campaign
+  - marketing
+- name: utm_term
+  description: UTM term parameter
+  dataType:
+  - text
+- name: utm_content
+  description: UTM content parameter
+  dataType:
+  - text
+- name: event_type
+  description: Type of event (pageview, session_start, session_end, etc.)
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - analytics
+  - event
+- name: match_confidence
+  description: Confidence score of company match (0-1)
+  dataType:
+  - number
+  sets:
+  - extended
+  tags:
+  - matching
+- name: match_method
+  description: Method used to identify company (reverse_ip, domain, manual, etc.)
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - matching
+uuid_strategy:
+  fields:
+  - field: session_id
+    namespace: URL
+    suffix: timestamp
+    description: Generate UUID from session_id + timestamp for unique events
+dependencies:
+- type: analytical
+  requires:
+  - Company_source
+data_sources:
+  company_collection: Company_source
+collection_groups:
+- visitor_analytics
+- sales_intelligence
+schema_config:
+  additional_properties: false
+id: Visitor_tracking
+name: Visitor Tracking
+group: visitor
+weaviate_instance: spark
+devtype: Production

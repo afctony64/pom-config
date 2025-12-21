@@ -1,0 +1,147 @@
+---
+name: Enum Classifier
+description: |
+  Prompt Tool for enum Cat field classification.
+
+  Schema-aware: Pomflow extracts enum fields, values, and descriptions.
+  Input-flexible: Works with research_output OR record properties.
+
+  Supports:
+  - Single-value enum fields (e.g., customerSizeCat → "Enterprise")
+  - Parallel array enum fields (e.g., keyCustomerSizeCat → ["SMB", "Enterprise"])
+
+  AI Tool Type: Prompt
+  Modes: standalone, post_execution, function_calling
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: instruction        # Primary: classification to enum values
+  complexity: simple            # Straightforward enum selection
+  context_size: small           # Enum fields and context
+  priority: speed               # High-volume batch classification
+
+inputs:
+  record:
+    type: object
+    description: Company record with properties
+  research_output:
+    type: object
+    description: LLM fields from research prompt (or record properties)
+  enum_fields:
+    type: object
+    description: Auto-injected by pomflow from schema (single-value enum fields)
+  parallel_enum_fields:
+    type: object
+    description: Auto-injected parallel array enum fields (e.g., keyCustomerSizeCat)
+  parallel_array_context:
+    type: object
+    description: Element-specific context from parallel_array_enricher (Issue #188)
+  field_context:
+    type: object
+    description: Auto-injected field descriptions and relationships
+
+model:
+  api: chat
+  configuration:
+    # Use OpenAI as primary (Ollama fallback requires local server)
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    temperature: 0.1
+    max_tokens: 2000
+
+processing_config:
+  schema_aware: true
+  extract:
+    - enum_fields
+    - parallel_enum_fields
+    - field_context
+---
+
+system:
+You are a **Classification Specialist**. Your task is to classify enum Cat fields based on research context.
+
+## Instructions
+
+1. Read the research context carefully
+2. For **single-value fields**: select the BEST matching value from allowed options
+3. For **parallel array fields**: classify EACH item in the source array, return an array of the same length
+4. Use the field description as guidance for classification
+5. Return ONLY a flat JSON object with field names and values/arrays
+6. Use exact enum values - no modifications
+7. Use "Unknown" only if you truly cannot determine from context
+
+## Output Format
+
+```json
+{
+  "fieldNameCat": "EnumValue",
+  "parallelFieldCat": ["Value1", "Value2", "Value3"]
+}
+```
+
+No explanations. No markdown. Just the JSON object.
+
+user:
+{% set props = record.properties if record.properties else record %}
+## Company Context
+
+**Company:** {{ props.get('accountName') or props.get('domain') or 'Unknown' }} ({{ props.get('domain') or 'Unknown' }})
+{% if props.get('industry') %}**Industry:** {{ props.get('industry') }}{% endif %}
+{% if props.get('description') %}**Description:** {{ props.get('description')[:300] }}...{% endif %}
+
+## Research Output
+
+{% if research_output and research_output is mapping %}
+{% for key, value in research_output.items() %}
+{% if value %}
+**{{ key }}:** {{ value }}
+{% endif %}
+{% endfor %}
+{% else %}
+No research output provided.
+{% endif %}
+
+## Single-Value Enum Fields
+
+{% if enum_fields and enum_fields is mapping %}
+{% for field_name, config in enum_fields.items() %}
+### {{ field_name }}
+{% if config and config.field_description %}**Guidance:** {{ config.field_description }}{% endif %}
+{% if config and config.enum_values %}**Valid Values:** {{ config.enum_values | join(', ') }}{% endif %}
+{% if config and config.source_field %}**Source Field:** {{ config.source_field }}{% endif %}
+
+{% endfor %}
+{% else %}
+No single-value enum fields.
+{% endif %}
+
+## Parallel Array Enum Fields
+
+{% if parallel_enum_fields and parallel_enum_fields is mapping %}
+{% for field_name, config in parallel_enum_fields.items() %}
+### {{ field_name }} (parallel to {{ config.parallel_to }})
+{% if config and config.field_description %}**Guidance:** {{ config.field_description }}{% endif %}
+{% if config and config.enum_values %}**Valid Values:** {{ config.enum_values | join(', ') }}{% endif %}
+{% set anchor = config.parallel_to %}
+{% set source_array = props.get(anchor) or research_output.get(anchor) or [] %}
+{% set element_context = parallel_array_context.get(anchor, {}) if parallel_array_context else {} %}
+{% if source_array %}
+**Required Output Length:** {{ source_array | length }} (one classification per item)
+
+{% for element in source_array %}
+**{{ element }}:**{% if element_context.get(element) %} 📄 {{ element_context[element][:200] }}...{% else %} _(no specific context)_{% endif %}
+
+{% endfor %}
+{% else %}
+**Source Array:** Empty or not found
+{% endif %}
+
+{% endfor %}
+{% else %}
+No parallel array enum fields.
+{% endif %}
+
+## Your Classification
+
+Return a JSON object with your classifications. For parallel array fields, return an array with one value per source item.

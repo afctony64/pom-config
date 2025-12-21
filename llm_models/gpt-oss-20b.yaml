@@ -1,0 +1,149 @@
+# ==============================================================================
+# MODEL CARD: gpt-oss:20b
+# ==============================================================================
+# GPT-OSS 20B - Balanced open source model
+# Good quality with reasonable resource requirements
+# ==============================================================================
+
+id: "gpt-oss:20b"
+name: GPT-OSS 20B
+type: llm_model
+version: "1.0.0"
+
+# === PROVIDER CONFIGURATION ===
+provider:
+  name: ollama
+  api_type: ollama
+
+# === ADAPTER CONFIGURATION ===
+adapter_config:
+  type: ollama
+  model: "gpt-oss:20b"
+  base_url: null
+  base_url_env: OLLAMA_HOST
+
+# === DEFAULT PARAMETERS ===
+parameters:
+  temperature: 0.7
+  max_tokens: 3000
+  top_p: 0.9
+
+# === CAPABILITIES ===
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: false
+  streaming: true
+  vision: false
+  function_calling: false
+  multimodal: false
+
+# === COST ===
+cost:
+  per_1m_input_tokens: 0.0
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: "Free local inference on DGX Spark"
+
+# === PERFORMANCE ===
+performance:
+  avg_latency_ms: 2200
+  tokens_per_second: 30
+  context_window: 24576  # Default 24K for 12B+ models - ratchet adjusts dynamically
+
+# === METADATA ===
+metadata:
+  description: "GPT-OSS 20B - Balanced 20.9B parameter open source model. Good quality with reasonable throughput."
+  category: general
+  status: stable
+  release_date: "2025-01-01"
+  last_verified: "2025-12-05"
+  family: gpt-oss
+  family_tier: quality
+  recommended_for:
+    - "General purpose generation"
+    - "Balanced quality/speed tasks"
+    - "Batch processing"
+  not_recommended_for:
+    - "Maximum quality (use 120b)"
+    - "Long context tasks (32K limit)"
+
+# === HARDWARE REQUIREMENTS ===
+requirements:
+  gpu_vram_mb: 13800
+  system_ram_mb: 16000
+  cpu_cores: 4.0
+
+# === HARDWARE-SPECIFIC OPTIMIZATION ===
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 6
+  max_concurrency: 8
+  dgx_spark:
+    optimal_parallel_workers: 8
+    recommended_batch_size: 1
+    memory_usage_gb: 13.8
+    estimated_throughput: 0.4
+    tokens_per_second: 30
+    notes: "Balanced capacity on Spark"
+  gpu_24gb_plus:
+    optimal_parallel_workers: 1
+    recommended_batch_size: 1
+  gpu_8gb_plus:
+    optimal_parallel_workers: 0
+    recommended_batch_size: 0
+    notes: "Requires 14GB+ VRAM"
+  cpu_only:
+    optimal_parallel_workers: 1
+    recommended_batch_size: 1
+    notes: "Very slow"
+
+# === RESOURCE CLASS ===
+# === VAST.AI SERVERLESS CONFIG ===
+vastai_config:
+  enabled: true
+  endpoint_name: "vLLM-GPT-OSS-20B"
+  huggingface_model: "meta-llama/Llama-3.1-8B-Instruct"  # Placeholder - update with actual model
+  cold_workers: 0  # Cold start only - save costs
+  # NOTE: Even when using placeholder HF model, keep disk conservative to avoid host download failures.
+  disk_space_gb: 150
+  gpu_requirements: "gpu_ram>=24 num_gpus=1 inet_down>100"
+  template_hash: "03fba9bdccaa8ace9ad931105d8e9eb4"  # pragma: allowlist secret
+  estimated_cold_start_seconds: 180
+  priority: 6
+
+resource_class:
+  class: C
+  vram_gb: 13.8
+  parallel_capacity_spark: 9
+  recommended_parallel: 8
+  throughput_tier: moderate
+  tokens_per_second_single: 30
+
+# ==============================================================================
+# MODEL RANKING SYSTEM
+# ==============================================================================
+tier: A
+tier_rank: 3
+
+# === DIMENSION SCORES (0-100) ===
+dimension_scores:
+  summarization: 84
+  reasoning: 86
+  instruction: 84
+  analysis: 85
+  coding: 80
+  speed: 38
+  context_efficiency: 70
+
+# === POM-SPECIFIC BENCHMARKS ===
+pom_benchmarks:
+  last_calibration: "2025-12-05"
+  calibration_version: "2.0"
+  prompts_tested: {}
+  aggregate:
+    avg_quality: 84
+    avg_latency_ms: 2200
+    total_prompts_tested: 0
+
+benchmarks: {}

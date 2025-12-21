@@ -1,0 +1,48 @@
+# Schema for Stress Test Collection
+# Used by tests/extended/test_weaviate_stress.py
+
+type: core
+class: StressTestCollection
+description: Collection for Weaviate stress testing
+
+# Use text2vec-transformers for vector search (available on spark/mac-weaviate)
+vectorizer: text2vec-transformers
+moduleConfig:
+  text2vec-transformers:
+    vectorizeClassName: false
+
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+
+properties:
+  - name: uuid
+    dataType:
+      - uuid
+    description: Unique identifier
+
+  - name: name
+    dataType:
+      - text
+    description: Record name
+
+  - name: description
+    dataType:
+      - text
+    description: Record description
+
+  - name: value
+    dataType:
+      - number
+    description: Numeric value for testing
+
+  - name: tags
+    dataType:
+      - "text[]"
+    description: Tags array
+
+  - name: active
+    dataType:
+      - boolean
+    description: Active flag

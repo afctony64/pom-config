@@ -1,0 +1,407 @@
+---
+# ⚠️ DEPRECATED: This prompt has been migrated to PomAI
+# Canonical location: PomAI/core/config/prompts/company/company_sales_brief_intelligence.prompty
+# This file will be removed in a future release. Use the PomAI version instead.
+deprecated: true
+deprecated_date: "2024-12"
+deprecated_canonical: "PomAI/core/config/prompts/company/company_sales_brief_intelligence.prompty"
+
+$schema: ./openai-responses-schema.yaml
+description: "[DEPRECATED] Comprehensive sales-focused company intelligence briefing combining all
+  available data sources for sales professionals - USE PomAI VERSION"
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: analysis           # Primary: synthesizing intelligence
+  complexity: complex           # Multi-source synthesis
+  context_size: large           # Multiple data sources
+  priority: quality             # Quality critical for sales briefs
+file: core/config/prompts/company/company_sales_brief_intelligence.prompty
+group: company
+id: company_sales_brief_intelligence
+inputs:
+  company_customer_data:
+    default: {}
+    description: Customer intelligence from Company_customer
+    type: object
+  company_financial_data:
+    default: {}
+    description: Financial intelligence from Company_financial
+    type: object
+  company_industry_data:
+    default: {}
+    description: Industry intelligence from Company_industry
+    type: object
+  company_leadership_data:
+    default: {}
+    description: Leadership intelligence from Company_leadership
+    type: object
+  company_name:
+    default: Apple Inc
+    description: Company name for sales brief
+    type: string
+  company_product_data:
+    default: {}
+    description: Product intelligence from Company_product
+    type: object
+  company_risk_data:
+    default: {}
+    description: Risk assessment from Company_risk
+    type: object
+  company_source_data:
+    default: {}
+    description: Core company data from Company_source
+    type: object
+  sales_context:
+    default:
+      meeting_type: initial_discovery
+      purpose: client_meeting
+      urgency: high
+    description: Sales context and intent
+    type: object
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-mini
+    type: pom-llm-proxy
+    tools: [web_search]  # Enable GPT-5 web search for source verification
+  parameters:
+    response_format:
+      json_schema:
+        name: SalesBriefResponse
+        schema:
+          additionalProperties: false
+          properties:
+            competitive_intelligence:
+              additionalProperties: false
+              properties:
+                competitive_threats:
+                  description: Key competitors and competitive threats
+                  items:
+                    type: string
+                  type: array
+                differentiation_opportunities:
+                  description: Ways to differentiate from competitors
+                  items:
+                    type: string
+                  type: array
+                market_position:
+                  description: Company's position in their market/industry
+                  type: string
+              required:
+              - market_position
+              - competitive_threats
+              - differentiation_opportunities
+              type: object
+            confidence_assessment:
+              additionalProperties: false
+              properties:
+                data_completeness:
+                  description: Percentage of available data fields populated
+                  maximum: 100
+                  minimum: 0
+                  type: number
+                intelligence_freshness:
+                  description: Freshness of the intelligence data
+                  enum:
+                  - very_fresh
+                  - fresh
+                  - moderate
+                  - stale
+                  - unknown
+                  type: string
+                reliability_notes:
+                  description: Notes about data reliability and limitations
+                  items:
+                    type: string
+                  type: array
+              required:
+              - data_completeness
+              - intelligence_freshness
+              - reliability_notes
+              type: object
+            executive_summary:
+              additionalProperties: false
+              properties:
+                business_highlights:
+                  description: Top 3-5 business highlights relevant to sales discussions
+                  items:
+                    type: string
+                  type: array
+                company_overview:
+                  description: Concise 2-3 sentence company overview for sales context
+                  type: string
+                sales_relevance_score:
+                  description: Sales opportunity relevance score (1-10)
+                  maximum: 10
+                  minimum: 1
+                  type: number
+              required:
+              - company_overview
+              - business_highlights
+              - sales_relevance_score
+              type: object
+            key_talking_points:
+              additionalProperties: false
+              properties:
+                conversation_starters:
+                  description: Intelligent conversation starters based on company
+                    intelligence
+                  items:
+                    type: string
+                  type: array
+                pain_points_opportunities:
+                  description: Likely pain points and sales opportunities
+                  items:
+                    properties:
+                      approach:
+                        type: string
+                      opportunity:
+                        type: string
+                      pain_point:
+                        type: string
+                    required:
+                    - pain_point
+                    - opportunity
+                    - approach
+                    type: object
+                  type: array
+                success_stories:
+                  description: Relevant success stories and case studies to reference
+                  items:
+                    type: string
+                  type: array
+                value_proposition_angles:
+                  description: Tailored value proposition angles based on company
+                    profile
+                  items:
+                    properties:
+                      angle:
+                        type: string
+                      evidence:
+                        type: string
+                      reasoning:
+                        type: string
+                    required:
+                    - angle
+                    - reasoning
+                    - evidence
+                    type: object
+                  type: array
+              required:
+              - value_proposition_angles
+              - pain_points_opportunities
+              - success_stories
+              - conversation_starters
+              type: object
+            next_steps:
+              additionalProperties: false
+              properties:
+                immediate_actions:
+                  description: Immediate actions to take before/during sales engagement
+                  items:
+                    type: string
+                  type: array
+                meeting_preparation:
+                  description: Specific preparation steps for meetings
+                  items:
+                    type: string
+                  type: array
+                research_gaps:
+                  description: Additional research needed for complete picture
+                  items:
+                    type: string
+                  type: array
+              required:
+              - immediate_actions
+              - research_gaps
+              - meeting_preparation
+              type: object
+            sales_opportunity_profile:
+              additionalProperties: false
+              properties:
+                company_size:
+                  properties:
+                    employees:
+                      type: string
+                    market_position:
+                      type: string
+                    revenue_range:
+                      type: string
+                  type: object
+                decision_makers:
+                  properties:
+                    ceo_profile:
+                      type: string
+                    decision_making_style:
+                      type: string
+                    key_executives:
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                financial_profile:
+                  properties:
+                    financial_health:
+                      type: string
+                    funding_stage:
+                      type: string
+                    growth_trajectory:
+                      type: string
+                    recent_funding:
+                      type: string
+                  type: object
+                growth_indicators:
+                  properties:
+                    expansion_signals:
+                      items:
+                        type: string
+                      type: array
+                    market_trends:
+                      type: string
+                    recent_developments:
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                technology_stack:
+                  properties:
+                    digital_maturity:
+                      type: string
+                    primary_products:
+                      items:
+                        type: string
+                      type: array
+                    tech_sophistication:
+                      type: string
+                  type: object
+              required:
+              - company_size
+              - financial_profile
+              - decision_makers
+              - technology_stack
+              - growth_indicators
+              type: object
+          required:
+          - executive_summary
+          - sales_opportunity_profile
+          - key_talking_points
+          - competitive_intelligence
+          - next_steps
+          - confidence_assessment
+          type: object
+        strict: true
+      type: json_schema
+name: Company Sales Brief Intelligence
+type: standard
+---
+
+system:
+You are an elite sales intelligence analyst specializing in creating comprehensive, actionable sales briefs for business professionals. Your mission is to synthesize all available company intelligence into a laser-focused brief that maximizes sales effectiveness.
+
+## Your Expertise:
+- **Sales Psychology**: Understanding what drives business decisions
+- **Executive Communication**: Speaking the language of C-suite executives
+- **Competitive Intelligence**: Identifying competitive advantages and threats
+- **Business Development**: Recognizing partnership and growth opportunities
+- **Risk Assessment**: Highlighting potential concerns and mitigation strategies
+
+## Sales Brief Philosophy:
+- **Actionable Intelligence**: Every insight must lead to a specific action
+- **Executive-Level Perspective**: Frame everything in terms of business impact
+- **Time-Sensitive**: Prioritize most critical information for immediate use
+- **Evidence-Based**: Support claims with specific data and examples
+- **Conversational**: Provide natural talking points and conversation starters
+
+## Available Company Intelligence:
+
+### Core Company Profile:
+{% if company_source_data %}
+**Company**: {{company_source_data.accountName}}
+**Industry**: {{company_source_data.industry}}
+**Website**: {{company_source_data.url}}
+**Size**: {{company_source_data.employees}} employees
+**Revenue**: ${{company_source_data.annualRevenue | default("Unknown")}}
+**Location**: {{company_source_data.city}}, {{company_source_data.state}}, {{company_source_data.country}}
+{% endif %}
+
+### Financial Intelligence:
+{% if company_financial_data %}
+**Funding Stage**: {{company_financial_data.fundingStage}}
+**Total Funding**: {{company_financial_data.totalFunding}}
+**Financial Health**: {{company_financial_data.financialHealth}}
+**Growth Stage**: {{company_financial_data.growthStage}}
+**Key Investors**: {{company_financial_data.keyInvestors}}
+{% endif %}
+
+### Leadership Intelligence:
+{% if company_leadership_data %}
+**CEO**: {{company_leadership_data.ceoName}}
+**Leadership Style**: {{company_leadership_data.leadershipStyle}}
+**Executive Team**: {{company_leadership_data.executiveTeam}}
+**Founder Background**: {{company_leadership_data.foundersInfo}}
+{% endif %}
+
+### Product Intelligence:
+{% if company_product_data %}
+**Primary Products**: {{company_product_data.primaryProducts}}
+**Technology Stack**: {{company_product_data.technologyStack}}
+**Product Category**: {{company_product_data.productCategory}}
+**Value Proposition**: {{company_product_data.valueProposition}}
+{% endif %}
+
+### Customer Intelligence:
+{% if company_customer_data %}
+**Customer Profile**: {{company_customer_data.customerProfile}}
+**Target Markets**: {{company_customer_data.targetMarkets}}
+**Use Cases**: {{company_customer_data.useCases}}
+**Customer Success**: {{company_customer_data.customerSuccess}}
+{% endif %}
+
+### Industry Intelligence:
+{% if company_industry_data %}
+**Market Position**: {{company_industry_data.marketSegment}}
+**Industry Trends**: {{company_industry_data.industryTrends}}
+**Competitive Landscape**: {{company_industry_data.competitiveLandscape}}
+**Market Size**: {{company_industry_data.marketSize}}
+{% endif %}
+
+### Risk Assessment:
+{% if company_risk_data %}
+**Risk Score**: {{company_risk_data.overallRiskScore}}/10
+**Primary Risks**: {{company_risk_data.primaryRiskFactors}}
+**Risk Mitigation**: {{company_risk_data.riskMitigation}}
+{% endif %}
+
+## Sales Context:
+**Purpose**: {{sales_context.purpose}}
+**Urgency**: {{sales_context.urgency}}
+**Meeting Type**: {{sales_context.meeting_type}}
+
+user:
+Create a comprehensive sales brief for {{company_name}} that synthesizes all available intelligence into actionable sales insights.
+
+## Focus Areas:
+
+1. **Executive Summary**: Provide a compelling overview that a sales executive can use to quickly understand the opportunity
+
+2. **Sales Opportunity Profile**: Analyze company size, financial health, decision-making dynamics, and growth indicators that affect sales potential
+
+3. **Key Talking Points**: Develop specific value proposition angles, identify likely pain points, and create conversation starters based on the company's profile
+
+4. **Competitive Intelligence**: Position the company within their competitive landscape and identify differentiation opportunities
+
+5. **Next Steps**: Provide specific, actionable next steps for sales engagement
+
+6. **Confidence Assessment**: Clearly indicate data completeness and reliability
+
+## Key Questions to Address:
+- What makes this company an attractive sales prospect?
+- Who are the key decision makers and what drives their decisions?
+- What are their likely pain points that we can address?
+- How should we position ourselves competitively?
+- What are the best conversation starters and value propositions?
+- What additional research is needed for a complete picture?
+
+Generate a sales brief that transforms raw company data into strategic sales intelligence.

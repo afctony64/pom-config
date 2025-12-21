@@ -1,0 +1,227 @@
+# =============================================================================
+# SCHEMA: Knowledge_base
+# =============================================================================
+# Central knowledge base for extracted research intelligence
+# Stores extracted knowledge from page facts for cross-domain research
+#
+# Version: 1.0.0
+# Created: 2025-12-06
+# =============================================================================
+
+type: knowledge
+class: Knowledge_base
+name: Knowledge_base
+description: Knowledge base for extracted research intelligence
+
+# Weaviate collection settings
+vectorizer: text2vec-transformers
+vector_index_type: hnsw
+
+# Multi-tenancy enabled
+multi_tenancy:
+  enabled: true
+
+# =============================================================================
+# PROPERTIES
+# =============================================================================
+properties:
+  # --- Core Identity ---
+  - name: url
+    dataType:
+      - text
+    description: Source page URL
+    required: true
+    searchable: true
+    tokenization: field
+    sets:
+      - standard
+      - extended
+    tags:
+      - core
+      - source
+
+  - name: domain
+    dataType:
+      - text
+    description: Source domain
+    required: true
+    searchable: true
+    tokenization: field
+    sets:
+      - standard
+      - extended
+    tags:
+      - core
+      - source
+
+  # --- Knowledge Content ---
+  - name: knowledge_text
+    dataType:
+      - text
+    description: Extracted knowledge text content
+    required: false
+    searchable: true
+    tokenization: word
+    sets:
+      - standard
+      - extended
+    tags:
+      - content
+      - searchable
+
+  - name: field_name
+    dataType:
+      - text
+    description: Researcher field name this knowledge belongs to
+    required: false
+    searchable: true
+    tokenization: field
+    sets:
+      - standard
+      - extended
+    tags:
+      - metadata
+
+  - name: field_value
+    dataType:
+      - text
+    description: Extracted field value
+    required: false
+    searchable: true
+    tokenization: word
+    sets:
+      - standard
+      - extended
+    tags:
+      - content
+
+  # --- Research Context ---
+  - name: researcher
+    dataType:
+      - text
+    description: Researcher type (competitor, customer, product, etc.)
+    required: false
+    searchable: true
+    tokenization: field
+    sets:
+      - standard
+      - extended
+    tags:
+      - metadata
+      - researcher
+
+  - name: source_collection
+    dataType:
+      - text
+    description: Source collection (typically Page_facts)
+    required: false
+    tokenization: field
+    sets:
+      - standard
+      - extended
+    tags:
+      - metadata
+      - source
+
+  # --- Timestamps ---
+  - name: extraction_timestamp
+    dataType:
+      - date
+    description: When knowledge was extracted
+    required: false
+    sets:
+      - standard
+      - extended
+    tags:
+      - timestamp
+
+  # --- Extended Fields ---
+  - name: llm_model
+    dataType:
+      - text
+    description: LLM model used for extraction
+    required: false
+    tokenization: field
+    sets:
+      - extended
+    tags:
+      - metadata
+      - extended
+
+  - name: prompt_version
+    dataType:
+      - text
+    description: Version of extraction prompt used
+    required: false
+    tokenization: field
+    sets:
+      - extended
+    tags:
+      - metadata
+      - extended
+
+  - name: confidence_score
+    dataType:
+      - number
+    description: Confidence score of extraction (0-1)
+    required: false
+    sets:
+      - extended
+    tags:
+      - quality
+      - extended
+
+  - name: entity_type
+    dataType:
+      - text
+    description: Type of entity this knowledge relates to
+    required: false
+    tokenization: field
+    sets:
+      - extended
+    tags:
+      - metadata
+      - extended
+
+# =============================================================================
+# FIELD SETS
+# =============================================================================
+field_sets:
+  standard:
+    - url
+    - domain
+    - knowledge_text
+    - field_name
+    - field_value
+    - researcher
+    - source_collection
+    - extraction_timestamp
+
+  extended:
+    - url
+    - domain
+    - knowledge_text
+    - field_name
+    - field_value
+    - researcher
+    - source_collection
+    - extraction_timestamp
+    - llm_model
+    - prompt_version
+    - confidence_score
+    - entity_type
+
+# =============================================================================
+# REFERENCES
+# =============================================================================
+references: []
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  category: knowledge
+  version: "1.0.0"
+  status: active
+  created: "2025-12-06"
+  last_updated: "2025-12-06"

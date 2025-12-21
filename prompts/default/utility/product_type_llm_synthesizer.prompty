@@ -1,0 +1,89 @@
+---
+# ⚠️ DEPRECATED: This prompt is being migrated to PomAI
+# Target location: PomAI/core/config/prompts/utility/product_type_llm_synthesizer.prompty
+# This file will be removed in a future release. Use the PomAI version instead.
+deprecated: true
+deprecated_date: "2024-12"
+deprecated_canonical: "PomAI/core/config/prompts/utility/product_type_llm_synthesizer.prompty"
+
+name: Product Type LLM Synthesizer
+description: "[DEPRECATED] Synthesize productTypeLLM from existing product information - MIGRATING TO PomAI"
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: summarization      # Primary: synthesizing product info
+  complexity: simple            # Straightforward synthesis
+  context_size: small           # Product record context
+  priority: speed               # Fast synthesis for batch processing
+inputs:
+  record:
+    description: Product research record to synthesize fields for
+    type: object
+  researcher_id:
+    description: Researcher ID for classify_all to use
+    type: string
+    default: product
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    temperature: 0.3
+    max_tokens: 5000
+    response_format:
+      type: json_schema
+      json_schema:
+        name: product_type_synthesis
+        strict: true
+        schema:
+          type: object
+          properties: {}
+          required: []
+          additionalProperties: false
+processing_config:
+  source_collection: Company_research_product
+  schema_id: Company_research_product
+  researcher_id: product
+  include_fields: ["productTypeLLM"]
+  filters:
+    - field: seed
+      operator: equal
+      value: false
+    - field: productTypeLLM
+      operator: is_null
+      value: true
+post_execution_tools:
+  - classify_all
+---
+system:
+You are a product analyst. Analyze the company and output JSON.
+
+CRITICAL for productTypeLLM:
+- Write prose, NOT category labels
+- Example of CORRECT output: ["Yoco is a cloud-based payment platform that enables small businesses to accept card payments. The system uses mobile card readers connected via Bluetooth to iOS/Android apps, processing transactions through secure payment gateways with PCI-DSS compliance..."]
+- Example of WRONG output: ["Application Software"] or ["Platform & Integration"]
+
+user:
+{% set props = record.properties if record.properties else record %}
+Analyze this company's product:
+
+{% if props.valueProposition %}**VALUE PROPOSITION:**
+{{ props.valueProposition }}
+{% endif %}
+
+{% if props.coreProducts %}**CORE PRODUCTS:**
+{{ props.coreProducts | join(', ') }}
+{% endif %}
+
+{% if props.products %}**PRODUCTS:**
+{{ props.products[:5] | join(', ') }}
+{% endif %}
+
+{% if props.productFeatures %}**KEY FEATURES:**
+{{ props.productFeatures[:10] | join(', ') }}
+{% endif %}
+
+{% if props.productCategories %}**PRODUCT CATEGORIES:**
+{{ props.productCategories | join(', ') }}
+{% endif %}

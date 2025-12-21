@@ -1,0 +1,58 @@
+id: "qwen2.5-coder:14b"
+name: Qwen 2.5 Coder 14B
+type: llm_model
+version: "1.0.0"
+provider: {name: ollama, api_type: ollama}
+adapter_config: {type: ollama, model: "qwen2.5-coder:14b", base_url: null, base_url_env: OLLAMA_HOST}
+parameters: {temperature: 0.7, max_tokens: 2000, top_p: 0.9}
+capabilities: {structured_output: true, reasoning: true, tool_calling: true, streaming: true, vision: false, function_calling: true, multimodal: false}
+cost: {per_1m_input_tokens: 0.0, per_1m_output_tokens: 0.0, currency: USD, notes: "Free local/VastAI"}
+performance: {avg_latency_ms: 1200, tokens_per_second: 40, context_window: 32768}
+metadata:
+  description: "Alibaba Qwen 2.5 Coder 14B - Advanced code generation"
+  category: code
+  status: stable
+  release_date: "2025-01-15"
+  last_verified: "2025-12-15"
+  family: qwen2.5-coder
+  family_tier: quality
+  strength: coding
+  recommended_for:
+    - Complex code generation
+    - Code review
+    - Architecture design
+  not_recommended_for:
+    - General reasoning
+    - Creative writing
+requirements: {gpu_vram_mb: 10000, system_ram_mb: 12000, cpu_cores: 4.0}
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 8
+  max_concurrency: 12
+vastai_config:
+  enabled: true
+  endpoint_name: "vLLM-Qwen2.5-Coder-14B"
+  huggingface_model: "Qwen/Qwen2.5-Coder-14B-Instruct"
+  cold_workers: 0
+  # NOTE: Keep disk conservative to avoid host download failures.
+  disk_space_gb: 120
+  gpu_requirements: "gpu_ram>=24 num_gpus=1 inet_down>100"
+  template_hash: "03fba9bdccaa8ace9ad931105d8e9eb4"
+  estimated_cold_start_seconds: 150
+  priority: 7
+resource_class: {class: B, vram_gb: 10.0, parallel_capacity_spark: 12, recommended_parallel: 8, throughput_tier: moderate, tokens_per_second_single: 40}
+tier: A
+tier_rank: 3
+dimension_scores:
+  summarization: 70
+  reasoning: 78
+  instruction: 80
+  analysis: 75
+  coding: 92
+  speed: 60
+  context_efficiency: 88
+pom_benchmarks:
+  last_calibration: "2025-12-15"
+  calibration_version: "1.0"
+  aggregate: {avg_quality: 80, avg_latency_ms: 1200, total_prompts_tested: 0}
+benchmarks: {}

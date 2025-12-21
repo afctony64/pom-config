@@ -1,0 +1,125 @@
+id: "llama3.1:70b"
+name: Llama 3.1 70B Instruct
+type: llm_model
+version: "1.0.0"
+
+provider:
+  name: vastai  # Cloud-only - too large for local
+  api_type: chat
+
+adapter_config:
+  type: vastai
+  model: meta-llama/Llama-3.1-70B-Instruct
+  base_url: null
+  base_url_env: VAST_ENDPOINT_URL
+
+parameters:
+  temperature: 0.7
+  max_tokens: 4000
+  top_p: 0.9
+
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: true
+  streaming: true
+  vision: false
+  function_calling: true
+  multimodal: false
+
+cost:
+  per_1m_input_tokens: 0.0  # Vast.ai bills per GPU-second
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: "Vast.ai cloud billing - ~$1.20/hr on A100"
+
+performance:
+  avg_latency_ms: 2500
+  tokens_per_second: 40
+  context_window: 131072
+
+metadata:
+  description: "Meta Llama 3.1 70B - Best open-source general model (cloud-only)"
+  category: general
+  status: stable
+  release_date: "2024-07-23"
+  last_verified: "2025-12-13"
+  family: llama3.1
+  family_tier: premium
+  strength: general
+  recommended_for:
+    - "Complex reasoning tasks"
+    - "Long-form content generation"
+    - "Multi-step analysis"
+    - "Maximum open-source quality"
+  not_recommended_for:
+    - "Local inference (too large)"
+    - "Low-latency requirements"
+    - "Cost-sensitive applications"
+
+requirements:
+  gpu_vram_mb: 45000  # Q4 quantized
+  system_ram_mb: 50000
+  cpu_cores: 8.0
+
+hardware_detection:
+  execution_mode: cloud  # Cloud only
+  optimal_concurrency: 4
+  max_concurrency: 8
+
+# === VAST.AI SERVERLESS CONFIG ===
+vastai_config:
+  enabled: true
+  endpoint_name: "vLLM-Llama3.1-70B"
+  huggingface_model: "meta-llama/Llama-3.1-70B-Instruct"
+  skip_local: true  # Too large for Spark - go direct to Vast.ai
+  cold_workers: 0  # Free tier - large model
+  # NOTE: 70B class weights are very large; require ample disk for HF cache + image layers.
+  disk_space_gb: 220
+  gpu_requirements: "gpu_ram>=80 num_gpus=1 inet_down>100"
+  template_hash: "03fba9bdccaa8ace9ad931105d8e9eb4"  # pragma: allowlist secret
+  estimated_cold_start_seconds: 300
+  priority: 8  # High priority - flagship model
+
+# === RESOURCE CLASS ===
+resource_class:
+  class: C
+  vram_gb: 45.0
+  parallel_capacity_spark: 1  # Very limited - only 1 instance fits on 128GB Spark
+  recommended_parallel: 1
+  throughput_tier: low
+  tokens_per_second_single: 40
+
+tier: S
+tier_rank: 2
+
+base_scores:
+  source: "Meta Llama 3.1 Model Card"
+  source_url: "https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct"
+  captured_date: "2025-12-13"
+  raw_benchmarks:
+    mmlu: 86.0
+    gsm8k: 95.0
+    humaneval: 80.5
+    arc_challenge: 93.0
+  notes: "Best open-source general model"
+
+dimension_scores:
+  summarization: 92
+  reasoning: 94
+  instruction: 92
+  analysis: 93
+  coding: 85
+  speed: 25
+  context_efficiency: 90
+
+pom_benchmarks:
+  last_calibration: "2025-12-13"
+  calibration_version: "1.0"
+  prompts_tested: {}
+  aggregate:
+    avg_quality: 92
+    avg_latency_ms: 2500
+    total_prompts_tested: 0
+
+benchmarks: {}

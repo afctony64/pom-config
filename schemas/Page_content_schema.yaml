@@ -1,0 +1,173 @@
+type: core
+class: Page_content
+version: '1.0'
+group: url
+weaviate_instance: cloud
+description: Clean page content schema - only fields we actually collect
+multiTenancyConfig:
+  enabled: true
+  autoTenantCreation: true
+  autoTenantActivation: true
+invertedIndexConfig:
+  indexNullState: true
+  indexTimestamps: false
+  indexPropertyLength: false
+  bm25:
+    b: 0.75
+    k1: 1.2
+vectorConfig:
+  content:
+    text2vec-weaviate:
+      model:
+        baseURL: https://api.embedding.weaviate.io
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        truncate: right
+        vectorizeClassName: true
+      vectorizeClassName: true
+      sourceProperties:
+      - title
+      - content
+  description:
+    text2vec-weaviate:
+      model:
+        baseURL: https://api.embedding.weaviate.io
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        truncate: right
+        vectorizeClassName: true
+      vectorizeClassName: true
+      sourceProperties:
+      - title
+      - description
+properties:
+- name: url
+  dataType:
+  - text
+  description: Canonical URL of the page (normalized with protocol)
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+- name: domain
+  dataType:
+  - text
+  description: Primary domain of the page URL
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+- name: title
+  dataType:
+  - text
+  description: Page title
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+- name: description
+  dataType:
+  - text
+  description: Page description
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+- name: content
+  dataType:
+  - text
+  description: Main page content
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+- name: content_length
+  dataType:
+  - int
+  description: Character length of extracted content
+  indexFilterable: true
+  indexSearchable: false
+- name: language
+  dataType:
+  - text
+  description: Detected content language
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+- name: status_code
+  dataType:
+  - int
+  description: HTTP status code
+  indexFilterable: true
+  indexSearchable: false
+- name: accessible
+  dataType:
+  - boolean
+  description: Whether page is accessible (status < 400)
+  indexFilterable: true
+  indexSearchable: false
+- name: content_quality_score
+  dataType:
+  - number
+  description: Overall content quality score (0-1) calculated from title, description, content
+  indexFilterable: true
+  indexSearchable: false
+- name: has_rich_content
+  dataType:
+  - boolean
+  description: Whether page has rich content (title + description + content)
+  indexFilterable: true
+  indexSearchable: false
+- name: updated_at
+  dataType:
+  - date
+  description: Timestamp when page was last scraped/updated
+  indexFilterable: true
+  indexSearchable: false
+# Researcher scoring fields - determines relevance for each researcher type
+- name: researcher_scores
+  dataType:
+  - object
+  description: Scores per researcher type (leadership, competitor, product, etc.)
+  indexFilterable: false
+  indexSearchable: false
+  nestedProperties:
+  - name: leadership
+    dataType:
+    - number
+  - name: competitor
+    dataType:
+    - number
+  - name: journalist
+    dataType:
+    - number
+  - name: social
+    dataType:
+    - number
+  - name: product
+    dataType:
+    - number
+  - name: customer
+    dataType:
+    - number
+  - name: partner
+    dataType:
+    - number
+  - name: financial
+    dataType:
+    - number
+  - name: industry
+    dataType:
+    - number
+  - name: risk
+    dataType:
+    - number
+- name: primary_researcher
+  dataType:
+  - text
+  description: Researcher type with highest score for this page
+  indexFilterable: true
+  indexSearchable: false
+  tokenization: field
+- name: primary_score
+  dataType:
+  - number
+  description: Score for primary researcher (0-1)
+  indexFilterable: true
+  indexSearchable: false
+id: Page_content
+name: Page_content
+collection_name: page_content

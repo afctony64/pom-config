@@ -1,0 +1,60 @@
+# Travel Research Tenant Group
+# Destination and travel experience intelligence
+
+id: travel
+type: tenant_group
+display_name: "Travel Research"
+description: |
+  Travel destination research and experience intelligence.
+  Analyzes destinations, accommodations, and travel experiences.
+
+domain_context: |
+  Travel and destination research for informed trip planning.
+  Focus on authentic experiences, practical logistics, and safety.
+
+  Key analysis dimensions:
+  - Destination characteristics and best times to visit
+  - Accommodation options across budget ranges
+  - Activities, attractions, and experiences
+  - Local cuisine and dining recommendations
+  - Transportation and logistics
+  - Safety and health considerations
+
+industry_focus:
+  preferred:
+    - Tourism
+    - Hospitality
+    - Adventure Travel
+    - Cultural Experiences
+    - Eco-Tourism
+  avoid:
+    - Package Tours (generic)
+    - Timeshares
+
+# Independent agents selected for this domain
+# Note: "financial" and "risk" are REUSED from company domain
+researchers:
+  - destination   # Location overview, climate, best times
+  - accommodation # Hotels, hostels, vacation rentals
+  - activity      # Things to do, attractions, tours
+  - cuisine       # Local food, restaurants, food experiences
+  - transport     # Getting there, getting around
+  - financial     # Budget planning, costs, value   ← SHARED AGENT
+  - risk          # Safety, health, travel advisories ← SHARED AGENT
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ENTITY MODEL CONFIGURATION (Standard)
+# ══════════════════════════════════════════════════════════════════════════════
+# Uses the Entity Model:
+# - Source: Domain (the URL/domain IS the entity)
+# - Output: Research_* (no prefix)
+entity:
+  entity_type: Destination
+  # ENTITY MODEL: Source is Domain (not Destination_source)
+  source_collection: Domain
+  # ENTITY MODEL: No prefix for research collections
+  research_schema_prefix: ""  # Results in Research_destination, Research_activity, etc.
+  domain_schema: Domain
+
+# Schema pattern for research output (generates Research_{researcher})
+schema_pattern: "Research_{researcher}"

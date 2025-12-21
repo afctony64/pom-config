@@ -1,0 +1,509 @@
+type: research
+class: Research_social
+id: Research_social
+name: Research Social
+description: '📚 RESEARCH REPOSITORY: Social Media Intelligence
+
+
+  RESEARCHER: Social Media Intelligence Analyst (see Research_social for researcher
+  identity)
+
+
+  KNOWLEDGE TYPE: Dual-layer social intelligence combining platform presence and content
+  strategy
+
+
+  LAYER 1 - PLATFORM PRESENCE:
+
+  - Technical social implementation (accounts, auth, sharing)
+
+  - Platform coverage and engagement metrics
+
+  - Community features (Discord, forums, Slack)
+
+
+  LAYER 2 - SOCIAL POSITION:
+
+  - Content strategy and messaging themes
+
+  - Community building approach
+
+  - Social proof and brand positioning
+
+
+  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity''s complete social
+  intelligence
+
+  - Tenant Isolation: Complete data separation per entity
+
+  - Tenant Activation: Automatic tenant creation and activation
+
+  - Scalability: Supports unlimited tenants with efficient partitioning
+
+
+  REPOSITORY CONTENTS:
+
+  - Platform Presence Analysis: What platforms they''re on and how they implement
+  them
+
+  - Social Strategy Analysis: How they use social in their go-to-market
+
+  - Community Engagement: How they build and nurture community
+
+  - Categorical Classifications: Machine-assigned categories for social attributes
+
+  - Quality Metadata: Processing dates, source quality, review flags, confidence levels
+
+  - Evidence Links: References to supporting data and source materials
+
+
+  DATA SOURCES:
+
+  - Domain enricher data (platform presence, technical implementation)
+
+  - Page content data (content strategy, messaging, community approach)
+
+  - AI-synthesized analysis combining both layers
+
+
+  QUALITY STANDARDS:
+
+  - Confidence Scoring: High, Medium, Low, Inferred, Web-verified
+
+  - Evidence-Based Assessment: Classifications backed by concrete evidence
+
+  - Source Tracking: Links to originating Domain records
+
+  - Conservative Calibration: Prefer ''unknown'' over incorrect data
+
+
+  INTEGRATION: Provides social intelligence to support holistic entity analysis
+
+
+  VECTOR SEARCH CAPABILITIES: Named vectors for similarity search across platform,
+  content, and community dimensions
+
+  '
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+namedVectors:
+  platformPresenceVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - platformPresenceLLM
+    - socialPlatforms
+    - socialAccountsFound
+    - socialPresenceTier
+    - hasSocialAuth
+    - hasSocialSharing
+    - platformStrategy
+    - socialEngagementScore
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  socialContentVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - socialContentLLM
+    - contentThemes
+    - messagingStyle
+    - socialProofIndicators
+    - contentStrategy
+    - socialMaturity
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  communityEngagementVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - communityEngagementLLM
+    - hasCommunityFeatures
+    - communityBuildingApproach
+    - engagementLevel
+    - communityApproach
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: uuid
+  dataType:
+  - text
+  description: Unique identifier for classification record
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+- name: entityName
+  dataType:
+  - text
+  description: Entity name for classification
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+- name: domain
+  dataType:
+  - text
+  description: Entity domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+- name: seed
+  dataType:
+  - boolean
+  description: Seed data flag (true = seed/training data, false = production data)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - seed
+  sets:
+  - system
+- name: socialAccountsFound
+  dataType:
+  - int
+  description: Number of social media accounts found
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: socialPlatforms
+  dataType:
+  - text[]
+  description: Social platforms detected (twitter, linkedin, facebook, instagram,
+    youtube, github)
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: socialEngagementScore
+  dataType:
+  - int
+  description: Social engagement score (0-100) from enricher
+  tags:
+  - research
+  sets:
+  - prompt
+- name: hasSocialAuth
+  dataType:
+  - boolean
+  description: Has social authentication features
+  tags:
+  - research
+  sets:
+  - prompt
+- name: hasSocialSharing
+  dataType:
+  - boolean
+  description: Has social sharing features
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: hasCommunityFeatures
+  dataType:
+  - boolean
+  description: Has community features (discord, slack, forums)
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: socialPresenceTier
+  dataType:
+  - text
+  description: Social presence tier from enricher analysis
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: contentThemes
+  dataType:
+  - text[]
+  description: Main content themes found in social/blog pages
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: socialProofIndicators
+  dataType:
+  - text[]
+  description: Social proof elements (testimonials, case studies, community size)
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: platformPresenceLLM
+  dataType:
+  - text
+  description: Descriptive analysis of social platform coverage and implementation
+    strategy. Include which platforms they're active on (Twitter, LinkedIn, GitHub,
+    Discord, etc.), social auth/sharing implementation, account discovery, engagement
+    score, and how platform choices align with their business model and audience.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: socialContentLLM
+  dataType:
+  - text
+  description: Descriptive analysis of content strategy, messaging themes, and thought
+    leadership positioning. Include content themes (product updates, technical education,
+    customer stories), messaging style (promotional, educational, community-focused),
+    social proof indicators, and content maturity level.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: communityEngagementLLM
+  dataType:
+  - text
+  description: 'Describe community engagement and relationship building (2 sentences,
+    ~75 words max).
+
+
+    START with overall engagement approach:
+
+    - How actively does the entity engage with its community?
+
+
+    Then list primary channels and note interaction level (two-way vs broadcast-only).
+
+    '
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: socialMaturity
+  dataType:
+  - text
+  description: 'AI synthesis: Overall social media maturity assessment.
+
+    Examples: "Strategic community builder", "Tactical presence", "Early stage"
+
+    '
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: dataSource
+  dataType:
+  - text
+  description: Source of classification data
+  sets:
+  - system
+- name: platformPresenceCat
+  dataType:
+  - text
+  description: Social media platform coverage - classify based on number of active
+    platforms, posting frequency, and cross-platform strategy. Consider LinkedIn,
+    Twitter, industry forums, and platform specialization.
+  enum:
+  - Multi-Platform-Active
+  - Selective-Presence
+  - LinkedIn-Focused
+  - Twitter-Focused
+  - Professional-Only
+  - Minimal-Presence
+  - Unknown
+  tags:
+  - Cat
+  - platform
+  - social
+  sets:
+  - standard
+  - EnumCat
+- name: socialContentCat
+  dataType:
+  - text
+  description: Primary social content strategy - classify based on content type, posting
+    themes, and engagement approach. Consider thought leadership, educational content,
+    product promotion, and community-driven content.
+  enum:
+  - Thought-Leadership
+  - Educational-Content
+  - Product-Updates
+  - Customer-Stories
+  - Company-Culture
+  - Industry-News
+  - Community-Driven
+  - Sales-Focused
+  - Unknown
+  tags:
+  - Cat
+  - content
+  - social
+  sets:
+  - standard
+  - EnumCat
+- name: communityEngagementCat
+  dataType:
+  - text
+  description: Community activity and engagement level - classify based on community
+    size, interaction frequency, user-generated content, and community-driven growth.
+    Consider developer communities, customer advocacy, and social engagement metrics.
+  enum:
+  - Active-Community
+  - Growing-Community
+  - Moderate-Engagement
+  - Minimal-Community
+  - Developer-Community
+  - Customer-Community
+  - Social-First
+  - Unknown
+  tags:
+  - Cat
+  - community
+  - social
+  sets:
+  - standard
+  - EnumCat
+- name: processedDate
+  dataType:
+  - text
+  description: Date when this analysis was completed
+  sets:
+  - system
+  - metadata
+- name: sourceQuality
+  dataType:
+  - text
+  description: Quality assessment of source data (high/medium/low/minimal)
+  sets:
+  - system
+  - metadata
+- name: reviewFlag
+  dataType:
+  - text
+  description: Review flag for human validation (none/for_review/needs_verification)
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: analysisConfidence
+  dataType:
+  - text
+  description: Confidence level of analysis (high/medium/low/inferred/web_verified)
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: citations
+  dataType:
+  - text[]
+  description: URLs of sources used for analysis (from pageData, domainData, and web_search)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: reasoning
+  dataType:
+  - text[]
+  description: AI reasoning steps and thought process for analysis
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: domain
+    dataType:
+    - uuid[]
+    description: Domain source UUIDs
+  - name: sourceEntity
+    dataType:
+    - uuid[]
+    description: Source entity UUIDs
+references:
+- name: sourceEntity
+  target_collection: Domain
+  description: Source entity reference
+- name: domain
+  target_collection: Domain
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: Reference to the source Domain record for beacon traversal (uses research
+    record's own UUID)
+group: research
+weaviate_instance: cloud
+collection_name: Research_social
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs (when available)
+    fallback_to_uuid4: true
+reverse_references:
+- target_collection: Domain
+  target_property: social
+  use_my_uuid: true
+  description: When this social researcher is created, add its UUID to Domain.social
+dependencies:
+- type: research
+data_sources:
+  primary: db:Domain
+  processor: prompty:entity_social
+collection_groups:
+- research_collections

@@ -1,0 +1,345 @@
+type: web
+class: Page_intelligence
+version: 1.0
+group: url
+weaviate_instance: spark
+description: '📦 RAW PAGE DATA STORAGE - No vectors needed
+
+
+  This collection stores raw page intelligence data WITHOUT embeddings.
+
+
+  ARCHITECTURE:
+
+  - Cloud: Stores raw data from web crawling (vectorless for efficiency)
+
+  - Local: Backup of cloud data (vectorless for fast sync)
+
+  - Page_source: Built FROM this data WITH local embeddings
+
+
+  WORKFLOW:
+
+  1. Cloud crawler → Page_intelligence (cloud, no vectors)
+
+  2. Nightly backup → Page_intelligence (local, no vectors)
+
+  3. Processing factory → Page_source (local, WITH vectors)
+
+
+  Why no vectors?
+
+  ✅ Faster backup (no vector transfer)
+
+  ✅ Cheaper storage (no vector index)
+
+  ✅ Vectors added downstream in Page_source
+
+  '
+vectorizer: none
+multiTenancyConfig:
+  enabled: true
+  autoTenantActivation: true
+  autoTenantCreation: true
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+schemaConfig:
+  autoSchemaEnabled: false
+properties:
+- name: success
+  dataType:
+  - boolean
+  description: Module-level success indicator - true if intelligence was created successfully
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - technical
+  - quality
+- name: url
+  dataType:
+  - text
+  description: Page URL
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - identity
+- name: domain
+  dataType:
+  - text
+  description: Domain extracted from URL
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - identity
+- name: path
+  dataType:
+  - text
+  description: URL path component
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - identity
+  - technical
+- name: title
+  dataType:
+  - text
+  description: Page title
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - content
+  - metadata
+- name: page_type
+  dataType:
+  - text
+  description: Classified page type (homepage, product, about, etc.)
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - classification
+  - metadata
+- name: business_value
+  dataType:
+  - number
+  description: Business value score (0.0-1.0)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - scoring
+  - metadata
+- name: content_category
+  dataType:
+  - text
+  description: Content category classification
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - classification
+  - metadata
+- name: research_relevance
+  dataType:
+  - number
+  description: Research relevance score (0.0-1.0)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - scoring
+  - metadata
+- name: source_sitemap
+  dataType:
+  - text
+  description: Source sitemap URL if discovered via sitemap
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - technical
+  - source
+- name: discovery_method
+  dataType:
+  - text
+  description: Method used to discover this URL
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - technical
+  - metadata
+- name: features
+  dataType:
+  - object
+  description: URL features and metadata
+  indexFilterable: false
+  sets:
+  - extended
+  tags:
+  - technical
+  - metadata
+  nestedProperties:
+  - name: is_homepage
+    dataType:
+    - boolean
+    description: Whether this is a homepage URL
+  - name: is_deep_page
+    dataType:
+    - boolean
+    description: Whether this is a deep page (not homepage)
+  - name: path_length
+    dataType:
+    - int
+    description: Number of path segments
+  - name: path_segments
+    dataType:
+    - int
+    description: Number of path segments in URL
+  - name: has_query_params
+    dataType:
+    - boolean
+    description: Whether URL has query parameters
+  - name: has_fragment
+    dataType:
+    - boolean
+    description: Whether URL has a fragment identifier
+  - name: has_dates
+    dataType:
+    - boolean
+    description: Whether URL contains date patterns
+  - name: has_numbers
+    dataType:
+    - boolean
+    description: Whether URL contains numbers
+  - name: file_extension
+    dataType:
+    - text
+    description: File extension if present
+  - name: content_length
+    dataType:
+    - int
+    description: Content length if available
+- name: enrichment
+  dataType:
+  - text
+  description: 'Enrichment data from lightweight page probes (stored as JSON string).
+
+    Contains head_probe and http_security_headers enricher outputs.
+
+    '
+  indexFilterable: false
+  indexSearchable: false
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - technical
+  - enrichment
+- name: language
+  dataType:
+  - text
+  description: ISO language code (e.g., en, it)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - content
+  - metadata
+- name: crawled_at
+  dataType:
+  - int
+  description: Unix seconds when page was crawled
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - processing
+  - temporal
+- name: processing_version
+  dataType:
+  - text
+  description: Pipeline version that produced this record
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - technical
+  - versioning
+- name: http_failure_count
+  dataType:
+  - int
+  description: Number of HTTP fetch failures for this URL (triggers Playwright at 3)
+  indexFilterable: true
+  sets:
+  - extended
+  - system
+  tags:
+  - technical
+  - processing
+- name: playwright_required
+  dataType:
+  - boolean
+  description: Flag indicating this URL requires Playwright extraction (skip HTTP, use Playwright directly)
+  indexFilterable: true
+  sets:
+  - extended
+  - system
+  tags:
+  - technical
+  - processing
+collection_name: Page_intelligence
+uuid_strategy:
+  fields:
+  - field: url
+    namespace: URL
+    description: Primary strategy using URL for deterministic intelligence UUIDs
+references:
+- collection: Company_source
+dependencies:
+- type: foundational
+data_sources:
+  url_collection: domain
+collection_groups:
+- url_collections
+schema_config:
+  additional_properties: false
+id: Page_intelligence
+name: Page Intelligence
+enrichers:
+- head_probe
+- http_security_headers

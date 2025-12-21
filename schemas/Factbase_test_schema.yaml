@@ -1,0 +1,91 @@
+type: schema
+class: Factbase_test
+version: 1.0
+group: test
+weaviate_instance: spark
+description: |
+  TEST COLLECTION - Researcher fact base (proof of concept)
+
+  Stores extracted, deduplicated facts from Page_source for researcher consumption.
+  This is a TEST schema to validate the vLLM fact extraction workflow.
+
+  Workflow:
+  1. Semantic search Page_source (domain + researcher query)
+  2. vLLM extracts ALL facts from relevant chunks
+  3. Deduplicate facts
+  4. Store in this collection
+  5. Researcher reads fact base to write report
+
+vectorizer: none
+
+multiTenancyConfig:
+  enabled: true
+  autoTenantActivation: true
+  autoTenantCreation: true
+
+invertedIndexConfig:
+  indexNullState: true
+
+schemaConfig:
+  autoSchemaEnabled: false
+
+properties:
+  # === IDENTITY ===
+  - name: domain
+    dataType: [text]
+    description: Company domain (e.g., yoco.com)
+    indexFilterable: true
+    tokenization: field
+
+  - name: researcher_type
+    dataType: [text]
+    description: Researcher type (industry, product, financial, etc.)
+    indexFilterable: true
+    tokenization: field
+
+  # === EXTRACTED FACTS ===
+  - name: facts
+    dataType: [object]
+    description: Array of extracted facts
+    nestedProperties:
+      - name: fact
+        dataType: [text]
+        description: The fact statement
+      - name: category
+        dataType: [text]
+        description: Fact category
+      - name: source_chunks
+        dataType: [text]
+        description: Source chunk IDs where this fact was found
+
+  # === METADATA ===
+  - name: total_chunks_analyzed
+    dataType: [int]
+    description: Number of Page_source chunks analyzed
+
+  - name: raw_facts_extracted
+    dataType: [int]
+    description: Total facts extracted before deduplication
+
+  - name: unique_facts
+    dataType: [int]
+    description: Unique facts after deduplication
+
+  - name: semantic_query_used
+    dataType: [text]
+    description: The semantic query used for chunk retrieval
+
+  - name: extraction_date
+    dataType: [date]
+    description: When extraction was performed
+    indexFilterable: true
+
+  - name: llm_model
+    dataType: [text]
+    description: Model used for extraction (e.g., Llama-3.1-8B)
+
+  - name: vllm_url
+    dataType: [text]
+    description: vLLM endpoint used
+
+collection_name: Factbase_test

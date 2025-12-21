@@ -1,0 +1,1317 @@
+type: core
+class: Domain
+version: 7.0
+group: url
+weaviate_instance: cloud
+description: |
+  Domain collection - THE UNIVERSAL ENTITY COLLECTION.
+
+  KEY CONCEPT: The Entity IS the Domain record.
+  - URL is the entity's digital signature (identity)
+  - Could be: company, destination, recipe, film, book
+  - Tenant isolation defines whose research it is
+  - TenantGroup defines which researchers to run
+  - Everything else is DISCOVERED by enrichers and researchers
+
+  FLOW:
+  1. URL seed → Domain record created (entity exists)
+  2. Enrichers discover: content, social_accounts, etc.
+  3. TenantGroup.researchers analyze → Research_* collections
+  4. Research records reference back to this Domain
+vectorConfig:
+  default:
+    text2vec-weaviate:
+      model: sentence-transformers/all-MiniLM-L6-v2
+      vectorizeClassName: true
+      sourceProperties:
+      - title
+      - description
+      - content
+multiTenancyConfig:
+  enabled: true
+  autoTenantCreation: true
+  autoTenantActivation: true
+invertedIndexConfig:
+  indexNullState: true
+  indexTimestamps: false
+  indexPropertyLength: false
+  cleanupIntervalSeconds: 60
+  bm25:
+    b: 0.75
+    k1: 1.2
+properties:
+# ============================================================
+# ENTITY IDENTITY - Domain IS the entity
+# ============================================================
+- name: url
+  dataType:
+  - text
+  description: Primary URL - THE ENTITY'S DIGITAL SIGNATURE (unique identity)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: true
+  indexInverted: true
+  sets:
+  - standard
+  tags:
+  - identity
+  - web
+
+- name: entityType
+  dataType:
+  - text
+  description: Entity type derived from TenantGroup (Company, Destination, Recipe, Film, Book)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - identity
+  - categorical
+
+- name: tenantGroup
+  dataType:
+  - text
+  description: TenantGroup context for this entity (company, travel, corporate, gaming)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - context
+  - categorical
+
+# ============================================================
+# DISCOVERED CONTENT
+# ============================================================
+- name: title
+  dataType:
+  - text
+  description: Page title extracted from URL snapshot
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - content
+  - metadata
+- name: description
+  dataType:
+  - text
+  description: Page description/meta description from URL snapshot
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - content
+  - metadata
+- name: content
+  dataType:
+  - text
+  description: Page content extracted from URL snapshot
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - extended
+  tags:
+  - content
+  - enriched
+- name: site_readable
+  dataType:
+  - boolean
+  description: Whether the site content was successfully readable
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - accessibility
+- name: requires_browser
+  dataType:
+  - boolean
+  description: Whether this site requires browser/Playwright for page scraping (JS-rendered or bot-protected)
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - processing
+  - browser
+- name: analysis_type
+  dataType:
+  - text
+  description: Type of analysis performed (e.g., "url_snapshot")
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - extended
+  tags:
+  - categorical
+  - processing
+- name: is_blacklisted
+  dataType:
+  - boolean
+  description: Whether the URL was blacklisted during processing
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - filtering
+- name: blacklist_reason
+  dataType:
+  - text
+  description: Reason why URL was blacklisted (if applicable)
+  indexFilterable: true
+  tokenization: word
+- name: domain
+  dataType:
+  - text
+  description: Domain extracted from URL
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - categorical
+  - web
+- name: robots_rules_count
+  dataType:
+  - number
+  description: Number of rules found in robots.txt
+  indexFilterable: true
+- name: robots_sitemap_urls
+  dataType:
+  - text[]
+  description: Sitemap URLs found in robots.txt
+  indexFilterable: false
+- name: page_processing_status
+  dataType:
+  - text
+  description: Status of page processing (completed/failed/processing)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - processing
+  - status
+- name: enricherResults
+  dataType:
+  - object[]
+  description: Array of flat enricher objects with all 47 MCPToolResponse fields (Weaviate
+    4.16 compatible)
+  indexSearchable: false
+  nestedProperties:
+  - name: tool_name
+    dataType:
+    - text
+    description: Name of the enricher tool (dynamic_html, head_probe, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: success
+    dataType:
+    - boolean
+    description: Whether the enrichment was successful
+    indexFilterable: true
+  - name: status
+    dataType:
+    - text
+    description: Execution status (completed, failed, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: execution_time_ms
+    dataType:
+    - number
+    description: Execution time in milliseconds
+    indexFilterable: true
+  - name: service_name
+    dataType:
+    - text
+    description: Service name (web_enrichers, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: confidence_score
+    dataType:
+    - number
+    description: Confidence score (0-1)
+    indexFilterable: true
+  - name: data_quality
+    dataType:
+    - text
+    description: Data quality assessment
+    indexFilterable: true
+    tokenization: field
+  - name: error
+    dataType:
+    - text
+    description: Error message if failed
+    indexSearchable: true
+    tokenization: word
+  - name: url
+    dataType:
+    - text
+    description: URL processed
+    indexFilterable: true
+    tokenization: field
+  - name: source
+    dataType:
+    - text
+    description: Data source
+    indexFilterable: true
+    tokenization: field
+  - name: title
+    dataType:
+    - text
+    description: Page title
+    indexSearchable: true
+    tokenization: word
+  - name: description
+    dataType:
+    - text
+    description: Page description
+    indexSearchable: true
+    tokenization: word
+  - name: content
+    dataType:
+    - text
+    description: Page content
+    indexSearchable: true
+    tokenization: word
+  - name: language
+    dataType:
+    - text
+    description: Content language (en, es, fr, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: content_type
+    dataType:
+    - text
+    description: Content MIME type (text/html, application/pdf, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: millis_elapsed
+    dataType:
+    - number
+    description: Processing time
+  - name: content_quality_score
+    dataType:
+    - number
+    description: Content quality score
+  - name: enrichment_status
+    dataType:
+    - text
+    description: Enrichment status (success_low_quality, success_basic_quality, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: status_reason
+    dataType:
+    - text
+    description: Status reason explanation
+    indexSearchable: true
+    tokenization: word
+  - name: status_recommendation
+    dataType:
+    - text
+    description: Status recommendation
+    indexSearchable: true
+    tokenization: word
+  - name: quality_tier
+    dataType:
+    - text
+    description: Quality tier (low, basic, high, premium)
+    indexFilterable: true
+    tokenization: field
+  - name: fetch_method
+    dataType:
+    - text
+    description: Fetch method used (aiohttp, playwright, google_fallback) - CRITICAL
+      for performance tracking
+    indexFilterable: true
+    tokenization: field
+  - name: title_source
+    dataType:
+    - text
+    description: Source of title data
+  - name: title_confidence
+    dataType:
+    - number
+    description: Title confidence score
+  - name: description_source
+    dataType:
+    - text
+    description: Source of description data
+  - name: description_confidence
+    dataType:
+    - number
+    description: Description confidence score
+  - name: content_source
+    dataType:
+    - text
+    description: Source of content data
+  - name: content_confidence
+    dataType:
+    - number
+    description: Content confidence score
+  - name: content_length
+    dataType:
+    - number
+    description: Content length in characters
+  - name: page_language
+    dataType:
+    - text
+    description: Detected page language
+  - name: business_keywords
+    dataType:
+    - text
+    description: Business keywords found
+  - name: primary_image
+    dataType:
+    - text
+    description: Primary image URL
+  - name: brand_name
+    dataType:
+    - text
+    description: Brand name detected
+  - name: value_proposition
+    dataType:
+    - text
+    description: Value proposition
+  - name: call_to_action_focus
+    dataType:
+    - text
+    description: Call to action focus
+  - name: page_load_performance
+    dataType:
+    - text
+    description: Page load performance
+  - name: mobile_optimized
+    dataType:
+    - boolean
+    description: Whether page is mobile optimized
+  - name: has_rich_content
+    dataType:
+    - boolean
+    description: Whether page has rich content
+  - name: has_social_meta
+    dataType:
+    - boolean
+    description: Whether page has social meta tags
+  - name: site_readable
+    dataType:
+    - boolean
+    description: Whether site is readable
+  - name: og_title
+    dataType:
+    - text
+    description: OpenGraph title
+    indexSearchable: true
+    tokenization: word
+  - name: og_description
+    dataType:
+    - text
+    description: OpenGraph description
+    indexSearchable: true
+    tokenization: word
+  - name: og_image
+    dataType:
+    - text
+    description: OpenGraph image URL
+    indexFilterable: true
+    tokenization: field
+  - name: og_type
+    dataType:
+    - text
+    description: OpenGraph type (website, article, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: og_site_name
+    dataType:
+    - text
+    description: OpenGraph site name
+    indexFilterable: true
+    tokenization: field
+  - name: og_url
+    dataType:
+    - text
+    description: OpenGraph URL
+    indexFilterable: true
+    tokenization: field
+  - name: twitter_card
+    dataType:
+    - text
+    description: Twitter card type (summary, summary_large_image, etc.)
+    indexFilterable: true
+    tokenization: field
+  - name: twitter_site
+    dataType:
+    - text
+    description: Twitter site handle (@company)
+    indexFilterable: true
+    tokenization: field
+  - name: twitter_creator
+    dataType:
+    - text
+    description: Twitter creator handle (@person)
+    indexFilterable: true
+    tokenization: field
+  - name: has_structured_data
+    dataType:
+    - boolean
+    description: Whether page has structured data
+  - name: structured_data_count
+    dataType:
+    - number
+    description: Count of structured data elements
+  - name: parsing_method
+    dataType:
+    - text
+    description: Parsing method used
+  - name: fallback_used
+    dataType:
+    - boolean
+    description: Whether fallback method was used
+  - name: processing_time_ms
+    dataType:
+    - number
+    description: Processing time in milliseconds
+  - name: primary_focus
+    dataType:
+    - text
+    description: Primary focus of the page
+  - name: status_code
+    dataType:
+    - number
+    description: HTTP status code
+  - name: error_code
+    dataType:
+    - text
+    description: Error code if any
+  - name: error_category
+    dataType:
+    - text
+    description: Error category
+  - name: observed_content_type
+    dataType:
+    - text
+    description: Observed content type
+  - name: captcha_detected
+    dataType:
+    - boolean
+    description: Whether CAPTCHA was detected
+  - name: has_response_headers
+    dataType:
+    - boolean
+    description: Whether response headers were received
+  - name: response_headers_count
+    dataType:
+    - number
+    description: Count of response headers
+  - name: redirect_count
+    dataType:
+    - number
+    description: Number of redirects
+  - name: cache_control
+    dataType:
+    - text
+    description: Cache control header
+  - name: final_url
+    dataType:
+    - text
+    description: Final URL after redirects
+  - name: etag
+    dataType:
+    - text
+    description: ETag header
+  - name: security_headers_count
+    dataType:
+    - number
+    description: Count of security headers
+  - name: last_modified
+    dataType:
+    - text
+    description: Last modified header
+  - name: path
+    dataType:
+    - text
+    description: URL path
+  - name: domain
+    dataType:
+    - text
+    description: Domain name
+  - name: is_https
+    dataType:
+    - boolean
+    description: Whether URL uses HTTPS
+  - name: server
+    dataType:
+    - text
+    description: Server header
+  - name: security_headers_json
+    dataType:
+    - text
+    description: Security headers as JSON string
+  tags:
+  - array
+  - enrichment
+  - results
+- name: created_at
+  dataType:
+  - date
+  description: Timestamp when record was created
+  sets:
+  - system
+  tags:
+  - temporal
+- name: updated_at
+  dataType:
+  - date
+  description: Timestamp when record was last updated
+  sets:
+  - system
+  tags:
+  - temporal
+- name: accountName
+  dataType:
+  - text
+  description: Company name for display purposes (copied from Company_source)
+  indexFilterable: true
+  tokenization: field
+- name: url_intelligence_count
+  dataType:
+  - int
+  description: Number of URLs discovered in url_intelligence collection for this company
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - intelligence
+  - metrics
+  - status
+- name: url_intelligence_updated_at
+  dataType:
+  - date
+  description: Timestamp when url_intelligence_count was last updated
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - status
+  - temporal
+- name: page_count
+  dataType:
+  - int
+  description: Number of good pages processed in page_content collection for this
+    company
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - metrics
+  - processing
+  - status
+- name: page_count_updated_at
+  dataType:
+  - date
+  description: Timestamp when page_count was last updated
+  indexFilterable: true
+- name: intelligence_status
+  dataType:
+  - text
+  description: Overall intelligence processing status (pending/processing/completed/failed)
+  indexFilterable: true
+  tokenization: field
+- name: social_media_score
+  dataType:
+  - int
+  description: Overall social media presence score (0-100)
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - intelligence
+  - metrics
+  - social
+- name: social_og_completeness
+  dataType:
+  - int
+  description: OpenGraph completeness score (0-25)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - metrics
+  - opengraph
+  - social
+- name: social_twitter_implementation
+  dataType:
+  - int
+  description: Twitter card implementation score (0-20)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - metrics
+  - social
+  - twitter
+- name: social_business_indicators
+  dataType:
+  - int
+  description: Social business model indicators score (0-20)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - business
+  - metrics
+  - social
+- name: social_tech_readiness
+  dataType:
+  - int
+  description: Social technology stack readiness score (0-20)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - metrics
+  - social
+  - technology
+- name: social_content_optimization
+  dataType:
+  - int
+  description: Social content optimization score (0-15)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - content
+  - metrics
+  - social
+- name: social_accounts_found
+  dataType:
+  - int
+  description: Number of social media accounts discovered
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - accounts
+  - discovery
+  - social
+- name: social_platforms
+  dataType:
+  - text[]
+  description: Array of social media platforms detected
+  indexFilterable: true
+  indexSearchable: true
+  sets:
+  - extended
+  tags:
+  - discovery
+  - platforms
+  - social
+- name: social_engagement_score
+  dataType:
+  - int
+  description: Social engagement score from deep analysis (0-100)
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - engagement
+  - metrics
+  - social
+- name: has_social_auth
+  dataType:
+  - boolean
+  description: Whether site has social authentication options
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - authentication
+  - features
+  - social
+- name: has_social_sharing
+  dataType:
+  - boolean
+  description: Whether site has social sharing features
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - features
+  - sharing
+  - social
+- name: has_community_features
+  dataType:
+  - boolean
+  description: Whether site has community/engagement features
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - community
+  - features
+  - social
+- name: social_accounts
+  dataType:
+  - text
+  description: JSON string of discovered social media accounts by platform
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - accounts
+  - social
+- name: social_authentication
+  dataType:
+  - text[]
+  description: Array of social authentication methods detected
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - authentication
+  - social
+- name: social_sharing_features
+  dataType:
+  - text[]
+  description: Array of social sharing features detected
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - sharing
+  - social
+- name: community_features
+  dataType:
+  - text[]
+  description: Array of community features detected
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - community
+  - social
+- name: sitemap_count
+  dataType:
+  - int
+  description: Number of sitemaps discovered by robots_txt enricher
+  indexFilterable: true
+- name: primary_sitemap
+  dataType:
+  - text
+  description: Primary sitemap URL for URL discovery
+  indexFilterable: true
+  tokenization: field
+- name: all_sitemap_urls
+  dataType:
+  - text[]
+  description: Complete list of all sitemap URLs discovered
+  indexSearchable: true
+- name: sitemap_references
+  dataType:
+  - text[]
+  description: Sitemap references found in robots.txt from robots_txt enricher
+  indexSearchable: true
+- name: discovered_page_urls
+  dataType:
+  - text[]
+  description: Page URLs discovered during analysis from robots_txt enricher
+  indexSearchable: true
+- name: business_insights
+  dataType:
+  - text
+  description: Business intelligence insights from robots_txt enricher
+  indexSearchable: true
+- name: seo_maturity
+  dataType:
+  - text
+  description: SEO sophistication level from robots_txt analysis (basic/intermediate/advanced/unknown)
+  indexFilterable: true
+  tokenization: field
+- name: crawl_openness
+  dataType:
+  - text
+  description: Crawling accessibility from robots_txt analysis (open/restricted/blocked/unknown)
+  indexFilterable: true
+  tokenization: field
+- name: total_urls_discovered
+  dataType:
+  - int
+  description: Total URLs found in all sitemaps by robots_txt enricher
+  indexFilterable: true
+- name: business_technology
+  dataType:
+  - text
+  description: Technology stack indicators from robots_txt analysis
+  indexSearchable: true
+  tokenization: word
+- name: business_model_signals
+  dataType:
+  - text
+  description: Business model indicators from robots_txt analysis
+  indexSearchable: true
+  tokenization: word
+- name: business_keywords
+  dataType:
+  - text[]
+  description: Business keywords found in content by dynamic_html enricher
+  indexSearchable: true
+- name: company_name
+  dataType:
+  - text
+  description: Company name detected from content by dynamic_html enricher
+  indexFilterable: true
+  tokenization: field
+- name: content_quality_score
+  dataType:
+  - number
+  description: Content quality score (0-1) from dynamic_html enricher
+  indexFilterable: true
+- name: status_code
+  dataType:
+  - int
+  description: HTTP status code from head_probe or dynamic_html enricher
+  indexFilterable: true
+- name: final_url
+  dataType:
+  - text
+  description: Final URL after redirects from head_probe enricher
+  indexFilterable: true
+  tokenization: field
+- name: security_score
+  dataType:
+  - int
+  description: Security score (0-100) from http_security_headers enricher
+  indexFilterable: true
+  tags:
+  - metrics
+  - security
+- name: security_percentage
+  dataType:
+  - number
+  description: Security compliance percentage from http_security_headers enricher
+  indexFilterable: true
+- name: has_hsts
+  dataType:
+  - boolean
+  description: Has HTTP Strict Transport Security header from http_security_headers
+    enricher
+  indexFilterable: true
+- name: has_csp
+  dataType:
+  - boolean
+  description: Has Content Security Policy header from http_security_headers enricher
+  indexFilterable: true
+- name: security_grade
+  dataType:
+  - text
+  description: Security grade (A/B/C/D/F) from http_security_headers enricher
+  indexFilterable: true
+  tokenization: field
+- name: has_frame_options
+  dataType:
+  - boolean
+  description: Has X-Frame-Options header from http_security_headers enricher
+  indexFilterable: true
+- name: has_content_type_options
+  dataType:
+  - boolean
+  description: Has X-Content-Type-Options header from http_security_headers enricher
+  indexFilterable: true
+- name: is_secure
+  dataType:
+  - boolean
+  description: Overall security assessment from http_security_headers enricher
+  indexFilterable: true
+- name: missing_headers
+  dataType:
+  - text[]
+  description: List of missing security headers from http_security_headers enricher
+  indexSearchable: true
+- name: has_ipv4
+  dataType:
+  - boolean
+  description: Has IPv4 addresses from dns_fingerprint enricher
+  indexFilterable: true
+- name: has_ipv6
+  dataType:
+  - boolean
+  description: Has IPv6 addresses from dns_fingerprint enricher
+  indexFilterable: true
+- name: social_presence_tier
+  dataType:
+  - text
+  description: Social presence tier (Strong/Good/Basic/Minimal) from social_snapshot
+    enricher
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - extended
+  tags:
+  - categorical
+  - social
+  - tier
+- name: social_recommendations
+  dataType:
+  - text[]
+  description: Social media improvement recommendations from social_snapshot enricher
+  indexSearchable: true
+  sets:
+  - extended
+  tags:
+  - actionable
+  - recommendations
+  - social
+- name: advanced_social_features
+  dataType:
+  - text
+  description: JSON of advanced social features detected by social_snapshot enricher
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - advanced
+  - social
+- name: discovered_sitemaps
+  dataType:
+  - text[]
+  description: XML sitemap URLs discovered by sitemap_discovery enricher
+  indexSearchable: true
+- name: sitemap_discovery_method
+  dataType:
+  - text
+  description: Method used to discover sitemaps (robots_txt/well_known/dns) from sitemap_discovery
+    enricher
+  indexFilterable: true
+  tokenization: field
+- name: total_sitemaps_discovered
+  dataType:
+  - int
+  description: Total number of sitemaps discovered by sitemap_discovery enricher
+  indexFilterable: true
+- name: attempted_locations
+  dataType:
+  - text[]
+  description: Sitemap locations attempted during discovery from sitemap_discovery
+    enricher
+  indexSearchable: true
+- name: successful_locations
+  dataType:
+  - text[]
+  description: Sitemap locations that were successfully found from sitemap_discovery
+    enricher
+  indexSearchable: true
+- name: bot_protected
+  dataType:
+  - boolean
+  description: Whether sitemap discovery was blocked by bot protection from sitemap_discovery
+    enricher
+  indexFilterable: true
+- name: homepage_urls_discovered
+  dataType:
+  - text[]
+  description: URLs discovered from homepage parsing by homepage_parser enricher
+  indexSearchable: true
+- name: homepage_total_links
+  dataType:
+  - int
+  description: Total number of links found on homepage by homepage_parser enricher
+  indexFilterable: true
+- name: homepage_discovery_method
+  dataType:
+  - text
+  description: Method used for homepage discovery (direct/redirect) from homepage_parser
+    enricher
+  indexFilterable: true
+  tokenization: field
+- name: homepage_has_navigation
+  dataType:
+  - boolean
+  description: Whether homepage has navigation menu from homepage_parser enricher
+  indexFilterable: true
+- name: homepage_has_footer
+  dataType:
+  - boolean
+  description: Whether homepage has footer section from homepage_parser enricher
+  indexFilterable: true
+- name: homepage_has_main_content
+  dataType:
+  - boolean
+  description: Whether homepage has main content area from homepage_parser enricher
+  indexFilterable: true
+- name: homepage_social_links
+  dataType:
+  - int
+  description: Count of social media links found on homepage by homepage_parser enricher
+  indexFilterable: true
+- name: homepage_contact_indicators
+  dataType:
+  - int
+  description: Count of contact indicators found on homepage by homepage_parser enricher
+  indexFilterable: true
+- name: homepage_valid_content_urls
+  dataType:
+  - int
+  description: Count of valid content URLs extracted from homepage by homepage_parser
+    enricher
+  indexFilterable: true
+- name: corporate_ip_ranges
+  dataType:
+  - text[]
+  description: Known corporate IP addresses/ranges for this company (from visitor
+    tracking)
+  indexSearchable: true
+  sets:
+  - extended
+  tags:
+  - intelligence
+  - ip
+  - visitor
+- name: visitor_networks
+  dataType:
+  - text
+  description: JSON array of network information from detected visitors (ISP, location,
+    connection type)
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - intelligence
+  - network
+  - visitor
+- name: last_visitor_ip
+  dataType:
+  - text
+  description: Most recently detected visitor IP from this company
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - extended
+  tags:
+  - intelligence
+  - ip
+  - visitor
+- name: last_visitor_location
+  dataType:
+  - text
+  description: Location of most recent visitor (city, country)
+  indexFilterable: true
+  tokenization: word
+  sets:
+  - extended
+  tags:
+  - intelligence
+  - location
+  - visitor
+- name: visitor_ip_updated_at
+  dataType:
+  - date
+  description: Timestamp when visitor IP intelligence was last updated
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - status
+  - temporal
+  - visitor
+- name: total_visitor_sessions
+  dataType:
+  - int
+  description: Total number of visitor sessions detected from this company
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - intelligence
+  - metrics
+  - visitor
+- name: first_visitor_seen_at
+  dataType:
+  - date
+  description: Timestamp when first visitor from this company was detected
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - status
+  - temporal
+  - visitor
+- name: visitor_connection_types
+  dataType:
+  - text[]
+  description: Types of connections detected (corporate, mobile, vpn)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - intelligence
+  - network
+  - visitor
+- name: visitor_isps
+  dataType:
+  - text[]
+  description: ISPs detected for this company's visitors
+  indexSearchable: true
+  sets:
+  - standard
+  tags:
+  - intelligence
+  - network
+  - visitor
+- name: visitor_countries
+  dataType:
+  - text[]
+  description: Countries where visitors from this company have been detected
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - intelligence
+  - visitor
+- name: is_active_visitor
+  dataType:
+  - boolean
+  description: Whether this company has had visitors in the last 30 days
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - intelligence
+  - status
+  - visitor
+- name: page_intelligence
+  dataType:
+  - boolean
+  description: Domain has been crawled and Page_intelligence records created
+  indexFilterable: true
+  indexSearchable: false
+  sets:
+  - standard
+  tags:
+  - pipeline
+  - processing
+- name: page_facts
+  dataType:
+  - boolean
+  description: Pages have been scraped and Page_facts records created
+  indexFilterable: true
+  indexSearchable: false
+  sets:
+  - standard
+  tags:
+  - pipeline
+  - processing
+- name: knowledge_base
+  dataType:
+  - boolean
+  description: Facts have been extracted to Knowledge_base collection
+  indexFilterable: true
+  indexSearchable: false
+  sets:
+  - standard
+  tags:
+  - pipeline
+  - processing
+# ============================================================
+# REFERENCES - Domain IS the Entity in the new model
+# ============================================================
+# Domain is the universal entity collection.
+# The URL is the entity's digital signature.
+# Researchers reference Domain, not a separate source.
+references:
+# --- LEGACY: Company_source reference (backward compatibility) ---
+- name: company
+  target_collection: Company_source
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "LEGACY: Reference to Company_source. In new model, Domain IS the entity."
+
+# --- NEW MODEL: Researcher references ---
+# Domain holds references to all researcher outputs for this entity
+- name: research_industry
+  target_collection: Research_industry
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Industry researcher analysis for this entity"
+
+- name: research_financial
+  target_collection: Research_financial
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Financial researcher analysis for this entity"
+
+- name: research_risk
+  target_collection: Research_risk
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Risk researcher analysis for this entity"
+
+collection_name: domain
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs (consistent
+      across collections)
+  - field: url
+    namespace: URL
+    description: Fallback strategy using full URL for deterministic UUIDs
+dependencies:
+- type: foundational
+
+# ============================================================
+# DATA SOURCES - Domain IS the entity (self-referential)
+# ============================================================
+# In the new model, Domain is the entity source.
+# Seed data (URLs) create Domain records directly.
+# Company_source is LEGACY (for backward compatibility only).
+data_sources:
+  # NEW MODEL: Domain is self-sourced from URL seeds
+  entity_source: Domain
+  # LEGACY: Company_source for backward compatibility
+  source_collection: Company_source
+collection_groups:
+- url_collections
+schema_config:
+  additional_properties: true
+calculated_fields:
+- name: enrichment_completeness
+  field_type: calculated
+  formula: 'enrichment_status === ''completed'' ? 1 : (enrichment_status === ''partial''
+    ? 0.5 : 0)'
+  description: 🔄 Enrichment completeness score (0-1)
+  dataType:
+  - number
+  sets:
+  - extended
+  tags:
+  - calculated
+  - processing
+  label: Enrichment Completeness
+  format: percentage
+  aggregations:
+  - mean
+  - count
+- name: domain_trust_score
+  field_type: calculated
+  formula: '(security_score || 0) * (site_readable ? 1 : 0.5) * (is_blacklisted ?
+    0 : 1)'
+  description: 🛡️ Combined domain trust score (calculated locally)
+  dataType:
+  - number
+  sets:
+  - full
+  tags:
+  - calculated
+  - security
+  - trust
+  label: Domain Trust Score
+  format: percentage
+  aggregations:
+  - mean
+  - median
+  - count
+id: Domain
+name: Domain

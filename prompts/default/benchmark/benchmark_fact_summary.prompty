@@ -1,0 +1,267 @@
+---
+# ⚠️ DEPRECATED: This prompt has been migrated to PomAI
+# Canonical location: PomAI/core/config/prompts/benchmarks/benchmark_fact_summary.prompty
+# This file will be removed in a future release. Use the PomAI version instead.
+deprecated: true
+deprecated_date: "2024-12"
+deprecated_canonical: "PomAI/core/config/prompts/benchmarks/benchmark_fact_summary.prompty"
+
+name: Benchmark Fact Summary
+description: >
+  [DEPRECATED] Analyze and compare facts extracted by multiple benchmark variants.
+  Identifies consensus facts, unique discoveries, and provides strategic recommendations.
+  USE PomAI VERSION.
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: analysis           # Primary: comparing and analyzing outputs
+  complexity: complex           # Multi-variant comparison with strategic insights
+  context_size: large           # Combined outputs from multiple variants
+  priority: quality             # Quality analysis critical for benchmark value
+
+inputs:
+  record:
+    description: Contains combined_outputs from all variants, domain, token usage
+    type: object
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    temperature: 0.3
+    max_tokens: 16000
+    response_format:
+      type: json_schema
+      json_schema:
+        name: fact_completeness_analysis
+        strict: true
+        schema:
+          type: object
+          properties:
+            summary:
+              type: object
+              description: High-level summary statistics
+              properties:
+                total_unique_facts:
+                  type: integer
+                  description: Total unique facts across all variants
+                consensus_facts_count:
+                  type: integer
+                  description: Facts found by ALL variants
+                consensus_percentage:
+                  type: number
+                  description: Percentage of facts found by all variants
+              required:
+                - total_unique_facts
+                - consensus_facts_count
+                - consensus_percentage
+              additionalProperties: false
+            variant_scores:
+              type: array
+              description: Coverage scores per variant
+              items:
+                type: object
+                properties:
+                  variant_name:
+                    type: string
+                  facts_found:
+                    type: integer
+                  coverage_percentage:
+                    type: number
+                  unique_discoveries:
+                    type: integer
+                    description: Facts ONLY this variant found
+                  tokens_used:
+                    type: integer
+                  efficiency_score:
+                    type: number
+                    description: Facts per 1000 tokens (higher = more efficient)
+                required:
+                  - variant_name
+                  - facts_found
+                  - coverage_percentage
+                  - unique_discoveries
+                additionalProperties: false
+            consensus_facts:
+              type: array
+              description: Facts found by ALL variants (high confidence)
+              items:
+                type: string
+            unique_discoveries:
+              type: array
+              description: Facts found by only ONE variant
+              items:
+                type: object
+                properties:
+                  variant:
+                    type: string
+                  facts:
+                    type: array
+                    items:
+                      type: string
+                required:
+                  - variant
+                  - facts
+                additionalProperties: false
+            partial_coverage:
+              type: array
+              description: Facts found by SOME but not all variants
+              items:
+                type: object
+                properties:
+                  fact:
+                    type: string
+                  found_by:
+                    type: array
+                    items:
+                      type: string
+                  not_found_by:
+                    type: array
+                    items:
+                      type: string
+                required:
+                  - fact
+                  - found_by
+                  - not_found_by
+                additionalProperties: false
+            strategic_analysis:
+              type: object
+              description: Strategic recommendations based on analysis
+              properties:
+                best_for_cost_sensitive:
+                  type: object
+                  properties:
+                    variant:
+                      type: string
+                    reasoning:
+                      type: string
+                  required:
+                    - variant
+                    - reasoning
+                  additionalProperties: false
+                best_for_technical_depth:
+                  type: object
+                  properties:
+                    variant:
+                      type: string
+                    reasoning:
+                      type: string
+                  required:
+                    - variant
+                    - reasoning
+                  additionalProperties: false
+                best_balanced:
+                  type: object
+                  properties:
+                    variant:
+                      type: string
+                    reasoning:
+                      type: string
+                  required:
+                    - variant
+                    - reasoning
+                  additionalProperties: false
+                key_tradeoffs:
+                  type: string
+                  description: Summary of the main tradeoffs between variants
+                missing_information:
+                  type: string
+                  description: Important information that NO variant captured
+              required:
+                - best_for_cost_sensitive
+                - best_for_technical_depth
+                - best_balanced
+                - key_tradeoffs
+              additionalProperties: false
+            quality_assessment:
+              type: object
+              properties:
+                contradictions:
+                  type: string
+                  description: Any contradictory facts between variants (or "None found")
+                confidence_notes:
+                  type: string
+                  description: Notes about fact confidence and verification
+              required:
+                - contradictions
+                - confidence_notes
+              additionalProperties: false
+          required:
+            - summary
+            - variant_scores
+            - consensus_facts
+            - unique_discoveries
+            - strategic_analysis
+            - quality_assessment
+          additionalProperties: false
+
+processing_config:
+  mode: report  # Report mode - analysis only, no collection writes
+
+---
+system:
+# 🔬 BENCHMARK FACT COMPLETENESS ANALYZER
+
+You are an expert analyst comparing research outputs from {{ record.variant_count }} different benchmark variants for **{{ record.domain }}**.
+
+Your task is to extract, compare, and analyze ALL facts from the variant outputs to determine:
+1. Which facts ALL variants agree on (consensus)
+2. Which facts are unique discoveries by specific variants
+3. Which variant provides the best value for different use cases
+
+## 📊 VARIANT OUTPUTS TO ANALYZE
+
+{% for variant in record.variants %}
+### Variant: {{ variant.name }}
+**Tokens Used**: {{ variant.tokens | default('N/A') }}
+
+**Output**:
+```json
+{{ variant.output | tojson(indent=2) if variant.output is mapping else variant.output }}
+```
+
+---
+{% endfor %}
+
+## 🎯 ANALYSIS INSTRUCTIONS
+
+### Step 1: Extract ALL Facts
+- Read through each variant's output carefully
+- Extract every distinct piece of factual information
+- A "fact" is a specific, verifiable claim about the company (product names, features, pricing models, integrations, etc.)
+
+### Step 2: Deduplicate & Categorize
+- Group semantically identical facts (even if worded differently)
+- Mark each fact as:
+  - **CONSENSUS**: Found by ALL variants
+  - **PARTIAL**: Found by some but not all variants (note which ones)
+  - **UNIQUE**: Found by only ONE variant (note which one)
+
+### Step 3: Calculate Coverage
+For each variant, calculate:
+- Total facts found
+- Coverage % = (facts found / total unique facts) × 100
+- Unique discoveries count
+- Efficiency = facts found / (tokens used / 1000)
+
+### Step 4: Strategic Analysis
+Based on the token usage and fact coverage:
+- **Cost-sensitive**: Which variant gets the most core facts with fewest tokens?
+- **Technical depth**: Which variant finds the most specific/detailed facts?
+- **Balanced**: Which variant offers the best coverage/cost tradeoff?
+
+### Step 5: Quality Assessment
+- Note any contradictions between variants
+- Identify important information that NO variant captured
+- Assess overall confidence in the extracted facts
+
+## ⚠️ IMPORTANT GUIDELINES
+
+1. **Be specific with facts** - "Prismatic offers 50+ connectors" is a fact, "Prismatic has integrations" is too vague
+2. **Semantic deduplication** - "B2B SaaS iPaaS" and "embedded iPaaS for B2B SaaS" are the same fact
+3. **Unique discoveries matter** - Facts found by only one variant may indicate deeper research OR hallucination
+4. **Efficiency analysis** - A variant using 2x tokens for only 3% more facts may not be worth it
+
+Return your analysis as structured JSON matching the schema.

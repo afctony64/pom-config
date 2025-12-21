@@ -1,0 +1,715 @@
+type: research
+class: Company_research_financial
+description: "\U0001F4DA RESEARCH REPOSITORY: Chief Financial Intelligence\n  \n \
+  \ RESEARCHER: Chief Financial Analyst (identity defined in seed data)\n  \n  KNOWLEDGE\
+  \ TYPE: Company-specific financial research and analysis\n  \n  MULTI-TENANT ARCHITECTURE:\
+  \ Each tenant represents one company's complete financial intelligence\n  - Tenant\
+  \ Isolation: Complete data separation per company\n  - Tenant Activation: Automatic\
+  \ tenant creation and activation\n  - Scalability: Supports unlimited tenants with\
+  \ efficient partitioning\n  \n  REPOSITORY CONTENTS:\n  - Chief Financial Analysis:\
+  \ Comprehensive financial intelligence and insights\n  - Categorical Classifications:\
+  \ Machine-assigned categories for financial attributes\n  - Quality Metadata: Processing\
+  \ dates, source quality, review flags, confidence levels\n  - Evidence Links: References\
+  \ to supporting data and source materials\n  \n  DATA SOURCES:\n  - AI-analyzed\
+  \ company websites and financial-specific content\n  - Industry reports and research\
+  \ publications\n  - Public company information and disclosures\n  - Validated against\
+  \ authoritative sources when available\n  \n  QUALITY STANDARDS:\n  - Confidence\
+  \ Scoring: High, Medium, Low, Inferred, Web-verified\n  - Evidence-Based Assessment:\
+  \ Classifications backed by concrete evidence\n  - Source Tracking: Links to originating\
+  \ Company_source records\n  - Conservative Calibration: Prefer 'unknown' over incorrect\
+  \ data\n  \n  INTEGRATION: Provides financial intelligence to support holistic company\
+  \ analysis\n  \n  VECTOR SEARCH CAPABILITIES: Named vectors for similarity search\
+  \ across key financial dimensions"
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+namedVectors:
+  fundingStageVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - fundingStageLLM
+    - fundingJourney
+    - totalFunding
+    - keyInvestors
+    - valuation
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  revenueSizeVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - revenueSizeLLM
+    - revenues
+    - revenueProfile
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  growthVelocityVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - growthVelocityLLM
+    - revenueGrowthRate
+    - revenueProfile
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  profitabilityProfileVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - profitabilityProfileLLM
+    - financialHealth
+    - keyFinancialMetrics
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: accountName
+  dataType:
+  - text
+  description: Company name
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+- name: seed
+  dataType:
+  - boolean
+  description: Indicates if this record originated from seed data (true) or was generated
+    by research process (false)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  tags:
+  - metadata
+  - seed
+- name: domain
+  dataType:
+  - text
+  description: Company domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+- name: stockSymbol
+  dataType:
+  - text
+  description: Stock ticker symbol for public companies (e.g., NVDA, MSFT, AAPL) -
+    discovered during financial research
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  sets:
+  - prompt
+- name: financialHealth
+  dataType:
+  - text
+  description: Overall financial position, stability, and health indicators
+  tags:
+  - financial
+  - metrics
+  - research
+  sets:
+  - extended
+  - prompt
+- name: revenueProfile
+  dataType:
+  - text
+  description: Revenue model, size, growth trajectory, and monetization strategy
+  tags:
+  - research
+  sets:
+  - prompt
+- name: fundingJourney
+  dataType:
+  - text[]
+  description: Funding Journey
+  tags:
+  - financial
+  - funding
+  - research
+  sets:
+  - prompt
+  - array
+- name: keyFinancialMetrics
+  dataType:
+  - text[]
+  description: Key Financial Metrics
+  tags:
+  - financial
+  - metrics
+  - research
+  sets:
+  - prompt
+  - array
+- name: growthVelocityLLM
+  dataType:
+  - text
+  description: Descriptive analysis of growth rate and business momentum. Include
+    YoY growth percentages, growth acceleration/deceleration trends, expansion metrics,
+    hiring velocity, and growth sustainability indicators.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: profitabilityProfileLLM
+  dataType:
+  - text
+  description: Descriptive analysis of profitability status and path to profitability.
+    Include profit/loss status, EBITDA mentions, cash flow indicators, burn rate if
+    applicable, runway estimates, and profitability timeline or achievement.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: revenueSizeLLM
+  dataType:
+  - text
+  description: Descriptive analysis of revenue scale and financial size. Include revenue
+    range indicators, ARR/MRR mentions if SaaS, revenue growth trajectory, and financial
+    scale relative to industry peers.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: edgarCoreMetrics
+  dataType:
+  - text
+  description: '**SEC EDGAR STRUCTURED FINANCIAL DATA** (Public companies only) -
+    JSON string containing core metrics'
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: financialRatios
+  dataType:
+  - text
+  description: '**CALCULATED FINANCIAL RATIOS** (All companies - calculated or inferred)
+    - JSON string containing financial ratios'
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: edgarMetadata
+  dataType:
+  - text
+  description: '**SEC EDGAR FILING METADATA** (Public companies only) - JSON string
+    containing filing metadata'
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: fundingStageLLM
+  dataType:
+  - text
+  description: Funding Stage Description
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: revenues
+  dataType:
+  - text
+  description: Revenue for classification
+  tags:
+  - research
+  sets:
+  - prompt
+- name: revenueGrowthRate
+  dataType:
+  - text
+  description: Revenue growth rate (YoY percentage or description) used in growthVelocityVector
+  tags:
+  - research
+  sets:
+  - prompt
+- name: totalFunding
+  dataType:
+  - text
+  description: Total funding for classification
+  tags:
+  - research
+  sets:
+  - prompt
+- name: keyInvestors
+  dataType:
+  - text[]
+  description: Key investors and funding sources
+  tags:
+  - financial
+  - investors
+  - research
+  sets:
+  - prompt
+  - array
+- name: valuation
+  dataType:
+  - text
+  description: Company valuation for classification
+  tags:
+  - research
+  sets:
+  - prompt
+- name: dataSource
+  dataType:
+  - text
+  description: Source of classification data
+  sets:
+  - system
+- name: fundingStageCat
+  dataType:
+  - text
+  description: 'Current funding stage - assess based on total capital raised, investor
+    profile, and company maturity. Guidelines: Bootstrapped (no external funding),
+    Pre-Seed (<$500K), Seed ($500K-$2M), Series-A ($2M-$15M), Series-B ($15M-$40M),
+    Series-C ($40M-$100M), Series-D-Plus (>$100M). Use ''Growth-Equity'' for late-stage
+    private companies. Only use ''Public'' if explicitly a public company, ''Acquired''
+    if acquired by another company.'
+  enum:
+  - Bootstrapped
+  - Pre-Seed
+  - Seed
+  - Series-A
+  - Series-B
+  - Series-C
+  - Series-D-Plus
+  - Growth-Equity
+  - Public
+  - Acquired
+  - Unknown
+  tags:
+  - Cat
+  - benchmark
+  sets:
+  - prompt
+  - system
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: fundingStageLLM
+- name: revenueSizeCat
+  dataType:
+  - text
+  description: Annual revenue size band - assess based on stated revenue, ARR/MRR
+    figures, employee count indicators, customer scale, and market positioning. For
+    SaaS companies, use ARR as primary indicator. For early-stage companies with no
+    revenue indicators, use 'Pre-Revenue'. Select the band that best matches available
+    evidence.
+  enum:
+  - Pre-Revenue
+  - Under-1M
+  - 1M-5M
+  - 5M-10M
+  - 10M-25M
+  - 25M-50M
+  - 50M-100M
+  - 100M-500M
+  - 500M-1B
+  - Over-1B
+  - Unknown
+  tags:
+  - Cat
+  sets:
+  - prompt
+  - system
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: revenueSizeLLM
+- name: growthVelocityCat
+  dataType:
+  - text
+  description: 'Revenue growth rate classification. Requires EXPLICIT growth metrics
+    - do not guess.
+
+
+    CLASSIFICATION RULES (explicit evidence required):
+
+    - Hyper-Growth: Stated >100% YoY growth, explicit "hypergrowth" claims
+
+    - Fast-Growth: Stated 50-100% YoY growth, explicit rapid expansion metrics
+
+    - Strong-Growth: Stated 25-50% YoY growth, explicit consistent expansion
+
+    - Steady-Growth: Stated 10-25% YoY growth, explicit market share gains
+
+    - Moderate-Growth: Stated 5-10% YoY growth, explicit incremental growth
+
+    - Slow-Growth: Stated <5% YoY growth, explicit maintenance mode
+
+    - Flat: Explicit stable/flat revenue, stated no growth
+
+    - Declining: Explicit revenue decline, stated contraction
+
+
+    USE Unknown WHEN:
+
+    - No explicit growth rate or trend stated
+
+    - Funding alone is NOT evidence of growth rate
+
+    - Product launches alone are NOT evidence of revenue growth
+
+    '
+  enum:
+  - Hyper-Growth
+  - Fast-Growth
+  - Strong-Growth
+  - Steady-Growth
+  - Moderate-Growth
+  - Slow-Growth
+  - Flat
+  - Declining
+  - Unknown
+  tags:
+  - Cat
+  - growth
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: growthVelocityLLM
+- name: profitabilityProfileCat
+  dataType:
+  - text
+  description: 'Profitability status classification. Requires EXPLICIT evidence -
+    do not guess.
+
+
+    CLASSIFICATION RULES (explicit evidence required):
+
+    - Highly-Profitable: Stated profit margins >20%, "highly profitable", strong positive
+    EBITDA
+
+    - Profitable: Explicit profitability claims, positive cash flow statements, "profitable"
+
+    - Break-Even: Stated "break-even", revenue equals costs, transition mentions
+
+    - Growth-Investment: Explicit "reinvesting for growth", "prioritizing growth over
+    profit"
+
+    - Early-Stage-Burn: Explicit "burn rate", "runway" discussions, stated losses
+
+    - Path-To-Profitability: Explicit "path to profitability", stated improving unit
+    economics
+
+    - Distressed: Explicit financial difficulties, restructuring announcements, going
+    concern
+
+
+    USE Unknown WHEN:
+
+    - No explicit profitability/loss statements found
+
+    - Only funding information without profitability context
+
+    - Company age alone is NOT evidence of profitability
+
+    '
+  enum:
+  - Highly-Profitable
+  - Profitable
+  - Break-Even
+  - Growth-Investment
+  - Early-Stage-Burn
+  - Path-To-Profitability
+  - Distressed
+  - Unknown
+  tags:
+  - Cat
+  - profitability
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: profitabilityProfileLLM
+- name: processedDate
+  dataType:
+  - text
+  description: Analysis completion date
+  sets:
+  - system
+  - metadata
+- name: sourceQuality
+  dataType:
+  - text
+  description: 'Quality rating of external tool content provided for analysis [high,
+    medium, low, minimal]:
+
+    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
+    - "medium": Some pageData available but limited relevance or coverage
+
+    - "low": Minimal pageData, relying on Company_source overview text only
+
+    - "minimal": No pageData, only basic company metadata available
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - metadata
+  - system
+  tags:
+  - metadata
+- name: analysisConfidence
+  dataType:
+  - text
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
+    - "web_verified": Confirmed through web_search with multiple external sources
+
+    - "llm_knowledge": Strong LLM training knowledge about well-known companies/entities
+
+    - "medium": Based on indirect evidence or partial information
+
+    - "low": Limited information, educated guesses
+
+    - "inferred": No direct evidence, purely analytical inference
+
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - metadata
+  - system
+  - prompt
+  tags:
+  - confidence
+- name: reviewFlag
+  dataType:
+  - text
+  description: 'Review requirement [none, for_review, needs_verification]:
+
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
+    - no review needed
+
+    - "for_review": Medium confidence with some gaps, human validation helpful
+
+    - "needs_verification": Low confidence or pure inference, human review required
+
+
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
+    - these sources are reliable.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - metadata
+  - system
+  - prompt
+  tags:
+  - review
+- name: citations
+  dataType:
+  - text[]
+  description: URLs of sources used for analysis (from pageData and web_search)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - array
+- name: reasoning
+  dataType:
+  - text[]
+  description: AI reasoning steps and thought process for analysis
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - array
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: createdAt
+  description: Record creation timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: updatedAt
+  description: Record update timestamp (sync)
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: syncVersion
+  description: Sync version number
+  dataType:
+  - int
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: syncedAt
+  description: Last sync timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: sourceLocation
+  description: Source location for sync
+  dataType:
+  - text
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: lastModifiedLocation
+  description: Last modified location
+  dataType:
+  - text
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: conflictResolution
+  description: Conflict resolution status
+  dataType:
+  - text
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: conflictResolvedAt
+  description: Conflict resolution timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: company
+    dataType:
+    - uuid[]
+    description: Company source UUIDs
+  - name: sourceEntity
+    dataType:
+    - uuid[]
+    description: Source entity UUIDs
+references:
+- name: sourceEntity
+  target_collection: Company_source
+  description: Source entity reference
+- name: company
+  target_collection: Company_source
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: Reference to the source company record for beacon traversal (uses research
+    record's own UUID)
+group: company
+weaviate_instance: cloud
+collection_name: Company_research_financial
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs (when available)
+    fallback_to_uuid4: true
+reverse_references:
+- target_collection: Company_source
+  target_property: financial
+  use_my_uuid: true
+  description: When this financial researcher is created, add its UUID to Company_source.financial
+dependencies:
+- type: research
+data_sources:
+  primary: db:Company_source
+  processor: prompty:company_financial
+collection_groups:
+- company_collections
+id: Company_research_financial
+name: Research Financial

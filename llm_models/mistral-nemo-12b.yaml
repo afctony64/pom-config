@@ -1,0 +1,116 @@
+id: "mistral-nemo:12b"
+name: Mistral Nemo 12B Instruct
+type: llm_model
+version: "1.0.0"
+provider:
+  name: ollama
+  api_type: ollama
+adapter_config:
+  type: ollama
+  model: mistral-nemo:12b-instruct-2407-q4_K_M
+  base_url: null
+  base_url_env: OLLAMA_HOST
+parameters:
+  temperature: 0.7
+  max_tokens: 2000
+  top_p: 0.9
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: true
+  streaming: true
+  vision: false
+  function_calling: true
+  multimodal: false
+cost:
+  per_1m_input_tokens: 0.0
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: Free local inference on DGX Spark
+performance:
+  avg_latency_ms: 43594
+  tokens_per_second: 14
+  context_window: 24576  # Default 24K - AdaptiveContextManager handles ratcheting
+metadata:
+  description: Mistral Nemo 12B Instruct (July 2024). Best for instruction following and extraction.
+  category: general
+  status: stable
+  release_date: '2024-07-01'
+  last_verified: '2025-12-07'
+  family: mistral-nemo
+  family_tier: quality
+  strength: instruction
+  recommended_for:
+  - Instruction following
+  - Data extraction
+  - Structured output
+  - General batch processing
+  not_recommended_for:
+  - Complex reasoning (use qwen3)
+  - Multimodal tasks (use gemma3)
+requirements:
+  gpu_vram_mb: 8500
+  system_ram_mb: 10000
+  cpu_cores: 4.0
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 10
+  max_concurrency: 16
+  dgx_spark:
+    optimal_parallel_workers: 14
+    recommended_batch_size: 1
+    memory_usage_gb: 8.5
+    estimated_throughput: 0.9
+    tokens_per_second: 50
+    notes: Fast instruction model - great for batch processing
+  gpu_24gb_plus:
+    optimal_parallel_workers: 2
+    recommended_batch_size: 1
+  gpu_8gb_plus:
+    optimal_parallel_workers: 1
+    recommended_batch_size: 1
+  cpu_only:
+    optimal_parallel_workers: 1
+    recommended_batch_size: 1
+    notes: Slow but workable
+resource_class:
+  class: B
+  vram_gb: 8.5
+  parallel_capacity_spark: 14
+  recommended_parallel: 12
+  throughput_tier: moderate
+  tokens_per_second_single: 50
+tier: A
+tier_rank: 3
+dimension_scores:
+  summarization: 82
+  reasoning: 80
+  instruction: 92
+  analysis: 80
+  coding: 75
+  speed: 60
+  context_efficiency: 88
+pom_benchmarks:
+  last_calibration: '2025-12-07'
+  calibration_version: '3.0'
+  prompts_tested: {}
+  aggregate:
+    avg_quality: 82
+    avg_latency_ms: 1200
+    total_prompts_tested: 0
+benchmarks: {}
+
+# === VAST.AI SERVERLESS CONFIGURATION ===
+vastai_config:
+  enabled: true
+  endpoint_name: "vLLM-Mistral-Nemo-12B"
+  huggingface_model: "mistralai/Mistral-Nemo-Instruct-2407"
+  gpu_tier: "consumer"  # RTX 3090/4090 - sufficient for 12B
+  skip_local: false
+  cold_workers: 0  # Cold start only - save costs
+  # NOTE: Keep disk conservative to avoid host download failures.
+  disk_space_gb: 120
+  gpu_requirements: "gpu_ram>=24 num_gpus=1 inet_down>100"
+  template_hash: "03fba9bdccaa8ace9ad931105d8e9eb4"  # pragma: allowlist secret
+  estimated_cold_start_seconds: 180
+  priority: 7  # Good general purpose model

@@ -1,0 +1,203 @@
+# Research Base Schema
+# Common fields for ALL generic researchers
+# NOT a collection itself - researcher schemas EXTEND these fields
+
+type: research
+class: Research_base
+description: |
+  BASE SCHEMA: Common fields for all generic researchers.
+
+  NOT instantiated directly - researcher schemas extend these fields.
+
+  KEY CONCEPT: Domain IS the Entity
+  - The URL/domain is the entity's digital signature
+  - Research records reference Domain (not a separate source)
+  - Domain contains: the entity identity + all discovered facts
+  - Research contains: researcher-specific analysis of those facts
+
+  DESIGN PRINCIPLES:
+  1. Entity-agnostic (Company, Destination, Character, Recipe, Film, Book)
+  2. Domain = Entity (URL is the digital signature)
+  3. TenantGroup provides domain context/expertise
+  4. Researcher provides specialized analysis (LLM + Cat fields)
+
+  FIELD PATTERN:
+  - Base fields: Domain reference, metadata, quality, citations
+  - Researcher adds: {subject}LLM, {subject}Cat, {subject}VecCat
+
+# ============================================================
+# BASE PROPERTIES - All researchers inherit these
+# ============================================================
+base_properties:
+
+  # --- ENTITY IDENTITY (who/what is being researched) ---
+  - name: entityId
+    dataType: [text]
+    description: "Unique identifier for the entity"
+    indexFilterable: true
+    tokenization: field
+    tags: [identity, system]
+
+  - name: entityType
+    dataType: [text]
+    description: "Entity type: Company, Destination, Character, Recipe"
+    indexFilterable: true
+    tokenization: field
+    tags: [identity, categorical]
+
+  - name: entityName
+    dataType: [text]
+    description: "Display name of the entity"
+    indexSearchable: true
+    tokenization: word
+    tags: [identity]
+
+  # --- RESEARCH CONTEXT (how it's being analyzed) ---
+  - name: tenantGroup
+    dataType: [text]
+    description: "Tenant group: company, travel, gaming, recipe"
+    indexFilterable: true
+    tokenization: field
+    tags: [context, categorical]
+
+  - name: researcherId
+    dataType: [text]
+    description: "Researcher ID: industry, financial, risk, etc."
+    indexFilterable: true
+    tokenization: field
+    tags: [context]
+
+  # --- SOURCE TRACKING ---
+  - name: primaryDomain
+    dataType: [text]
+    description: "Primary domain URL for this entity"
+    indexFilterable: true
+    tokenization: field
+    tags: [source, web]
+
+  - name: dataSource
+    dataType: [text]
+    description: "Data source: ai_analysis, web_scrape, api, manual"
+    indexFilterable: true
+    tokenization: field
+    tags: [source]
+
+  - name: seed
+    dataType: [boolean]
+    description: "Seed/training data flag"
+    indexFilterable: true
+    tags: [metadata]
+
+  # --- QUALITY METADATA ---
+  - name: processedAt
+    dataType: [date]
+    description: "Analysis completion timestamp"
+    indexFilterable: true
+    tags: [temporal]
+
+  - name: updatedAt
+    dataType: [date]
+    description: "Last update timestamp"
+    indexFilterable: true
+    tags: [temporal]
+
+  - name: sourceQuality
+    dataType: [text]
+    description: "Source quality: high, medium, low, minimal"
+    indexFilterable: true
+    tokenization: field
+    tags: [quality]
+    enum: [high, medium, low, minimal, unknown]
+
+  - name: analysisConfidence
+    dataType: [text]
+    description: "Confidence: high, medium, low, inferred, web_verified"
+    indexFilterable: true
+    tokenization: field
+    tags: [quality]
+    enum: [high, medium, low, inferred, web_verified, unknown]
+
+  - name: reviewFlag
+    dataType: [text]
+    description: "Review status: none, for_review, needs_verification, verified"
+    indexFilterable: true
+    tokenization: field
+    tags: [quality]
+    enum: [none, for_review, needs_verification, verified]
+
+  # --- AI PROVENANCE ---
+  - name: citations
+    dataType: ["text[]"]
+    description: "Source URLs used for analysis"
+    indexSearchable: true
+    tags: [provenance]
+
+  - name: reasoning
+    dataType: ["text[]"]
+    description: "AI reasoning steps"
+    tags: [provenance, ai]
+
+  # --- DOMAIN REFERENCE (Cross-reference to source Domain record) ---
+  - name: references
+    dataType: [object]
+    description: "Cross-reference UUIDs for Weaviate beacon traversal"
+    sets: [system]  # Exclude from AI schema - coercer generates these
+    moduleConfig:
+      text2vec-weaviate:
+        skip: true
+    nestedProperties:
+      - name: domain
+        dataType: ["uuid[]"]
+        description: "Domain record UUID (the entity's digital signature)"
+
+# ============================================================
+# STANDARD CONFIGURATION - All researchers use these
+# ============================================================
+multiTenancyConfig:
+  enabled: true
+  autoTenantCreation: true
+  autoTenantActivation: true
+
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+
+vectorizer: none
+
+# Schema metadata
+group: research
+weaviate_instance: cloud
+
+uuid_strategy:
+  fields:
+    - field: domain
+      namespace: URL
+      description: "Primary strategy using domain for deterministic UUIDs (matches Domain record)"
+    - field: entityId
+      namespace: ENTITY
+      fallback_to_uuid4: true
+
+# ============================================================
+# CROSS-REFERENCES (Weaviate beacon pattern)
+# ============================================================
+references:
+  - name: domain
+    target_collection: Domain
+    uuid_source_field: uuid
+    auto_flatten: false
+    description: "Reference to the source Domain record for beacon traversal (uses research record's own UUID)"
+
+# Reverse references: When researcher is saved, add its UUID to Domain.research_*
+# Note: Each specific researcher schema (Research_industry, etc.) should define
+# its own reverse_reference to the appropriate Domain property
+
+schema_config:
+  additional_properties: false
+  strict_field_filtering: true

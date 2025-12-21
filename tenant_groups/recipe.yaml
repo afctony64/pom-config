@@ -1,0 +1,57 @@
+# Recipe Research Tenant Group
+# Culinary analysis and recipe optimization
+
+id: recipe
+type: tenant_group
+display_name: "Recipe Research"
+description: |
+  Culinary recipe research and optimization.
+  Analyzes ingredients, techniques, nutrition, and pairings.
+
+domain_context: |
+  Culinary recipe analysis for cooking excellence.
+  Focus on technique, ingredient quality, and flavor development.
+
+  Key analysis dimensions:
+  - Ingredient analysis and sourcing
+  - Cooking techniques and methods
+  - Nutritional content and dietary considerations
+  - Flavor pairings and complementary dishes
+  - Substitutions and adaptations
+  - Cultural and historical context
+
+industry_focus:
+  preferred:
+    - Culinary Arts
+    - Food Science
+    - Nutrition
+    - Regional Cuisines
+  avoid:
+    - Fast Food
+    - Processed Foods
+
+# Independent agents selected for this domain
+researchers:
+  - ingredient     # Ingredient analysis, sourcing, quality
+  - technique      # Cooking methods, timing, temperature
+  - nutrition      # Nutritional analysis, dietary info
+  - pairing        # Flavor combinations, wine/beverage
+  - substitution   # Alternatives, dietary adaptations
+  - risk           # Allergies, food safety  ← SHARED AGENT
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ENTITY MODEL CONFIGURATION (Standard)
+# ══════════════════════════════════════════════════════════════════════════════
+# Uses the Entity Model:
+# - Source: Domain (the URL/domain IS the entity)
+# - Output: Research_* (no prefix)
+entity:
+  entity_type: Recipe
+  # ENTITY MODEL: Source is Domain
+  source_collection: Domain
+  # ENTITY MODEL: No prefix for research collections
+  research_schema_prefix: ""  # Results in Research_ingredient, Research_technique, etc.
+  domain_schema: Domain
+
+# Schema pattern for research output (generates Research_{researcher})
+schema_pattern: "Research_{researcher}"

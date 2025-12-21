@@ -1,0 +1,91 @@
+---
+# ⚠️ DEPRECATED: This prompt has been migrated to PomAI
+# Canonical location: PomAI/core/config/prompts/utility/seed_generator.prompty
+# This file will be removed in a future release. Use the PomAI version instead.
+deprecated: true
+deprecated_date: "2024-12"
+deprecated_canonical: "PomAI/core/config/prompts/utility/seed_generator.prompty"
+
+name: Seed Generator (Single Segment)
+description: "[DEPRECATED] Generate realistic B2B SaaS seed company descriptions for ONE segment with specified number of variants - USE PomAI VERSION"
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: summarization      # Primary: generating descriptions
+  complexity: simple            # Template-based generation
+  context_size: small           # Segment info input
+  priority: speed               # Fast generation for batches
+inputs:
+  segment:
+    type: object
+    description: Single segment data with sector, naics, industry, segment info, target_seed_count, and variant_guidance
+    required: true
+  record:
+    type: object
+    description: Record data (optional)
+    default: {}
+model:
+  provider: pom-llm-proxy
+  configuration:
+    type: pom-llm-proxy
+    model: llama3.2:3b-instruct-q4_K_M
+  parameters:
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 2000
+---
+system:
+You are an expert B2B SaaS market analyst creating detailed company profile descriptions for market segmentation research.
+
+Your task is to generate realistic, specific descriptions of companies operating in defined market segments. Each description should read like an actual company profile, not generic marketing copy.
+
+Focus on:
+- Concrete details: specific technologies, metrics, customer profiles
+- Market positioning: what makes this variant unique in the segment
+- Scale indicators: revenue ranges, customer counts, team size where relevant
+- Real-world applicability: descriptions that could match actual companies
+
+user:
+Generate {{ segment.target_seed_count | default(5) }} detailed company profile descriptions for the following market segment. {% if segment.variant_guidance %}Follow the variant guidance provided.{% else %}Create diverse company profiles representing different business models and scales within this segment.{% endif %}
+
+**SECTOR**: {{ segment.sector }}
+**NAICS**: {{ segment.naics }}
+**INDUSTRY**: {{ segment.industry }}
+**SEGMENT**: {{ segment.segment_name }}
+**SEGMENT DESCRIPTION**: {{ segment.segment_description }}
+
+{% if segment.variant_guidance %}
+**VARIANT PROFILE GUIDELINES:**
+{{ segment.variant_guidance }}
+{% else %}
+**VARIANT PROFILE GUIDELINES (if applicable):**
+
+When creating multiple descriptions, consider diverse approaches:
+- Enterprise vs Mid-Market vs SMB/Startup scale
+- Vertical specialization vs horizontal platform
+- Product-led vs sales-led growth models
+- Different pricing strategies (subscription, usage-based, seat-based)
+- Geographic focus (global, regional, local)
+- Market positioning (niche specialist vs broad platform)
+{% endif %}
+
+**OUTPUT FORMAT:**
+Generate {{ segment.target_seed_count | default(5) }} descriptions. {% if segment.variant_guidance %}Use the variant guidance provided.{% else %}Create diverse profiles representing different business models, scales, and approaches within this segment.{% endif %}
+
+Use this format for each description:
+
+### DESCRIPTION_1: [Variant/Type Name]
+[3-4 sentence description]
+
+### DESCRIPTION_2: [Variant/Type Name]
+[3-4 sentence description]
+
+[... continue for all requested descriptions ...]
+
+**OUTPUT REQUIREMENTS** for each description:
+1. First sentence: Target customer profile (size, industry focus) and core value proposition
+2. Second sentence: Key features, technologies, or capabilities that differentiate this variant
+3. Third sentence: Scale metrics matching the variant profile (revenue, customers, geographic reach)
+4. Fourth sentence: Market positioning, competitive advantages, or unique approach
+
+Write ONLY the descriptions in the format shown above. Make them sound like real companies in this segment.

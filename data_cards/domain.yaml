@@ -1,0 +1,262 @@
+# Data Card: Domain with References
+#
+# Purpose: Fetch Domain records with Company_source reference via GraphQL
+# Use Case: Get domain information with associated company data
+#
+# ✅ GraphQL executor with reference traversal to Company_source
+
+id: domain
+name: Domain with Company Reference
+type: data_card
+file: domain.yaml
+description: >
+  Fetches Domain records with extended field set and includes referenced Company_source data.
+  Uses GraphQL executor for efficient reference traversal.
+
+# Tagging system
+tags:
+  - domain
+  - url
+  - company-reference
+  - extended-fields
+
+target_scope: domain_intelligence
+
+# ✅ STANDARD: Use 'graphql' for all data cards
+executor: graphql
+
+# Enable relationship traversal for cross-references
+relationship_support: true
+
+# Access control
+personas:
+  - "*"
+
+# Query parameters
+parameters:
+  type: graphql  # Must match executor
+
+  # Root collection
+  collection: Domain
+
+  # Relationship traversal configuration
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Reference fields to include
+  references:
+    - company  # Reference to Company_source
+
+  # Field tags for reference collections
+  field_tags: []  # No tag filtering for references - use field_set instead
+
+  # Limits
+  limit: 50
+  limit_default: 50
+
+  # Field set configuration
+  field_set: standard
+  field_set_default: standard
+  field_set_options:
+    - standard
+    - extended
+
+# Field definitions for each field set
+field_sets:
+  standard:
+    description: "Core domain fields with company reference"
+    fields:
+      # Domain core fields
+      - name: domain
+        type: text
+        source: property
+        description: Domain name
+
+      - name: url
+        type: text
+        source: property
+        description: Primary URL
+
+      - name: title
+        type: text
+        source: property
+        description: Page title
+
+      - name: description
+        type: text
+        source: property
+        description: Page description
+
+      - name: page_processing_status
+        type: text
+        source: property
+        description: Processing status
+
+      - name: is_blacklisted
+        type: boolean
+        source: property
+        description: Blacklist status
+
+      # Company reference fields (flattened with underscore notation)
+      - name: company_accountName
+        type: text
+        source: reference
+        description: Company name from Company_source
+
+      - name: company_industry
+        type: text
+        source: reference
+        description: Company industry
+
+      - name: company_domain
+        type: text
+        source: reference
+        description: Company domain
+
+  extended:
+    description: "Full domain profile with all fields and company reference"
+    fields:
+      # All standard fields
+      - name: domain
+        type: text
+        source: property
+        description: Domain name
+
+      - name: url
+        type: text
+        source: property
+        description: Primary URL
+
+      - name: title
+        type: text
+        source: property
+        description: Page title
+
+      - name: description
+        type: text
+        source: property
+        description: Page description
+
+      - name: content
+        type: text
+        source: property
+        description: Page content
+
+      - name: site_readable
+        type: boolean
+        source: property
+        description: Site readability status
+
+      - name: analysis_type
+        type: text
+        source: property
+        description: Analysis type
+
+      - name: page_processing_status
+        type: text
+        source: property
+        description: Processing status
+
+      - name: is_blacklisted
+        type: boolean
+        source: property
+        description: Blacklist status
+
+      - name: blacklist_reason
+        type: text
+        source: property
+        description: Blacklist reason
+
+      - name: robots_rules_count
+        type: number
+        source: property
+        description: Robots.txt rules count
+
+      - name: robots_sitemap_urls
+        type: text[]
+        source: property
+        description: Sitemap URLs
+
+      - name: enricherResults
+        type: object[]
+        source: property
+        description: Enricher results array
+
+      # Company reference fields (extended, flattened with underscore notation)
+      - name: company_accountName
+        type: text
+        source: reference
+        description: Company name from Company_source
+
+      - name: company_industry
+        type: text
+        source: reference
+        description: Company industry
+
+      - name: company_domain
+        type: text
+        source: reference
+        description: Company domain
+
+      - name: company_employees
+        type: number
+        source: reference
+        description: Company employee count
+
+      - name: company_annualRevenue
+        type: number
+        source: reference
+        description: Company annual revenue
+
+      - name: company_stockSymbol
+        type: text
+        source: reference
+        description: Company stock symbol
+
+      - name: company_description
+        type: text
+        source: reference
+        description: Company description
+
+      - name: company_overview
+        type: text
+        source: reference
+        description: Company overview
+
+# Collection configuration for references
+collections:
+  - collection: Domain
+    uses_field_set: standard
+    required: true
+    references:
+      company:
+        target_collection: Company_source
+        field_set: standard  # Use standard field_set for Company_source reference (5 fields: accountName, accountType, description, employees, state)
+
+# Query behavior
+supports_relationships: true
+supports_aggregation: false
+supports_grouping: true
+requires_query_text: false
+
+# Performance settings
+default_limit: 50
+max_limit: 1000
+timeout_seconds: 30
+
+# Examples for documentation
+examples:
+  - description: Basic query with standard fields
+    code: |
+      result = await execute_data_card(
+          data_card_id="domain",
+          limit=10
+      )
+
+  - description: Extended fields query with company reference
+    code: |
+      result = await execute_data_card(
+          data_card_id="domain",
+          field_set="extended",
+          limit=10
+      )

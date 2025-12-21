@@ -1,0 +1,114 @@
+id: "gemma3:12b"
+name: Gemma 3 12B IT-QAT
+type: llm_model
+version: "1.0.0"
+provider:
+  name: ollama
+  api_type: ollama
+adapter_config:
+  type: ollama
+  model: gemma3:12b-it-qat
+  base_url: null
+  base_url_env: OLLAMA_HOST
+parameters:
+  temperature: 0.7
+  max_tokens: 2000
+  top_p: 0.9
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: false
+  streaming: true
+  vision: true
+  function_calling: false
+  multimodal: true
+cost:
+  per_1m_input_tokens: 0.0
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: Free local inference on DGX Spark
+performance:
+  avg_latency_ms: 22535
+  tokens_per_second: 27
+  context_window: 24576  # Default 24K - AdaptiveContextManager handles ratcheting
+metadata:
+  description: Google Gemma 3 12B IT-QAT. Best for multimodal and instruction tasks.
+  category: general
+  status: stable
+  release_date: '2025-03-01'
+  last_verified: '2025-12-07'
+  family: gemma3
+  family_tier: quality
+  strength: multimodal
+  recommended_for:
+  - Table component analysis
+  - Multimodal/vision tasks
+  - Instruction following
+  - General batch processing
+  not_recommended_for:
+  - Executive summaries (use 27b)
+  - Complex reasoning (use qwen3)
+requirements:
+  gpu_vram_mb: 8900
+  system_ram_mb: 10000
+  cpu_cores: 4.0
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 8
+  max_concurrency: 14
+  dgx_spark:
+    optimal_parallel_workers: 12
+    recommended_batch_size: 1
+    memory_usage_gb: 8.9
+    estimated_throughput: 0.8
+    tokens_per_second: 45
+    notes: Fast quality on Spark - use for analysis components
+  gpu_24gb_plus:
+    optimal_parallel_workers: 2
+    recommended_batch_size: 1
+  gpu_8gb_plus:
+    optimal_parallel_workers: 1
+    recommended_batch_size: 1
+  cpu_only:
+    optimal_parallel_workers: 1
+    recommended_batch_size: 1
+    notes: Slow but workable
+vastai_config:
+  enabled: true
+  endpoint_name: "vLLM-Gemma3-12B"
+  huggingface_model: "google/gemma-3-12b-it"
+  cold_workers: 0  # Cold start only - save costs
+  # NOTE: Official docs advertise very large max context (128K), but we run smaller by default.
+  # Disk sizing is primarily weights + HF cache + image layers; keep conservative.
+  disk_space_gb: 120
+  gpu_requirements: "gpu_ram>=24 num_gpus=1 inet_down>100"
+  template_hash: "03fba9bdccaa8ace9ad931105d8e9eb4"  # pragma: allowlist secret
+  estimated_cold_start_seconds: 180
+  priority: 6  # Medium priority
+
+resource_class:
+  class: B
+  vram_gb: 8.9
+  parallel_capacity_spark: 14
+  recommended_parallel: 12
+  throughput_tier: moderate
+  tokens_per_second_single: 45
+tier: A
+tier_rank: 1
+dimension_scores:
+  summarization: 85
+  reasoning: 82
+  instruction: 88
+  analysis: 84
+  coding: 70
+  speed: 55
+  context_efficiency: 88
+pom_benchmarks:
+  last_calibration: '2025-12-07'
+  calibration_version: '3.0'
+  prompts_tested: {}
+  aggregate:
+    avg_quality: 85
+    avg_latency_ms: 1500
+    total_prompts_tested: 0
+benchmarks: {}

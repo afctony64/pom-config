@@ -1,0 +1,87 @@
+# Company Research Tenant Group (LEGACY)
+# ══════════════════════════════════════════════════════════════════════════════
+# LEGACY TENANT GROUP - Used ONLY by Prismatic tenant for backward compatibility
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# This tenant group uses the LEGACY schema pattern:
+# - Source: Company_source (not Domain)
+# - Output: Company_research_* (not Research_*)
+#
+# ALL OTHER TENANT GROUPS should use the Entity Model:
+# - Source: Domain
+# - Output: Research_*
+#
+# See: corporate.yaml, travel.yaml, gaming.yaml, recipe.yaml for Entity Model
+
+id: company
+type: tenant_group
+display_name: "Company Research (Legacy)"
+description: |
+  LEGACY: B2B company research using Company_source schema.
+  Only for Prismatic tenant - all new tenants should use Entity Model.
+  Analyzes companies across 10 dimensions using specialized researchers.
+
+# Domain context applied to all researchers in this group
+domain_context: |
+  B2B technology company research and competitive intelligence.
+  Focus on SaaS, enterprise software, and technology services.
+
+  Key analysis dimensions:
+  - Market positioning and competitive landscape
+  - Financial health and funding trajectory
+  - Product capabilities and technical architecture
+  - Customer base and go-to-market strategy
+  - Leadership team and organizational culture
+
+industry_focus:
+  preferred:
+    - SaaS
+    - Enterprise Software
+    - B2B Technology
+    - Cloud Infrastructure
+    - Developer Tools
+    - Integration Platforms
+  avoid:
+    - Consumer Apps
+    - Retail
+    - Gaming (unless B2B)
+
+# Independent agents selected for this domain
+researchers:
+  - industry      # Market positioning, NAICS codes, business models
+  - financial     # Revenue, funding, financial health
+  - product       # Product capabilities, technical stack
+  - customer      # Target customers, use cases, testimonials
+  - leadership    # Exec team, founders, org structure
+  - risk          # Business risks, compliance, vulnerabilities
+  - partner       # Partnerships, integrations, ecosystem
+  - social        # Social presence, community, brand
+  - journalist    # Press coverage, analyst reports
+  - competitor    # Competitive analysis, differentiation
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LEGACY ENTITY CONFIGURATION
+# ══════════════════════════════════════════════════════════════════════════════
+# This is the ONLY tenant group that uses Company_source and Company_research_*
+# All other tenant groups use Domain + Research_*
+entity:
+  entity_type: Company
+  # LEGACY: Source is Company_source (not Domain)
+  source_collection: Company_source
+  # LEGACY: Research collections use Company_ prefix
+  research_schema_prefix: "Company_"
+  domain_schema: Domain
+  # Page research configuration
+  page_research:
+    page_intelligence_schema: Page_intelligence
+    page_facts_schema: Page_facts
+
+# Schema pattern (generates Company_research_{researcher})
+schema_pattern: "Company_research_{researcher}"
+
+# Entity spawn sources - which research collections can spawn new research subjects
+entity_spawn_sources:
+  - researcher: competitor
+    collection: Company_research_competitor
+    enabled: true
+    auto_spawn: false  # If true, spawn runs automatically after research

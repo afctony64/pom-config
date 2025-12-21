@@ -1,0 +1,320 @@
+type: schema
+class: Researcher_fact
+version: 1.0
+group: company
+weaviate_instance: spark
+description: |
+  🎯 RESEARCHER FACT - Individual Normalized Facts
+
+  ARCHITECTURE: ONE record per normalized fact
+
+  PURPOSE:
+  Stores individual, normalized facts extracted from raw page content.
+  Each fact is atomic, deduplicated, and categorized for researcher analysis.
+
+  RELATIONSHIP TO Researcher_fact_base:
+  - Researcher_fact_base: Aggregated facts per (domain × researcher × source_type)
+  - Researcher_fact: Individual fact records for granular querying and analysis
+
+  USE CASES:
+  - Query individual facts by category
+  - Search facts across domains/researchers
+  - Track fact provenance and conflicts
+  - Build fact graphs and relationships
+
+  WORKFLOW:
+  1. Stage-1 Facts Organizer (Qwen 8B) normalizes raw page facts
+  2. Individual facts stored in Researcher_fact collection
+  3. Aggregated facts also stored in Researcher_fact_base.fact_base array
+  4. Stage-2 Taxonomy Builder groups facts into structured taxonomies
+  5. Stage-3 Researcher Analysis uses facts for final research output
+
+  FACT QUALITY:
+  - Confidence scores (0.0-1.0) indicate extraction quality
+  - Source URLs provide provenance
+  - Categories enable researcher-specific filtering
+  - Conflict tracking for contradictory facts
+
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: text2vec-transformers
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+uuid_strategy:
+  type: uuid
+  fields: []
+properties:
+- name: fact
+  dataType:
+  - text
+  description: |
+    Atomic factual statement about the entity.
+
+    CHARACTERISTICS:
+    - Self-contained sentence with full context
+    - Specific to the target entity (domain + researcher_type)
+    - Verifiable and traceable to source URLs
+    - Normalized and deduplicated from raw page content
+
+    EXAMPLES:
+    - "Yoco offers three pricing plans: Starter ($29/month), Professional ($79/month), and Enterprise (custom pricing)"
+    - "Yoco provides payment processing, point-of-sale hardware, and business management tools"
+    - "Yoco supports integrations with Shopify, WooCommerce, and Magento"
+  indexFilterable: false
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - system
+  - standard
+  - extended
+
+- name: domain
+  dataType:
+  - text
+  description: |
+    Company domain (e.g., yoco.com).
+
+    PRIMARY KEY COMPONENT 1 of 4
+
+    Links fact to specific company/entity.
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - system
+  - standard
+  - identifier
+  tags:
+  - identity
+
+- name: researcher_type
+  dataType:
+  - text
+  description: |
+    Researcher type (product, financial, industry, customer, etc.).
+
+    PRIMARY KEY COMPONENT 2 of 4
+
+    Determines which researcher's taxonomy this fact belongs to.
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - system
+  - standard
+
+- name: source_type
+  dataType:
+  - text
+  description: |
+    Source type: page, edgar, linkedin, api, etc.
+
+    PRIMARY KEY COMPONENT 3 of 4
+
+    Indicates which data source workflow produced this fact.
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - system
+  - standard
+
+- name: category
+  dataType:
+  - text
+  description: |
+    Fact category from researcher's taxonomy.
+
+    PRIMARY KEY COMPONENT 4 of 4
+
+    Examples (product researcher):
+    - features: Product features and capabilities
+    - pricing: Pricing & packaging information
+    - deployment: Deployment models and regions
+    - integration: Integrations and supported platforms
+    - technology: Technology stack and APIs
+    - target_customer: Target customer profiles
+
+    Categories are defined in researcher_ai.categories configuration.
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - system
+  - standard
+
+- name: source_url
+  dataType:
+  - text
+  description: |
+    Primary source URL where this fact was found.
+
+    Best single source URL chosen from all contributing sources.
+    Prefers official product/docs pages over generic pages.
+    Other sources tracked in all_source_urls array.
+  indexFilterable: true
+  indexSearchable: false
+  tokenization: field
+  sets:
+  - system
+  - standard
+  - extended
+
+- name: all_source_urls
+  dataType:
+  - text[]
+  description: |
+    All source URLs that contributed to this canonical fact.
+
+    When multiple raw facts are merged into one canonical fact,
+    all contributing URLs are stored here for full provenance.
+  indexFilterable: false
+  indexSearchable: false
+  tokenization: field
+  sets:
+  - extended
+
+- name: source_ids
+  dataType:
+  - text[]
+  description: |
+    Source identifiers from original data sources.
+
+    Format examples:
+    - "page:123#chunk:5" (Page_facts collection)
+    - "edgar:10-K-2024#section:business" (EDGAR filings)
+    - "linkedin:company#post:456" (LinkedIn data)
+
+    Enables traceability back to original source records.
+  indexFilterable: false
+  indexSearchable: false
+  tokenization: field
+  sets:
+  - extended
+
+- name: confidence
+  dataType:
+  - number
+  description: |
+    Extraction confidence score (0.0-1.0).
+
+    CONFIDENCE LEVELS:
+    - 0.9: Clear, repeated facts from multiple high-quality sources
+    - 0.7-0.8: Single high-quality source or well-documented fact
+    - 0.5-0.6: Single-source or ambiguous facts
+    - 0.3-0.4: Weak but still factual (rarely used)
+    - <0.3: Not stored (filtered out)
+
+    Used for quality filtering and fact ranking.
+  indexFilterable: true
+  indexSearchable: false
+  sets:
+  - system
+  - standard
+
+- name: conflict_status
+  dataType:
+  - text
+  description: |
+    Whether this fact has conflicting values from different sources.
+
+    VALUES:
+    - "none": No conflicts, consistent across sources
+    - "conflicting_values": Different sources provide contradictory information
+
+    When conflicts exist, separate fact records are created for each
+    conflicting value, all marked with conflict_status="conflicting_values".
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  - extended
+
+- name: fact_base_id
+  dataType:
+  - text
+  description: |
+    Reference to Researcher_fact_base record UUID.
+
+    Links individual fact to its aggregated fact_base record.
+    Format: UUID of Researcher_fact_base record.
+
+    Enables navigation: fact → fact_base → domain
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - extended
+
+- name: fact_index
+  dataType:
+  - int
+  description: |
+    Index position of this fact in Researcher_fact_base.fact_base array.
+
+    Enables mapping back to aggregated fact_base structure.
+    Used for source_fact_mapping in Researcher_fact_base.
+  indexFilterable: true
+  sets:
+  - extended
+
+- name: extraction_metadata
+  dataType:
+  - text
+  description: |
+    JSON string with extraction processing metadata.
+
+    Example JSON:
+    {
+      "extraction_model": "qwen3:8b",
+      "prompt_version": "facts_organizer_v1",
+      "extracted_at": "2025-01-28T10:30:00Z",
+      "raw_facts_count": 45,
+      "normalization_notes": "Merged 3 overlapping facts into one canonical fact"
+    }
+
+    Stored as TEXT because metadata fields are dynamic.
+  indexFilterable: false
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - extended
+
+- name: extracted_at
+  dataType:
+  - date
+  description: |
+    Timestamp when this fact was extracted and normalized.
+
+    Used for fact freshness tracking and incremental updates.
+  indexFilterable: true
+  sets:
+  - system
+  - standard
+
+- name: processing_stage
+  dataType:
+  - text
+  description: |
+    Processing stage indicator for 3-stage pipeline.
+
+    VALUES:
+    - "stage_1_normalized": Fact normalized by Stage-1 Facts Organizer
+    - "stage_2_taxonomized": Fact grouped into taxonomy by Stage-2 Taxonomy Builder
+    - "stage_3_analyzed": Fact used in Stage-3 Researcher Analysis
+
+    Tracks fact progression through pipeline stages.
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - extended
+
+collection_name: Researcher_fact

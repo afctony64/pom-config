@@ -1,0 +1,371 @@
+type: web
+class: API_intelligence
+version: 1.0
+group: api
+weaviate_instance: spark
+description: 'Unified cache for all external API responses (Edgar, Google, Brave,
+  Clearbit, etc.). Provides deterministic caching to reduce API calls and costs. Follows
+  same pattern as Page_content but for API data.
+
+  '
+vectorizer: none
+moduleConfig:
+  text2vec-weaviate:
+    model: Snowflake/snowflake-arctic-embed-l-v2.0
+    dimensions: 1024
+    vectorizeClassName: false
+namedVectors:
+  response_content:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - apiSource
+    - endpoint
+    - responseStatus
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: true
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+schemaConfig:
+  autoSchemaEnabled: false
+properties:
+- name: apiKey
+  dataType:
+  - text
+  description: 'Deterministic cache key: {domain}_{apiSource}_{endpoint}_{paramsHash}
+    Example: oracle.com_edgar_company_facts_ORCL
+
+    '
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - cache
+  - identity
+- name: domain
+  dataType:
+  - text
+  description: Company domain (oracle.com, google.com, etc.)
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - identity
+- name: domainUuid
+  dataType:
+  - uuid
+  description: Reference to Company_source.uuid for GraphQL relationships
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - beacon
+- name: apiSource
+  dataType:
+  - text
+  description: 'API provider: edgar, google, brave, clearbit, openai, perplexity,
+    etc.
+
+    '
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - api
+- name: endpoint
+  dataType:
+  - text
+  description: 'API endpoint: company_facts, search, enrich, chat, etc.
+
+    '
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - api
+- name: apiVersion
+  dataType:
+  - text
+  description: API version (v1, v2, etc.) if applicable
+  indexFilterable: true
+  tokenization: field
+- name: requestParams
+  dataType:
+  - text
+  description: 'Request parameters as JSON string (ticker, query, filters, etc.)
+
+    '
+  indexSearchable: false
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: requestUrl
+  dataType:
+  - text
+  description: Full API URL for debugging and audit trail
+  indexSearchable: false
+  tokenization: field
+- name: requestedAt
+  dataType:
+  - date
+  description: Timestamp when API request was made
+  indexFilterable: true
+- name: responseData
+  dataType:
+  - text
+  description: 'Raw API response as JSON string. Structure varies by API: - Edgar:
+    {coreMetrics, filings, facts} - Google: {searchResults, snippets, relatedSearches}
+    - Brave: {webPages, newsArticles, images} - Clearbit: {companyInfo, enrichmentData}
+
+    '
+  indexSearchable: false
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - data
+  - response
+- name: responseStatus
+  dataType:
+  - text
+  description: 'Response status: success, not_found, error, rate_limited, unauthorized
+
+    '
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - status
+- name: responseCode
+  dataType:
+  - int
+  description: HTTP status code (200, 404, 429, 500, etc.)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - status
+- name: responseSize
+  dataType:
+  - int
+  description: Size of response data in bytes
+  indexFilterable: true
+- name: lastFetched
+  dataType:
+  - date
+  description: Last successful fetch timestamp
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - cache
+- name: cacheUntil
+  dataType:
+  - date
+  description: Cache expiration timestamp (calculated based on API source TTL)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - cache
+  - metadata
+- name: dataFreshness
+  dataType:
+  - text
+  description: 'Freshness indicator: - fresh: < 7 days - stale: 7-90 days - expired:
+    > 90 days
+
+    '
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - cache
+- name: fetchCount
+  dataType:
+  - int
+  description: Number of times this endpoint has been refreshed
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - cache
+  - metrics
+- name: dataQuality
+  dataType:
+  - text
+  description: 'Quality assessment: complete, partial, empty, invalid
+
+    '
+  indexFilterable: true
+  tokenization: field
+- name: validationErrors
+  dataType:
+  - text[]
+  description: List of validation issues with the response data
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: hasData
+  dataType:
+  - boolean
+  description: Whether response contains usable data (not empty/error)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - data
+- name: edgar_ticker
+  dataType:
+  - text
+  description: Stock ticker symbol (for Edgar API responses)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - edgar
+  - finance
+- name: edgar_cik
+  dataType:
+  - text
+  description: Central Index Key (for Edgar API responses)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - edgar
+  - finance
+- name: search_query
+  dataType:
+  - text
+  description: Search query string (for Google/Brave search responses)
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - brave
+  - google
+  - search
+- name: researcher_id
+  dataType:
+  - text
+  description: Researcher that requested this API call (competitor, financial, industry, journalist, etc.)
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - research
+  - audit
+- name: createdAt
+  dataType:
+  - date
+  description: First time this cache entry was created
+  indexFilterable: true
+- name: updatedAt
+  dataType:
+  - date
+  description: Last time this cache entry was updated
+  indexFilterable: true
+- name: processingTime
+  dataType:
+  - number
+  description: API call duration in seconds
+  indexFilterable: true
+- name: cost
+  dataType:
+  - number
+  description: Estimated API call cost in USD (if applicable)
+  indexFilterable: true
+collection_name: API_intelligence
+uuid_strategy:
+  fields:
+  - field: apiKey
+    namespace: API_CACHE
+    description: Deterministic UUID based on apiKey (domain + apiSource + endpoint
+      + params)
+references:
+- collection: Company_source
+  field: domainUuid
+  target_field: uuid
+  type: many_to_one
+dependencies:
+- type: foundational
+- collection: Company_source
+  relationship: many_to_one
+  via: domainUuid
+data_sources:
+  api_calls: all_external_apis
+collection_groups:
+- api_collections
+- cache_collections
+schema_config:
+  additional_properties: false
+calculated_fields:
+- name: isFresh
+  formula: dataFreshness === 'fresh'
+  description: Whether cache is fresh (< 7 days)
+  type: boolean
+  tags: []
+- name: needsRefresh
+  formula: dataFreshness === 'expired' || responseStatus === 'error'
+  description: Whether cache needs refresh
+  type: boolean
+  tags: []
+- name: apiCost
+  formula: cost || 0
+  description: Estimated API call cost in USD
+  type: number
+  format: currency
+  tags: []
+validators:
+- field: apiSource
+  rule: required
+  message: API source is required
+- field: endpoint
+  rule: required
+  message: API endpoint is required
+- field: responseStatus
+  rule: enum
+  values:
+  - success
+  - not_found
+  - error
+  - rate_limited
+  - unauthorized
+  message: Invalid response status
+id: API_intelligence
+name: API Intelligence
+# NOTE: Cache TTL is configured in pom_core/services/api_cache_service.py

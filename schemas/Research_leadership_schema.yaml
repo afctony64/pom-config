@@ -1,0 +1,578 @@
+type: research
+class: Research_leadership
+id: Research_leadership
+name: Research Leadership
+description: "📚 RESEARCH REPOSITORY: Executive Leadership Intelligence\n\
+  \  \n  RESEARCHER: Executive Leadership Analyst (identity defined in seed data for\
+  \ researcher identity)\n  \n  KNOWLEDGE TYPE: Entity-specific leadership research\
+  \ and analysis\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's\
+  \ complete leadership intelligence\n  - Tenant Isolation: Complete data separation\
+  \ per entity\n  - Tenant Activation: Automatic tenant creation and activation\n\
+  \  - Scalability: Supports unlimited tenants with efficient partitioning\n  \n \
+  \ REPOSITORY CONTENTS:\n  - Executive Leadership Analysis: Comprehensive leadership\
+  \ intelligence and insights\n  - Categorical Classifications: Machine-assigned categories\
+  \ for leadership attributes\n  - Quality Metadata: Processing dates, source quality,\
+  \ review flags, confidence levels\n  - Evidence Links: References to supporting\
+  \ data and source materials\n  \n  DATA SOURCES:\n  - AI-analyzed entity websites\
+  \ and leadership-specific content\n  - Industry reports and research publications\n\
+  \  - Public entity information and disclosures\n  - Validated against authoritative\
+  \ sources when available\n  \n  QUALITY STANDARDS:\n  - Confidence Scoring: High,\
+  \ Medium, Low, Inferred, Web-verified\n  - Evidence-Based Assessment: Classifications\
+  \ backed by concrete evidence\n  - Source Tracking: Links to originating Domain\
+  \ records\n  - Conservative Calibration: Prefer 'unknown' over incorrect data\n\
+  \  \n  INTEGRATION: Provides leadership intelligence to support holistic entity\
+  \ analysis\n  \n  VECTOR SEARCH CAPABILITIES: Named vectors for similarity search\
+  \ across key leadership dimensions"
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+namedVectors:
+  founderProfileVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - founderProfileLLM
+    - ceoBackground
+    - founderStatus
+    - ceoName
+    - ceoTenure
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  executiveExperienceVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - executiveExperienceLLM
+    - keyExecutives
+    - executiveBackgrounds
+    - executiveTeamSize
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  leadershipStyleVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - leadershipStyleLLM
+    - leadershipStyle
+    - boardComposition
+    - advisors
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: entityName
+  dataType:
+  - text
+  description: Entity name
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+- name: seed
+  dataType:
+  - boolean
+  description: Indicates if this record originated from seed data (true) or was generated
+    by research process (false)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: domain
+  dataType:
+  - text
+  description: Entity domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+- name: founderProfileLLM
+  dataType:
+  - text
+  description: Founder Profile Description
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: ceoName
+  dataType:
+  - text
+  description: CEO name for classification
+  tags:
+  - executive
+  - leadership
+  - research
+  sets:
+  - extended
+  - prompt
+- name: ceoBackground
+  dataType:
+  - text
+  description: CEO background for classification
+  tags:
+  - research
+  sets:
+  - prompt
+- name: ceoTenure
+  dataType:
+  - text
+  description: CEO tenure for classification
+  tags:
+  - research
+  sets:
+  - prompt
+- name: founderStatus
+  dataType:
+  - text
+  description: Founder status for classification
+  tags:
+  - research
+  sets:
+  - prompt
+- name: executiveTeamSize
+  dataType:
+  - number
+  description: Executive team size for classification
+  tags:
+  - research
+  sets:
+  - prompt
+- name: executiveExperienceLLM
+  dataType:
+  - text
+  description: Executive Experience Description
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: keyExecutives
+  dataType:
+  - text[]
+  description: Key executive information
+  tags:
+  - executive
+  - leadership
+  - research
+  sets:
+  - extended
+  - prompt
+- name: keyExecutivesIds
+  dataType:
+  - text[]
+  description: Parallel array of UUID5 IDs for keyExecutives (index-aligned, auto-generated)
+  tags:
+  - research
+  - system
+  sets:
+  - extended
+  - prompt
+- name: keyExecutiveEvidence
+  dataType:
+  - text[]
+  description: Evidence/context found for each keyExecutive from page facts search
+    (parallel to keyExecutives array). Stores the factual basis for classifications
+    and extracted values.
+  parallel_to: keyExecutives
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - evidence
+  sets:
+  - extended
+  - prompt
+- name: executiveBackgrounds
+  dataType:
+  - text[]
+  description: Executive background and experience for each executive (parallel to
+    keyExecutives array) - e.g., "MBA from top university, 15yr industry veteran",
+    "Technical degree, ex-Fortune 500", "Management consulting, serial entrepreneur".
+    Use "Not disclosed" if background unknown. MUST have same length as keyExecutives
+    array.
+  parallel_to: keyExecutives
+  tags:
+  - executive
+  - leadership
+  - research
+  sets:
+  - extended
+  - prompt
+- name: executiveRoles
+  dataType:
+  - text[]
+  description: Role/title for each executive (parallel to keyExecutives array) - e.g.,
+    "CEO", "CTO", "VP Engineering", "Head of Product". Use "Not disclosed" if role
+    unknown. MUST have same length as keyExecutives array.
+  parallel_to: keyExecutives
+  tags:
+  - executive
+  - leadership
+  - research
+  sets:
+  - extended
+  - prompt
+- name: executiveTenure
+  dataType:
+  - text[]
+  description: Tenure/time at entity for each executive (parallel to keyExecutives
+    array) - e.g., "5 years", "Since founding", "2 years", "6 months". Use "Not disclosed"
+    if tenure unknown. MUST have same length as keyExecutives array.
+  parallel_to: keyExecutives
+  tags:
+  - executive
+  - leadership
+  - research
+  sets:
+  - extended
+  - prompt
+- name: executiveLinkedIn
+  dataType:
+  - text[]
+  description: LinkedIn profile URL for each executive (parallel to keyExecutives
+    array) - e.g., "https://www.linkedin.com/in/john-doe/", "https://www.linkedin.com/in/jane-smith/".
+    Use "Not disclosed" if LinkedIn profile unknown or not public. MUST have same
+    length as keyExecutives array.
+  parallel_to: keyExecutives
+  tags:
+  - research
+  sets:
+  - prompt
+- name: leadershipStyleLLM
+  dataType:
+  - text
+  description: Leadership Style Description
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: boardComposition
+  dataType:
+  - text
+  description: Board composition details
+  tags:
+  - governance
+  - leadership
+  - research
+  sets:
+  - extended
+  - prompt
+- name: advisors
+  dataType:
+  - text[]
+  description: Advisors for classification
+  tags:
+  - advisory
+  - leadership
+  - research
+  sets:
+  - extended
+  - prompt
+- name: dataSource
+  dataType:
+  - text
+  description: Source of classification data
+  sets:
+  - system
+- name: founderProfileCat
+  dataType:
+  - text
+  description: Founder background type - classify based on primary expertise area,
+    entrepreneurial history, and professional background. Consider technical vs business
+    orientation, serial entrepreneurship, and industry origin.
+  enum:
+  - Technical-Founder
+  - Business-Founder
+  - Domain-Expert
+  - Serial-Entrepreneur
+  - First-Time-Founder
+  - Corporate-Spinout
+  - Academic-Founder
+  - Designer-Product
+  - Mixed-Team
+  - Unknown
+  tags:
+  - Cat
+  - founders
+  sets:
+  - standard
+  - EnumCat
+- name: executiveExperienceCat
+  dataType:
+  - text
+  description: Executive team experience level - classify based on years of leadership
+    experience, prior entity exits, industry tenure, and track record. Consider founding
+    experience, operational roles, and domain expertise depth.
+  enum:
+  - Veteran-Executives
+  - Seasoned-Team
+  - Experienced-Operators
+  - Emerging-Leaders
+  - First-Time-Founders
+  - Domain-Experts
+  - Technology-Native
+  - Elite-Pedigree
+  - Unknown
+  tags:
+  - Cat
+  - experience
+  sets:
+  - standard
+  - EnumCat
+- name: leadershipStyleCat
+  dataType:
+  - text
+  description: Leadership approach and focus - classify based on decision-making style,
+    strategic priorities, and management philosophy. Consider founder involvement,
+    innovation focus, execution discipline, and customer centricity.
+  enum:
+  - Founder-Led
+  - Professional-Management
+  - Innovation-Focused
+  - Sales-Driven
+  - Customer-Centric
+  - Data-Driven
+  - Visionary
+  - Operationally-Excellent
+  - Consensus-Builder
+  - Unknown
+  tags:
+  - Cat
+  - style
+  sets:
+  - standard
+  - EnumCat
+- name: processedDate
+  dataType:
+  - text
+  description: Analysis completion date
+  sets:
+  - system
+  - metadata
+- name: sourceQuality
+  dataType:
+  - text
+  description: 'Quality rating of external tool content provided for analysis [high,
+    medium, low, minimal]:
+
+    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
+    - "medium": Some pageData available but limited relevance or coverage
+
+    - "low": Minimal pageData, relying on source overview text only
+
+    - "minimal": No pageData, only basic entity metadata available
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: analysisConfidence
+  dataType:
+  - text
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
+    - "web_verified": Confirmed through web_search with multiple external sources
+
+    - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
+    - "medium": Based on indirect evidence or partial information
+
+    - "low": Limited information, educated guesses
+
+    - "inferred": No direct evidence, purely analytical inference
+
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: reviewFlag
+  dataType:
+  - text
+  description: 'Review requirement [none, for_review, needs_verification]:
+
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
+    - no review needed
+
+    - "for_review": Medium confidence with some gaps, human validation helpful
+
+    - "needs_verification": Low confidence or pure inference, human review required
+
+
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
+    - these sources are reliable.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: citations
+  dataType:
+  - text[]
+  description: URLs of sources used for analysis (from pageData and web_search)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: reasoning
+  dataType:
+  - text[]
+  description: AI reasoning steps and thought process for analysis
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: companyFitScore
+  description: Entity fit scores
+  dataType:
+  - number[]
+  sets:
+  - extended
+  - prompt
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: executionTrackRecordScore
+  description: Execution track record scores
+  dataType:
+  - number[]
+  sets:
+  - extended
+  - prompt
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: homeLeadershipTeamStrength
+  description: Leadership team strength
+  dataType:
+  - number
+  sets:
+  - extended
+  - prompt
+- name: industryExperienceScore
+  description: Industry experience scores
+  dataType:
+  - number[]
+  sets:
+  - extended
+  - prompt
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: domain
+    dataType:
+    - uuid[]
+    description: Domain source UUIDs
+  - name: sourceEntity
+    dataType:
+    - uuid[]
+    description: Source entity UUIDs
+references:
+- name: sourceEntity
+  target_collection: Domain
+  description: Source entity reference
+- name: domain
+  target_collection: Domain
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: Reference to the source Domain record for beacon traversal (uses research
+    record's own UUID)
+group: research
+weaviate_instance: cloud
+collection_name: Research_leadership
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs
+reverse_references:
+- target_collection: Domain
+  target_property: leadership
+  use_my_uuid: true
+  description: When this leadership researcher is created, add its UUID to Domain.leadership
+dependencies:
+- type: research
+data_sources:
+  primary: db:Domain
+  processor: prompty:entity_leadership
+collection_groups:
+- research_collections
+display_config:
+  entityName: Entity
+  default_sort:
+  - founderProfileCat
+  - executiveExperienceCat
+  - leadershipStyleCat

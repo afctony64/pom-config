@@ -1,0 +1,124 @@
+# Corporate Research Tenant Group
+# For corporate tenants researching professional services entities
+#
+# CONCEPT:
+# - Tenant = Organization DOING the research (e.g., Internet Brands)
+# - TenantGroup = Domain expertise the tenant specializes in
+# - Entity = Subject BEING researched (e.g., law firms, medical practices)
+
+id: corporate
+type: tenant_group
+display_name: "Corporate Research"
+description: |
+  Corporate tenants researching professional services organizations.
+  Domain expertise: Legal services, medical practices, professional firms.
+
+# Domain context - the expertise area for tenants in this group
+domain_context: |
+  Professional services research and market intelligence.
+  Tenants in this group are experts at researching:
+  - Law firms and legal practices
+  - Medical practices and healthcare providers
+  - Professional service organizations
+
+  Key analysis dimensions:
+  - Practice area specializations
+  - Professional credentials and licensing
+  - Client base and geographic reach
+  - Competitive positioning in local markets
+  - Regulatory compliance and professional standards
+
+# Target domains this group specializes in researching
+target_domains:
+  primary:
+    - Legal Services
+    - Law Firms
+    - Medical Practices
+    - Healthcare Providers
+  secondary:
+    - Professional Services
+    - Consulting Firms
+    - Accounting Practices
+
+# Independent agents selected for this domain (10 total)
+researchers:
+  - industry      # Practice areas, professional classifications
+  - financial     # Fee structures, revenue models
+  - leadership    # Attorneys, partners, professional staff
+  - risk          # Compliance, malpractice, regulatory
+  - customer      # Client testimonials, case results
+  - competitor    # Local market positioning
+  - journalist    # News coverage, press mentions, media sentiment
+  - partner       # Strategic partnerships, referral networks
+  - product       # Services offered, practice capabilities
+  - social        # Social media presence, community engagement
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ENTITY MODEL CONFIGURATION (Standard)
+# ══════════════════════════════════════════════════════════════════════════════
+# Uses the Entity Model:
+# - Source: Domain (the URL/domain IS the entity)
+# - Output: Research_* (no prefix)
+entity:
+  entity_type: Company
+  # ENTITY MODEL: Source is Domain (not Company_source)
+  source_collection: Domain
+  # ENTITY MODEL: No prefix for research collections
+  research_schema_prefix: ""  # Results in Research_industry, Research_financial, etc.
+  domain_schema: Domain
+
+  # Page research configuration
+  # Researchers query Page_facts directly via search_query
+  page_research:
+    page_intelligence_schema: Page_intelligence
+    page_facts_schema: Page_facts
+    # Priority paths for legal services domain
+    priority_paths:
+      - /about
+      - /attorneys
+      - /team
+      - /practice-areas
+      - /case-results
+      - /testimonials
+      - /contact
+
+# Schema pattern for research output (generates Research_{researcher})
+schema_pattern: "Research_{researcher}"
+
+# Self-assembly configuration
+# INPUT: entity_name + tenant_id → OUTPUT: Full research pipeline
+assembly:
+  # URL discovery via web search
+  search_tool: brave_search
+  max_url_candidates: 3
+  exclude_domains:
+    - linkedin.com
+    - facebook.com
+    - twitter.com
+    - wikipedia.org
+    - crunchbase.com
+    - yelp.com
+    - yellowpages.com
+    # Legal-specific directories to exclude
+    - avvo.com
+    - martindale.com
+    - findlaw.com
+    - justia.com
+
+  # Suitability criteria for Domain creation
+  suitability:
+    min_content_quality: 0.3
+    require_readable: true
+    reject_blacklisted: true
+
+  # Auto-trigger full pipeline
+  auto_page_discovery: true
+  auto_page_facts: true
+  auto_researchers: true
+
+# Entity spawn sources - which research collections can spawn new research subjects
+entity_spawn_sources:
+  - researcher: competitor
+    collection: Research_competitor
+    enabled: true
+    auto_spawn: false  # If true, spawn runs automatically after research

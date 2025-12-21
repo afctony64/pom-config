@@ -1,0 +1,307 @@
+type: web
+class: Page_facts
+version: 1.0
+group: url
+weaviate_instance: spark
+description: 'LOCAL PROCESSING FACTORY - Page facts with embeddings generated locally
+
+
+  ARCHITECTURE: Local processing factory for cost-effective page analysis
+
+
+  WORKFLOW:
+
+  1. Nightly backup: Cloud Page_intelligence → Local Page_intelligence (raw data)
+
+  2. Local processing: Local Page_intelligence → Page_facts (with embeddings)
+
+  3. FREE embeddings: Uses local Snowflake arctic-embed-l-v2.0 transformers
+
+  4. Scale: Process millions of pages locally with zero API costs
+
+
+  BENEFITS:
+
+  ✅ Zero API costs for embeddings (local transformers)
+
+  ✅ Same quality as cloud (Snowflake arctic-embed-l-v2.0)
+
+  ✅ Process 700K+ pages without cloud limits
+
+  ✅ Full control over processing schedule
+
+  ✅ Can run semantic search/classification locally
+
+
+  VECTORIZER: text2vec-transformers (local all-mpnet-base-v2)
+
+  - Service: http://transformers-lb:80 (load-balanced across GPU instances)
+
+  - Model: sentence-transformers/all-mpnet-base-v2 (768 dimensions)
+
+  - Production-ready local embeddings with high quality
+
+  '
+vectorizer: text2vec-transformers
+moduleConfig:
+  text2vec-transformers:
+    inferenceUrl: http://transformers-lb:80
+    vectorizeClassName: false
+    vectorizePropertyName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+schemaConfig:
+  autoSchemaEnabled: false
+properties:
+- name: url
+  dataType:
+  - text
+  description: Canonical URL of the page (from Page_intelligence)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - core
+  - identity
+- name: domain
+  dataType:
+  - text
+  description: Primary domain of the page
+  indexSearchable: true
+  tokenization: field
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - core
+  - identity
+- name: title
+  dataType:
+  - text
+  description: Page title (used in description & content vectors)
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - content
+- name: description
+  dataType:
+  - text
+  description: Page description (used in description vector)
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - content
+- name: content
+  dataType:
+  - text
+  description: Main page content (used in content vector)
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - content
+- name: url_with_fragment
+  dataType:
+  - text
+  description: URL with fragment for chunk navigation (e.g.,
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+- name: chunk_index
+  dataType:
+  - int
+  description: Position of chunk in page (0 = overview)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+- name: chunk_type
+  dataType:
+  - text
+  description: Semantic chunk type (overview, pricing, features, contact, about, general)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+- name: is_primary_chunk
+  dataType:
+  - boolean
+  description: True for overview chunk (index 0)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+- name: content_length
+  dataType:
+  - int
+  description: Character length of extracted content
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - metadata
+- name: content_quality_score
+  dataType:
+  - number
+  description: Overall content quality score (0-1) based on title, description, content
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - quality
+- name: has_rich_content
+  dataType:
+  - boolean
+  description: Whether page has substantial content (length > 1000 chars)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - quality
+- name: language
+  dataType:
+  - text
+  description: Detected content language (from Page_intelligence)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - metadata
+- name: status_code
+  dataType:
+  - int
+  description: HTTP status code (from Page_intelligence)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - technical
+- name: accessible
+  dataType:
+  - boolean
+  description: Whether page is accessible (status < 400)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - technical
+- name: page_type
+  dataType:
+  - text
+  description: Page classification (homepage, product, blog, etc.)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - classification
+- name: source_sitemap
+  dataType:
+  - text
+  description: Source sitemap URL where page was discovered
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - technical
+- name: processed_at
+  dataType:
+  - date
+  description: Timestamp when page was processed from Page_intelligence
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - temporal
+- name: source_collection
+  dataType:
+  - text
+  description: Source collection (always "Page_intelligence")
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - system
+collection_name: Page_facts
+uuid_strategy:
+  fields:
+  - field: url_with_fragment
+    namespace: URL
+    description: 'Primary strategy using url_with_fragment for unique chunk UUIDs
+      (includes #section-N)'
+references: []
+dependencies:
+- type: foundational
+data_sources:
+  local_intelligence: Page_intelligence
+collection_groups:
+- url_collections
+- local_processing
+schema_config:
+  additional_properties: false
+id: Page_facts
+name: Page Facts
+# NOTE: Enrichers list is configured in settings (PAGE_FACTS_ENRICHERS)

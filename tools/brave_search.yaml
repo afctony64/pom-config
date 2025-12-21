@@ -1,0 +1,80 @@
+id: brave_search
+name: Brave Search
+type: tool_card
+version: "1.0.0"
+
+execution:
+  type: mcp
+  module: pom_core.services.ai_tool_modules.external.brave_search
+  class: BraveSearchTool
+
+model_support:
+  gpt-5-nano: true
+  gpt-5-mini: true
+  gpt-5.1: true
+  all: true
+
+timing:
+  injection: false
+  function_calling: true
+  post_processing: false
+
+function_schema:
+  name: brave_search
+  description: "Search the web using Brave Search API"
+  parameters:
+    type: object
+    properties:
+      query:
+        type: string
+        description: "Search query string"
+      count:
+        type: integer
+        description: "Number of results to return (1-20)"
+        minimum: 1
+        maximum: 20
+        default: 10
+    required:
+      - query
+
+llm_guidance:
+  priority: high
+  value_proposition: "Web search with high-quality results and citation support"
+  usage_instructions: |
+    Use when user asks about:
+    - Web search queries
+    - Current information
+    - Research that requires citations
+  avoid_when: |
+    - Internal data queries
+    - Database lookups
+
+cost:
+  per_call: 0.003  # $3 per 1000 searches (Brave API pricing Dec 2024)
+  currency: USD
+
+performance:
+  avg_latency_ms: 800
+  timeout_ms: 10000
+
+validation:
+  required_params:
+    - query
+  param_rules:
+    query:
+      min_length: 1
+      max_length: 500
+
+metadata:
+  description: "Brave Search API via MCP"
+  category: external_data
+  status: stable
+  tags:
+    - mcp
+    - search
+    - brave
+
+mcp:
+  supports_injection: false
+  supports_function_calling: true
+  supports_post_processing: false

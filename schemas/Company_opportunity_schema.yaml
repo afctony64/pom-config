@@ -1,0 +1,661 @@
+type: core
+class: Company_opportunity
+description: Schema for company opportunities with flat field structure (no sourceData
+  nesting)
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexNullState: true
+  indexPropertyLength: false
+  indexTimestamps: false
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+moduleConfig:
+  text2vec-weaviate:
+    baseUrl: https://api.embedding.weaviate.io
+    model: Snowflake/snowflake-arctic-embed-m-v1.5
+    truncate: right
+    vectorizeClassName: true
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: uuid
+  dataType:
+  - uuid
+  description: Primary system identifier
+  indexFilterable: true
+  indexSearchable: false
+  sets:
+  - system
+  tags:
+  - identity
+- name: _collection
+  dataType:
+  - text
+  description: Target collection identifier
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - system
+- name: core_url
+  dataType:
+  - text
+  description: Core URL identifier for domain-agnostic filtering and lookup
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - system
+  tags:
+  - beacon
+- name: opportunityId
+  dataType:
+  - text
+  description: Opportunity identifier
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - system
+  - identifier
+  tags:
+  - identity
+  - sales
+- name: opportunityName
+  dataType:
+  - text
+  description: Name of the opportunity
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - standard
+  tags:
+  - identity
+  - opportunity_profile
+  - sales
+- name: accountId
+  dataType:
+  - text
+  description: Account identifier (for reference resolution)
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - system
+  - identifier
+  tags:
+  - beacon
+  - identity
+- name: stage
+  dataType:
+  - text
+  description: Current stage in sales process
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - standard
+  tags:
+  - opportunity_status
+  - pipeline
+  - sales_process
+- name: fiscalPeriod
+  dataType:
+  - text
+  description: Fiscal period for the opportunity
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - extended
+  tags:
+  - accounting
+  - reporting
+  - timeline
+- name: closed
+  dataType:
+  - boolean
+  description: Whether opportunity is closed
+  indexFilterable: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - standard
+  tags:
+  - opportunity_status
+  - sales_process
+- name: won
+  dataType:
+  - boolean
+  description: Whether opportunity was won
+  indexFilterable: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - standard
+  - drill_down
+  tags:
+  - opportunity_status
+  - sales_process
+- name: reasonLost
+  dataType:
+  - text
+  description: Reason opportunity was lost
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - extended
+  tags:
+  - competitive_intelligence
+  - sales_process
+- name: amount
+  dataType:
+  - number
+  description: Amount of the opportunity
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - standard
+  tags:
+  - deal_size
+  - financial
+  - revenue
+- name: probability
+  dataType:
+  - number
+  description: Probability of closing successfully
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - extended
+  tags:
+  - forecasting
+  - probability
+  - sales_process
+- name: closeDate
+  dataType:
+  - date
+  description: Expected close date
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - standard
+  tags:
+  - forecasting
+  - sales_process
+  - timeline
+- name: createdDate
+  dataType:
+  - date
+  description: Date opportunity was created
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - extended
+  tags:
+  - opportunity_history
+  - sales_process
+  - timeline
+- name: demoDate
+  dataType:
+  - date
+  description: Date when demo was conducted
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+- name: pocDate
+  dataType:
+  - date
+  description: Date when proof of concept was conducted
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+- name: age
+  dataType:
+  - int
+  description: Age of opportunity in days
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - extended
+  tags:
+  - performance_metrics
+  - sales_velocity
+  - timeline
+- name: type
+  dataType:
+  - text
+  description: Type of opportunity
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - extended
+  tags:
+  - categorical
+  - deal_profile
+  - sales_strategy
+- name: leadSource
+  dataType:
+  - text
+  description: Source of the lead
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - extended
+  tags:
+  - categorical
+  - lead_generation
+  - marketing_attribution
+- name: leadSourceSubcategory
+  dataType:
+  - text
+  description: Lead source subcategory
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - extended
+  tags:
+  - categorical
+  - lead_generation
+  - marketing_attribution
+- name: g2ProductId
+  dataType:
+  - text
+  description: G2 product identifier
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+- name: g2ProductUuid
+  dataType:
+  - text
+  description: G2 product UUID
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+- name: opportunityOwner
+  dataType:
+  - text
+  description: Sales representative owning the opportunity
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - standard
+  tags:
+  - sales
+  - territory
+- name: opportunityOwnerAlias
+  dataType:
+  - text
+  description: Opportunity owner alias/short name
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - extended
+  tags:
+  - sales
+  - territory
+- name: ownerRole
+  dataType:
+  - text
+  description: Role of the opportunity owner
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: true
+  sets:
+  - extended
+  tags:
+  - sales
+  - territory
+- name: processedDate
+  dataType:
+  - date
+  description: Date when the record was processed
+  indexFilterable: true
+  indexRangeFilters: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+      vectorizePropertyName: false
+  sets:
+  - system
+  tags:
+  - metadata
+  - timeline
+- name: dataSource
+  dataType:
+  - text
+  description: Source of the data (e.g., Excel import, API, manual entry)
+  indexFilterable: true
+  indexSearchable: true
+  tokenization: word
+  moduleConfig:
+    text2vec-weaviate:
+      skip: false
+      vectorizePropertyName: false
+  sets:
+  - system
+  tags:
+  - metadata
+# === SYSTEM/SYNC FIELDS (for mirroring compatibility) ===
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: createdAt
+  description: Record creation timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: updatedAt
+  description: Record update timestamp (sync)
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: syncVersion
+  description: Sync version number
+  dataType:
+  - int
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: syncedAt
+  description: Last sync timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: sourceLocation
+  description: Source location for sync
+  dataType:
+  - text
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: lastModifiedLocation
+  description: Last modified location
+  dataType:
+  - text
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: conflictResolution
+  description: Conflict resolution status
+  dataType:
+  - text
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: conflictResolvedAt
+  description: Conflict resolution timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: name
+  description: Opportunity name
+  dataType:
+  - text
+  sets:
+  - standard
+- name: domain
+  description: Company domain
+  dataType:
+  - text
+  sets:
+  - standard
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: account
+    dataType:
+    - uuid[]
+    description: Account UUIDs
+  - name: company
+    dataType:
+    - uuid[]
+    description: Company source UUIDs
+
+references:
+- name: sourceEntity
+  target_collection: Company_source
+  description: Source entity reference
+- name: company
+  target_collection: Company_source
+  uuid_source_field: accountId
+  auto_flatten: true
+  description: Reference to the Company_source record using accountId as the lookup
+    key
+group: company
+weaviate_instance: cloud
+collection_name: Company_opportunity
+id: Company_opportunity
+name: Opportunity
+field_sets:
+  system:
+  - uuid
+  - _collection
+  - opportunityId
+  - accountId
+  - core_url
+  - dataSource
+  - processedDate
+  standard:
+  - opportunityName
+  - accountId
+  - amount
+  - stage
+  - closed
+  - won
+  - closeDate
+  - opportunityOwner
+  extended:
+  - opportunityName
+  - accountId
+  - amount
+  - stage
+  - closed
+  - won
+  - closeDate
+  - createdDate
+  - age
+  - probability
+  - type
+  - leadSource
+  - leadSourceSubcategory
+  - opportunityOwner
+  - opportunityOwnerAlias
+  - ownerRole
+  - fiscalPeriod
+  - reasonLost
+calculated_fields:
+- name: won_amount
+  field_type: calculated
+  formula: 'amount if (won and closed) else 0'
+  description: 💰 Won opportunity amount (ARR for won deals only)
+  dataType:
+  - number
+  sets:
+  - calculated
+  - standard
+  - drill_down
+  tags:
+  - calculated
+  - financial
+  - metrics
+  - revenue
+  aggregations:
+  - sum
+  - avg
+- name: win_rate
+  field_type: calculated
+  formula: '(100.0 if (won and closed) else (0.0 if closed else None))'
+  description: 📊 Win rate indicator (100 for won, 0 for lost, None for open opportunities)
+  dataType:
+  - number
+  sets:
+  - calculated
+  - standard
+  tags:
+  - calculated
+  - metrics
+  - sales_process
+  - performance
+  aggregations:
+  - avg
+  - count

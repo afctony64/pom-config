@@ -1,0 +1,48 @@
+# Schema for Multi-Tenant Isolation Test Collection
+# Used by tests/extended/test_multi_tenant_isolation.py
+
+type: core
+class: IsolationTestCollection
+description: Collection for multi-tenant isolation testing
+
+# Use text2vec-transformers for vector search (available on spark/mac-weaviate)
+vectorizer: text2vec-transformers
+moduleConfig:
+  text2vec-transformers:
+    vectorizeClassName: false
+
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+
+properties:
+  - name: uuid
+    dataType:
+      - uuid
+    description: Unique identifier
+
+  - name: name
+    dataType:
+      - text
+    description: Record name
+
+  - name: tenant_marker
+    dataType:
+      - text
+    description: Marker to verify tenant isolation
+
+  - name: description
+    dataType:
+      - text
+    description: Record description
+
+  - name: value
+    dataType:
+      - number
+    description: Numeric value for testing
+
+  - name: created_at
+    dataType:
+      - date
+    description: Creation timestamp

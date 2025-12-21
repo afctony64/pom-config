@@ -1,0 +1,263 @@
+# Data Card: Page Facts with Extended Field Set
+#
+# Purpose: Fetch Page_facts records with extended field set
+# Use Case: Get comprehensive page facts data for analysis
+#
+# ✅ GraphQL executor with extended field set (no references available)
+# ⚠️  Internal card - use page_facts_search for user-facing search
+
+id: page_facts
+name: Page Facts Extended
+type: data_card
+file: page_facts.yaml
+description: >
+  Fetches Page_facts records with extended field set including all available properties.
+  Uses GraphQL executor for efficient data retrieval.
+  
+  Internal card for filtered retrieval. Use page_facts_search for search use cases.
+
+# 🎨 Frontend Display Control
+# Hidden from frontend dropdowns (use page_facts_search instead)
+display: false
+
+# Tagging system
+tags:
+  - page-facts
+  - url
+  - extended-fields
+  - content-analysis
+
+target_scope: page_intelligence
+
+# ✅ STANDARD: Use 'graphql' for all data cards
+executor: graphql
+
+# Enable relationship traversal (no references available, but support enabled)
+relationship_support: true
+
+# Access control
+personas:
+  - "*"
+
+# Query parameters
+parameters:
+  type: graphql  # Must match executor
+
+  # Root collection
+  collection: Page_facts
+
+  # Relationship traversal configuration
+  relationship_traversal: false  # No references available
+  dynamic_templates: true
+
+  # No references (Page_facts has empty references array)
+  references: []
+
+  # Limits
+  limit: 50
+  limit_default: 50
+
+  # Field set configuration
+  field_set: standard
+  field_set_default: standard
+  field_set_options:
+    - standard
+    - extended
+
+# Field definitions for each field set
+field_sets:
+  standard:
+    description: "Core page facts fields"
+    fields:
+      - name: url
+        type: text
+        source: property
+        description: Canonical URL of the page
+      
+      - name: domain
+        type: text
+        source: property
+        description: Primary domain of the page
+      
+      - name: title
+        type: text
+        source: property
+        description: Page title
+      
+      - name: description
+        type: text
+        source: property
+        description: Page description
+      
+      - name: content
+        type: text
+        source: property
+        description: Main page content
+      
+      - name: content_length
+        type: int
+        source: property
+        description: Character length of extracted content
+      
+      - name: content_quality_score
+        type: number
+        source: property
+        description: Overall content quality score (0-1)
+      
+      - name: has_rich_content
+        type: boolean
+        source: property
+        description: Whether page has substantial content
+      
+      - name: language
+        type: text
+        source: property
+        description: Detected content language
+      
+      - name: status_code
+        type: int
+        source: property
+        description: HTTP status code
+      
+      - name: accessible
+        type: boolean
+        source: property
+        description: Whether page is accessible
+      
+      - name: page_type
+        type: text
+        source: property
+        description: Page classification
+      
+      - name: processed_at
+        type: date
+        source: property
+        description: Timestamp when page was processed
+
+  extended:
+    description: "Full page facts with all available fields"
+    fields:
+      # All standard fields
+      - name: url
+        type: text
+        source: property
+        description: Canonical URL of the page
+      
+      - name: domain
+        type: text
+        source: property
+        description: Primary domain of the page
+      
+      - name: title
+        type: text
+        source: property
+        description: Page title
+      
+      - name: description
+        type: text
+        source: property
+        description: Page description
+      
+      - name: content
+        type: text
+        source: property
+        description: Main page content
+      
+      - name: url_with_fragment
+        type: text
+        source: property
+        description: URL with fragment for chunk navigation
+      
+      - name: chunk_index
+        type: int
+        source: property
+        description: Position of chunk in page (0 = overview)
+      
+      - name: chunk_type
+        type: text
+        source: property
+        description: Semantic chunk type
+      
+      - name: is_primary_chunk
+        type: boolean
+        source: property
+        description: True for overview chunk (index 0)
+      
+      - name: content_length
+        type: int
+        source: property
+        description: Character length of extracted content
+      
+      - name: content_quality_score
+        type: number
+        source: property
+        description: Overall content quality score (0-1)
+      
+      - name: has_rich_content
+        type: boolean
+        source: property
+        description: Whether page has substantial content
+      
+      - name: language
+        type: text
+        source: property
+        description: Detected content language
+      
+      - name: status_code
+        type: int
+        source: property
+        description: HTTP status code
+      
+      - name: accessible
+        type: boolean
+        source: property
+        description: Whether page is accessible
+      
+      - name: page_type
+        type: text
+        source: property
+        description: Page classification
+      
+      - name: source_sitemap
+        type: text
+        source: property
+        description: Source sitemap URL where page was discovered
+      
+      - name: processed_at
+        type: date
+        source: property
+        description: Timestamp when page was processed
+      
+      - name: source_collection
+        type: text
+        source: property
+        description: Source collection (always "Page_intelligence")
+
+# Query behavior
+supports_relationships: false  # No references available
+supports_aggregation: false
+supports_grouping: true
+requires_query_text: false
+
+# Performance settings
+default_limit: 50
+max_limit: 1000
+timeout_seconds: 30
+
+# Examples for documentation
+examples:
+  - description: Basic query with standard fields
+    code: |
+      result = await execute_data_card(
+          data_card_id="page_facts",
+          limit=10
+      )
+
+  - description: Extended fields query
+    code: |
+      result = await execute_data_card(
+          data_card_id="page_facts",
+          field_set="extended",
+          limit=10
+      )
+

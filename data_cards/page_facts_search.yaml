@@ -1,0 +1,394 @@
+# Data Card: Page Facts Search
+#
+# Purpose: Search Page_facts records using vector, BM25, or hybrid search strategies
+# Use Case: Knowledge Base extraction, semantic document search
+#
+# ✅ Search-optimized data card with strategy support
+# ✅ Routes to Spark Weaviate (has vectorizer)
+# ✅ Supports domain filtering
+
+id: page_facts_search
+name: Page Facts Search
+type: data_card
+file: page_facts_search.yaml
+description: >
+  Searches Page_facts records using vector (semantic), BM25 (keyword), or hybrid search strategies.
+  Supports domain filtering and configurable search parameters.
+  Used by Knowledge Base prompt for multi-strategy fact extraction.
+  
+  Routes to Spark Weaviate instance (has text2vec-transformers vectorizer).
+
+# Tagging system
+tags:
+  - page-facts
+  - search
+  - vector-search
+  - bm25-search
+  - hybrid-search
+  - knowledge-extraction
+  - spark-weaviate
+
+target_scope: knowledge_base
+
+# 🎨 Frontend Display Control
+# Show in frontend dropdowns for user-facing search
+display: true
+
+# ✅ STANDARD: Use 'graphql' for all data cards
+executor: graphql
+
+# No relationship traversal (Page_facts has no references)
+relationship_support: false
+
+# Access control
+personas:
+  - "*"
+
+# Query parameters
+parameters:
+  type: graphql  # Must match executor
+
+  # Root collection
+  collection: Page_facts
+
+  # ⭐ SEARCH STRATEGY CONFIGURATION
+  # Determines which search method to use
+  # Options: "vector" (semantic), "bm25" (keyword), "hybrid" (both)
+  search_strategy: vector  # Default: vector search
+  
+  # Search query text (REQUIRED for all search strategies)
+  # This is passed via user_input.query_text in DataFactory
+  # Example: "company products services information"
+  
+  # Hybrid search configuration
+  hybrid_alpha: 0.5  # Balance between vector (1.0) and BM25 (0.0)
+                     # 0.5 = balanced, 0.7 = favor vector, 0.3 = favor BM25
+  
+  # BM25 keyword search configuration
+  bm25_properties:  # Optional: Target specific fields for BM25
+    - content
+    - title
+    - description
+    - domain
+  
+  # Vector search configuration (Note: min_certainty not used by GraphQL)
+  # GraphQL uses hybrid with alpha=0.9 for "vector" strategy
+  # For true nearText, use search modules directly
+  
+  # Domain filter (common use case for Page_facts)
+  # Example: domain="yoco.com" to search only Yoco pages
+  domain: ""  # Optional: filter by domain
+  
+  # Relationship traversal configuration
+  relationship_traversal: false  # No references available
+  dynamic_templates: true
+  
+  # No references (Page_facts has empty references array)
+  references: []
+  
+  # Limits
+  limit: 30
+  limit_default: 30
+  
+  # Field set configuration
+  field_set: standard
+  field_set_default: standard
+  field_set_options:
+    - standard
+    - extended
+
+# Field definitions for each field set
+field_sets:
+  standard:
+    description: "Core page facts fields for search results"
+    fields:
+      - name: url
+        type: text
+        source: property
+        description: Canonical URL of the page
+      
+      - name: url_with_fragment
+        type: text
+        source: property
+        description: URL with fragment for chunk navigation
+      
+      - name: domain
+        type: text
+        source: property
+        description: Primary domain of the page
+      
+      - name: title
+        type: text
+        source: property
+        description: Page title
+      
+      - name: description
+        type: text
+        source: property
+        description: Page description
+      
+      - name: content
+        type: text
+        source: property
+        description: Main page content
+      
+      - name: chunk_index
+        type: int
+        source: property
+        description: Position of chunk in page (0 = overview)
+      
+      - name: chunk_type
+        type: text
+        source: property
+        description: Semantic chunk type
+      
+      - name: content_length
+        type: int
+        source: property
+        description: Character length of extracted content
+      
+      - name: content_quality_score
+        type: number
+        source: property
+        description: Overall content quality score (0-1)
+      
+      - name: has_rich_content
+        type: boolean
+        source: property
+        description: Whether page has substantial content
+
+  extended:
+    description: "Full page facts with all available fields"
+    fields:
+      # All standard fields plus additional metadata
+      - name: url
+        type: text
+        source: property
+        description: Canonical URL of the page
+      
+      - name: url_with_fragment
+        type: text
+        source: property
+        description: URL with fragment for chunk navigation
+      
+      - name: domain
+        type: text
+        source: property
+        description: Primary domain of the page
+      
+      - name: title
+        type: text
+        source: property
+        description: Page title
+      
+      - name: description
+        type: text
+        source: property
+        description: Page description
+      
+      - name: content
+        type: text
+        source: property
+        description: Main page content
+      
+      - name: chunk_index
+        type: int
+        source: property
+        description: Position of chunk in page (0 = overview)
+      
+      - name: chunk_type
+        type: text
+        source: property
+        description: Semantic chunk type
+      
+      - name: is_primary_chunk
+        type: boolean
+        source: property
+        description: True for overview chunk (index 0)
+      
+      - name: content_length
+        type: int
+        source: property
+        description: Character length of extracted content
+      
+      - name: content_quality_score
+        type: number
+        source: property
+        description: Overall content quality score (0-1)
+      
+      - name: has_rich_content
+        type: boolean
+        source: property
+        description: Whether page has substantial content
+      
+      - name: language
+        type: text
+        source: property
+        description: Detected content language
+      
+      - name: status_code
+        type: int
+        source: property
+        description: HTTP status code
+      
+      - name: accessible
+        type: boolean
+        source: property
+        description: Whether page is accessible
+      
+      - name: page_type
+        type: text
+        source: property
+        description: Page classification
+      
+      - name: source_sitemap
+        type: text
+        source: property
+        description: Source sitemap URL where page was discovered
+      
+      - name: processed_at
+        type: date
+        source: property
+        description: Timestamp when page was processed
+      
+      - name: source_collection
+        type: text
+        source: property
+        description: Source collection (always "Page_intelligence")
+
+# Query behavior
+supports_relationships: false  # No references available
+supports_aggregation: false
+supports_grouping: true
+requires_query_text: true  # ⭐ Search strategies require query_text
+
+# Search strategy support flags
+supports_vector_search: true
+supports_bm25_search: true
+supports_hybrid_search: true
+
+# Performance settings
+default_limit: 30
+max_limit: 1000
+timeout_seconds: 30
+
+# Examples for documentation
+examples:
+  - description: Vector search for semantic similarity
+    code: |
+      from pom_core.database.data_factory import DataFactory
+      from pom_core.models.data_model import DataRequest
+      
+      result = await data_factory.get_data(
+          data_card_id="page_facts_search",
+          user_input=DataRequest(
+              collection="Page_facts",
+              query_text="company products services",  # ⭐ Required
+              parameters={
+                  "search_strategy": "vector",  # ⭐ Semantic search
+                  "domain": "yoco.com",  # Optional filter
+                  "limit": 30
+              }
+          )
+      )
+
+  - description: BM25 keyword search
+    code: |
+      result = await data_factory.get_data(
+          data_card_id="page_facts_search",
+          user_input=DataRequest(
+              collection="Page_facts",
+              query_text="Yoco payment processing",  # ⭐ Required
+              parameters={
+                  "search_strategy": "bm25",  # ⭐ Keyword search
+                  "bm25_properties": ["content", "title"],  # Target fields
+                  "domain": "yoco.com",
+                  "limit": 20
+              }
+          )
+      )
+
+  - description: Hybrid search (vector + BM25)
+    code: |
+      result = await data_factory.get_data(
+          data_card_id="page_facts_search",
+          user_input=DataRequest(
+              collection="Page_facts",
+              query_text="detailed company information",  # ⭐ Required
+              parameters={
+                  "search_strategy": "hybrid",  # ⭐ Balanced search
+                  "hybrid_alpha": 0.7,  # 70% vector, 30% BM25
+                  "domain": "yoco.com",
+                  "limit": 25
+              }
+          )
+      )
+
+  - description: Search with domain filter and extended fields
+    code: |
+      result = await data_factory.get_data(
+          data_card_id="page_facts_search",
+          user_input=DataRequest(
+              collection="Page_facts",
+              query_text="pricing plans features",
+              parameters={
+                  "search_strategy": "hybrid",
+                  "hybrid_alpha": 0.6,
+                  "domain": "yoco.com",
+                  "field_set": "extended",  # Get all fields
+                  "limit": 50
+              }
+          )
+      )
+
+# Implementation notes
+notes: |
+  ⚠️  TENANT ROUTING IMPORTANT:
+  
+  Page_facts routes to Spark Weaviate (has vectorizer).
+  Ensure DataFactory uses tenant-aware routing:
+  
+  from pom_core.utils.schema_router import get_factory_config_for_tenant_collection
+  
+  factory_config = get_factory_config_for_tenant_collection(tenant_id, "Page_facts")
+  if factory_config:
+      factory = WeaviateDatabaseFactory(config=factory_config)
+  else:
+      factory = WeaviateDatabaseFactory()
+  
+  data_factory = DataFactory(factory=factory, tenant_id=tenant_id)
+  
+  ---
+  
+  SEARCH STRATEGY IMPLEMENTATION:
+  
+  - Vector: Uses hybrid with alpha=0.9 (90% vector, 10% BM25)
+  - BM25: Pure keyword search
+  - Hybrid: Configurable alpha balance
+  
+  GraphQL generation handled automatically by DataFactory + GraphQLGenerator.
+  
+  ---
+  
+  GENERATED GRAPHQL EXAMPLES:
+  
+  BM25:
+    Get {
+      Page_facts(
+        tenant: "test_db"
+        bm25: {query: $bm25_query_0, properties: ["content", "title"]}
+        where: {path: ["domain"], operator: Equal, valueText: "yoco.com"}
+        limit: 20
+      ) { url content title domain }
+    }
+  
+  Hybrid:
+    Get {
+      Page_facts(
+        tenant: "test_db"
+        hybrid: {query: $hybrid_query_0, alpha: 0.7}
+        where: {path: ["domain"], operator: Equal, valueText: "yoco.com"}
+        limit: 25
+      ) { url content title domain }
+    }
+

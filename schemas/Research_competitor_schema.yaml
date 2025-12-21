@@ -1,0 +1,577 @@
+type: research
+class: Research_competitor
+id: Research_competitor
+name: Research Competitor
+description: "📚 RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Lookalike\
+  \ Entity Discovery)\n  \n  RESEARCHER: Competitive Intelligence Analyst (identity\
+  \ defined in seed data for researcher identity)\n  \n  KNOWLEDGE TYPE: Ecosystem\
+  \ of DIRECT COMPETITORS as lookalike prospects for the tenant's sales team\n  \n\
+  \  PURPOSE: Build a seed list of entities with similar offerings in similar markets:\n\
+  \  - Identify entities that COMPETE WITH this entity (not against the tenant)\n\
+  \  - Map the competitive ecosystem to find lookalike prospects\n  - Generate high-quality\
+  \ prospect lists based on similarity\n  - Enable efficient \"land and expand\" prospecting\
+  \ strategies\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's\
+  \ complete competitor intelligence\n  - Tenant Isolation: Complete data separation\
+  \ per entity\n  - Tenant Activation: Automatic tenant creation and activation\n\
+  \  - Scalability: Supports unlimited tenants with efficient partitioning\n  \n \
+  \ REPOSITORY CONTENTS:\n  - Competitive Ecosystem Map: Named competitors with similar\
+  \ offerings/markets\n  - Similarity Analysis: What makes these entities comparable\n\
+  \  - Categorical Classifications: Machine-assigned categories for competitor attributes\n\
+  \  - Quality Metadata: Processing dates, source quality, review flags, confidence\
+  \ levels\n  - Evidence Links: References to supporting data and source materials\n\
+  \  \n  DATA SOURCES:\n  - AI-analyzed entity websites and competitor-specific content\n\
+  \  - Industry reports and research publications\n  - Public entity information\
+  \ and disclosures\n  - Validated against authoritative sources when available\n\
+  \  \n  QUALITY STANDARDS:\n  - Confidence Scoring: High, Medium, Low, Inferred,\
+  \ Web-verified\n  - Evidence-Based Assessment: Classifications backed by concrete\
+  \ evidence\n  - Source Tracking: Links to originating Domain records\n  - Conservative\
+  \ Calibration: Prefer 'unknown' over incorrect data\n  \n  INTEGRATION: Seeds prospect\
+  \ lists by identifying lookalike entities in the same competitive\
+  \ ecosystem\n  \n  VECTOR SEARCH CAPABILITIES: Named vectors for similarity search\
+  \ across key competitor dimensions for lookalike discovery"
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+namedVectors:
+  competitorAnalysisVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - competitorAnalysisLLM
+    - competitivePositioning
+    - keyCompetitors
+    - competitiveMarket
+    - differentiationFactors
+    - competitiveThreats
+    - competitorNames
+    - competitorPositioning
+    - competitorPriceVs
+    - competitorAdvantagesVs
+    - competitorGapsVs
+    - competitorTargetMarket
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  marketPositionVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - marketPositionLLM
+    - competitiveAdvantages
+    - marketDynamics
+    - marketSize
+    - marketTrends
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: entityName
+  dataType:
+  - text
+  description: Entity name
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+- name: seed
+  dataType:
+  - boolean
+  description: Indicates if this record originated from seed data (true) or was generated
+    by research process (false)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: domain
+  dataType:
+  - text
+  description: Entity domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+- name: dataSource
+  dataType:
+  - text
+  description: Source of research data
+  sets:
+  - system
+- name: competitiveMarket
+  dataType:
+  - text
+  description: Primary competitive market or industry space
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: marketDynamics
+  dataType:
+  - text
+  description: Key competitive dynamics and market forces
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitivePositioning
+  dataType:
+  - text
+  description: How the entity positions itself against competitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: keyCompetitors
+  dataType:
+  - text[]
+  description: Array of DIRECT competitor names (2-5 entities customers would compare
+    to)
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: keyCompetitorsIds
+  dataType:
+  - text[]
+  description: Parallel array of UUID5 IDs for keyCompetitors (index-aligned, auto-generated)
+  tags:
+  - research
+  - system
+  sets:
+  - extended
+  - prompt
+- name: competitorDomain
+  dataType:
+  - text[]
+  description: Each competitor's primary domain (parallel to keyCompetitors array). Populated during spawn process or by researcher if known.
+  parallel_to: keyCompetitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: keyCompetitorEvidence
+  dataType:
+  - text[]
+  description: Evidence/context found for each keyCompetitor from page facts search
+    (parallel to keyCompetitors array). Stores the factual basis for classifications
+    and extracted values.
+  parallel_to: keyCompetitors
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - evidence
+  sets:
+  - extended
+  - prompt
+- name: competitorPositioning
+  dataType:
+  - text[]
+  description: Each competitor's market positioning (parallel to keyCompetitors array)
+    - e.g., "Market Leader", "Challenger", "Niche Player". Use "Not disclosed" if
+    positioning unknown. MUST have same length as keyCompetitors array.
+  parallel_to: keyCompetitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitorPriceVs
+  dataType:
+  - text[]
+  description: Price comparison vs THIS entity (parallel to keyCompetitors array)
+    - e.g., "$150/user vs our $99", "Similar pricing", "Lower cost". Use "Not disclosed"
+    if pricing comparison unknown. MUST have same length as keyCompetitors array.
+  parallel_to: keyCompetitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitorAdvantagesVs
+  dataType:
+  - text[]
+  description: What THIS entity has that this competitor doesn't (parallel to keyCompetitors
+    array) - e.g., "Better technology, simpler setup", "Stronger customer support,
+    faster delivery", "More flexible pricing, easier onboarding". Use "Not disclosed"
+    if advantages unknown. MUST have same length as keyCompetitors array.
+  parallel_to: keyCompetitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitorGapsVs
+  dataType:
+  - text[]
+  description: What this competitor has that THIS entity doesn't (parallel to keyCompetitors
+    array) - e.g., "More advanced features, larger market presence", "Established
+    brand recognition, broader product line", "Better infrastructure, more resources".
+    Use "Not disclosed" if gaps unknown. MUST have same length as keyCompetitors array.
+  parallel_to: keyCompetitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitorTargetMarket
+  dataType:
+  - text[]
+  description: Each competitor's target market (parallel to keyCompetitors array)
+    - e.g., "Enterprise", "SMB", "Mid-market". Use "Not disclosed" if target market
+    unknown. MUST have same length as keyCompetitors array.
+  parallel_to: keyCompetitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: differentiationFactors
+  dataType:
+  - text[]
+  description: Key factors that differentiate THIS entity from ALL competitors
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitiveAdvantages
+  dataType:
+  - text[]
+  description: THIS entity's specific competitive advantages across the board
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitiveThreats
+  dataType:
+  - text[]
+  description: Identified competitive threats and challenges facing THIS entity
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: marketSize
+  dataType:
+  - text
+  description: Competitive market size and scope assessment
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: marketTrends
+  dataType:
+  - text[]
+  description: Key market trends affecting competitive landscape
+  tags:
+  - research
+  sets:
+  - extended
+  - prompt
+- name: competitorAnalysisLLM
+  dataType:
+  - text
+  description: Descriptive analysis of competitive landscape and positioning. Include
+    direct competitors identified, alternative solutions, competitive advantages claimed,
+    differentiation factors, and competitive threats acknowledged.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: competitorAnalysisCat
+  dataType:
+  - text
+  description: Competitive analysis classification - assess based on market position,
+    growth trajectory, and competitive threat level. Consider market share indicators,
+    growth momentum, innovation capabilities, and competitive positioning claims.
+  enum:
+  - Market-Leader
+  - Strong-Challenger
+  - Established-Player
+  - Fast-Follower
+  - Niche-Leader
+  - Emerging-Challenger
+  - Legacy-Incumbent
+  - Disruptor
+  - Strategic-Alternative
+  - Unknown
+  tags:
+  - Cat
+  - competitive
+  sets:
+  - standard
+  - EnumCat
+- name: marketPositionLLM
+  dataType:
+  - text
+  description: Descriptive analysis of market position and competitive standing. Include
+    market leadership claims (leader, challenger, niche player), market share indicators,
+    positioning strategy (premium, value, specialist), and competitive moat strength.
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+- name: marketPositionCat
+  dataType:
+  - text
+  description: Market positioning strategy - classify based on competitive positioning,
+    market segment focus, and differentiation approach. Consider leadership claims,
+    pricing strategy, target market, and unique positioning angles.
+  enum:
+  - Market-Dominant
+  - Premium-Leader
+  - Value-Leader
+  - Innovation-Leader
+  - Vertical-Specialist
+  - Regional-Leader
+  - Feature-Leader
+  - Fast-Grower
+  - Consolidator
+  - Unknown
+  tags:
+  - Cat
+  - market
+  sets:
+  - standard
+  - EnumCat
+- name: processedDate
+  dataType:
+  - text
+  description: Analysis completion date
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: sourceQuality
+  dataType:
+  - text
+  description: 'Quality rating of external tool content provided for analysis [high,
+    medium, low, minimal]:
+
+    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
+    - "medium": Some pageData available but limited relevance or coverage
+
+    - "low": Minimal pageData, relying on source overview text only
+
+    - "minimal": No pageData, only basic entity metadata available
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: analysisConfidence
+  dataType:
+  - text
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
+    - "web_verified": Confirmed through web_search with multiple external sources
+
+    - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
+    - "medium": Based on indirect evidence or partial information
+
+    - "low": Limited information, educated guesses
+
+    - "inferred": No direct evidence, purely analytical inference
+
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: reviewFlag
+  dataType:
+  - text
+  description: 'Review requirement [none, for_review, needs_verification]:
+
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
+    - no review needed
+
+    - "for_review": Medium confidence with some gaps, human validation helpful
+
+    - "needs_verification": Low confidence or pure inference, human review required
+
+
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
+    - these sources are reliable.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: citations
+  dataType:
+  - text[]
+  description: URLs of sources used for analysis (from pageData and web_search)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: reasoning
+  dataType:
+  - text[]
+  description: AI reasoning steps and thought process for analysis
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+- name: homeMarketStrengthScore
+  dataType:
+  - number
+  description: Target entity's market strength (1-10)
+  sets:
+  - prompt
+  - extended
+- name: homeInnovationScore
+  dataType:
+  - number
+  description: Target entity's innovation capability (1-10)
+  sets:
+  - prompt
+  - extended
+- name: homeMarketPositionScore
+  dataType:
+  - number
+  description: Target entity's overall market position (1-10)
+  sets:
+  - prompt
+  - extended
+- name: marketStrengthScore
+  dataType:
+  - number[]
+  description: Each competitor's market strength (1-10)
+  parallel_to: keyCompetitors
+  sets:
+  - prompt
+- name: innovationScore
+  dataType:
+  - number[]
+  description: Each competitor's innovation capability (1-10)
+  parallel_to: keyCompetitors
+  sets:
+  - prompt
+- name: threatLevelScore
+  dataType:
+  - number[]
+  description: Competitive threat level per competitor (1-10)
+  parallel_to: keyCompetitors
+  sets:
+  - prompt
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: domain
+    dataType:
+    - uuid[]
+    description: Domain source UUIDs
+  - name: sourceEntity
+    dataType:
+    - uuid[]
+    description: Source entity UUIDs
+references:
+- name: sourceEntity
+  target_collection: Domain
+  description: Source entity reference
+- name: domain
+  target_collection: Domain
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: Reference to the source Domain record for beacon traversal (uses research
+    record's own UUID)
+group: research
+weaviate_instance: cloud
+collection_name: Research_competitor
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs
+reverse_references:
+- target_collection: Domain
+  target_property: competitor
+  use_my_uuid: true
+  description: When this competitor researcher is created, add its UUID to Domain.competitor
+dependencies:
+- type: research
+data_sources:
+  primary: db:Domain
+  processor: prompty:entity_competitor
+collection_groups:
+- research_collections

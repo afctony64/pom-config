@@ -1,0 +1,186 @@
+# Data Card: Knowledge Base with Extended Field Set
+#
+# Purpose: Fetch Knowledge_base records with extended field set
+# Use Case: Get comprehensive knowledge base data for analysis
+#
+# ✅ GraphQL executor with extended field set (no references available)
+
+id: knowledge_base
+name: Knowledge Base Extended
+type: data_card
+file: knowledge_base.yaml
+description: >
+  Fetches Knowledge_base records with extended field set including all available properties.
+  Uses GraphQL executor for efficient data retrieval.
+
+# Tagging system
+tags:
+  - knowledge-base
+  - research
+  - extended-fields
+  - knowledge-extraction
+
+target_scope: knowledge_intelligence
+
+# ✅ STANDARD: Use 'graphql' for all data cards
+executor: graphql
+
+# Enable relationship traversal (no references available, but support enabled)
+relationship_support: true
+
+# Access control
+personas:
+  - "*"
+
+# Query parameters
+parameters:
+  type: graphql  # Must match executor
+
+  # Root collection
+  collection: Knowledge_base
+
+  # Relationship traversal configuration
+  relationship_traversal: false  # No references available
+  dynamic_templates: true
+
+  # No references (Knowledge_base has empty references array)
+  references: []
+
+  # Limits
+  limit: 50
+  limit_default: 50
+
+  # Field set configuration
+  field_set: standard
+  field_set_default: standard
+  field_set_options:
+    - standard
+    - extended
+
+# Field definitions for each field set
+field_sets:
+  standard:
+    description: "Core knowledge base fields"
+    fields:
+      - name: url
+        type: text
+        source: property
+        description: Source page URL
+      
+      - name: domain
+        type: text
+        source: property
+        description: Source domain
+      
+      - name: researcher
+        type: text
+        source: property
+        description: Researcher type (competitor, customer, product, etc.)
+      
+      - name: knowledge_text
+        type: text
+        source: property
+        description: Extracted knowledge text
+      
+      - name: field_name
+        type: text
+        source: property
+        description: Researcher field name this knowledge belongs to
+      
+      - name: field_value
+        type: text
+        source: property
+        description: Extracted field value
+      
+      - name: extraction_timestamp
+        type: date
+        source: property
+        description: When knowledge was extracted
+      
+      - name: source_collection
+        type: text
+        source: property
+        description: Source collection (typically "Page_facts")
+
+  extended:
+    description: "Full knowledge base entry with all available fields"
+    fields:
+      # All standard fields
+      - name: url
+        type: text
+        source: property
+        description: Source page URL
+      
+      - name: domain
+        type: text
+        source: property
+        description: Source domain
+      
+      - name: researcher
+        type: text
+        source: property
+        description: Researcher type (competitor, customer, product, etc.)
+      
+      - name: knowledge_text
+        type: text
+        source: property
+        description: Extracted knowledge text
+      
+      - name: field_name
+        type: text
+        source: property
+        description: Researcher field name this knowledge belongs to
+      
+      - name: field_value
+        type: text
+        source: property
+        description: Extracted field value
+      
+      - name: extraction_timestamp
+        type: date
+        source: property
+        description: When knowledge was extracted
+      
+      - name: source_collection
+        type: text
+        source: property
+        description: Source collection (typically "Page_facts")
+      
+      - name: llm_model
+        type: text
+        source: property
+        description: LLM model used for extraction
+      
+      - name: prompt_version
+        type: text
+        source: property
+        description: Version of extraction prompt used
+
+# Query behavior
+supports_relationships: false  # No references available
+supports_aggregation: false
+supports_grouping: true
+requires_query_text: false
+
+# Performance settings
+default_limit: 50
+max_limit: 1000
+timeout_seconds: 30
+
+# Examples for documentation
+examples:
+  - description: Basic query with standard fields
+    code: |
+      result = await execute_data_card(
+          data_card_id="knowledge_base",
+          limit=10
+      )
+
+  - description: Extended fields query
+    code: |
+      result = await execute_data_card(
+          data_card_id="knowledge_base",
+          field_set="extended",
+          limit=10
+      )
+

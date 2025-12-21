@@ -1,0 +1,163 @@
+id: company_research
+collection: Company_source
+name: Company Research (Complete)
+type: data_card
+file: company_research.yaml
+description: >
+  Fetch Company_source records with ALL researcher fields (Cat, LLM, and research).
+  Uses tag-based filtering to get comprehensive research data.
+  Part of the Company Research Suite - use specialized cards for specific needs:
+  - company_research: ALL fields (comprehensive, slower)
+  - company_research_categories: Cat fields only (pivot tables, fast)
+  - company_research_analysis: LLM fields only (detailed insights)
+
+# Tagging system
+tags:
+  - research
+  - cat-fields
+  - llm-fields
+  - research-fields
+  - company-intelligence
+  - comprehensive
+
+target_scope: company_intelligence
+executor: graphql
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for comprehensive company research
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql
+
+  # Root collection
+  collection: Company_source
+
+  # Use reverse traversal to fetch researcher collections
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Fetch one or more companies
+  limit: 10000
+  limit_default: 10000
+
+# 🎯 TAG-BASED FILTERING - Fetch fields by tags (Cat, LLM, research)
+# No explicit fields - let the system resolve based on tags!
+fields: {}
+
+# Specify tags to include for all researcher collections
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+# Collection configuration: Company_source with auto-discovered nested references
+# System automatically discovers ALL 10 researcher references from Company_source schema
+# field_tags=[Cat, LLM, research] fetches all field types across all discovered references
+collections:
+  - collection: Company_source
+    required: true
+    # ✅ NO field_set specified - let field_tags control field selection
+    # This ensures field_tags=[Cat, LLM, research] applies to all references without intersection
+    # ✅ AUTO-DISCOVERY: No need to list all researcher collections
+    # GraphQLGenerator automatically discovers all nested references:
+    # financial, industry, product, customer, leadership, competitor, partner, risk, journalist, social
+    # field_tags=[Cat, LLM, research] applied to all discovered references (fetches everything)
+
+# Chat intelligence integration
+chat_integration:
+  best_for:
+    - "Comprehensive company research with all fields"
+    - "Reports requiring Cat, LLM, and research data"
+    - "Deep dive analysis with full context"
+
+  usage_patterns:
+    - "Returns all Cat, LLM, and research tagged fields"
+    - "Excludes system fields automatically"
+    - "Perfect for detailed dossiers and research reports"
+
+  parameter_examples:
+    - name: "Full company research"
+      params: {limit: 100}
+    - name: "Single company full context"
+      params: {where: {domain: "example.com"}}
+
+# Response structure
+response_structure:
+  root_object: Company_source
+  includes_relationships: true
+  relationship_style: reverse_traversal
+  field_focus: comprehensive_research
+  expected_collections:
+    - Company_source
+    - Company_research_industry
+    - Company_research_financial
+    - Company_research_product
+    - Company_research_leadership
+    - Company_research_customer
+    - Company_research_competitor
+    - Company_research_partner
+    - Company_research_risk
+    - Company_research_journalist
+    - Company_research_social
+
+# Documentation
+documentation:
+  overview: |
+    This data card fetches comprehensive research data using tag-based filtering.
+    It returns all Cat fields (classifications), LLM fields (analysis), and research
+    fields (detailed facts) for complete company intelligence.
+
+  tag_strategy: |
+    HYBRID FIELD SELECTION:
+
+    Company_source: uses_field_set='extended' (6 fields: foundedYear, url, domain, city, country, description)
+    Researcher collections: field_tags=[Cat, LLM, research]
+
+    This fetches:
+    - Company_source: Extended fields (identity, location, temporal data)
+    - Researchers: Cat fields (categorical classifications)
+    - Researchers: LLM fields (AI-generated analysis)
+    - Researchers: Research fields (detailed facts)
+
+    Note: Company_source uses field_set because its fields are tagged with
+    'identity', 'content', 'location' (not Cat/LLM/research)
+
+  usage_examples:
+    - name: "Fetch companies with full research data"
+      query: "data_card_id: company_research, limit: 100"
+      notes: "Gets all Cat, LLM, and research fields"
+
+    - name: "Fetch single company by domain"
+      query: "data_card_id: company_research, where: {domain: 'example.com'}"
+
+    - name: "Company dossier (full context)"
+      query: "data_card_id: company_research, where: {domain: 'example.com'}"
+      output: "Company_source + all Cat/LLM/research fields from 10 researchers"
+
+  company_research_suite: |
+    COMPLETE SUITE OF 3 DATA CARDS FOR DIFFERENT USE CASES:
+
+    1. company_research (this card)
+       - Tags: [Cat, LLM, research]
+       - Use: Comprehensive analysis, complete dossiers
+       - Performance: Slower (large payload)
+       - Limit: 10000 default (supports large batch operations)
+
+    2. company_research_categories
+       - Tags: [Cat]
+       - Use: Pivot tables, cross-tabs, dashboards
+       - Performance: Fast (small payload)
+       - Limit: 100 default
+
+    3. company_research_analysis
+       - Tags: [LLM]
+       - Use: Detailed insights, qualitative reports
+       - Performance: Medium (LLM fields only)
+       - Limit: 10000 default (supports large batch operations)
+
+    RECOMMENDATION: Start with company_research_categories for exploration,
+    then use company_research_analysis for detailed analysis of specific companies.

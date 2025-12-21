@@ -1,0 +1,58 @@
+# Gaming Research Tenant Group
+# RPG character builds, game mechanics, and meta analysis
+
+id: gaming
+type: tenant_group
+display_name: "Gaming Research"
+description: |
+  RPG and gaming research for character optimization and strategy.
+  Analyzes builds, mechanics, and competitive meta across games.
+
+domain_context: |
+  RPG and competitive gaming research for optimal play.
+  Focus on character builds, game mechanics, and meta strategy.
+
+  Key analysis dimensions:
+  - Character builds and stat optimization
+  - Skill/ability synergies and rotations
+  - Equipment and gear recommendations
+  - Game mechanics and system understanding
+  - Current meta and tier rankings
+  - Lore and narrative context
+
+industry_focus:
+  preferred:
+    - RPG
+    - MMORPG
+    - Action RPG
+    - Strategy Games
+    - Competitive Gaming
+  avoid:
+    - Casual Mobile
+    - Puzzle Games
+
+# Independent agents selected for this domain
+researchers:
+  - character    # Class/job analysis, playstyle
+  - build        # Stat allocation, skill trees, gear
+  - mechanics    # Game systems, combat, progression
+  - lore         # Story, world, narrative context
+  - meta         # Tier lists, competitive viability
+  - risk         # Build weaknesses, counters  ← SHARED AGENT (recontextualized)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ENTITY MODEL CONFIGURATION (Standard)
+# ══════════════════════════════════════════════════════════════════════════════
+# Uses the Entity Model:
+# - Source: Domain (the URL/domain IS the entity)
+# - Output: Research_* (no prefix)
+entity:
+  entity_type: Character
+  # ENTITY MODEL: Source is Domain
+  source_collection: Domain
+  # ENTITY MODEL: No prefix for research collections
+  research_schema_prefix: ""  # Results in Research_character, Research_build, etc.
+  domain_schema: Domain
+
+# Schema pattern for research output (generates Research_{researcher})
+schema_pattern: "Research_{researcher}"

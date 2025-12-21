@@ -1,0 +1,585 @@
+type: research
+class: Company_research_industry
+description: '📚 RESEARCH REPOSITORY: Industry & Market Intelligence
+
+
+  RESEARCHER: Senior Industry Intelligence Analyst (see Company_research_industry
+  for researcher identity)
+
+
+  KNOWLEDGE TYPE: Company-specific categorized research and analysis
+
+
+  MULTI-TENANT ARCHITECTURE: Each tenant represents one company''s complete industry
+  intelligence
+
+  - Tenant Isolation: Complete data separation per company
+
+  - Tenant Activation: Automatic tenant creation and activation
+
+  - Scalability: Supports unlimited tenants with efficient partitioning
+
+
+  REPOSITORY CONTENTS:
+
+  - Industry Classifications: NAICS codes (6-digit), sector, industry, industrySegment
+
+  - Business Models: Detailed business model descriptions and categories (SaaS, Marketplace,
+  E-commerce, Consulting)
+
+  - Market Positioning: Competitive landscape, value chain position, market niche
+  analysis
+
+  - Vertical Markets: Target markets and vertical specialization
+
+  - Delivery Models: How companies deliver products/services
+
+  - Quality Metadata: Processing dates, source quality, review flags, confidence levels
+
+
+  DATA SOURCES:
+
+  - AI-analyzed company websites and web content
+
+  - Industry reports and competitive intelligence
+
+  - Market research and positioning content
+
+  - Validated against official NAICS taxonomy
+
+
+  QUALITY STANDARDS:
+
+  - Confidence Scoring: High, Medium, Low, Inferred, Web-verified
+
+  - Human Verification: Review flags for validation
+
+  - Source Tracking: Links to originating Company_source records
+
+  - Conservative Calibration: Prefer ''unknown'' over incorrect data
+
+
+  INTEGRATION: Provides foundational industry context to:
+
+  - Financial research (revenue models, funding, growth analysis)
+
+  - Product research (product-market fit, technical positioning)
+
+  - Customer research (target segments, acquisition channels)
+
+  - Leadership research (industry expertise, founder background)
+
+  - Risk research (industry-specific risks, regulatory environment)
+
+  - Partnership research (industry ecosystem, strategic alliances)
+
+
+  VECTOR SEARCH CAPABILITIES:
+
+  - businessModelVector: Search by business model and value chain similarities
+
+  - industrySegmentVector: Discover companies with similar industry segments and positioning
+
+  - deliveryModelVector: Match by service delivery approaches
+
+  '
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+namedVectors:
+  businessModelVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - businessModelLLM
+    - valueChainPosition
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  deliveryModelVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - deliveryModelLLM
+    - businessModelLLM
+    - companyDescription
+    - valueChainPosition
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+  industrySegmentVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - sector
+    - industry
+    - naicsDescription
+    - industrySegmentLLM
+    - businessModelLLM
+    - deliveryModelLLM
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: accountId
+  dataType:
+  - text
+  description: Unique account identifier from source record
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - identifier
+  tags:
+  - identity
+- name: accountName
+  dataType:
+  - text
+  description: Company name
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+- name: domain
+  dataType:
+  - text
+  description: Company domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - extended
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+- name: seed
+  dataType:
+  - boolean
+  description: Seed data flag (true = seed/training data, false = production data)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - metadata
+  - seed
+  sets:
+  - system
+- name: dataSource
+  dataType:
+  - text
+  description: Source of research data
+  sets:
+  - system
+- name: sector
+  dataType:
+  - text[]
+  description: Broad economic sector - mutually exclusive top-level industry classification.
+    Array supports multi-segment classification (ordered by similarity score, [0]
+    is primary)
+  enum:
+  - Software
+  - Professional Services
+  - Financial Services
+  - Healthcare
+  - Manufacturing
+  - Construction
+  - Education
+  - Retail
+  - Agriculture
+  - Transportation
+  - Energy
+  - Real Estate
+  - Hospitality
+  - Media & Entertainment
+  - Telecommunications
+  - Government
+  - Nonprofit
+  tags:
+  - research
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+- name: industry
+  dataType:
+  - text[]
+  description: Primary industry classification within the sector - mutually exclusive
+    categories under each sector. Array supports multi-segment classification (ordered
+    by similarity score, [0] is primary)
+  enum:
+  - Enterprise Applications
+  - Data & AI Platforms
+  - Digital Workplace Collaboration
+  - Software Infrastructure & DevOps
+  - Cybersecurity & Privacy
+  - Payments & Fintech
+  - Vertical SaaS
+  - Developer Tools & Platforms
+  - Business Intelligence & Analytics
+  - IT Services & Consulting
+  - Management Consulting
+  - Legal Services
+  - Accounting & Tax Services
+  - Marketing & Advertising Services
+  - HR & Recruiting Services
+  - Engineering & Architecture Services
+  - Banking & Lending
+  - Investment Management
+  - Insurance
+  - Medical Devices & Equipment
+  - Pharmaceuticals & Biotechnology
+  - Healthcare Services & Facilities
+  - Health IT & Digital Health
+  tags:
+  - research
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+- name: industrySegmentLLM
+  dataType:
+  - text[]
+  description: 'Describe the company''s industry segment positioning (100-150 words).
+
+
+    Address these elements:
+
+    1. What they do - their primary activity or offering (be specific, not generic)
+
+    2. Who they serve - target customers/clients and their characteristics
+
+    3. How they operate - their approach or model for delivering value
+
+    4. Segment-defining characteristics - what places them in one segment vs adjacent
+    ones
+
+
+    Use specific terminology that would appear in industry publications.
+
+    Avoid generic terms like "provides solutions" or "offers services."
+
+    Array supports multi-segment classification (ordered by similarity score, [0]
+    is primary)
+
+    '
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+- name: naicsCode
+  dataType:
+  - text[]
+  description: NAICS industry classification code. Array supports multi-segment classification
+    (ordered by similarity score, [0] is primary)
+  tags:
+  - categorical
+  - industry
+  - research
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+- name: naicsDescription
+  dataType:
+  - text[]
+  description: Human-readable description of the NAICS code. Array supports multi-segment
+    classification (ordered by similarity score, [0] is primary)
+  tags:
+  - research
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+- name: businessModelLLM
+  dataType:
+  - text[]
+  description: Descriptive analysis of business model and revenue generation approach.
+    Include how they make money (B2B SaaS subscriptions, marketplace commissions,
+    professional services), customer acquisition model, and go-to-market strategy
+    fundamentals. Array supports multi-segment classification (ordered by similarity
+    score, [0] is primary)
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+- name: businessModelCat
+  dataType:
+  - text[]
+  description: Primary business model - classify based on revenue structure, customer
+    type (B2B/B2C), pricing approach, and service delivery. Consider subscription
+    vs transactional, market focus, and monetization strategy. Array supports multi-segment
+    classification (ordered by similarity score, [0] is primary)
+  enum:
+  - B2B-SaaS
+  - B2B-Enterprise
+  - B2B-SMB
+  - B2C-Subscription
+  - B2C-Transactional
+  - Marketplace
+  - Usage-Based
+  - Freemium
+  - Services-Led
+  - Hybrid-Model
+  - Unknown
+  tags:
+  - Cat
+  - business
+  sets:
+  - EnumCat
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+    source_llm: businessModelLLM
+- name: deliveryModelLLM
+  dataType:
+  - text[]
+  description: 'Describe how the company delivers its products/services to customers
+    (2-3 sentences, ~150 words max).
+
+
+    START with the primary delivery mechanism:
+
+    - Does it involve physical hardware or is it software-only?
+
+    - Is infrastructure cloud-hosted, customer-hosted, or shared?
+
+    - How do customers access it (browser, mobile, API, physical device)?
+
+
+    Then briefly note deployment approach and key service delivery characteristics.
+
+    Array supports multi-segment classification (ordered by similarity score, [0]
+    is primary)
+
+    '
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+- name: deliveryModelCat
+  dataType:
+  - text[]
+  description: Product delivery model - classify based on deployment architecture,
+    hosting approach, and service management. Consider cloud-native vs on-premise,
+    self-service vs managed, and infrastructure requirements. Array supports multi-segment
+    classification (ordered by similarity score, [0] is primary)
+  enum:
+  - Cloud-SaaS
+  - Cloud-Native
+  - On-Premise
+  - Hybrid-Cloud
+  - Private-Cloud
+  - Managed-Service
+  - API-First
+  - Edge-Distributed
+  - Unknown
+  tags:
+  - Cat
+  sets:
+  - EnumCat
+  - array
+  metadata:
+    parallel_to: industrySegmentCat
+    source_llm: deliveryModelLLM
+- name: valueChainPosition
+  dataType:
+  - text
+  description: Company's position in the value chain
+  tags:
+  - research
+  sets:
+  - prompt
+- name: companyDescription
+  dataType:
+  - text
+  description: Comprehensive company description
+  tags:
+  - research
+  - contextual
+  - extractable
+  sets:
+  - prompt
+- name: industrySegmentCat
+  dataType:
+  - text[]
+  description: Industry sub-segment classification - highly granular semantic categorization
+    requiring vector-based similarity matching with seed data. Hundreds of possible
+    nuanced sub-industries (e.g., DevOps vs Security vs Analytics in Software Infrastructure,
+    or Management Consulting vs Legal Services in Professional Services). Array supports
+    multi-segment classification (ordered by similarity score, [0] is primary)
+  tags:
+  - Cat
+  - benchmark
+  sets:
+  - VecCat
+  - array
+  metadata:
+    parallel_anchor: true
+- name: processedDate
+  dataType:
+  - text
+  description: Date when this analysis was completed
+  sets:
+  - system
+  - metadata
+- name: sourceQuality
+  dataType:
+  - text
+  description: Quality assessment of source data (high/medium/low/minimal)
+  sets:
+  - system
+  - metadata
+- name: reviewFlag
+  dataType:
+  - text
+  description: Review flag for human validation (none/for_review/needs_verification)
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: analysisConfidence
+  dataType:
+  - text
+  description: Confidence level of analysis (high/medium/low/inferred/web_verified)
+  sets:
+  - system
+  - metadata
+  - prompt
+- name: citations
+  dataType:
+  - text[]
+  description: URLs of sources used for analysis (from pageData and web_search)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - array
+- name: reasoning
+  dataType:
+  - text[]
+  description: AI reasoning steps and thought process for analysis
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  - array
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: classificationThreshold
+  description: Classification threshold
+  dataType:
+  - number
+  sets:
+  - system
+- name: matchedSeeds
+  description: Matched seed names
+  dataType:
+  - text[]
+  sets:
+  - system
+  - array
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: segmentSimilarities
+  description: Segment similarity scores
+  dataType:
+  - number[]
+  sets:
+  - system
+  - array
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  nestedProperties:
+  - name: company
+    dataType:
+    - uuid[]
+    description: Company source UUIDs
+references:
+- name: company
+  target_collection: Company_source
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: Reference to the source company record for beacon traversal (uses research
+    record's own UUID)
+group: company
+weaviate_instance: cloud
+collection_name: Company_research_industry
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs (when available)
+    fallback_to_uuid4: true
+reverse_references:
+- target_collection: Company_source
+  target_property: industry
+  use_my_uuid: true
+  description: When this industry researcher is created, add its UUID to Company_source.industry
+dependencies:
+- type: research
+data_sources:
+  primary: db:Company_source
+  processor: prompty:company_industry
+collection_groups:
+- company_collections
+schema_config:
+  additional_properties: false
+  strict_field_filtering: true
+id: Company_research_industry
+name: Research Industry

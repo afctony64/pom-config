@@ -1,0 +1,189 @@
+# Benchmark Judge Scores Collection
+# Stores normalized judge evaluation scores for model comparisons
+# Enables querying and analysis of judge scores across prompts, models, and time
+
+type: schema
+class: Benchmark_judge_scores
+weaviate_instance: spark
+class_name: Benchmark_judge_scores
+description: "Judge evaluation scores from model benchmarking - normalized scores matrix for analysis"
+
+vectorizer_config:
+  vectorizer: none  # No vectorization needed for numeric scores
+
+properties:
+  # Primary Dimensions: prompt, model, entity
+  - name: prompt_name
+    dataType: ["text"]
+    description: "Prompt template name being evaluated (e.g., facts_organizer, classification)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: model_key
+    dataType: ["text"]
+    description: "Model key (e.g., qwen3:8b, gpt-5-mini)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: model_name
+    dataType: ["text"]
+    description: "Human-readable model name"
+    index_filterable: true
+    index_searchable: false
+
+  - name: entity
+    dataType: ["text"]
+    description: "Entity/domain/record being processed (e.g., yoco.com, company_uuid)"
+    index_filterable: true
+    index_searchable: false
+
+  # Context
+  - name: benchmark_name
+    dataType: ["text"]
+    description: "Name of benchmark run (e.g., facts_organizer_class_competition)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: test_id
+    dataType: ["text"]
+    description: "Unique test run identifier (timestamp-based)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: timestamp
+    dataType: ["date"]
+    description: "When the evaluation was performed"
+    index_filterable: true
+    index_searchable: false
+
+  - name: resource_class
+    dataType: ["text"]
+    description: "Model resource class (A, B, C)"
+    index_filterable: true
+    index_searchable: false
+
+  # Core Dimension Scores (normalized 0.0-1.0)
+  - name: accuracy_score
+    dataType: ["number"]
+    description: "Accuracy dimension score (0.0-1.0)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: completeness_score
+    dataType: ["number"]
+    description: "Completeness dimension score (0.0-1.0)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: schema_compliance_score
+    dataType: ["number"]
+    description: "Schema compliance dimension score (0.0-1.0)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: uniqueness_score
+    dataType: ["number"]
+    description: "Uniqueness dimension score (0.0-1.0)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: tool_usage_score
+    dataType: ["number"]
+    description: "Tool usage dimension score (0.0-1.0)"
+    index_filterable: true
+    index_searchable: false
+
+  # Aggregated Scores
+  - name: aggregated_score
+    dataType: ["number"]
+    description: "Overall aggregated score (0.0-1.0) - weighted combination of core dimensions + throughput"
+    index_filterable: true
+    index_searchable: false
+
+  - name: throughput_score
+    dataType: ["number"]
+    description: "Performance/throughput score (0.0-1.0)"
+    index_filterable: true
+    index_searchable: false
+
+  # Sub-Dimension Details (JSON stored as text for flexibility)
+  - name: accuracy_sub_dimensions
+    dataType: ["text"]
+    description: "Accuracy sub-dimension scores JSON (e.g., {'hallucinations': 0.95, 'correctness': 0.9})"
+    index_filterable: false
+    index_searchable: false
+
+  - name: completeness_sub_dimensions
+    dataType: ["text"]
+    description: "Completeness sub-dimension scores JSON (e.g., {'coverage': 0.85, 'missing_items': 0.9})"
+    index_filterable: false
+    index_searchable: false
+
+  - name: schema_sub_dimensions
+    dataType: ["text"]
+    description: "Schema compliance sub-dimension scores JSON (e.g., {'field_presence': 0.95, 'enum_adherence': 0.88})"
+    index_filterable: false
+    index_searchable: false
+
+  - name: uniqueness_sub_dimensions
+    dataType: ["text"]
+    description: "Uniqueness sub-dimension scores JSON (e.g., {'deduplication': 0.9, 'redundancy': 0.85})"
+    index_filterable: false
+    index_searchable: false
+
+  - name: tool_usage_sub_dimensions
+    dataType: ["text"]
+    description: "Tool usage sub-dimension scores JSON (e.g., {'correct_tool_selection': 0.95, 'correct_parameters': 0.9})"
+    index_filterable: false
+    index_searchable: false
+
+  # Evaluation Details
+  - name: evaluation_notes
+    dataType: ["text"]
+    description: "Detailed evaluation notes from judge"
+    index_filterable: false
+    index_searchable: true
+
+  - name: strengths
+    dataType: ["text[]"]
+    description: "List of strengths identified by judge"
+    index_filterable: false
+    index_searchable: true
+
+  - name: weaknesses
+    dataType: ["text[]"]
+    description: "List of weaknesses identified by judge"
+    index_filterable: false
+    index_searchable: true
+
+  - name: recommendation
+    dataType: ["text"]
+    description: "Judge recommendation (excellent, good, acceptable, needs_improvement, poor)"
+    index_filterable: true
+    index_searchable: false
+
+  # PomFlow Arguments (all filterable for querying)
+  - name: tenant_id
+    dataType: ["text"]
+    description: "Tenant ID passed to PomFlow (e.g., prismatic, test_db)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: researcher_type
+    dataType: ["text"]
+    description: "Researcher type/researcher_id passed to PomFlow (e.g., product, industry, financial)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: source_type
+    dataType: ["text"]
+    description: "Source type passed to PomFlow (e.g., page, linkedin, api)"
+    index_filterable: true
+    index_searchable: false
+
+  - name: domain
+    dataType: ["text"]
+    description: "Domain passed to PomFlow (e.g., yoco.com, may be same as entity)"
+    index_filterable: true
+    index_searchable: false
+

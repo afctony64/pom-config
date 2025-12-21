@@ -1,0 +1,198 @@
+type: schema
+class: Fact_base
+version: 1.0
+group: company
+weaviate_instance: spark
+description: >
+  🔎 FACT BASE - Canonical facts per Domain × Researcher × Source
+
+  PURPOSE:
+  - Single canonical collection for cleaned and classified facts
+  - Replaces legacy Knowledge_base and Researcher_fact_base collections
+
+  ARCHITECTURE:
+  - ONE record per (domain × researcher_type × source_type)
+  - Facts stored in fact_base array with optional entity_name and fact_type
+
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: false
+  indexPropertyLength: false
+  indexNullState: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+
+vectorizer: none
+
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+
+uuid_strategy:
+  type: url
+  fields: [url]
+
+properties:
+  # === IDENTITY / KEY DIMENSIONS ===
+  - name: url
+    dataType: [text]
+    description: >
+      Constructed URL for uuid3 generation
+
+      Format: https://{domain}/fact_base/{researcher_type}/{source_type}
+
+      Example: https://example.com/fact_base/product/page
+    indexFilterable: true
+    tokenization: field
+    moduleConfig:
+      text2vec-transformers:
+        skip: true
+    sets: [system]
+
+  - name: domain
+    dataType: [text]
+    description: >
+      Company domain (e.g., example.com)
+
+      PRIMARY KEY COMPONENT 1 of 3
+    indexFilterable: true
+    indexSearchable: true
+    tokenization: field
+    sets: [system]
+
+  - name: researcher_type
+    dataType: [text]
+    description: >
+      Researcher type (industry, product, customer, leadership, etc.)
+
+      PRIMARY KEY COMPONENT 2 of 3
+    indexFilterable: true
+    tokenization: field
+    sets: [system]
+
+  - name: source_type
+    dataType: [text]
+    description: >
+      Source type: page, edgar, linkedin, etc.
+
+      PRIMARY KEY COMPONENT 3 of 3
+    indexFilterable: true
+    tokenization: field
+    sets: [system]
+
+  # === FACTS ===
+  - name: fact_base
+    dataType: ["object[]"]
+    description: >
+      Atomic facts for this domain × researcher_type × source_type.
+
+      Stage 1:
+      - fact, entity_name (optional), source_url, confidence, category
+
+      Stage 2:
+      - fact_type added per fact (Feature, Pricing, Product, etc.)
+    indexFilterable: false
+    indexSearchable: false
+    nestedProperties:
+      - name: fact
+        dataType: [text]
+        description: Extracted fact statement
+        indexSearchable: true
+        tokenization: word
+      - name: entity_name
+        dataType: [text]
+        description: Natural entity name this fact is about (product, person, company, etc.)
+        indexFilterable: true
+        indexSearchable: true
+        tokenization: field
+      - name: fact_type
+        dataType: [text]
+        description: Structural fact type (Product, Feature, Pricing, Title, etc.)
+        indexFilterable: true
+        tokenization: field
+      - name: source_url
+        dataType: [text]
+        description: Source page URL where this fact was found
+        indexSearchable: false
+        tokenization: field
+      - name: confidence
+        dataType: [number]
+        description: Extraction confidence score (0-1)
+        indexFilterable: true
+      - name: category
+        dataType: [text]
+        description: Rough category tag (product, leadership, industry, etc.)
+        indexFilterable: true
+        tokenization: field
+
+  - name: fact_count
+    dataType: [int]
+    description: Number of facts in fact_base from this source
+    indexFilterable: true
+
+  # === SOURCE METADATA ===
+  - name: source_pages
+    dataType: ["object[]"]
+    description: >
+      Metadata about pages that contributed facts to this fact_base.
+
+      Enables traceability: which pages were classified as relevant.
+    indexFilterable: false
+    indexSearchable: false
+    nestedProperties:
+      - name: url
+        dataType: [text]
+        description: Page URL
+        indexSearchable: false
+        tokenization: field
+      - name: title
+        dataType: [text]
+        description: Page title
+        indexSearchable: true
+        tokenization: word
+      - name: relevance_score
+        dataType: [number]
+        description: Semantic relevance score (0-1)
+        indexFilterable: true
+
+  - name: source_metadata
+    dataType: [text]
+    description: >
+      Source-specific metadata (varies by source_type, stored as JSON string).
+
+      Example:
+      {"crawl_date": "2025-01-15", "page_count": 45}
+    indexFilterable: false
+    indexSearchable: true
+    tokenization: word
+
+  - name: extracted_at
+    dataType: [date]
+    description: Timestamp when facts were extracted from this source
+    indexFilterable: true
+
+  - name: processing_method
+    dataType: [text]
+    description: Processing method (semantic_local, semantic_cloud, etc.)
+    indexFilterable: true
+    tokenization: field
+
+  - name: extraction_model
+    dataType: [text]
+    description: Model used for extraction (e.g., gpt-5-mini)
+    indexFilterable: true
+    tokenization: field
+
+  - name: avg_confidence
+    dataType: [number]
+    description: Average confidence across facts from this source (0-1)
+    indexFilterable: true
+
+collection_name: Fact_base
+

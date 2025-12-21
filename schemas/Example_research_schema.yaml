@@ -1,0 +1,125 @@
+# =============================================================================
+# Example Research Collection Schema
+# =============================================================================
+# Generic research output schema for testing researcher_ai integration.
+# Works with all example researchers (rpg_expert, customer_reviewer, etc.)
+#
+# Usage:
+#   processing_config:
+#     schema_id: Example_research
+#     researcher_ai_type: rpg_expert
+
+type: research
+class: Example_research
+id: Example_research
+name: Example Research Output
+description: |
+  Generic research output collection for testing researcher_ai configs.
+  Flexible schema that works with multiple researcher types.
+
+collection: Example_research
+weaviate_class: Example_research
+
+# Multi-tenant support
+multi_tenant: true
+
+# Field definitions with LLM tag for structured output
+fields:
+  # === Identity Fields ===
+  - name: uuid
+    type: uuid
+    description: Unique identifier
+    sets: [core]
+
+  - name: researcherType
+    type: string
+    description: Type of researcher that generated this analysis
+    sets: [core, LLM]
+
+  - name: subjectName
+    type: string
+    description: Name of the subject being analyzed
+    sets: [core, LLM]
+
+  # === Analysis Output Fields ===
+  - name: summary
+    type: text
+    description: Executive summary of the analysis
+    sets: [LLM, prompt]
+
+  - name: keyFindings
+    type: text[]
+    description: List of key findings from the analysis
+    sets: [LLM, prompt]
+
+  - name: recommendations
+    type: text[]
+    description: Actionable recommendations based on analysis
+    sets: [LLM, prompt]
+
+  - name: confidenceScore
+    type: number
+    description: Confidence score for the analysis (0-100)
+    sets: [LLM]
+
+  # === Sentiment/Rating Fields ===
+  - name: overallSentiment
+    type: string
+    description: Overall sentiment (positive, negative, mixed, neutral)
+    sets: [LLM, EnumCat]
+    allowed_values:
+      - positive
+      - negative
+      - mixed
+      - neutral
+
+  - name: rating
+    type: number
+    description: Numeric rating if applicable (1-10)
+    sets: [LLM]
+
+  # === Categorization Fields ===
+  - name: primaryCategory
+    type: string
+    description: Primary category for the analysis subject
+    sets: [LLM, EnumCat]
+
+  - name: tags
+    type: string[]
+    description: Relevant tags for the analysis
+    sets: [LLM]
+
+  # === Source Attribution ===
+  - name: sources
+    type: object[]
+    description: Sources used in the analysis
+    sets: [LLM]
+    properties:
+      - name: title
+        type: string
+      - name: url
+        type: string
+      - name: relevance
+        type: string
+
+  # === Metadata ===
+  - name: analysisDate
+    type: date
+    description: When the analysis was performed
+    sets: [core]
+
+  - name: toolsUsed
+    type: string[]
+    description: Tools used during analysis (brave_search, etc.)
+    sets: [LLM]
+
+  # === Flexible Output Fields ===
+  - name: structuredOutput
+    type: object
+    description: Researcher-specific structured output
+    sets: [LLM]
+
+  - name: rawNotes
+    type: text
+    description: Raw analysis notes
+    sets: [LLM]
