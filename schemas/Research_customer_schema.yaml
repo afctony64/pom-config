@@ -84,7 +84,7 @@ properties:
   sets:
   - system
   - metadata
-- name: domain
+- name: domainName
   dataType:
   - text
   description: Entity domain extracted from URL (e.g., example.com)
@@ -862,7 +862,37 @@ properties:
     dataType:
     - uuid[]
     description: Domain source UUIDs
+# Audit fields
+- name: createdAt
+  dataType:
+  - date
+  description: Record creation timestamp
+  sets:
+  - system
+  - audit
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: updatedAt
+  dataType:
+  - date
+  description: Last modification timestamp
+  sets:
+  - system
+  - audit
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
 references:
+  dataType:
+  - date
+  description: Last modification timestamp
+  sets:
+  - system
+  - audit
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
 - name: domain
   target_collection: Domain
   uuid_source_field: uuid

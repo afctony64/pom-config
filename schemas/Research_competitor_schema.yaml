@@ -101,7 +101,7 @@ properties:
   sets:
   - system
   - metadata
-- name: domain
+- name: domainName
   dataType:
   - text
   description: Entity domain extracted from URL (e.g., example.com)
@@ -157,6 +157,7 @@ properties:
   - research
   sets:
   - extended
+  - spawn
   - prompt
 - name: keyCompetitorsIds
   dataType:
@@ -177,6 +178,7 @@ properties:
   - research
   sets:
   - extended
+  - spawn
   - prompt
 - name: keyCompetitorEvidence
   dataType:
@@ -255,6 +257,7 @@ properties:
   - research
   sets:
   - extended
+  - spawn
   - prompt
 - name: differentiationFactors
   dataType:
@@ -545,7 +548,37 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
+# Audit fields
+- name: createdAt
+  dataType:
+  - date
+  description: Record creation timestamp
+  sets:
+  - system
+  - audit
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: updatedAt
+  dataType:
+  - date
+  description: Last modification timestamp
+  sets:
+  - system
+  - audit
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
 references:
+  dataType:
+  - date
+  description: Last modification timestamp
+  sets:
+  - system
+  - audit
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
 - name: sourceEntity
   target_collection: Domain
   description: Source entity reference
