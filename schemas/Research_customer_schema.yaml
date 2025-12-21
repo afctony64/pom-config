@@ -84,7 +84,7 @@ properties:
   sets:
   - system
   - metadata
-- name: domainName
+- name: domain
   dataType:
   - text
   description: Entity domain extracted from URL (e.g., example.com)
@@ -893,7 +893,7 @@ references:
   moduleConfig:
     text2vec-weaviate:
       skip: true
-- name: domain
+- name: domainBeacon
   target_collection: Domain
   uuid_source_field: uuid
   auto_flatten: false
