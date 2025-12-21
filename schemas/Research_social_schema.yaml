@@ -498,15 +498,6 @@ properties:
     text2vec-weaviate:
       skip: true
 references:
-  dataType:
-  - date
-  description: Last modification timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
 - name: sourceEntity
   target_collection: Domain
   description: Source entity reference
