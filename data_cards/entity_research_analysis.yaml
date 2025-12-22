@@ -1,0 +1,136 @@
+id: entity_research_analysis
+collection: Domain
+name: Entity Research Analysis
+type: data_card
+file: entity_research_analysis.yaml
+description: >
+  Fetch Domain records with ONLY LLM (analysis) fields from all Research_* collections.
+  Optimized for detailed AI-generated insights and qualitative analysis.
+  Use this card when you need deep analysis without categorical classifications.
+
+# Tagging system
+tags:
+  - research
+  - llm-fields
+  - analysis
+  - insights
+  - entity-intelligence
+  - qualitative
+  - entity-model
+
+target_scope: entity_intelligence
+executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for LLM analysis
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql  # Legacy parameter format (for compatibility)
+
+  # Root collection - Domain IS the entity in entity model
+  collection: Domain
+
+  # Use reverse traversal to fetch Research_* collections
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Fetch one or more entities (supports large batch operations)
+  limit: 10000
+  limit_default: 10000
+
+# 🎯 TAG-BASED FILTERING - Fetch ONLY LLM fields for detailed analysis
+# No explicit fields - let the system resolve based on tags!
+fields: {}
+
+# Specify tags to include for all researcher collections
+field_tags:
+  - LLM
+
+# Collection configuration: Domain with auto-discovered nested references
+# System automatically discovers ALL Research_* references from Domain schema
+# field_tags=[LLM] filters to only LLM fields across all discovered references
+collections:
+  - collection: Domain
+    uses_field_set: extended  # Get Domain context fields (description, overview, etc.)
+    required: true
+    # ✅ AUTO-DISCOVERY: No need to list all Research_* collections
+    # Native methods automatically discover all reverse references:
+    # industry, financial, product, customer, leadership, competitor, partner, risk, journalist, social
+    # field_tags=[LLM] applied to all discovered references
+
+# Chat integration
+chat_integration:
+  best_for:
+    - "Detailed insights and qualitative reports"
+    - "AI-generated analysis review"
+    - "Deep dive analysis without categories"
+    - "Understanding entity characteristics and context"
+
+  usage_patterns:
+    - "Returns only LLM fields (detailed analysis)"
+    - "Excludes categorical classifications"
+    - "Perfect for qualitative research and insights"
+
+# Query behavior
+supports_relationships: true
+supports_aggregation: false
+supports_grouping: false
+requires_query_text: false
+
+# Performance settings
+default_limit: 100  # Lower default (LLM fields are larger)
+max_limit: 10000  # Allow large batch operations
+timeout_seconds: 60  # Longer timeout for LLM field processing
+
+# Related collections
+related_collections:
+  - Domain
+  - Research_financial
+  - Research_industry
+  - Research_product
+  - Research_customer
+  - Research_leadership
+  - Research_competitor
+  - Research_partner
+  - Research_risk
+  - Research_journalist
+  - Research_social
+
+# Documentation
+documentation:
+  overview: |
+    This data card fetches ONLY LLM (AI-generated analysis) fields using tag-based filtering.
+    Optimized for detailed insights and qualitative analysis without categorical data.
+
+    Works with Entity Model: Domain + Research_* collections (not Company_source).
+
+  tag_strategy: |
+    LLM FIELD SELECTION:
+
+    Domain: uses_field_set='extended' (description, overview, context)
+    Research collections: field_tags=[LLM]
+
+    This fetches ONLY:
+    - Domain: Extended fields (entity context and description)
+    - Researchers: LLM fields (AI-generated detailed analysis)
+
+    EXCLUDED:
+    - Cat fields (categorical classifications - use entity_research_categories instead)
+    - Research fields (raw facts - use entity_research instead)
+
+  usage_examples:
+    - name: "Detailed entity analysis"
+      query: "data_card_id: entity_research_analysis, limit: 10"
+      notes: "Get LLM insights for detailed review"
+
+    - name: "Single entity deep dive"
+      query: "data_card_id: entity_research_analysis, where: {domain: 'example.com'}"
+
+  comparison:
+    entity_research: "All fields (Cat + LLM + research) - comprehensive but slower"
+    entity_research_categories: "Cat fields only - fast and efficient for pivot tables"
+    entity_research_analysis: "LLM fields only - detailed analysis without categories"

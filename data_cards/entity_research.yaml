@@ -1,0 +1,172 @@
+id: entity_research
+collection: Domain
+name: Entity Research (Complete)
+type: data_card
+file: entity_research.yaml
+description: >
+  Fetch Domain records with ALL researcher fields (Cat, LLM, and research) from all Research_* collections.
+  Uses tag-based filtering to get comprehensive research data.
+  Part of the Entity Research Suite - use specialized cards for specific needs:
+  - entity_research: ALL fields (comprehensive, slower)
+  - entity_research_categories: Cat fields only (pivot tables, fast)
+  - entity_research_analysis: LLM fields only (detailed insights)
+
+# Tagging system
+tags:
+  - research
+  - cat-fields
+  - llm-fields
+  - research-fields
+  - entity-intelligence
+  - comprehensive
+  - entity-model
+
+target_scope: entity_intelligence
+executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for comprehensive entity research
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql  # Legacy parameter format (for compatibility)
+
+  # Root collection - Domain IS the entity in entity model
+  collection: Domain
+
+  # ✅ FIX: Use direct parallel queries (no traversal overhead)
+  # Remove traversal - query each Research_* collection directly
+  relationship_traversal: false
+  dynamic_templates: false
+
+  # Fetch one or more entities
+  limit: 10000
+  limit_default: 10000
+
+# 🎯 TAG-BASED FILTERING - Fetch fields by tags (Cat, LLM, research)
+# No explicit fields - let the system resolve based on tags!
+fields: {}
+
+# Specify tags to include for all researcher collections
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+# ✅ FIX: Explicit list of all collections - direct parallel queries
+# No traversal, no auto-discovery - just 11 simple queries in parallel
+collections:
+  - collection: Domain
+    required: true
+    uses_field_set: extended  # Get Domain context fields (url, domain, description, etc.)
+
+  # Explicit list of all Research_* collections - queried in parallel
+  - collection: Research_industry
+  - collection: Research_financial
+  - collection: Research_product
+  - collection: Research_customer
+  - collection: Research_leadership
+  - collection: Research_competitor
+  - collection: Research_partner
+  - collection: Research_risk
+  - collection: Research_journalist
+  - collection: Research_social
+
+# Chat intelligence integration
+chat_integration:
+  best_for:
+    - "Comprehensive entity research with all fields"
+    - "Reports requiring Cat, LLM, and research data"
+    - "Deep dive analysis with full context"
+    - "Complete entity dossiers"
+
+  usage_patterns:
+    - "Returns all Cat, LLM, and research tagged fields"
+    - "Excludes system fields automatically"
+    - "Perfect for detailed dossiers and research reports"
+    - "Works for any entity type (Company, Destination, Character, etc.)"
+
+  parameter_examples:
+    - name: "Full entity research"
+      params: {limit: 100}
+    - name: "Single entity full context"
+      params: {where: {domain: "example.com"}}
+
+# Response structure
+response_structure:
+  root_object: Domain
+  includes_relationships: true
+  relationship_style: reverse_traversal
+  field_focus: comprehensive_research
+  expected_collections:
+    - Domain
+    - Research_industry
+    - Research_financial
+    - Research_product
+    - Research_leadership
+    - Research_customer
+    - Research_competitor
+    - Research_partner
+    - Research_risk
+    - Research_journalist
+    - Research_social
+
+# Documentation
+documentation:
+  overview: |
+    This data card fetches comprehensive research data using tag-based filtering.
+    It returns all Cat fields (classifications), LLM fields (analysis), and research
+    fields (detailed facts) for complete entity intelligence.
+
+    Works with Entity Model: Domain + Research_* collections (not Company_source).
+
+  tag_strategy: |
+    HYBRID FIELD SELECTION:
+
+    Domain: uses_field_set='extended' (url, domain, description, metadata)
+    Research collections: field_tags=[Cat, LLM, research]
+
+    This fetches:
+    - Domain: Extended fields (entity identity, URL, metadata)
+    - Researchers: Cat fields (categorical classifications)
+    - Researchers: LLM fields (AI-generated analysis)
+    - Researchers: Research fields (detailed facts)
+
+  usage_examples:
+    - name: "Fetch entities with full research data"
+      query: "data_card_id: entity_research, limit: 100"
+      notes: "Gets all Cat, LLM, and research fields"
+
+    - name: "Fetch single entity by domain"
+      query: "data_card_id: entity_research, where: {domain: 'example.com'}"
+
+    - name: "Entity dossier (full context)"
+      query: "data_card_id: entity_research, where: {domain: 'example.com'}"
+      output: "Domain + all Cat/LLM/research fields from 10 researchers"
+
+  entity_research_suite: |
+    COMPLETE SUITE OF 3 DATA CARDS FOR DIFFERENT USE CASES:
+
+    1. entity_research (this card)
+       - Tags: [Cat, LLM, research]
+       - Use: Comprehensive analysis, complete dossiers
+       - Performance: Slower (large payload) - ~15-27s for 100 records
+       - Limit: 10000 default (supports large batch operations)
+
+    2. entity_research_categories
+       - Tags: [Cat]
+       - Use: Pivot tables, cross-tabs, dashboards
+       - Performance: Fast (small payload) - ~2-7s for 100 records
+       - Limit: 10000 default
+
+    3. entity_research_analysis
+       - Tags: [LLM]
+       - Use: Detailed insights, qualitative reports
+       - Performance: Medium (LLM fields only) - ~9-15s for 100 records
+       - Limit: 10000 default (supports large batch operations)
+
+    RECOMMENDATION: Start with entity_research_categories for exploration,
+    then use entity_research_analysis for detailed analysis of specific entities.

@@ -1,0 +1,137 @@
+id: entity_research_categories
+collection: Domain
+name: Entity Research Categories
+type: data_card
+file: entity_research_categories.yaml
+description: >
+  Fetch Domain records with ONLY Cat (categorical) fields from all Research_* collections.
+  Optimized for pivot tables and efficient data analysis with categorical dimensions.
+  Use this card when you need classifications without detailed LLM analysis.
+
+# Tagging system
+tags:
+  - research
+  - cat-fields
+  - categorical
+  - pivot-tables
+  - entity-intelligence
+  - efficient
+  - entity-model
+
+target_scope: entity_intelligence
+executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for efficient pivot tables
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql  # Legacy parameter format (for compatibility)
+
+  # Root collection - Domain IS the entity in entity model
+  collection: Domain
+
+  # Use reverse traversal to fetch Research_* collections
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Fetch one or more entities (high limit for full dataset queries)
+  limit: 10000
+  limit_default: 10000
+
+# 🎯 TAG-BASED FILTERING - Fetch ONLY Cat fields for efficient pivot tables
+# No explicit fields - let the system resolve based on tags!
+fields: {}
+
+# Specify tags to include for all researcher collections
+field_tags:
+  - Cat
+
+# Collection configuration: Domain with auto-discovered nested references
+# System automatically discovers ALL Research_* references from Domain schema
+# field_tags=[Cat] filters to only Cat fields across all discovered references
+collections:
+  - collection: Domain
+    uses_field_set: standard  # Get minimal Domain fields (identity only)
+    required: true
+    # ✅ AUTO-DISCOVERY: No need to list all Research_* collections
+    # Native methods automatically discover all reverse references:
+    # industry, financial, product, customer, leadership, competitor, partner, risk, journalist, social
+    # field_tags=[Cat] applied to all discovered references
+
+# Chat integration
+chat_integration:
+  best_for:
+    - "Pivot table analysis with categorical dimensions"
+    - "Classification-based filtering and grouping"
+    - "Efficient batch queries with minimal data transfer"
+    - "Quick categorical summaries"
+    - "Dashboard data preparation"
+
+# Query behavior
+supports_relationships: true
+supports_aggregation: true
+supports_grouping: true
+requires_query_text: false
+
+# Performance settings
+default_limit: 100  # Higher default for categorical data (smaller payload)
+max_limit: 10000  # Allow full dataset queries for reports
+timeout_seconds: 30
+
+# Related collections
+related_collections:
+  - Domain
+  - Research_financial
+  - Research_industry
+  - Research_product
+  - Research_customer
+  - Research_leadership
+  - Research_competitor
+  - Research_partner
+  - Research_risk
+  - Research_journalist
+  - Research_social
+
+# Documentation
+documentation:
+  overview: |
+    This data card fetches ONLY categorical (Cat) fields using tag-based filtering.
+    Optimized for pivot tables, cross-tabs, and efficient categorical analysis.
+    Smaller payload than full research data - ideal for dashboards and reports.
+
+    Works with Entity Model: Domain + Research_* collections (not Company_source).
+
+  tag_strategy: |
+    CATEGORICAL FIELD SELECTION:
+
+    Domain: uses_field_set='standard' (minimal identity fields: domain, url)
+    Research collections: field_tags=[Cat]
+
+    This fetches ONLY:
+    - Domain: Standard fields (domain, url, basic metadata)
+    - Researchers: Cat fields (categorical classifications like useCaseCat, industryCat)
+
+    EXCLUDED:
+    - LLM fields (detailed analysis - use entity_research_analysis instead)
+    - Research fields (raw data - use entity_research instead)
+
+  usage_examples:
+    - name: "Pivot table: Industries by customer segment"
+      query: "data_card_id: entity_research_categories, limit: 100"
+      notes: "Get all Cat fields for cross-tab analysis"
+
+    - name: "Filter by use case category"
+      query: "data_card_id: entity_research_categories, where: {domain: 'example.com'}"
+
+    - name: "Quick categorical summary"
+      query: "data_card_id: entity_research_categories, limit: 1000"
+      notes: "Efficient batch query with minimal data transfer"
+
+  comparison:
+    entity_research: "All fields (Cat + LLM + research) - comprehensive but slower"
+    entity_research_categories: "Cat fields only - fast and efficient for pivot tables"
+    entity_research_analysis: "LLM fields only - detailed analysis without categories"
