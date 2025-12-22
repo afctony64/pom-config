@@ -1,0 +1,43 @@
+id: central_reach
+name: CentralReach
+type: tenant
+description: CentralReach - autism therapy and ABA practice intelligence
+# Groups: company (Company_* collections), url (Page_* collections only, excludes Domain)
+# Note: Knowledge_base access is granted separately if needed
+groups: ["company", "url"]
+
+# User/persona information (configuration data)
+user:
+  name: Drew
+  email: drew@centralreach.org
+  role: Business Development Specialist
+
+# Analysis configuration - OPTIMIZED for token efficiency
+analysis_config:
+  mission: "Find ABA practices with multiple therapists, BCBA supervision, insurance billing, and clinical documentation needs"
+  industry_focus: ["aba_therapy", "autism_therapy", "behavioral_health", "applied_behavior_analysis", "developmental_therapy"]
+  researcher_guidance:
+    industry:
+      key_indicators: ["BCBA credentials", "Insurance acceptance", "Autism therapy services", "Clinical staff listings"]
+      naics_focus: ["621399", "624120"]  # Offices of health practitioners, services for individual/family
+    product:
+      key_indicators: ["Therapy programs", "Clinical documentation", "Parent resources", "Practice management"]
+
+# Data sources configuration (infrastructure only)
+data_sources:
+  data_dir: "Data/uploads/tenants/central_reach"
+  upload_dir: "Data/uploads/tenants/central_reach"
+
+  # Note: Seed files and taxonomy paths are in tenant_ai configs (PomAI-owned)
+  # See: PomAI/core/config/tenants/central_reach_ai.yaml for:
+  #   - data_sources.seed_files
+  #
+  # For standalone testing: Use RESEARCHER_SEED_OUTPUT_DIR env var
+  # Research collections auto-discover seeds from Data/seeds/ taxonomy
+
+# Weaviate instance routing (optional)
+# If not specified, uses collection-based routing from schema weaviate_instance field
+# weaviate_routing:
+#   Collection_name:
+#     cluster_url: "http://weaviate-instance:8080"
+#     api_key: ""  # Optional, not needed for local instances

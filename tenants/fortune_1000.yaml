@@ -1,0 +1,45 @@
+id: fortune_1000
+name: Fortune 1000
+type: tenant
+description: Fortune 1000 enterprise intelligence and strategic partnership analysis
+groups: ["company", "url"]
+
+# User/persona information (configuration data)
+user:
+  name: Tony
+  email: tony@fortune1000.org
+  role: Enterprise Sales Analyst
+
+# Analysis configuration - OPTIMIZED for token efficiency
+analysis_config:
+  mission: "Find Fortune 1000 companies with technology focus, enterprise partnerships, and digital transformation initiatives"
+  industry_focus: ["fortune_1000", "enterprise_technology", "global_corporations", "strategic_partnerships"]
+  researcher_guidance:
+    industry:
+      key_indicators: ["Fortune ranking", "SEC filings", "Investor relations", "Global presence", "Enterprise partnerships"]
+    financial:
+      key_indicators: ["Revenue scale", "Technology budget", "Strategic investments"]
+
+# Data sources configuration (infrastructure only)
+data_sources:
+  data_dir: "Data/uploads/tenants/fortune_1000"
+  upload_dir: "Data/uploads/tenants/fortune_1000"
+
+  # Note: Seed files and taxonomy paths are in tenant_ai configs (PomAI-owned)
+  # See: PomAI/core/config/tenants/fortune_1000_ai.yaml for:
+  #   - data_sources.seed_files
+  #
+  # For standalone testing: Use RESEARCHER_SEED_OUTPUT_DIR env var
+  # Research collections auto-discover seeds from Data/seeds/ taxonomy
+
+# Collection routing configuration
+# Maps collection names to Weaviate instances: "cloud", "spark", "local" (mac-weaviate)
+# fortune_1000 tenant routes to Cloud by default (fallback to collection-level routing if not specified)
+collections:
+  # Explicitly route to Cloud (optional - falls back to collection-level routing if not specified)
+  Company_research_industry: "cloud"
+  Company_source: "cloud"
+  Domain: "cloud"  # Domain collection routing for spider pipeline
+  Page_intelligence: "cloud"  # Page intelligence for spider pipeline
+  Page_facts: "cloud"  # Page facts for spider pipeline
+  # Other collections will use collection-level routing from schema or default to Cloud

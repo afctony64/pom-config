@@ -1,0 +1,96 @@
+id: prismatic
+name: Prismatic
+type: tenant
+description: Prismatic - embedded iPaaS platform for B2B SaaS companies
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TENANT GROUP: corporate (ENTITY MODEL)
+# ══════════════════════════════════════════════════════════════════════════════
+# Prismatic now uses the Entity Model (as of Dec 2024):
+# - Source: Domain (the URL/domain IS the entity)
+# - Output: Research_* (no Company_ prefix)
+#
+# This aligns with all other production tenants.
+tenant_group: corporate
+
+# Primary entity collection for this tenant (used by reference CLI and other tools)
+entity_collection: Domain
+
+# Groups: collection access permissions
+groups: ["research", "url"]
+
+# Issue #224: Use global classifier tenant for Vec classification seeds
+# This separates seed data from production data for cleaner architecture
+classifier_tenant: classifier
+
+# User/persona information (configuration data)
+user:
+  name: Michael
+  role: CEO
+  email: michael@prismatic.io
+
+# Analysis configuration - OPTIMIZED for token efficiency
+analysis_config:
+  # ONE mission statement (not 3!)
+  mission: "Find B2B SaaS with APIs, 100+ customers asking for integrations, dev teams of 5-50"
+
+  # Industry targeting
+  industry_focus: ["b2b_saas", "fintech", "ecommerce_platforms", "marketing_automation", "crm", "hr_tech", "vertical_saas"]
+
+  # Researcher-specific domain expertise (concise key indicators only)
+  researcher_guidance:
+    product:
+      key_indicators: ["API documentation", "Integration marketplace", "Developer resources", "Tech blog", "GitHub presence"]
+      tech_stack_emphasis: "Extract from engineering blog, job posts, tech stack page"
+      critical_fields: ["technologyStack", "coreProducts", "productCategories", "valueProposition"]
+
+    industry:
+      naics_focus: ["518210", "511210", "541511"]  # Software publishers, data processing, custom computer programming
+      market_signals: ["SaaS metrics", "API subdomain patterns", "Developer community"]
+
+# Data sources configuration (infrastructure only)
+data_sources:
+  data_dir: "Data/uploads/tenants/prismatic"
+  upload_dir: "Data/uploads/tenants/prismatic"
+
+  # Note: Seed files and taxonomy paths are in tenant_ai configs (PomAI-owned)
+  # See: PomAI/core/config/tenants/prismatic_ai.yaml for:
+  #   - data_sources.taxonomy_base_path
+  #   - data_sources.backup_path
+  #   - data_sources.taxonomy
+  #   - data_sources.seed_files
+
+# Weaviate instance routing (REQUIRED for tenant isolation)
+# Prismatic tenant routes to Weaviate Cloud for production data
+# Credentials come from environment variables (.env) - tenant just specifies instance
+collections:
+  # ENTITY MODEL: Research_* collections - all on Cloud
+  Research_competitor: "cloud"
+  Research_customer: "cloud"
+  Research_financial: "cloud"
+  Research_industry: "cloud"
+  Research_journalist: "cloud"
+  Research_leadership: "cloud"
+  Research_partner: "cloud"
+  Research_product: "cloud"
+  Research_risk: "cloud"
+  Research_social: "cloud"
+
+  # Domain collection (source for Entity Model) - on Cloud
+  Domain: "cloud"
+
+  # Page collections (group: url) - GPU-accelerated on Spark
+  Page_facts: "spark"
+  Page_intelligence: "spark"
+  Page_content: "spark"
+  Page_researcher: "spark"
+  Page_source: "spark"
+
+  # Knowledge base (for RAG and training data) - on Spark
+  Knowledge_base: "spark"
+
+  # Fact base (canonical facts per Domain × Researcher × Source) - on Spark
+  Fact_base: "spark"
+
+  # API cache (external API responses) - on Spark
+  API_intelligence: "spark"

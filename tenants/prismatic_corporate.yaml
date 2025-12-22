@@ -1,0 +1,81 @@
+id: prismatic_corporate
+name: Prismatic (Corporate/Entity Model)
+type: tenant
+description: Prismatic - embedded iPaaS platform for B2B SaaS companies (using Entity Model)
+
+# TENANT GROUP: corporate (ENTITY MODEL)
+# This tenant uses the Entity Model (Domain -> Research_*):
+# - Source: Domain (the URL/domain IS the entity)
+# - Output: Research_* (no Company_ prefix)
+#
+# Side-by-side testing:
+# - prismatic (legacy): Company_source -> Company_research_*
+# - prismatic_corporate (new): Domain -> Research_*
+tenant_group: corporate
+
+groups: ["research", "url"]
+classifier_tenant: classifier
+
+user:
+  name: Michael
+  role: CEO
+  email: michael@prismatic.io
+
+analysis_config:
+  mission: "Find B2B SaaS with APIs, 100+ customers asking for integrations, dev teams of 5-50"
+  industry_focus: ["b2b_saas", "fintech", "ecommerce_platforms", "marketing_automation", "crm", "hr_tech", "vertical_saas"]
+
+  researcher_guidance:
+    product:
+      key_indicators: ["API documentation", "Integration marketplace", "Developer resources", "Tech blog", "GitHub presence"]
+      tech_stack_emphasis: "Extract from engineering blog, job posts, tech stack page"
+      critical_fields: ["technologyStack", "coreProducts", "productCategories", "valueProposition"]
+    industry:
+      naics_focus: ["518210", "511210", "541511"]
+      market_signals: ["SaaS metrics", "API subdomain patterns", "Developer community"]
+
+data_sources:
+  data_dir: "Data/uploads/tenants/prismatic"
+  upload_dir: "Data/uploads/tenants/prismatic"
+
+collections:
+  # ENTITY MODEL: Research_* collections
+  Research_competitor: "cloud"
+  Research_customer: "cloud"
+  Research_financial: "cloud"
+  Research_industry: "cloud"
+  Research_journalist: "cloud"
+  Research_leadership: "cloud"
+  Research_partner: "cloud"
+  Research_product: "cloud"
+  Research_risk: "cloud"
+  Research_social: "cloud"
+
+  # Domain collection (source for Entity Model)
+  Domain: "cloud"
+
+  # Page collections (GPU-accelerated on Spark)
+  Page_facts: "spark"
+  Page_intelligence: "spark"
+  Page_content: "spark"
+  Page_researcher: "spark"
+  Page_source: "spark"
+
+  # Other collections
+  Knowledge_base: "spark"
+  Fact_base: "spark"
+  API_intelligence: "spark"
+
+  # LEGACY: Keep Company_* routing for comparison
+  Company_source: "cloud"
+  Company_opportunity: "cloud"
+  Company_research_competitor: "cloud"
+  Company_research_customer: "cloud"
+  Company_research_financial: "cloud"
+  Company_research_industry: "cloud"
+  Company_research_journalist: "cloud"
+  Company_research_leadership: "cloud"
+  Company_research_partner: "cloud"
+  Company_research_product: "cloud"
+  Company_research_risk: "cloud"
+  Company_research_social: "cloud"

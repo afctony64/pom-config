@@ -1,0 +1,82 @@
+id: knowledge
+name: Knowledge Organization
+type: tenant
+description: Knowledge management and research organization with collaborative research environment
+groups: ["knowledge"]
+
+# Default user for tenant (required by TenantConfig model)
+user:
+  name: Knowledge Team
+  email: team@knowledge.org
+  role: Knowledge Management Team
+
+# Default analysis configuration - OPTIMIZED for token efficiency
+analysis_config:
+  mission: "Collaborative knowledge management and research analysis across multiple domains"
+  industry_focus: ["knowledge_management", "research", "analysis", "scientific_research"]
+
+# Shared tenant-level configuration
+shared_resources: true
+collaboration_enabled: true
+default_analysis_config:
+  industry_focus: ["knowledge_management", "research", "analysis", "scientific_research"]
+  shared_knowledge_base: true
+
+# Multiple users within single tenant
+# Each user has their own analysis style and focus areas
+users:
+  annie:
+    name: Annie
+    role: Investigative Animal Cruelty Campaign Manager
+    email: annie@knowledge.org
+    analysis_config:
+      description: Annie, an Investigative Animal Cruelty Campaign Manager who provides insights on animal welfare issues
+      style: Punchy, bullet point summary of key themes and issues, highlighting perpetrators and victims
+      focus_areas: ["animal_welfare", "investigations", "campaigns", "cruelty_prevention"]
+
+  emma:
+    name: Emma
+    role: Knowledge Analyst
+    email: emma@knowledge.org
+    analysis_config:
+      description: Emma, a knowledge analyst who specializes in research analysis and content insights
+      style: Strategic knowledge analysis with comprehensive research assessment
+      focus_areas: ["research_analysis", "content_insights", "strategic_assessment"]
+
+  jenson:
+    name: Jenson
+    role: Knowledge Researcher
+    email: jenson@knowledge.org
+    analysis_config:
+      description: Jenson, a knowledge researcher specializing in data analysis and research methodology
+      style: Technical analysis with comprehensive research insights and quality assessment
+      focus_areas: ["data_analysis", "research_methodology", "quality_assessment", "technical_insights"]
+
+  scientist:
+    name: Scientist
+    role: Research Scientist
+    email: scientist@knowledge.org
+    analysis_config:
+      description: Research scientist specializing in knowledge analysis and scientific research
+      style: Scientific analysis with evidence-based insights and research methodology
+      focus_areas: ["scientific_research", "evidence_based_analysis", "research_methodology", "knowledge_analysis"]
+
+
+# Data sources configuration (infrastructure only)
+data_sources:
+  data_dir: "Data/uploads/tenants/knowledge"
+  upload_dir: "Data/uploads/tenants/knowledge"
+
+  # Note: Seed files and taxonomy paths are in tenant_ai configs (PomAI-owned)
+  # See: PomAI/core/config/tenants/knowledge_ai.yaml for:
+  #   - data_sources.seed_files
+  #
+  # For standalone testing: Use RESEARCHER_SEED_OUTPUT_DIR env var
+  # Research collections auto-discover seeds from Data/seeds/ taxonomy
+
+# Weaviate instance routing (optional)
+# If not specified, uses collection-based routing from schema weaviate_instance field
+# weaviate_routing:
+#   Collection_name:
+#     cluster_url: "http://weaviate-instance:8080"
+#     api_key: ""  # Optional, not needed for local instances

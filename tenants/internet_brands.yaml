@@ -1,0 +1,115 @@
+# Internet Brands Tenant Configuration
+#
+# ROLE: Tenant (the organization DOING the research)
+# DOMAIN EXPERTISE: Legal services / Law firms
+# TENANT GROUP: corporate (professional services research)
+#
+# This tenant researches law firms and legal practices to support
+# digital marketing segmentation and service positioning.
+
+id: internet_brands
+name: Internet Brands
+type: tenant
+description: Internet Brands - legal services domain expert researching law firms
+
+# Tenant Group: Defines domain context and available researchers
+# See: config/tenant_groups/corporate.yaml
+tenant_group: corporate
+
+# Primary entity collection for this tenant (used by reference CLI and other tools)
+entity_collection: Domain
+
+# Collection access groups (legacy - for collection permissions)
+groups: ["company", "url"]
+
+# User/persona information (configuration data)
+user:
+  name: Simon
+  email: simon@internetbrands.org
+  role: Business Development Representative
+
+# Analysis configuration - OPTIMIZED for token efficiency
+analysis_config:
+  mission: "Find law firms with primary practice area specializations for digital marketing segmentation and service positioning"
+  industry_focus: ["legal_services", "law_firms", "personal_injury", "family_law", "criminal_defense", "corporate_law", "estate_planning", "real_estate_law", "immigration_law", "employment_law"]
+
+  # 🎯 LEGAL SERVICES DOMAIN GUIDANCE (concise key indicators only)
+  researcher_guidance:
+    product:
+      key_indicators: ["Practice areas", "Legal services", "Attorney bios", "Case results"]
+      critical_note: "Practice Areas ≠ Products (e.g., Personal Injury = Practice Area, not product)"
+      critical_fields: ["coreProducts", "productCategories", "valueProposition"]
+
+    customer:
+      key_indicators: ["Client testimonials", "Practice area clients", "Service descriptions", "Geographic reach"]
+
+    industry:
+      key_indicators: ["Bar profiles", "Practice specializations", "Attorney credentials", "Legal directory listings"]
+      naics_focus: ["541110"]  # Legal services
+
+    leadership:
+      key_indicators: ["Attorney names", "Bar admissions", "Specializations", "Professional recognition"]
+      critical_note: "ONLY report actual attorney names found - NEVER fabricate"
+
+    financial:
+      key_indicators: ["Fee structures", "Revenue model (contingency/hourly/retainer)", "Firm growth"]
+
+    competitor:
+      key_indicators: ["Local competitors", "Specialization depth", "Market reputation", "Referral networks"]
+
+    partnership:
+      key_indicators: ["Bar associations", "Referral relationships", "Professional networks", "Community involvement"]
+
+    risk:
+      key_indicators: ["Bar compliance", "Confidentiality policies", "Professional liability", "Security posture"]
+# Data sources configuration
+data_sources:
+  data_dir: "Data/uploads/tenants/internet_brands"
+  upload_dir: "Data/uploads/tenants/internet_brands"
+
+  # Note: Seed files and taxonomy paths are in tenant_ai configs (PomAI-owned)
+  # See: PomAI/core/config/tenants/internet_brands_ai.yaml for:
+  #   - data_sources.seed_files
+  #
+  # For standalone testing: Use RESEARCHER_SEED_OUTPUT_DIR env var
+  # Research collections auto-discover seeds from Data/seeds/ taxonomy
+
+# Weaviate instance routing (REQUIRED for tenant isolation)
+# Uses same pattern as prismatic: instance names resolved from environment
+# Credentials come from environment variables (.env) - tenant just specifies instance
+collections:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ENTITY MODEL (NEW) - Domain + Research_* collections
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  # Core entity collection (Domain IS the entity in new model)
+  Domain: "cloud"
+
+  # Research output collections (Entity Model - replaces Company_research_*)
+  Research_industry: "cloud"
+  Research_financial: "cloud"
+  Research_leadership: "cloud"
+  Research_risk: "cloud"
+  Research_customer: "cloud"
+  Research_competitor: "cloud"
+  Research_journalist: "cloud"
+  Research_partner: "cloud"
+  Research_product: "cloud"
+  Research_social: "cloud"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PAGE COLLECTIONS - GPU-accelerated on Spark
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  # Page-level collections (existing data here!)
+  Page_intelligence: "spark"
+  Page_facts: "spark"
+  Page_content: "spark"
+  Page_source: "spark"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # LEGACY (backward compatibility with old Company_ model)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  # Keep Company_source for any existing data/workflows
+  Company_source: "cloud"

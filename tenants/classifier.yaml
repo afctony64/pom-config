@@ -1,0 +1,43 @@
+# Global Classifier Tenant
+# Issue #224: Dedicated tenant for Vec classification seed data
+#
+# This tenant holds ONLY seed data (synthetic training data) for vector classification.
+# Production tenants set `classifier_tenant: classifier` to query seeds from here.
+#
+# Benefits:
+# - Clear separation of seeds from production data
+# - Quality monitoring for classifier data
+# - Version control for seeds independent of production
+# - Cleaner queries (no seed=true filtering needed)
+
+id: classifier
+name: Global Classifier
+type: tenant
+description: Global tenant for Vec classification seed data (synthetic training records)
+groups: ["company"]
+
+# No user - this is a system tenant for seed data only
+user:
+  name: System
+  role: Classifier Seed Data
+  email: system@pom.ai
+
+# Analysis config - not used for classification, but required for tenant validation
+analysis_config:
+  mission: "Store and serve synthetic seed data for Vec classification"
+  industry_focus: ["all"]
+
+# Weaviate routing - same cluster as production for low-latency queries
+# Seeds are stored in the same Weaviate Cloud instance
+collections:
+  # Company research collections - where seed data lives
+  Company_research_competitor: "cloud"
+  Company_research_customer: "cloud"
+  Company_research_financial: "cloud"
+  Company_research_industry: "cloud"
+  Company_research_journalist: "cloud"
+  Company_research_leadership: "cloud"
+  Company_research_partner: "cloud"
+  Company_research_product: "cloud"
+  Company_research_risk: "cloud"
+  Company_research_social: "cloud"
