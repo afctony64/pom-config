@@ -1,6 +1,6 @@
 id: entity_research
 collection: Domain
-name: Entity Research (Complete)
+name: Research All
 type: data_card
 file: entity_research.yaml
 description: >

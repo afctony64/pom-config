@@ -1,6 +1,6 @@
 id: entity_research_analysis
 collection: Domain
-name: Entity Research Analysis
+name: Research Analysis
 type: data_card
 file: entity_research_analysis.yaml
 description: >

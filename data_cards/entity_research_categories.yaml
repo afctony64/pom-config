@@ -1,6 +1,6 @@
 id: entity_research_categories
 collection: Domain
-name: Entity Research Categories
+name: Research Categories
 type: data_card
 file: entity_research_categories.yaml
 description: >

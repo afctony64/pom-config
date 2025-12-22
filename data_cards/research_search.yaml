@@ -1,0 +1,196 @@
+id: research_search
+collection: Research_product  # Default - will search across all Research_* collections
+name: Research Vector Search
+type: data_card
+file: research_search.yaml
+description: >
+  Semantic/keyword search across Research_* collections using hybrid search (BM25 + vector).
+  Searches ALL searchable text properties including: entityName, citations, and all LLM fields
+  (sectorLLM, industryLLM, financialSummaryLLM, productLLM, etc.) across all Research_* collections.
+  Supports BM25, hybrid (default), and vector search strategies.
+  Can filter to specific researcher types or search all researchers.
+  Requires query_text parameter for search query (e.g., "technology" searches for that term
+  in all research content fields).
+
+# Tagging system
+tags:
+  - research
+  - search
+  - cross-researcher
+  - semantic-search
+  - entity-intelligence
+  - entity-model
+
+target_scope: entity_intelligence
+executor: fetch  # ✅ Use native methods - search handled via query_text parameter
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for cross-researcher search
+relationship_support: false  # Search operation, not traversal
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql  # Legacy parameter format (for compatibility)
+  
+  # Default collection (fallback - search will use all collections)
+  collection: Research_product
+  
+  # ✅ KEY PARAMETER: query_text is required for search
+  query_text: ""  # Required - user must provide search query
+  
+  # ✅ KEY PARAMETER: researcher_types filters which researchers to search
+  # Empty list [] = search all researchers
+  # Specific list ["product", "financial"] = search only those researchers
+  researcher_types: []  # Default: empty list = all researchers
+  
+  # Search strategy: bm25, hybrid, vector
+  search_strategy: hybrid  # Default: hybrid search
+  
+  # No traversal needed - search operation
+  relationship_traversal: false
+  dynamic_templates: false
+  
+  # Search limits
+  limit: 100
+  limit_default: 100
+
+# 🎯 TAG-BASED FILTERING - Fetch all field types for search results
+# No explicit fields - let the system resolve based on tags!
+fields: {}
+
+# Specify tags to include (all field types for search results)
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+# Collection configuration: Search across multiple Research_* collections
+# researcher_types parameter controls which collections to search
+collections:
+  - collection: Research_industry
+  - collection: Research_financial
+  - collection: Research_product
+  - collection: Research_customer
+  - collection: Research_leadership
+  - collection: Research_competitor
+  - collection: Research_partner
+  - collection: Research_risk
+  - collection: Research_journalist
+  - collection: Research_social
+
+# Chat intelligence integration
+chat_integration:
+  best_for:
+    - "Cross-researcher search"
+    - "Finding entities by research content"
+    - "Semantic discovery across researchers"
+    - "Keyword search in research data"
+
+  usage_patterns:
+    - "Searches across all Research_* collections (or filtered subset)"
+    - "Returns matching research records with all field types"
+    - "Supports BM25, hybrid, and vector search strategies"
+
+  parameter_examples:
+    - name: "Search all researchers"
+      params: {query_text: "technology", researcher_types: [], limit: 100}
+    - name: "Search product and financial only"
+      params: {query_text: "revenue", researcher_types: ["product", "financial"], limit: 50}
+    - name: "BM25 search only"
+      params: {query_text: "SaaS", search_strategy: "bm25", limit: 100}
+
+# Query behavior
+supports_relationships: false
+supports_aggregation: false
+supports_grouping: false
+requires_query_text: true  # ✅ REQUIRED: query_text must be provided
+
+# Performance settings
+default_limit: 100
+max_limit: 1000
+timeout_seconds: 30
+
+# Response structure
+response_structure:
+  root_object: Research_*  # Dynamic based on search results
+  includes_relationships: false
+  field_focus: search_results
+  expected_collections:
+    - Research_industry
+    - Research_financial
+    - Research_product
+    - Research_customer
+    - Research_leadership
+    - Research_competitor
+    - Research_partner
+    - Research_risk
+    - Research_journalist
+    - Research_social
+
+# Documentation
+documentation:
+  overview: |
+    This data card performs semantic/keyword search across Research_* collections.
+    Supports BM25 (keyword), hybrid (BM25 + vector), and vector search strategies.
+    Can filter to specific researcher types or search all researchers.
+
+    Works with Entity Model: Research_* collections (not Company_research_*).
+
+  search_strategies: |
+    SEARCH STRATEGIES:
+
+    1. BM25 (bm25):
+       - Keyword-based search
+       - Fast, exact matches
+       - Good for specific terms
+
+    2. Hybrid (hybrid) - DEFAULT:
+       - Combines BM25 + vector search
+       - Best balance of precision and recall
+       - Recommended for most use cases
+
+    3. Vector (vector):
+       - Semantic similarity search
+       - Good for conceptual queries
+       - Slower but more flexible
+
+  researcher_filtering: |
+    RESEARCHER TYPE FILTERING:
+
+    Empty list [] = Search all researchers:
+      researcher_types: []
+
+    Specific researchers = Search only those:
+      researcher_types: ["product", "financial"]
+
+    Supported researcher types:
+    - industry
+    - financial
+    - product
+    - customer
+    - leadership
+    - competitor
+    - partner
+    - risk
+    - journalist
+    - social
+
+  usage_examples:
+    - name: "Search all researchers for 'technology'"
+      query: "data_card_id: research_search, parameters: {query_text: 'technology', researcher_types: [], limit: 100}"
+      notes: "Searches all Research_* collections"
+
+    - name: "Search product and financial for 'revenue'"
+      query: "data_card_id: research_search, parameters: {query_text: 'revenue', researcher_types: ['product', 'financial'], limit: 50}"
+
+    - name: "BM25 search for 'SaaS'"
+      query: "data_card_id: research_search, parameters: {query_text: 'SaaS', search_strategy: 'bm25', limit: 100}"
+
+  performance: |
+    Medium (search overhead) - ~2-5 seconds for 100 results
+    Performance depends on:
+    - Search strategy (BM25 fastest, vector slowest)
+    - Number of researchers searched (all vs filtered)
+    - Query complexity

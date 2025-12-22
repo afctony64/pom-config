@@ -1,0 +1,143 @@
+id: research_by_researcher_id
+collection: Research_product  # Default fallback - will be overridden by researcher_id parameter
+name: Research by Type
+type: data_card
+file: research_by_researcher_id.yaml
+description: >
+  Query a specific Research_* collection by researcher_id parameter.
+  DataFactory automatically resolves researcher_id to collection name (Research_{researcher_id}).
+  Supports all field types (Cat, LLM, research) for focused analysis on one researcher type.
+
+# Tagging system
+tags:
+  - research
+  - single-researcher
+  - focused-analysis
+  - entity-intelligence
+  - entity-model
+
+target_scope: entity_intelligence
+executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for single researcher queries
+relationship_support: false  # Single collection, no traversal needed
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql  # Legacy parameter format (for compatibility)
+  
+  # Default collection (fallback if researcher_id not provided)
+  collection: Research_product
+  
+  # ✅ KEY PARAMETER: researcher_id resolves to Research_{researcher_id}
+  # DataFactory handles resolution using tenant group config
+  # Options: industry, financial, product, customer, leadership, competitor, partner, risk, journalist, social
+  researcher_id: product  # Default, can be overridden by user
+  
+  # No traversal needed - single collection query
+  relationship_traversal: false
+  dynamic_templates: false
+  
+  # Fetch limits
+  limit: 1000
+  limit_default: 1000
+
+# 🎯 TAG-BASED FILTERING - Fetch all field types by default
+# No explicit fields - let the system resolve based on tags!
+fields: {}
+
+# Specify tags to include (all field types)
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+# Single collection configuration
+collections:
+  - collection: Research_product  # Default fallback - DataFactory will override based on researcher_id
+    required: true
+
+# Chat intelligence integration
+chat_integration:
+  best_for:
+    - "Focused analysis on one researcher type"
+    - "Single researcher queries (product, financial, industry, etc.)"
+    - "Performance optimization (single collection)"
+    - "Researcher-specific reports"
+
+  usage_patterns:
+    - "Returns all Cat, LLM, and research fields for one researcher"
+    - "Automatically resolves researcher_id to collection name"
+    - "Works with Entity Model: Research_* collections"
+
+  parameter_examples:
+    - name: "Product research only"
+      params: {researcher_id: "product", limit: 100}
+    - name: "Financial research only"
+      params: {researcher_id: "financial", limit: 100}
+    - name: "Industry research only"
+      params: {researcher_id: "industry", limit: 100}
+
+# Response structure
+response_structure:
+  root_object: Research_*  # Dynamic based on researcher_id
+  includes_relationships: false
+  field_focus: all_research_fields
+  expected_collections:
+    - Research_industry
+    - Research_financial
+    - Research_product
+    - Research_customer
+    - Research_leadership
+    - Research_competitor
+    - Research_partner
+    - Research_risk
+    - Research_journalist
+    - Research_social
+
+# Documentation
+documentation:
+  overview: |
+    This data card queries a single Research_* collection based on researcher_id parameter.
+    DataFactory automatically resolves researcher_id to the correct collection name using
+    tenant group configuration (Entity Model: Research_*, Legacy: Company_research_*).
+
+    Works with Entity Model: Research_* collections (not Company_research_*).
+
+  researcher_resolution: |
+    RESEARCHER ID RESOLUTION:
+
+    User provides: researcher_id="product"
+    DataFactory resolves: Research_product (for Entity Model tenants)
+    DataFactory resolves: Company_research_product (for Legacy tenants)
+
+    Supported researcher_ids:
+    - industry
+    - financial
+    - product
+    - customer
+    - leadership
+    - competitor
+    - partner
+    - risk
+    - journalist
+    - social
+
+  usage_examples:
+    - name: "Query product research"
+      query: "data_card_id: research_by_researcher_id, parameters: {researcher_id: 'product', limit: 100}"
+      notes: "Gets all fields from Research_product collection"
+
+    - name: "Query financial research"
+      query: "data_card_id: research_by_researcher_id, parameters: {researcher_id: 'financial', limit: 100}"
+
+    - name: "Query industry research"
+      query: "data_card_id: research_by_researcher_id, parameters: {researcher_id: 'industry', limit: 100}"
+
+  performance: |
+    Fast (single collection) - ~1-2 seconds for 100 records
+    Ideal for focused analysis on one researcher type
+    No traversal overhead - direct collection query

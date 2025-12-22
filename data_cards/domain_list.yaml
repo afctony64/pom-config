@@ -1,0 +1,225 @@
+id: domain_list
+collection: Domain
+name: Domains
+type: data_card
+file: domain_list.yaml
+description: >
+  Simple entity listing without research data.
+  Fast enumeration of Domain records with minimal fields.
+  Use for entity lookups, domain enumeration, and quick entity lists.
+
+# Tagging system
+tags:
+  - domain
+  - entity-listing
+  - enumeration
+  - fast
+  - entity-intelligence
+  - entity-model
+
+target_scope: entity_intelligence
+executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for entity listing
+relationship_support: false  # No research data, no traversal needed
+
+personas:
+  - "*"
+
+parameters:
+  type: graphql  # Legacy parameter format (for compatibility)
+  
+  # Root collection - Domain IS the entity in entity model
+  collection: Domain
+  
+  # No traversal needed - simple Domain listing
+  relationship_traversal: false
+  dynamic_templates: false
+  
+  # Fetch limits
+  limit: 1000
+  limit_default: 1000
+  
+  # Field set configuration
+  field_set: standard
+  field_set_default: standard
+  field_set_options:
+    - standard
+    - extended
+
+# 🎯 FIELD SETS - Domain fields not tagged, use field sets instead
+# No field_tags - Domain fields use field_set configuration
+fields: {}
+
+# No field tags - Domain fields use field_set
+field_tags: []
+
+# Single collection configuration
+collections:
+  - collection: Domain
+    required: true
+    uses_field_set: standard  # Default: standard fields (domain, url, basic metadata)
+
+# Field definitions for each field set
+field_sets:
+  standard:
+    description: "Core domain fields (identity only)"
+    fields:
+      - name: domain
+        type: text
+        source: property
+        description: Domain name
+        
+      - name: url
+        type: text
+        source: property
+        description: Primary URL
+        
+      - name: title
+        type: text
+        source: property
+        description: Page title
+        
+      - name: description
+        type: text
+        source: property
+        description: Page description
+
+  extended:
+    description: "Extended domain fields (more context)"
+    fields:
+      # All standard fields
+      - name: domain
+        type: text
+        source: property
+        description: Domain name
+        
+      - name: url
+        type: text
+        source: property
+        description: Primary URL
+        
+      - name: title
+        type: text
+        source: property
+        description: Page title
+        
+      - name: description
+        type: text
+        source: property
+        description: Page description
+      
+      # Additional extended fields
+      - name: content
+        type: text
+        source: property
+        description: Page content
+      
+      - name: site_readable
+        type: boolean
+        source: property
+        description: Site readability status
+      
+      - name: analysis_type
+        type: text
+        source: property
+        description: Analysis type
+      
+      - name: page_processing_status
+        type: text
+        source: property
+        description: Processing status
+      
+      - name: is_blacklisted
+        type: boolean
+        source: property
+        description: Blacklist status
+
+# Chat intelligence integration
+chat_integration:
+  best_for:
+    - "Entity enumeration"
+    - "Domain lookups"
+    - "Quick entity lists"
+    - "Entity listing without research data"
+
+  usage_patterns:
+    - "Returns Domain records only (no Research_* data)"
+    - "Fast enumeration with minimal fields"
+    - "Perfect for entity lookups and domain lists"
+
+  parameter_examples:
+    - name: "Standard entity list"
+      params: {field_set: "standard", limit: 100}
+    - name: "Extended entity list"
+      params: {field_set: "extended", limit: 100}
+    - name: "Filter by domain"
+      params: {where: {domain: "example.com"}, limit: 10}
+
+# Query behavior
+supports_relationships: false
+supports_aggregation: false
+supports_grouping: true
+requires_query_text: false
+
+# Performance settings
+default_limit: 100
+max_limit: 10000
+timeout_seconds: 10  # Fast - simple Domain query
+
+# Response structure
+response_structure:
+  root_object: Domain
+  includes_relationships: false
+  field_focus: entity_identity
+  expected_collections:
+    - Domain
+
+# Documentation
+documentation:
+  overview: |
+    This data card fetches Domain records without any research data.
+    Fast enumeration of entities with minimal fields (domain, url, title, description).
+    Perfect for entity lookups, domain enumeration, and quick entity lists.
+
+    Works with Entity Model: Domain collection (not Company_source).
+
+  field_sets: |
+    FIELD SET CONFIGURATION:
+
+    Standard (default):
+    - domain
+    - url
+    - title
+    - description
+
+    Extended:
+    - All standard fields
+    - content
+    - site_readable
+    - analysis_type
+    - page_processing_status
+    - is_blacklisted
+
+  usage_examples:
+    - name: "Standard entity list"
+      query: "data_card_id: domain_list, field_set: standard, limit: 100"
+      notes: "Gets basic domain fields only"
+
+    - name: "Extended entity list"
+      query: "data_card_id: domain_list, field_set: extended, limit: 100"
+      notes: "Gets extended domain fields"
+
+    - name: "Filter by domain"
+      query: "data_card_id: domain_list, where: {domain: 'example.com'}, limit: 10"
+
+  performance: |
+    Very fast (simple Domain query) - ~0.2-0.5 seconds for 100 records
+    No research data overhead - just Domain collection
+    Ideal for entity enumeration and lookups
+
+  comparison:
+    domain_list: "Domain only - fast enumeration, no research data"
+    entity_research_categories: "Domain + Cat fields from Research_* - pivot tables"
+    entity_research: "Domain + all fields from Research_* - comprehensive"

@@ -63,34 +63,97 @@ data_sources:
 # Weaviate instance routing (REQUIRED for tenant isolation)
 # Prismatic tenant routes to Weaviate Cloud for production data
 # Credentials come from environment variables (.env) - tenant just specifies instance
+# Note: Both 'collections' (legacy) and 'weaviate_routing.collections' (new) are supported
 collections:
-  # ENTITY MODEL: Research_* collections - all on Cloud
-  Research_competitor: "cloud"
-  Research_customer: "cloud"
-  Research_financial: "cloud"
-  Research_industry: "cloud"
-  Research_journalist: "cloud"
-  Research_leadership: "cloud"
-  Research_partner: "cloud"
-  Research_product: "cloud"
-  Research_risk: "cloud"
-  Research_social: "cloud"
+    # LEGACY COMPANY MODEL: Company_* collections (for backward compatibility with tests and legacy data)
+    Company_source: "cloud"
+    Company_opportunity: "cloud"
+    Company_research_competitor: "cloud"
+    Company_research_customer: "cloud"
+    Company_research_financial: "cloud"
+    Company_research_industry: "cloud"
+    Company_research_journalist: "cloud"
+    Company_research_leadership: "cloud"
+    Company_research_partner: "cloud"
+    Company_research_product: "cloud"
+    Company_research_risk: "cloud"
+    Company_research_social: "cloud"
 
-  # Domain collection (source for Entity Model) - on Cloud
-  Domain: "cloud"
+    # ENTITY MODEL: Research_* collections - all on Cloud
+    Research_competitor: "cloud"
+    Research_customer: "cloud"
+    Research_financial: "cloud"
+    Research_industry: "cloud"
+    Research_journalist: "cloud"
+    Research_leadership: "cloud"
+    Research_partner: "cloud"
+    Research_product: "cloud"
+    Research_risk: "cloud"
+    Research_social: "cloud"
 
-  # Page collections (group: url) - GPU-accelerated on Spark
-  Page_facts: "spark"
-  Page_intelligence: "spark"
-  Page_content: "spark"
-  Page_researcher: "spark"
-  Page_source: "spark"
+    # Domain collection (source for Entity Model) - on Cloud
+    Domain: "cloud"
 
-  # Knowledge base (for RAG and training data) - on Spark
-  Knowledge_base: "spark"
+    # Page collections (group: url) - GPU-accelerated on Spark
+    Page_facts: "spark"
+    Page_intelligence: "spark"
+    Page_content: "spark"
+    Page_researcher: "spark"
+    Page_source: "spark"
 
-  # Fact base (canonical facts per Domain × Researcher × Source) - on Spark
-  Fact_base: "spark"
+    # Knowledge base (for RAG and training data) - on Spark
+    Knowledge_base: "spark"
 
-  # API cache (external API responses) - on Spark
-  API_intelligence: "spark"
+    # Fact base (canonical facts per Domain × Researcher × Source) - on Spark
+    Fact_base: "spark"
+
+    # API cache (external API responses) - on Spark
+    API_intelligence: "spark"
+
+# New format (also supported by pom-core)
+weaviate_routing:
+  collections:
+    # LEGACY COMPANY MODEL: Company_* collections (for backward compatibility with tests and legacy data)
+    Company_source: "cloud"
+    Company_opportunity: "cloud"
+    Company_research_competitor: "cloud"
+    Company_research_customer: "cloud"
+    Company_research_financial: "cloud"
+    Company_research_industry: "cloud"
+    Company_research_journalist: "cloud"
+    Company_research_leadership: "cloud"
+    Company_research_partner: "cloud"
+    Company_research_product: "cloud"
+    Company_research_risk: "cloud"
+    Company_research_social: "cloud"
+
+    # ENTITY MODEL: Research_* collections - all on Cloud
+    Research_competitor: "cloud"
+    Research_customer: "cloud"
+    Research_financial: "cloud"
+    Research_industry: "cloud"
+    Research_journalist: "cloud"
+    Research_leadership: "cloud"
+    Research_partner: "cloud"
+    Research_product: "cloud"
+    Research_risk: "cloud"
+    Research_social: "cloud"
+
+    # Domain collection (source for Entity Model) - on Cloud
+    Domain: "cloud"
+
+    # Page collections (group: url) - GPU-accelerated on Spark
+    Page_facts: "spark"
+    Page_intelligence: "spark"
+    Page_content: "spark"
+    Page_researcher: "spark"
+    Page_source: "spark"
+
+    # Knowledge base (for RAG and training data) - on Spark
+    Knowledge_base: "spark"
+
+    # Fact base (canonical facts per Domain × Researcher × Source) - on Spark
+    Fact_base: "spark"
+
+    # API cache (external API responses) - on Spark
+    API_intelligence: "spark"
