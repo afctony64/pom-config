@@ -1,0 +1,221 @@
+type: core
+class: Source
+description: Generic entity source collection for any tenant group - entity-agnostic source data with domain and search information
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: true
+  indexNullState: true
+  indexPropertyLength: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+vectorizerConfig:
+  text2vec-weaviate:
+    model: sentence-transformers/all-MiniLM-L6-v2
+    vectorizeClassName: true
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+data_sources:
+  url_collection: domain
+properties:
+- name: uuid
+  description: Unique identifier for the record
+  dataType:
+  - text
+  sets:
+  - system
+  tags:
+  - identity
+- name: entityName
+  description: Name of the entity (generic - works for companies, people, places, etc.)
+  dataType:
+  - text
+  sets:
+  - standard
+  - drill_down
+  tags:
+  - identity
+- name: domain
+  description: Domain extracted from URL (e.g., example.com)
+  dataType:
+  - text
+  sets:
+  - extended
+  - identifier
+  tags:
+  - identity
+  - web
+- name: url
+  description: Primary validated website URL (discovered by web presence)
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - identity
+  - web
+- name: searchInfo
+  description: Search information facts - array of fact objects with factType and fact
+  dataType:
+  - object[]
+  sets:
+  - extended
+  tags:
+  - content
+  - search
+  nestedProperties:
+  - name: factType
+    description: Type/category of the fact (e.g., "industry", "location", "description")
+    dataType:
+    - text
+  - name: fact
+    description: The actual fact/information discovered
+    dataType:
+    - text
+- name: title
+  description: Entity title/name extracted from website (from URL snapshot)
+  dataType:
+  - text
+  sets:
+  - system
+  tags:
+  - content
+  - enriched
+- name: description
+  description: Entity description
+  dataType:
+  - text
+  sets:
+  - standard
+  - drill_down
+  tags:
+  - content
+- name: content
+  description: Rich content from website analysis (from URL snapshot)
+  dataType:
+  - text
+  sets:
+  - system
+  tags:
+  - content
+  - enriched
+- name: overview
+  description: Brief entity overview based on website content
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - content
+- name: url_processed
+  description: Boolean flag indicating URL enrichment has been completed
+  dataType:
+  - boolean
+  sets:
+  - system
+  tags:
+  - flags
+  - processing
+- name: page_processed
+  description: Boolean flag indicating page content extraction has been completed
+  dataType:
+  - boolean
+  sets:
+  - system
+  tags:
+  - flags
+  - processing
+- name: has_research
+  description: Boolean flag indicating whether this entity has any research records
+  dataType:
+  - boolean
+- name: research_count
+  description: Total count of research records across all research types
+  dataType:
+  - number
+- name: content_quality_score
+  description: Numeric score (0-100) indicating content richness and quality for research
+  dataType:
+  - number
+  sets:
+  - system
+  tags:
+  - metrics
+  - processing
+- name: last_processing_update
+  description: Timestamp when processing flags were last updated
+  dataType:
+  - date
+  sets:
+  - system
+  tags:
+  - processing
+  - temporal
+# === SYSTEM/SYNC FIELDS ===
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: createdAt
+  description: Record creation timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: updatedAt
+  description: Record update timestamp (sync)
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+- name: references
+  description: Cached reference UUIDs (auto-generated nested object)
+  dataType:
+  - object
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+group: company
+weaviate_instance: cloud
+collection_name: Source
+uuid_strategy:
+  fields:
+  - field: domain
+    namespace: URL
+    description: Primary strategy using domain for deterministic UUIDs
+  - field: url
+    namespace: URL
+    description: Fallback strategy using full URL for deterministic UUIDs
+  - field: entityName
+    namespace: DNS
+    prefix: entity
+    description: Final fallback strategy using entityName for records without URLs
+dependencies:
+- type: foundational
+collection_groups:
+- production_collections
+schema_config:
+  additional_properties: true
+id: Source
+name: Source
+devtype: Production
