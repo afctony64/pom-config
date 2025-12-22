@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 7.0
+version: 8.0
 group: url
 weaviate_instance: cloud
 description: |
@@ -1246,7 +1246,70 @@ references:
   target_collection: Research_risk
   uuid_source_field: uuid
   auto_flatten: false
+  description: "DEPRECATED: Use 'risk' instead. Risk researcher analysis."
+
+# --- CANONICAL: Researcher references (named to match researcher_id) ---
+# Reference name matches researcher_id for CLI consistency (e.g., --researcher-id competitor → reference 'competitor')
+# These are the standard references used by pomflow_cli and reverse_references from Research_* schemas
+- name: industry
+  target_collection: Research_industry
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Industry researcher analysis for this entity"
+
+- name: financial
+  target_collection: Research_financial
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Financial researcher analysis for this entity"
+
+- name: leadership
+  target_collection: Research_leadership
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Leadership researcher analysis for this entity"
+
+- name: risk
+  target_collection: Research_risk
+  uuid_source_field: uuid
+  auto_flatten: false
   description: "Risk researcher analysis for this entity"
+
+- name: customer
+  target_collection: Research_customer
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Customer researcher analysis for this entity"
+
+- name: competitor
+  target_collection: Research_competitor
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Competitor researcher analysis for this entity"
+
+- name: journalist
+  target_collection: Research_journalist
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Journalist/media researcher analysis for this entity"
+
+- name: partner
+  target_collection: Research_partner
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Partner researcher analysis for this entity"
+
+- name: product
+  target_collection: Research_product
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Product researcher analysis for this entity"
+
+- name: social
+  target_collection: Research_social
+  uuid_source_field: uuid
+  auto_flatten: false
+  description: "Social researcher analysis for this entity"
 
 collection_name: domain
 uuid_strategy:
