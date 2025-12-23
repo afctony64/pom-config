@@ -1,0 +1,164 @@
+---
+# 📐 64K CONTEXT WINDOW OPTIMIZED
+# For models with 64K context: ~240K chars budget
+# Reserves ~60K for prompt/output, ~180K for page data
+# Target: ~80 chunks × 2K chars = ~160K chars page data
+name: Researcher (64K Context)
+description: |
+  Optimized for 64K context window models.
+  Balanced chunk limit for comprehensive coverage.
+  Best for: Mid-tier models, balanced inference.
+
+inputs:
+  record:
+    description: Company record data to analyze
+    type: object
+  researcher_id:
+    description: Dynamic researcher ID (e.g., company_research_industry) - REQUIRED
+    type: string
+  persona_id:
+    description: Optional persona ID for adaptations
+    type: string
+    default: null
+  pageData:
+    description: Injected page content from vector search
+    type: array
+    default: null
+  edgarData:
+    description: SEC Edgar financial data (for public companies only)
+    type: object
+    default: null
+
+data_requirements:
+  injectors:
+    # 📄 Page Facts - 64K OPTIMIZED
+    # Budget: ~160K chars for page data (~40K tokens)
+    # Using 80 chunks for broader coverage
+    - injector_template: page_facts_vector
+      template_vars:
+        domain: "{{ record.properties.domain if record.properties else record.domain }}"
+        researcher_type: "{{ record._researcher_id }}"
+        limit: 80  # 80 chunks × ~2K chars = ~160K chars
+        alpha: 0.9
+        inject_as: pageData
+    - injector_template: mcp
+      template_vars:
+        tool: edgar_company_facts
+        params:
+          cik: "{{ record.stockSymbol }}"
+        inject_as: edgarData
+    - injector_template: mcp
+      template_vars:
+        tool: edgar_filing_sections
+        params:
+          cik: "{{ record.stockSymbol }}"
+          researcher_type: "{{ record._researcher_id }}"
+        inject_as: edgarSections
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+    # tools: [brave_search]
+  parameters:
+    response_format:
+      type: json_schema
+      json_schema:
+        name: researcher_output
+        strict: true
+        schema:
+          type: object
+          properties: {}
+          required: []
+          additionalProperties: false
+
+processing_config:
+  source_collection: Company_source
+  target_collections:
+    - Company_research_industry
+  max_turns: 12
+  iteration_parameter: researcher_id
+  iteration_values: "ALL_RESEARCHERS"
+
+# Context budget breakdown:
+# - System prompt: ~4K tokens
+# - Page data (80 chunks): ~40K tokens
+# - Edgar data: ~4K tokens
+# - Output: ~8K tokens
+# - Total: ~56K tokens (fits 64K with buffer)
+---
+
+system:
+{% if researcher %}
+## 🎯 RESEARCHER IDENTITY
+
+{% if researcher.description %}
+{{ researcher.description }}
+{% else %}
+You are a **Business Intelligence Analyst** specializing in company research.
+{% endif %}
+
+{% if researcher.name %}**Researcher**: {{ researcher.name }}{% endif %}
+{% if researcher.id %}**Collection**: {{ researcher.id }}{% endif %}
+{% else %}
+You are a **Business Intelligence Analyst** specializing in company research.
+{% endif %}
+
+{% if tenant %}
+## 🏢 TENANT CONTEXT
+{% if tenant.name %}**Tenant**: {{ tenant.name }}{% endif %}
+{% if tenant.description %}**Context**: {{ tenant.description }}{% endif %}
+{% endif %}
+
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+## 📋 ANALYSIS CONTEXT
+**Company Information:**
+- **Name**: {{ props.get('accountName') or props.get('company_name') or 'Unknown' }}
+- **Domain**: {{ props.get('domain') or props.get('url') or 'Not provided' }}
+- **Industry**: {{ props.get('industry', 'To be determined') }}
+- **Description**: {{ props.get('description') or props.get('company_description') or 'No description available' }}
+{% endif %}
+
+{% if pageData and pageData|length > 0 %}
+## 📄 PRIMARY SOURCE: PAGE CONTENT ({{ pageData|length }} chunks)
+
+You have access to **{{ pageData|length }} content chunks** from the company website.
+These chunks were selected using semantic search based on your research focus area.
+
+**⚠️ IMPORTANT: These are your PRIMARY SOURCE OF TRUTH.**
+- Use the actual content from these pages as evidence
+- Cite page URLs when making claims
+
+{% for page in pageData %}
+### Chunk {{ loop.index }}: {{ page.title or page.url }}
+**URL**: {{ page.url }}
+{% if page.certainty is defined %}**Relevance**: {{ page.certainty }}{% endif %}
+
+**Content**:
+{{ page.content[:3000] }}{% if page.content and page.content|length > 3000 %}... [truncated]{% endif %}
+
+---
+{% endfor %}
+{% else %}
+## ⚠️ NO PAGE CONTENT AVAILABLE
+No page content found. Mark analysisConfidence as "low" if no direct evidence is available.
+{% endif %}
+
+## 🎯 ANALYSIS TASK
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+{% set company_name = props.get('accountName') or props.get('company_name') or 'the company' %}
+{% else %}
+{% set company_name = 'the company' %}
+{% endif %}
+Analyze **{{ company_name }}** using your expertise and the provided data.
+
+## 🚨 OUTPUT REQUIREMENTS
+1. USE EXACT SCHEMA FIELD NAMES
+2. STRICT SCHEMA COMPLIANCE
+3. POPULATE ALL SCHEMA FIELDS
+4. FLAT JSON STRUCTURE
+5. APPROPRIATE DATA TYPES
+

@@ -1,0 +1,117 @@
+---
+# 📐 32K CONTEXT WINDOW OPTIMIZED
+# For models with 32K context: ~120K chars budget
+# Reserves ~40K for prompt/output, ~80K for page data
+# Target: ~40 chunks × 2K chars = ~80K chars page data
+name: Researcher (32K Context)
+description: |
+  Optimized for 32K context window models.
+  Conservative chunk limit to ensure prompt + output fits.
+  Best for: Smaller local models, fast inference.
+
+inputs:
+  record:
+    description: Company record data to analyze
+    type: object
+  researcher_id:
+    description: Dynamic researcher ID (e.g., company_research_industry) - REQUIRED
+    type: string
+  persona_id:
+    description: Optional persona ID for adaptations
+    type: string
+    default: null
+  pageData:
+    description: Injected page content from vector search
+    type: array
+    default: null
+  edgarData:
+    description: SEC Edgar financial data (for public companies only)
+    type: object
+    default: null
+
+data_requirements:
+  injectors:
+    # 📄 Page Facts - 32K OPTIMIZED
+    # Budget: ~80K chars for page data (~20K tokens)
+    # Using 40 chunks as optimal balance from testing
+    - injector_template: page_facts_vector
+      template_vars:
+        domain: "{{ record.properties.domain if record.properties else record.domain }}"
+        researcher_type: "{{ record._researcher_id }}"
+        limit: 40  # 40 chunks × ~2K chars = ~80K chars
+        alpha: 0.9
+        inject_as: pageData
+    - injector_template: mcp
+      template_vars:
+        tool: edgar_company_facts
+        params:
+          cik: "{{ record.stockSymbol }}"
+        inject_as: edgarData
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+    # tools: [brave_search]
+  parameters:
+    response_format:
+      type: json_schema
+      json_schema:
+        name: researcher_output
+        strict: true
+        schema:
+          type: object
+          properties: {}
+          required: []
+          additionalProperties: false
+
+processing_config:
+  source_collection: Company_source
+  target_collections:
+    - Company_research_industry
+  max_turns: 10  # Reduced for smaller context
+  iteration_parameter: researcher_id
+  iteration_values: "ALL_RESEARCHERS"
+
+# Context budget breakdown:
+# - System prompt: ~3K tokens
+# - Page data (40 chunks): ~20K tokens
+# - Edgar data: ~2K tokens
+# - Output: ~5K tokens
+# - Total: ~30K tokens (fits 32K with buffer)
+---
+
+system:
+{% if researcher %}
+## 🎯 RESEARCHER IDENTITY
+{% if researcher.description %}{{ researcher.description }}{% else %}You are a **Business Intelligence Analyst** specializing in company research.{% endif %}
+{% if researcher.name %}**Researcher**: {{ researcher.name }}{% endif %}
+{% if researcher.id %}**Collection**: {{ researcher.id }}{% endif %}
+{% else %}
+You are a **Business Intelligence Analyst** specializing in company research.
+{% endif %}
+
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+## 📋 ANALYSIS CONTEXT
+**Company**: {{ props.get('accountName') or props.get('company_name') or 'Unknown' }}
+**Domain**: {{ props.get('domain') or 'Not provided' }}
+{% endif %}
+
+{% if pageData and pageData|length > 0 %}
+## 📄 PAGE CONTENT ({{ pageData|length }} chunks)
+⚠️ PRIMARY SOURCE - cite URLs for claims.
+
+{% for page in pageData[:40] %}
+### [{{ loop.index }}] {{ page.url }}
+{{ page.content[:2500] }}{% if page.content|length > 2500 %}...{% endif %}
+---
+{% endfor %}
+{% else %}
+## ⚠️ NO PAGE CONTENT - mark confidence as "low"
+{% endif %}
+
+## 🎯 TASK
+Analyze the company using provided data. Return JSON matching the schema exactly.
+

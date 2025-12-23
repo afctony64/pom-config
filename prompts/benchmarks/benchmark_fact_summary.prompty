@@ -1,0 +1,116 @@
+---
+name: Benchmark Fact Summary
+description: Summarize and compare facts from multiple benchmark variants
+
+inputs:
+  record:
+    description: Contains combined_outputs from all variants
+    type: object
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    temperature: 0.3
+    max_tokens: 16000
+    response_format:
+      type: json_schema
+      json_schema:
+        name: fact_summary
+        strict: true
+        schema:
+          type: object
+          properties:
+            unique_facts:
+              type: array
+              description: All unique facts found across variants
+              items:
+                type: object
+                properties:
+                  fact:
+                    type: string
+                    description: The extracted fact
+                  found_by:
+                    type: string
+                    description: Which variants found this (ALL, 20, VF, FF, 20+VF, VF+FF, 20+FF)
+                required:
+                  - fact
+                  - found_by
+                additionalProperties: false
+            statistics:
+              type: object
+              properties:
+                total_unique_facts:
+                  type: integer
+                consensus_facts:
+                  type: integer
+                  description: Facts found by ALL variants
+                unique_discoveries:
+                  type: integer
+                  description: Facts found by only ONE variant
+                variant_with_most_unique:
+                  type: string
+              required:
+                - total_unique_facts
+                - consensus_facts
+                - unique_discoveries
+                - variant_with_most_unique
+              additionalProperties: false
+            quality_assessment:
+              type: object
+              properties:
+                most_comprehensive_variant:
+                  type: string
+                contradictions:
+                  type: string
+                  description: Any contradictory facts between variants
+                missing_information:
+                  type: string
+                  description: What important info might still be missing
+              required:
+                - most_comprehensive_variant
+                - contradictions
+                - missing_information
+              additionalProperties: false
+          required:
+            - unique_facts
+            - statistics
+            - quality_assessment
+          additionalProperties: false
+
+---
+
+You are analyzing research outputs from {{ record.variant_count }} different data injection strategies for the same company ({{ record.domain }}).
+
+Each strategy used different methods to select which web pages to inject into the prompt:
+- **researcher_pages_20** (20): Score-based selection (20 pages with highest researcher relevance scores)
+- **researcher_pages_vector_full** (VF): Vector/semantic search (100 most semantically relevant pages)  
+- **researcher_pages_facts_vector** (FF): Chunk-based vector search (50 most relevant content chunks)
+
+## ALL VARIANT OUTPUTS:
+
+{{ record.combined_outputs }}
+
+## YOUR TASK:
+
+Extract and compare ALL facts from the variant outputs above.
+
+1. **List ALL unique facts** - deduplicate similar facts across variants
+
+2. **For each fact**, note which variant(s) found it using these codes:
+   - ALL = found by all 3 variants
+   - 20 = found ONLY by researcher_pages_20
+   - VF = found ONLY by researcher_pages_vector_full
+   - FF = found ONLY by researcher_pages_facts_vector
+   - 20+VF = found by 20 and VF only
+   - 20+FF = found by 20 and FF only
+   - VF+FF = found by VF and FF only
+
+3. **Calculate statistics**: total facts, consensus count, unique discoveries, best variant
+
+4. **Assess quality**: most comprehensive, any contradictions, missing info
+
+Return structured JSON matching the schema.
+

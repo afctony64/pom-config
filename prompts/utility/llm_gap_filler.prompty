@@ -1,0 +1,114 @@
+---
+name: LLM Gap Filler
+description: Model-driven gap filler that generates any missing LLM fields for ANY researcher
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: reasoning          # Primary: generating missing content
+  complexity: medium            # Context-aware content generation
+  context_size: medium          # Record context input
+  priority: balanced            # Balance quality and coverage
+inputs:
+  record:
+    description: Research record with potential missing LLM fields
+    type: object
+  researcher_id:
+    description: Researcher ID (e.g., product, industry, customer, financial, leadership, social)
+    type: string
+    required: true
+  researcher:
+    description: Researcher config with properties (injected by PomFlow based on researcher_id)
+    type: object
+    required: true
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    temperature: 0.3
+    max_tokens: 8000
+    response_format:
+      type: json_schema
+      json_schema:
+        name: llm_gap_filler
+        strict: true
+        schema:
+          type: object
+          properties: {}
+          required: []
+          additionalProperties: false
+processing_config:
+  mode: update
+  source_collection: Company_research_{{ researcher_id }}
+  schema_id: Company_research_{{ researcher_id }}
+  include_fields_tag: LLM
+  filters:
+    - field: seed
+      operator: equal
+      value: false
+post_execution_tools:
+  - classify_all
+---
+system:
+You are a research analyst filling in missing data fields for company research.
+
+Your task: Generate ONLY the missing LLM fields listed in the user message.
+
+## LLM FIELD DEFINITIONS
+
+{% for field in researcher.properties %}
+{% if field.tags and 'LLM' in field.tags %}
+- **{{ field.name }}**: {{ field.description }}
+{% endif %}
+{% endfor %}
+
+## RULES
+- Write detailed prose, NOT category labels
+- Be specific based on available context
+- If insufficient context, write "Unable to determine from available information"
+- You MUST generate content for EVERY field listed in "MISSING FIELDS TO GENERATE"
+- Return each field as a single-element array with one comprehensive paragraph: ["Your detailed description here"]
+
+user:
+{% set props = record.properties if record.properties else record %}
+
+## COMPANY: {{ props.domain | default('Unknown') }}
+
+## MISSING FIELDS TO GENERATE:
+{% for field in researcher.properties %}
+{% if field.tags and 'LLM' in field.tags %}
+{% set field_value = props[field.name] %}
+{% set is_empty = not field_value or (field_value is iterable and field_value | length == 0) %}
+{% if is_empty %}- {{ field.name }}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+## AVAILABLE CONTEXT
+{% for field in researcher.properties %}
+{% if not field.tags or 'LLM' not in field.tags %}
+{% set field_value = props[field.name] %}
+{% if field_value %}
+{% if field_value is iterable and field_value is not string %}
+{% set items = field_value | list %}
+**{{ field.name }}:** {{ items[:10] | join(', ') }}{% if items | length > 10 %} (+{{ items | length - 10 }} more){% endif %}
+
+{% else %}
+**{{ field.name }}:** {{ field_value }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+## EXISTING LLM FIELD VALUES (for reference)
+{% for field in researcher.properties %}
+{% if field.tags and 'LLM' in field.tags %}
+{% set field_value = props[field.name] %}
+{% if field_value and (field_value is string or (field_value is iterable and field_value | length > 0)) %}
+**{{ field.name }}:** {{ field_value[0] if field_value is iterable and field_value | length > 0 else field_value }}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+Generate JSON with ONLY the missing LLM fields listed above.

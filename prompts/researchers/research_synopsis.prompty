@@ -1,0 +1,169 @@
+---
+name: Research Synopsis
+description: Synthesize research insights from multiple analysts into a cohesive executive summary
+# ✅ KEY DESIGN FEATURE: Prompt template declares what OTHER PROMPT TEMPLATES it depends on
+# This is declarative and "in reverse" - the prompt says what it needs
+# PomFlow can then find all components using those prompt templates and execute them first
+processing_config:
+  mode: report  # ✅ Report mode - generates JSON for report executor, does NOT write to collections
+  prompt_dependencies:
+    - Researcher Synopsis  # ✅ Depends on Researcher Synopsis (which depends on Researcher)
+inputs:
+  company_name:
+    description: Name of the company being analyzed
+    type: string
+  domain:
+    description: Company domain
+    type: string
+  industry_analysis:
+    description: Industry researcher insights
+    type: string
+    default: ""
+  customer_analysis:
+    description: Customer researcher insights
+    type: string
+    default: ""
+  product_analysis:
+    description: Product researcher insights
+    type: string
+    default: ""
+  competitor_analysis:
+    description: Competitor researcher insights
+    type: string
+    default: ""
+  financial_analysis:
+    description: Financial researcher insights
+    type: string
+    default: ""
+  partner_analysis:
+    description: Partner researcher insights
+    type: string
+    default: ""
+  leadership_analysis:
+    description: Leadership researcher insights
+    type: string
+    default: ""
+  risk_analysis:
+    description: Risk researcher insights
+    type: string
+    default: ""
+  social_analysis:
+    description: Social researcher insights
+    type: string
+    default: ""
+  journalist_analysis:
+    description: Press/journalist researcher insights
+    type: string
+    default: ""
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: gemma3:27b-it-qat  # Larger model for better writing quality & synthesis
+  parameters:
+    temperature: 0.7
+---
+# Executive Summary - {{ company_name }}
+
+You are a senior business analyst synthesizing research from multiple specialized researchers into a cohesive executive summary.
+
+## Company Overview
+- **Company**: {{ company_name }}
+- **Domain**: {{ domain }}
+
+## Research Insights Available
+
+{% if prior_prompt_results %}
+### Research Findings from All Researchers
+
+{% for prompt_name, result in prior_prompt_results.items() %}
+### {{ prompt_name }}
+{% if result.data %}
+{{ result.data.content if result.data.content else result.data }}
+{% else %}
+{{ result }}
+{% endif %}
+{% endfor %}
+
+{% else %}
+{% if industry_analysis %}
+### Industry Context
+{{ industry_analysis }}
+{% endif %}
+
+{% if customer_analysis %}
+### Customer Insights
+{{ customer_analysis }}
+{% endif %}
+
+{% if product_analysis %}
+### Product/Service Analysis
+{{ product_analysis }}
+{% endif %}
+
+{% if competitor_analysis %}
+### Competitive Landscape
+{{ competitor_analysis }}
+{% endif %}
+
+{% if financial_analysis %}
+### Financial Position
+{{ financial_analysis }}
+{% endif %}
+
+{% if partner_analysis %}
+### Partnerships & Ecosystem
+{{ partner_analysis }}
+{% endif %}
+
+{% if leadership_analysis %}
+### Leadership & Organization
+{{ leadership_analysis }}
+{% endif %}
+
+{% if risk_analysis %}
+### Risk Assessment
+{{ risk_analysis }}
+{% endif %}
+
+{% if social_analysis %}
+### Social Presence
+{{ social_analysis }}
+{% endif %}
+
+{% if journalist_analysis %}
+### Press Coverage
+{{ journalist_analysis }}
+{% endif %}
+{% endif %}
+
+## Your Task
+
+{% if not prior_prompt_results and not (industry_analysis or customer_analysis or product_analysis or competitor_analysis or financial_analysis or partner_analysis or leadership_analysis or risk_analysis or social_analysis or journalist_analysis) %}
+**Note:** Limited analysis data is available for this company. Create a brief executive summary (2-3 paragraphs, 150-250 words) based on the company name and domain:
+
+1. **Company Overview**: Who they are based on their name and domain
+2. **Market Context**: What industry/sector they likely operate in
+3. **General Assessment**: Note that detailed research analysis would be needed for comprehensive insights
+{% else %}
+Create a **concise executive summary** (3-5 paragraphs, 200-400 words) that:
+
+1. **Opens with Company Positioning**: Who they are, what they do, and their market position
+2. **Synthesizes Key Insights**: Integrate the most important findings from across all research areas
+3. **Highlights Strategic Factors**: Key strengths, opportunities, risks, or competitive advantages
+4. **Concludes with Overall Assessment**: High-level perspective on the company's trajectory
+{% endif %}
+
+**Requirements:**
+- Write in clear, professional business language
+- Focus on actionable insights, not just facts
+{% if prior_prompt_results or (industry_analysis or customer_analysis or product_analysis or competitor_analysis or financial_analysis or partner_analysis or leadership_analysis or risk_analysis or social_analysis or journalist_analysis) %}
+- Connect insights across research areas (e.g., how product strategy relates to competitive position)
+- Be balanced - include both positive and concerning findings
+- Use specific details from the research to support conclusions
+{% endif %}
+
+**Format:**
+- Standard paragraph format (not bullets)
+- Professional tone suitable for executive audience
+- No markdown formatting (this will be rendered as HTML)

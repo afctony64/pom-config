@@ -1,0 +1,337 @@
+---
+name: Entity Researcher
+description: >
+  Universal entity researcher template for the Self-Assembling Research System.
+  Entity-agnostic: works with any TenantGroup (corporate, travel, recipes, etc.)
+
+  ENTITY MODEL (Standard):
+  - Source: Domain (the URL IS the entity)
+  - Output: Research_* collections (no prefix)
+  - Page_facts for evidence (vectorized semantic search)
+
+  LEGACY MODEL (Prismatic only - via TenantGroup):
+  - Source: Company_source
+  - Output: Company_research_* collections
+
+# NOTE: classification section removed - see docs/architecture/FUTURE_PROMPT_FEATURES.md
+# NOTE: quality_control section removed - see docs/architecture/FUTURE_PROMPT_FEATURES.md
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DEFAULTS - Safe configuration values ONLY (NOT researcher fallbacks)
+# ══════════════════════════════════════════════════════════════════════════════
+# ⚠️ IMPORTANT: This prompt REQUIRES researcher_ai config to be present.
+# Missing researcher_ai should FAIL - do not add fallbacks that allow
+# running with wrong/generic prompts. That wastes money on bad output.
+#
+# Only include genuine configuration settings here, NOT researcher identity.
+# DO NOT add: search_query, entity_type, researcher_role - these MUST come from researcher_ai
+defaults:
+  # Maximum characters per page content (token budget management)
+  max_content_chars: 2500
+
+inputs:
+  # === REQUIRED INPUTS ===
+  record:
+    description: Domain record data to analyze (the entity)
+    type: object
+  researcher_id:
+    description: Dynamic researcher ID (e.g., industry, financial, leadership) - REQUIRED
+    type: string
+
+  # === CONTEXT INJECTION (via ContextManager) ===
+  # These are injected automatically by the execution engine
+  tenant:
+    description: TenantConfig object (injected from tenant_id)
+    type: object
+    default: null
+  tenant_group:
+    description: TenantGroupConfig object (injected from tenant.tenant_group)
+    type: object
+    default: null
+  researcher_ai:
+    description: ResearcherAIConfig with tool_guidance, search_query (injected from researcher_id)
+    type: object
+    required: true  # ⚠️ REQUIRED - fail-fast if missing, prevents expensive wrong runs
+
+  # === DATA INJECTION (via data_requirements.injectors) ===
+  pageData:
+    description: Injected page content from Page_facts (vectorized, searchable)
+    type: array
+    default: null
+  edgarData:
+    description: SEC Edgar financial data (for public companies only)
+    type: object
+    default: null
+
+  # === COMPRESSION CONFIG (optional - via ContextManager) ===
+  compression_stats:
+    description: Stats from context compression (if applied)
+    type: object
+    default: null
+
+data_requirements:
+  injectors:
+    # 📄 PRIMARY: Page Facts Injection
+    # Uses semantic search on Page_facts vectors to find relevant content
+    - injector_template: page_facts_vector
+      template_vars:
+        domain: "{{ (record.get('properties') or record).get('domain', record.get('domain', '')) }}"
+        researcher_type: "{{ record._researcher_id }}"
+        # REQUIRED: researcher_ai.search_query must be set - no fallback to prevent wrong queries
+        search_query: "{{ researcher_ai.search_query }}"
+        min_certainty: 0.15
+        limit: 100
+        inject_as: pageData
+    # 📊 SEC Edgar data for public companies (optional)
+    - injector_template: mcp
+      template_vars:
+        tool: edgar_company_facts
+        params:
+          cik: "{{ record.stockSymbol }}"
+        inject_as: edgarData
+      optional: true
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    max_output_tokens: 8000
+    response_format:
+      type: json_schema
+      json_schema:
+        name: researcher_output
+        strict: true
+        schema:
+          type: object
+          properties: {}
+          required: []
+          additionalProperties: false
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PROCESSING CONFIG - ENTITY MODEL (Standard)
+# ══════════════════════════════════════════════════════════════════════════════
+processing_config:
+  source_collection: Domain
+  target_collections:
+    - Research_industry
+  required_processing_flags:
+    researcher_processing_status: null
+  max_turns: 15  # Increased to match Researcher prompt
+  iteration_parameter: researcher_id
+  iteration_values: "TENANT_GROUP_RESEARCHERS"
+  # 🆕 Compression strategy for context management (optional)
+  # Options: aggressive (6k tokens), balanced (12k), comprehensive (24k), none
+  compression_strategy: balanced
+
+# 🔧 POST-EXECUTION TOOLS
+post_execution_tools:
+  - classify_all
+---
+{# ══════════════════════════════════════════════════════════════════════════════
+   JINJA2 MACROS - Reusable template blocks for cleaner code
+   ══════════════════════════════════════════════════════════════════════════════ #}
+
+{# Macro: Get property from record (handles both .properties and direct access) #}
+{% macro get_prop(record, key, default='') -%}
+{{ (record.get('properties') or record).get(key, default) or default }}
+{%- endmacro %}
+
+{# Macro: Get display name for entity #}
+{% macro get_display_name(record) -%}
+{% if record %}{% set props = record.get('properties') or record %}{{ props.get('domainName') or props.get('domain') or 'the entity' }}{% else %}the entity{% endif %}
+{%- endmacro %}
+
+{# Macro: Get attribute safely (works for both Pydantic models and dicts) #}
+{% macro get_attr(obj, attr, default=None) -%}
+{% if obj is mapping %}{{ obj.get(attr, default) }}{% elif obj %}{{ obj[attr] if obj[attr] is defined else default }}{% else %}{{ default }}{% endif %}
+{%- endmacro %}
+
+{# Macro: Truncate content with configurable limit #}
+{% macro truncate_content(content, max_chars) -%}
+{{ content[:max_chars] }}{% if content|length > max_chars %}... [truncated]{% endif %}
+{%- endmacro %}
+
+{# ══════════════════════════════════════════════════════════════════════════════
+   SYSTEM PROMPT - Main template content
+   ══════════════════════════════════════════════════════════════════════════════ #}
+
+system:
+{# === RESEARCHER IDENTITY === #}
+## 🎯 RESEARCHER IDENTITY
+
+{% if researcher_ai and researcher_ai.researcher_identity %}
+**Title**: {{ researcher_ai.researcher_identity.title }}
+**Mission**: {{ researcher_ai.researcher_identity.mission }}
+{% if researcher_ai.researcher_identity.core_competencies %}
+
+**Core Competencies**:
+{% for competency in researcher_ai.researcher_identity.core_competencies %}
+- {{ competency }}
+{% endfor %}
+{% endif %}
+{% if researcher_ai.display_name %}
+**Researcher**: {{ researcher_ai.display_name }}
+{% endif %}
+{% else %}
+**ERROR: researcher_ai config is missing. Cannot run without researcher profile.**
+{% endif %}
+
+{# === TENANT CONTEXT (simplified - no string check needed) === #}
+{% if tenant and (tenant.name or tenant.description) %}
+## 🏢 TENANT CONTEXT
+
+{% if tenant.name %}**Tenant**: {{ tenant.name }}{% endif %}
+{% if tenant.description %}
+**Context**: {{ tenant.description }}
+{% endif %}
+{% endif %}
+
+{# === RESEARCH DOMAIN (simplified - tenant_group always Pydantic or None) === #}
+{% if tenant_group %}
+## 🔬 RESEARCH DOMAIN
+
+**TenantGroup**: {{ tenant_group.id if tenant_group.id else tenant_group }}
+{% if tenant_group.description %}
+{{ tenant_group.description }}
+{% endif %}
+{% endif %}
+
+{# === ENTITY CONTEXT === #}
+## 📋 ENTITY CONTEXT
+
+{% if record %}
+{% set props = record.get('properties') or record %}
+**Entity Information:**
+- **Name**: {{ props.get('domainName') or props.get('domain') or 'Unknown' }}
+- **Domain**: {{ props.get('domain') or props.get('url') or 'Not provided' }}
+- **Entity Type**: {{ props.get('entityType', 'unknown') }}
+{% if props.get('description') %}- **Description**: {{ props.get('description') }}{% endif %}
+{% if props.get('industry') %}- **Industry**: {{ props.get('industry') }}{% endif %}
+{% endif %}
+
+{# === PAGE CONTENT (with configurable truncation) === #}
+{% if pageData and pageData|length > 0 %}
+## 📄 PRIMARY SOURCE: PAGE CONTENT
+
+You have access to **{{ pageData|length }} relevant pages** from the entity's website.
+{% if compression_stats %}(Context compressed: {{ compression_stats.get('pageData_before', '?') }} → {{ compression_stats.get('pageData_after', pageData|length) }} pages){% endif %}
+
+**⚠️ IMPORTANT: These pages are your PRIMARY SOURCE OF TRUTH.**
+- Use the actual content from these pages as evidence
+- Cite page URLs when making claims
+- Higher similarity scores indicate more relevant content
+
+{% for page in pageData %}
+### Page {{ loop.index }}: {{ page.get('title') or page.get('url') or 'Unknown' }}
+**URL**: {{ page.get('url', 'N/A') }}
+{% if page.get('similarity_score') %}**Relevance**: {{ (page.get('similarity_score') * 100)|round(1) }}%{% endif %}
+{% if page.get('word_count') %}**Words**: {{ page.get('word_count') }}{% endif %}
+
+**Content**:
+{{ truncate_content(page.get('content', ''), defaults.max_content_chars) }}
+
+---
+{% endfor %}
+{% else %}
+## ⚠️ NO PAGE CONTENT AVAILABLE
+
+No page content was found for this entity/researcher combination.
+Rely on your training knowledge and use web search tools if available.
+Mark analysisConfidence as "low" or "inferred" if no direct evidence is available.
+{% endif %}
+
+{# === SEC EDGAR DATA === #}
+{% if edgarData %}
+## 📊 SEC EDGAR DATA
+
+Financial data from SEC filings:
+{{ edgarData | tojson(indent=2) }}
+{% endif %}
+
+{# === TOOL GUIDANCE === #}
+{% if researcher_ai and researcher_ai.tool_guidance and researcher_ai.tool_guidance.brave_search %}
+## 🔧 TOOL USAGE GUIDANCE
+
+**Web Search**:
+- Priority: {{ researcher_ai.tool_guidance.brave_search.priority }}
+- Max Calls: {{ researcher_ai.tool_guidance.brave_search.max_calls }}
+- When to use: {{ researcher_ai.tool_guidance.brave_search.when_to_use }}
+{% if researcher_ai.tool_guidance.brave_search.recommended_searches %}
+**Recommended Searches**:
+{% for key, query in researcher_ai.tool_guidance.brave_search.recommended_searches.items() %}
+- {{ key }}: "{{ query }}"
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{# === ANALYSIS TASK === #}
+## 🎯 ANALYSIS TASK
+
+Analyze **{{ get_display_name(record) }}** using the page content provided above.
+
+**Data Source Priority**:
+1. **Page Content** (pageData) - PRIMARY SOURCE, cite URLs
+2. **SEC Edgar Data** (if available) - For financial metrics
+3. **Web Search** (if tools available) - For additional context
+4. **Training Knowledge** - For context and industry norms
+
+{# === FOCUS AREAS === #}
+{% if researcher_ai and researcher_ai.focus_areas %}
+## 🔍 FOCUS AREAS
+
+Prioritize analysis of:
+{% for area in researcher_ai.focus_areas %}
+- {{ area }}
+{% endfor %}
+{% endif %}
+
+{# === FACT TYPES TO EXTRACT === #}
+{% if researcher_ai and researcher_ai.fact_types %}
+## 📋 KEY INFORMATION TO EXTRACT
+
+Identify and extract the following from the source content:
+{% for ft in researcher_ai.fact_types %}
+- {{ ft | replace('_', ' ') | title }}
+{% endfor %}
+{% endif %}
+
+{# === AVOID === #}
+{% if researcher_ai and researcher_ai.avoid %}
+## ⛔ AVOID
+
+{% for item in researcher_ai.avoid %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+
+## 🚨 CRITICAL OUTPUT REQUIREMENTS
+
+1. **USE EXACT SCHEMA FIELD NAMES**: You MUST use the exact field names specified in the JSON schema below. Do NOT convert to snake_case or use alternative names.
+
+2. **STRICT SCHEMA COMPLIANCE**: The schema is set to `strict: true` - you MUST only return fields that are defined in the schema properties.
+
+3. **POPULATE ALL SCHEMA FIELDS**: Generate complete analysis for ALL fields shown in the schema. Every field in `properties` must have a value (use `null` only if truly unavailable).
+
+4. **FLAT JSON STRUCTURE**: Return a flat JSON object with all fields at the root level - no nested objects or arrays unless the schema explicitly defines them as array types.
+
+5. **APPROPRIATE DATA TYPES** (match what's defined in the schema):
+   - **`*LLM` fields (text[] arrays)**: Fields ending in `LLM` return arrays of 1-3 descriptive strings (100-200 words each)
+   - **String fields**: Single text values
+   - **List fields**: Arrays of items
+   - **Numbers**: Numeric scores and metrics
+   - **null**: Only when data is truly unavailable (avoid empty arrays `[]`)
+   - ⚠️ **ONLY use field names that appear in the JSON schema below** - do NOT invent or guess field names
+
+6. **LLM + Cat FIELD PATTERN**:
+   - `*LLM` fields: **Text arrays** with analytical content (1-3 items, 100-200 words each). NEVER return empty arrays `[]`
+   - `*Cat` fields: Will be auto-populated by classify_all post-processor - skip these
+
+7. **PARALLEL ARRAYS**: For array fields marked as `parallel_to`, ensure all related arrays have the same length.
+
+## ⚠️ SCHEMA ENFORCEMENT
+
+The JSON schema below defines the EXACT structure you must return. The schema will be dynamically injected with the complete field definitions for this researcher's collection.
+
+Focus your analysis specifically on **{{ get_display_name(record) }}** using the page content provided.

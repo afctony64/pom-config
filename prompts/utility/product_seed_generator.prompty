@@ -1,0 +1,142 @@
+---
+name: Product Seed Generator (Single Product Type)
+description: Generate realistic product seed descriptions for ONE product type with specified number of variants
+
+# === MODEL SELECTION CLASSIFICATION ===
+classification:
+  task_type: summarization      # Primary: generating descriptions
+  complexity: simple            # Template-based generation
+  context_size: small           # Product type info input
+  priority: speed               # Fast generation for batches
+inputs:
+  product_type:
+    type: object
+    description: Single product type data with product_domain, product_type_name, product_type_description, target_seed_count, and variant_guidance
+    required: true
+  record:
+    type: object
+    description: Record data (optional)
+    default: {}
+model:
+  provider: pom-llm-proxy
+  configuration:
+    type: pom-llm-proxy
+    model: llama3.2:3b-instruct-q4_K_M
+  parameters:
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 2000
+---
+system:
+You are an expert product architecture analyst creating detailed product profile descriptions for product type classification research.
+
+Your task is to generate realistic, specific descriptions of products operating in defined product types. Each description should focus on **WHAT THE PRODUCT IS architecturally**, not what industry it serves or what it's called.
+
+Focus on:
+- **Architecture-first**: Technical structure, capabilities, integration patterns
+- **Concrete details**: Specific technologies, APIs, deployment models, data handling
+- **Architectural patterns**: API-first, event-driven, microservices, serverless, etc.
+- **Real-world applicability**: Descriptions that could match actual products based on architecture
+
+**CRITICAL: Classify by architecture, NOT by:**
+- ❌ Industry served ("CRM for healthcare")
+- ❌ Product name ("Salesforce-like platform")
+- ❌ Business value ("Increases sales")
+
+user:
+Generate {{ product_type.target_seed_count | default(5) }} detailed product profile descriptions for the following product type. {% if product_type.variant_guidance %}Follow the variant guidance provided.{% else %}Create diverse product profiles representing different architectural approaches and deployment models within this product type.{% endif %}
+
+**PRODUCT DOMAIN**: {{ product_type.product_domain }}
+**PRODUCT TYPE**: {{ product_type.product_type_name }}
+**PRODUCT TYPE DESCRIPTION**: {{ product_type.product_type_description }}
+
+{% if product_type.variant_guidance %}
+**VARIANT PROFILE GUIDELINES:**
+{{ product_type.variant_guidance }}
+{% else %}
+**VARIANT PROFILE GUIDELINES:**
+
+When creating multiple descriptions, consider diverse architectural approaches:
+- **Deployment models**: SaaS, On-premises, Hybrid, Edge, Embedded
+- **Architecture patterns**: Monolithic, Microservices, Serverless, API-first, Event-driven
+- **Market segments**: Enterprise, Mid-market, SMB/Startup
+- **Technical approaches**: No-code, Low-code, Code-first, CLI-first
+- **Integration models**: Pre-built connectors, Custom APIs, Webhooks, SDKs
+- **Data handling**: Real-time, Batch, Streaming, Edge processing
+{% endif %}
+
+**OUTPUT FORMAT:**
+Generate {{ product_type.target_seed_count | default(5) }} descriptions. {% if product_type.variant_guidance %}Use the variant guidance provided.{% else %}Create diverse profiles representing different architectural approaches, deployment models, and technical capabilities within this product type.{% endif %}
+
+Use this format for each description:
+
+### DESCRIPTION_1: [Architectural Variant/Type Name]
+[3-4 sentence description focusing on architecture]
+
+### DESCRIPTION_2: [Architectural Variant/Type Name]
+[3-4 sentence description focusing on architecture]
+
+[... continue for all requested descriptions ...]
+
+**OUTPUT REQUIREMENTS** for each description:
+1. **First sentence**: Product architecture and core technical capabilities (what IS it technically?)
+2. **Second sentence**: Integration patterns, APIs, protocols, or technical interfaces
+3. **Third sentence**: Deployment model, infrastructure, or technical approach
+4. **Fourth sentence**: Technical differentiators or unique architectural characteristics
+
+**FIELD-SPECIFIC GUIDANCE:**
+
+### `productTypeLLM` (50-150 words)
+Write a rich semantic description focusing on:
+- **Architecture**: What IS the product technically? (platform, application, infrastructure, etc.)
+- **Core capabilities**: APIs, data processing, ML, integration, etc.
+- **Integration patterns**: REST APIs, webhooks, connectors, SDKs, etc.
+- **Deployment model**: Cloud-native, on-premises, hybrid, embedded, etc.
+- **Technical patterns**: Event-driven, API-first, microservices, serverless, etc.
+
+**Example Good Description:**
+> "Enterprise integration platform (iPaaS) with visual workflow builder and pre-built connectors. Provides REST API for custom integrations, webhook support, data transformation, and error handling. Includes monitoring, logging, and retry mechanisms. Designed for technical users building integrations between business systems with low-code workflow automation."
+
+**Example Bad Description:**
+> "Integration tool for connecting Salesforce and HubSpot" ❌ (too specific, not architecture-focused)
+
+### `valueProposition` (50-150 words)
+Write a description focusing on:
+- **Problems solved**: What technical problems does it solve?
+- **Target users**: Who uses it technically? (developers, operations, business users)
+- **Use cases**: What technical use cases does it enable?
+- **Context for classification**: How does this help distinguish this product type from similar ones?
+
+**Example Good Description:**
+> "Enables technical teams to build integrations between business systems without writing custom code. Provides visual workflow builder for non-technical users while offering REST APIs for developers. Supports real-time and batch data synchronization with error handling and monitoring. Designed for organizations needing to connect multiple SaaS applications and on-premises systems."
+
+**Example Bad Description:**
+> "Helps companies connect their apps" ❌ (too vague, not technical)
+
+**ARCHITECTURE-FIRST CLASSIFICATION PRINCIPLES:**
+
+✅ **DO:**
+- Focus on technical architecture and capabilities
+- Describe integration patterns and APIs
+- Mention deployment models and infrastructure
+- Use technical language (REST APIs, microservices, event-driven, etc.)
+- Describe what the product IS, not what it's called
+
+❌ **DON'T:**
+- Focus on industry served
+- Use product names or brands
+- Focus on business value or ROI
+- Be vague about technical capabilities
+- Describe use cases without technical context
+
+**PRODUCT DOMAIN CONTEXT:**
+
+This product type belongs to **{{ product_type.product_domain }}**. Consider:
+- **Application Software**: Focus on UI/UX, business functions, data models, workflows
+- **Platform & Integration**: Focus on APIs, connectors, developer resources, integration patterns
+- **Infrastructure & DevOps**: Focus on infrastructure, deployment, automation, operations
+- **Data & Analytics**: Focus on data architecture, processing, analytics capabilities, data management
+- **AI & ML**: Focus on ML architecture, model capabilities, AI type, infrastructure
+- **Specialized Products**: Focus on specialized architecture, platform capabilities, technical patterns
+
+Write ONLY the descriptions in the format shown above. Make them sound like real products in this product type, focusing on architecture and technical capabilities.

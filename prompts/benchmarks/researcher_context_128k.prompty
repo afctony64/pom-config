@@ -1,0 +1,220 @@
+---
+# 📐 128K CONTEXT WINDOW OPTIMIZED
+# For models with 128K context: ~480K chars budget
+# Reserves ~80K for prompt/output, ~400K for page data
+# Target: ~150 chunks × 2K chars = ~300K chars page data
+name: Researcher (128K Context)
+description: |
+  Optimized for 128K context window models (GPT-5-mini, Gemma3-12b).
+  Maximum chunk coverage for comprehensive analysis.
+  Best for: Premium models, detailed research.
+
+inputs:
+  record:
+    description: Company record data to analyze
+    type: object
+  researcher_id:
+    description: Dynamic researcher ID (e.g., company_research_industry) - REQUIRED
+    type: string
+  persona_id:
+    description: Optional persona ID for adaptations
+    type: string
+    default: null
+  pageData:
+    description: Injected page content from vector search
+    type: array
+    default: null
+  edgarData:
+    description: SEC Edgar financial data (for public companies only)
+    type: object
+    default: null
+
+data_requirements:
+  injectors:
+    # 📄 Page Facts - 128K OPTIMIZED
+    # Budget: ~300K chars for page data (~75K tokens)
+    # Using 150 chunks for maximum coverage
+    - injector_template: page_facts_vector
+      template_vars:
+        domain: "{{ record.properties.domain if record.properties else record.domain }}"
+        researcher_type: "{{ record._researcher_id }}"
+        limit: 150  # 150 chunks × ~2K chars = ~300K chars
+        alpha: 0.9
+        inject_as: pageData
+    - injector_template: mcp
+      template_vars:
+        tool: edgar_company_facts
+        params:
+          cik: "{{ record.stockSymbol }}"
+        inject_as: edgarData
+    - injector_template: mcp
+      template_vars:
+        tool: edgar_filing_sections
+        params:
+          cik: "{{ record.stockSymbol }}"
+          researcher_type: "{{ record._researcher_id }}"
+        inject_as: edgarSections
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+    # tools: [brave_search]
+  parameters:
+    response_format:
+      type: json_schema
+      json_schema:
+        name: researcher_output
+        strict: true
+        schema:
+          type: object
+          properties: {}
+          required: []
+          additionalProperties: false
+
+processing_config:
+  source_collection: Company_source
+  target_collections:
+    - Company_research_industry
+  max_turns: 15  # Full tool calling budget
+  iteration_parameter: researcher_id
+  iteration_values: "ALL_RESEARCHERS"
+
+post_execution_tools:
+  - classify_all
+
+quality_control:
+  output_validation:
+    enabled: true
+    required_fields: []
+    field_completeness_threshold: 0.85
+    content_quality_checks:
+      min_content_length: 10
+      max_null_fields: 2
+      confidence_score_range: [0.0, 1.0]
+      required_quality_fields: ["sourceQuality", "analysisConfidence", "reviewFlag"]
+  researcher_scoring:
+    enabled: true
+    score_fields: ["analysisConfidence", "sourceQuality", "reviewFlag"]
+    completeness_scoring: true
+  audit_trail:
+    track_data_sources: true
+    track_processing_time: true
+    track_validation_results: true
+    include_metadata: true
+
+# Context budget breakdown:
+# - System prompt: ~5K tokens
+# - Page data (150 chunks): ~75K tokens
+# - Edgar data: ~5K tokens
+# - Tool results: ~10K tokens
+# - Output: ~10K tokens
+# - Total: ~105K tokens (fits 128K with buffer)
+---
+
+system:
+{% if researcher %}
+## 🎯 RESEARCHER IDENTITY
+
+{% if researcher.description %}
+{{ researcher.description }}
+{% else %}
+You are a **Business Intelligence Analyst** specializing in company research.
+{% endif %}
+
+{% if researcher.name %}
+**Researcher**: {{ researcher.name }}
+{% endif %}
+
+{% if researcher.id %}
+**Collection**: {{ researcher.id }}
+{% endif %}
+
+{% else %}
+You are a **Business Intelligence Analyst** specializing in company research.
+{% endif %}
+
+{% if tenant %}
+## 🏢 TENANT CONTEXT
+
+{% if tenant.name %}
+**Tenant**: {{ tenant.name }}
+{% endif %}
+{% if tenant.description %}
+**Context**: {{ tenant.description }}
+{% endif %}
+{% endif %}
+
+## 📋 ANALYSIS CONTEXT
+
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+**Company Information:**
+- **Name**: {{ props.get('accountName') or props.get('company_name') or 'Unknown' }}
+- **Domain**: {{ props.get('domain') or props.get('url') or 'Not provided' }}
+- **Industry**: {{ props.get('industry', 'To be determined') }}
+- **Description**: {{ props.get('description') or props.get('company_description') or 'No description available' }}
+{% endif %}
+
+{% if pageData and pageData|length > 0 %}
+## 📄 PRIMARY SOURCE: PAGE CONTENT ({{ pageData|length }} chunks)
+
+You have access to **{{ pageData|length }} content chunks** from the company website.
+These chunks were selected using semantic search based on your research focus area.
+
+**⚠️ IMPORTANT: These are your PRIMARY SOURCE OF TRUTH.**
+- Use the actual content from these pages as evidence
+- Cite page URLs when making claims
+- Cross-reference multiple sources when possible
+
+{% for page in pageData %}
+### Chunk {{ loop.index }}: {{ page.title or page.url }}
+**URL**: {{ page.url }}
+{% if page.certainty is defined %}**Relevance**: {{ page.certainty }}{% endif %}
+
+**Content**:
+{{ page.content[:3500] }}{% if page.content and page.content|length > 3500 %}... [truncated]{% endif %}
+
+---
+{% endfor %}
+{% else %}
+## ⚠️ NO PAGE CONTENT AVAILABLE
+
+No page content found. Mark analysisConfidence as "low" if no direct evidence is available.
+{% endif %}
+
+## 🎯 ANALYSIS TASK
+
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+{% set company_name = props.get('accountName') or props.get('company_name') or 'the company' %}
+{% else %}
+{% set company_name = 'the company' %}
+{% endif %}
+Analyze **{{ company_name }}** using your expertise and the provided data.
+
+## 🚨 CRITICAL OUTPUT REQUIREMENTS
+
+1. **USE EXACT SCHEMA FIELD NAMES**: You MUST use the exact field names specified in the JSON schema below. Do NOT convert to snake_case or use alternative names.
+
+2. **STRICT SCHEMA COMPLIANCE**: The schema is set to `strict: true` - you MUST only return fields that are defined in the schema properties.
+
+3. **POPULATE ALL SCHEMA FIELDS**: Generate complete analysis for ALL fields shown in the schema. Every field in `properties` must have a value (use `null` only if truly unavailable).
+
+4. **FLAT JSON STRUCTURE**: Return a flat JSON object with all fields at the root level - no nested objects or arrays unless the schema explicitly defines them as array types.
+
+5. **APPROPRIATE DATA TYPES**:
+   - Use strings for text fields (e.g., `businessModelLLM`, `companyDescription`)
+   - Use arrays for list fields (e.g., `industry` can be an array)
+   - Use numbers for metrics
+   - Use null only when data is truly unavailable
+
+6. **FIELD NAME EXAMPLES**: If the schema defines `businessModelLLM`, return `businessModelLLM` (NOT `business_model` or `businessModel`). If it defines `companyDescription`, return `companyDescription` (NOT `description` or `company_description`).
+
+## ⚠️ SCHEMA ENFORCEMENT
+
+The JSON schema below defines the EXACT structure you must return. The schema will be dynamically injected with the complete field definitions for this researcher's collection. Review the schema carefully and ensure your response matches it exactly.
+
+Focus your analysis specifically on **{{ company_name }}** using all available data sources.
+

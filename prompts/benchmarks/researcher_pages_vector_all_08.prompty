@@ -1,0 +1,134 @@
+---
+name: Researcher with Pages (Vector All > 0.8)
+description: >
+  Benchmark variant: VECTOR SEARCH - ALL pages with certainty > 0.8
+  Uses hybrid semantic search with min_certainty threshold.
+  
+  Parameters:
+  - alpha: 0.8 (80% vector, 20% BM25)
+  - min_certainty: 0.8 (only pages with high confidence)
+  - limit: 500 (effectively "all" that pass threshold)
+
+inputs:
+  record:
+    description: Company record data to analyze
+    type: object
+  researcher_id:
+    description: Dynamic researcher ID (e.g., company_research_industry) - REQUIRED
+    type: string
+  persona_id:
+    description: Optional persona ID for adaptations
+    type: string
+    default: null
+  pageData:
+    description: Injected page content from vector search
+    type: array
+    default: null
+
+data_requirements:
+  injectors:
+    # 📄 Page Content Injection - VECTOR ALL > 0.8
+    # High limit (500) = get all pages that pass min_certainty
+    - injector_template: page_content_vector
+      template_vars:
+        domain: "{{ record.properties.domain if record.properties else record.domain }}"
+        researcher_type: "{{ record._researcher_id }}"
+        alpha: 0.8
+        min_certainty: 0.8
+        limit: 500
+        inject_as: pageData
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    response_format:
+      type: json_schema
+      json_schema:
+        name: researcher_output
+        strict: true
+        schema:
+          type: object
+          properties: {}
+          required: []
+          additionalProperties: false
+
+processing_config:
+  source_collection: Company_source
+  schema_ids:
+    - Company_research_product
+  max_turns: 15
+  iteration_parameter: researcher_id
+  iteration_values: "ALL_RESEARCHERS"
+
+quality_control:
+  output_validation:
+    enabled: true
+    field_completeness_threshold: 0.85
+---
+
+system:
+{% if researcher %}
+## 🎯 RESEARCHER IDENTITY
+
+{% if researcher.description %}
+{{ researcher.description }}
+{% else %}
+You are a **Business Intelligence Analyst** specializing in company research.
+{% endif %}
+
+{% if researcher.name %}
+**Researcher**: {{ researcher.name }}
+{% endif %}
+{% endif %}
+
+## 📋 ANALYSIS CONTEXT
+
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+**Company Information:**
+- **Name**: {{ props.get('accountName') or props.get('domain') or 'Unknown' }}
+- **Domain**: {{ props.get('domain') or 'Not provided' }}
+{% endif %}
+
+{% if pageData and pageData|length > 0 %}
+## 📄 PRIMARY SOURCE: PAGE CONTENT (Vector All > 0.8 - {{ pageData|length }} pages)
+
+You have access to **{{ pageData|length }} high-confidence pages** from the company website.
+These pages were selected using **hybrid vector search** with certainty >= 0.8.
+
+**Selection Method**: Hybrid search (80% vector, 20% BM25), min_certainty=0.8
+**⚠️ IMPORTANT: These pages are your PRIMARY SOURCE OF TRUTH.**
+
+{% for page in pageData %}
+### Page {{ loop.index }}: {{ page.title or page.url }}
+**URL**: {{ page.url }}
+**Certainty**: {{ page.certainty }}
+
+**Content**:
+{{ page.content[:3000] }}{% if page.content|length > 3000 %}... [truncated]{% endif %}
+
+---
+{% endfor %}
+{% else %}
+## ⚠️ NO PAGE CONTENT AVAILABLE
+
+No page content found with certainty >= 0.8. Mark analysisConfidence as "low".
+{% endif %}
+
+## 🎯 ANALYSIS TASK
+
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+{% set display_name = props.get('accountName') or props.get('domain') or 'the company' %}
+{% else %}
+{% set display_name = 'the company' %}
+{% endif %}
+Analyze **{{ display_name }}** using the page content provided above.
+
+## 🚨 OUTPUT REQUIREMENTS
+
+Return a flat JSON object with all fields at the root level matching the schema.
+Use exact field names from the schema. Cite page URLs when making claims.

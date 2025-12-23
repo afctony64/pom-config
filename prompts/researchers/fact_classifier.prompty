@@ -1,0 +1,268 @@
+---
+name: Fact Classifier
+description: Classify facts by entity_type and fact_type using Mistral 7B
+inputs:
+  record:
+    description: Source record data (Domain)
+    type: object
+  researcher:
+    description: Researcher configuration (defines taxonomy)
+    type: object
+  extractedFacts:
+    description: Facts from Fact Extractor (Fact_base record)
+    type: object
+    default: null
+
+processing_config:
+  prompt_dependencies:
+    - Fact Extractor  # Runs after Fact Extractor via PomFlow chaining
+  source_collection: Fact_base
+  schema_id: Fact_base
+  record_key_fields:
+    - domain
+    - researcher_type
+    - source_type
+
+data_requirements:
+  injectors:
+    # Fetch extracted facts from Fact_base (if not chained)
+    - injector_template: data
+      template_vars:
+        collection: Fact_base
+        filters:
+          domain: "{{ record.properties.domain }}"
+          researcher_type: "{{ researcher.type if researcher else 'generic' }}"
+        inject_as: extractedFacts
+        limit: 1
+
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: mistral:7b-instruct  # Mistral for classification expertise
+  parameters:
+    temperature: 0.1
+    response_format:
+      type: json_schema
+      json_schema:
+        name: fact_classification_output
+        strict: true
+        schema:
+          type: object
+          properties:
+            classified_facts:
+              type: array
+              description: Facts with entity_type and fact_type assigned
+              items:
+                type: object
+                properties:
+                  fact:
+                    type: string
+                  entity_name:
+                    type: string
+                  entity_name_normalized:
+                    type: string
+                    description: Canonical entity name (normalized)
+                  entity_type:
+                    type: string
+                    description: From researcher taxonomy
+                  entity_type_confidence:
+                    type: number
+                  fact_type:
+                    type: string
+                    description: From researcher taxonomy
+                  fact_type_confidence:
+                    type: number
+                  source_url:
+                    type: string
+                  confidence:
+                    type: number
+                required: [fact, entity_type, fact_type, source_url, confidence]
+            skipped_facts:
+              type: array
+              description: Facts that don't fit taxonomy
+              items:
+                type: object
+                properties:
+                  fact:
+                    type: string
+                  reason:
+                    type: string
+            entity_summary:
+              type: object
+              description: Summary of discovered entities
+              additionalProperties:
+                type: object
+                properties:
+                  entity_type:
+                    type: string
+                  fact_count:
+                    type: integer
+          required: [classified_facts]
+
+---
+# 🏷️ FACT CLASSIFIER (Mistral 7B)
+
+You classify facts against researcher taxonomies. Assign entity_type and fact_type to each fact.
+
+## 📊 RESEARCHER CONTEXT
+
+**Domain**: {{ record.properties.domain }}
+**Researcher Type**: {{ researcher.type if researcher else 'generic' }}
+
+---
+
+## 📋 RESEARCHER TAXONOMY
+
+### Entity Types
+{% if researcher and researcher.entity_types %}
+{% for entity_type in researcher.entity_types %}
+- **{{ entity_type.name }}**: {{ entity_type.description | default("") }}
+{% endfor %}
+{% else %}
+- **Product**: Products, platforms, tools offered
+- **Feature**: Capabilities, functionality
+- **Person**: Executives, founders, employees
+- **Customer**: Client companies, users
+- **Partner**: Integration partners, alliances
+{% endif %}
+
+### Fact Types
+{% if researcher and researcher.fact_types %}
+{% for fact_type in researcher.fact_types %}
+- **{{ fact_type.name }}**: {{ fact_type.description | default("") }}
+{% endfor %}
+{% else %}
+- **Capability**: What something can do
+- **Specification**: Quantified details (50+ integrations, $99/month)
+- **Pricing**: Cost, pricing model
+- **Title**: Job title, role
+- **Biography**: Background, experience
+- **Testimonial**: Customer quote, endorsement
+{% endif %}
+
+---
+
+{% if tenant and tenant.entity_hints %}
+## 🏢 KNOWN ENTITIES (Tenant Context)
+
+These entities are already known for this domain:
+{% for entity in tenant.entity_hints %}
+- {{ entity }}
+{% endfor %}
+
+Use these for entity name normalization.
+{% endif %}
+
+---
+
+## 📄 FACTS TO CLASSIFY
+
+{% if extractedFacts and extractedFacts.fact_base %}
+**Total Facts**: {{ extractedFacts.fact_base | length }}
+
+{% for fact in extractedFacts.fact_base %}
+### Fact {{ loop.index }}
+- **Entity**: {{ fact.entity_name | default("Unknown") }}
+- **Fact**: {{ fact.fact }}
+- **Source**: {{ fact.source_url }}
+- **Confidence**: {{ fact.confidence }}
+- **Category**: {{ fact.category | default("general") }}
+
+{% endfor %}
+{% elif prior_prompt_results and prior_prompt_results['Fact Extractor'] %}
+{% set extractor_result = prior_prompt_results['Fact Extractor'] %}
+**Total Facts**: {{ extractor_result.facts | length if extractor_result.facts else 0 }}
+
+{% for fact in extractor_result.facts %}
+### Fact {{ loop.index }}
+- **Entity**: {{ fact.entity_name | default("Unknown") }}
+- **Fact**: {{ fact.fact }}
+- **Source**: {{ fact.source_url }}
+- **Confidence**: {{ fact.confidence }}
+
+{% endfor %}
+{% else %}
+**⚠️ NO FACTS AVAILABLE** - Run Fact Extractor first.
+{% endif %}
+
+---
+
+## 🎯 YOUR TASK: Classify Facts
+
+### Step 1: Normalize Entity Names
+- Standardize entity names to canonical form
+- "workflow builder" → "Workflow Builder"
+- "The Prismatic Platform" → "Prismatic Platform"
+- Match to known entities if available
+
+### Step 2: Assign Entity Type
+- Choose from researcher taxonomy: [{% if researcher and researcher.entity_types %}{{ researcher.entity_types | map(attribute='name') | join(', ') }}{% else %}Product, Feature, Person, Customer, Partner{% endif %}]
+- Assign confidence based on match clarity
+- If entity name matches known entity, higher confidence
+
+### Step 3: Assign Fact Type
+- Choose from researcher taxonomy: [{% if researcher and researcher.fact_types %}{{ researcher.fact_types | map(attribute='name') | join(', ') }}{% else %}Capability, Specification, Pricing, Title, Biography, Testimonial{% endif %}]
+- "supports X" → Capability
+- "50+ integrations" → Specification
+- "$99/month" → Pricing
+
+### Step 4: Handle Non-Matches
+- If fact doesn't fit taxonomy, add to `skipped_facts`
+- Explain why (wrong researcher type, unclear category, etc.)
+- Don't force-fit facts
+
+### Step 5: Entity Summary
+- Count facts per entity
+- Report entity types discovered
+
+---
+
+## 📋 OUTPUT FORMAT
+
+```json
+{
+  "classified_facts": [
+    {
+      "fact": "Workflow Builder supports 50+ automation triggers",
+      "entity_name": "Workflow Builder",
+      "entity_name_normalized": "Workflow Builder",
+      "entity_type": "Feature",
+      "entity_type_confidence": 0.95,
+      "fact_type": "Specification",
+      "fact_type_confidence": 0.90,
+      "source_url": "https://...",
+      "confidence": 0.95
+    }
+  ],
+  "skipped_facts": [
+    {
+      "fact": "Contact us for custom pricing",
+      "reason": "No specific fact content, just CTA"
+    }
+  ],
+  "entity_summary": {
+    "Workflow Builder": {
+      "entity_type": "Feature",
+      "fact_count": 5
+    },
+    "Prismatic Platform": {
+      "entity_type": "Product",
+      "fact_count": 8
+    }
+  }
+}
+```
+
+---
+
+## ⚠️ CLASSIFICATION RULES
+
+1. **USE TAXONOMY**: Only assign types from the researcher's taxonomy
+2. **NORMALIZE**: Standardize entity names for grouping
+3. **DON'T FORCE-FIT**: Skip facts that don't match taxonomy
+4. **PRESERVE ORIGINAL**: Keep original fact text and source
+5. **CONFIDENCE SCORES**: Rate how well the classification fits
+
+Begin classification:
+

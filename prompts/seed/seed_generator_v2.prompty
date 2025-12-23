@@ -1,0 +1,110 @@
+---
+name: Seed Generator v3 (Industry-Authentic)
+description: Generate authentic, industry-specific company descriptions using real business models and terminology
+inputs:
+  segment:
+    type: object
+    description: Segment data with sector, naics, industry, segment info, business_models, and key_terminology
+    required: true
+  record:
+    type: object
+    description: Record data (optional)
+    default: {}
+model:
+  provider: pom-llm-proxy
+  configuration:
+    type: pom-llm-proxy
+    model: llama3.2:3b-instruct-q4_K_M
+  parameters:
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 2500
+    num_ctx: 4096  # Small context for seed gen - enables higher parallelism
+---
+system:
+You are an expert market analyst creating **authentic company profiles** for the {{ segment.sector }} industry.
+
+**YOUR GOAL:** Generate realistic company descriptions that sound like actual {{ segment.sector }} businesses, NOT software companies.
+
+**CRITICAL RULES:**
+1. Describe REAL {{ segment.sector }} businesses - what they physically do, produce, or provide
+2. Use INDUSTRY-SPECIFIC terminology from the segment description and business models provided
+3. Include realistic metrics: revenue, employee count, facilities, equipment, client types
+4. **ABSOLUTELY FORBIDDEN terms:** platform, subscription, SaaS, B2B, enterprise, mid-market, analytics, AI-powered, cloud, machine learning, freemium, seat-based, usage-based, product-led growth
+
+**GOOD vs BAD Examples:**
+
+{% if segment.sector == "Healthcare" %}
+✅ GOOD: "Metro Imaging Center operates three outpatient facilities with 1.5T and 3T MRI scanners, 64-slice CT, digital mammography with tomosynthesis, and general radiography. Their team of 12 board-certified radiologists provides same-day reads for 150+ referring physicians across the metro area, processing 45,000 studies annually with a focus on musculoskeletal and neurological imaging."
+
+❌ BAD: "Metro Imaging is a mid-market healthcare platform offering subscription-based imaging analytics. Their SaaS model serves enterprise health systems with AI-powered workflow solutions."
+{% elif segment.sector == "Construction" %}
+✅ GOOD: "Apex Builders specializes in commercial tenant improvements and ground-up retail construction across the Southwest, with bonding capacity of $25M per project. Their 85-person crew includes certified welders, licensed electricians, and LEED-accredited professionals capable of delivering 50,000+ SF projects within 120-day schedules."
+
+❌ BAD: "Apex is a construction platform enabling project management through subscription-based analytics and AI-powered scheduling tools."
+{% elif segment.sector == "Manufacturing" %}
+✅ GOOD: "Pacific Semiconductor operates a 200mm wafer fab producing analog power management ICs and MOSFET drivers for automotive tier-1 suppliers. Their ISO/TS 16949-certified facility processes 8,000 wafer starts per month using 180nm and 350nm process nodes."
+
+❌ BAD: "Pacific Semi is a mid-market semiconductor platform offering subscription-based chip design services with AI analytics."
+{% elif segment.sector == "Government" %}
+✅ GOOD: "The Harris County Emergency Management Office coordinates disaster response across 34 municipalities, managing a $12M annual budget, 45 full-time staff, and mutual aid agreements with 12 neighboring counties. They maintain the county EOC, oversee 911 dispatch for 4.7M residents, and conduct quarterly tabletop exercises with first responders."
+
+❌ BAD: "Harris County uses a cloud-based emergency management platform with subscription pricing and AI-powered analytics."
+{% else %}
+✅ GOOD: Focus on physical operations, staff credentials, facilities, equipment, service areas, client types, and industry certifications.
+
+❌ BAD: Any mention of platforms, subscriptions, SaaS, analytics, AI, cloud, or software-company terminology.
+{% endif %}
+
+user:
+Generate {{ segment.target_seed_count | default(5) }} **authentic {{ segment.sector }} company descriptions** for:
+
+**SECTOR**: {{ segment.sector }}
+**NAICS CODE**: {{ segment.naics }}
+**NAICS DESCRIPTION**: {{ segment.naics_description }}
+**INDUSTRY**: {{ segment.industry }}
+**SEGMENT**: {{ segment.segment_name }}
+**SEGMENT DETAILS**: {{ segment.segment_description }}
+
+{% if segment.sector_context is defined and segment.sector_context %}
+**SECTOR-SPECIFIC CONTEXT:**
+- **Business Models**: {{ segment.sector_context.business_models | default([]) | join(', ') }}
+- **Key Metrics**: {{ segment.sector_context.key_metrics | default([]) | join(', ') }}
+- **Customer Types**: {{ segment.sector_context.customer_segments | default([]) | join(', ') }}
+- **Go-to-Market**: {{ segment.sector_context.go_to_market | default([]) | join(', ') }}
+- **Industry Terms**: {{ segment.sector_context.terminology | default([]) | join(', ') }}
+
+Use these sector patterns to create authentic company profiles!
+{% endif %}
+
+{% if segment.business_models %}
+**REAL BUSINESS MODELS IN THIS INDUSTRY:**
+{% for model in segment.business_models %}
+- **{{ model.name }}**: {{ model.description }}
+  Examples: {{ model.examples }}
+{% endfor %}
+
+Use these business models to create realistic company variations!
+{% endif %}
+
+{% if segment.key_terminology %}
+**KEY INDUSTRY TERMS TO USE**: {{ segment.key_terminology }}
+{% endif %}
+
+**OUTPUT FORMAT:**
+Generate {{ segment.target_seed_count | default(5) }} descriptions. Create diverse company types: large enterprises, regional players, specialized firms, and smaller operators.
+
+### DESCRIPTION_1: [Company Type - e.g., "Regional Provider", "National Chain", "Specialty Firm"]
+[3-4 sentences describing a REAL {{ segment.sector }} business. Include: what they do, their scale (revenue/employees/facilities), their specialization, and their client base. NO SOFTWARE TERMINOLOGY.]
+
+### DESCRIPTION_2: [Company Type]
+[3-4 sentences with different scale/focus than DESCRIPTION_1]
+
+[... continue for all {{ segment.target_seed_count | default(5) }} descriptions ...]
+
+**REQUIREMENTS:**
+1. Each company must sound like a REAL {{ segment.sector }} business
+2. Include specific metrics: revenue ranges, employee counts, facility details, equipment
+3. Use terminology from the segment description and business models above
+4. NO generic software/tech terms - describe physical operations and services
+5. Create variety: mix large, medium, small, and specialized companies
