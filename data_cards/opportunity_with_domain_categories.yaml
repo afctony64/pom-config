@@ -1,0 +1,125 @@
+id: opportunity_with_domain_categories
+name: Opportunity with Domain Categories (Entity Model)
+type: data_card
+file: opportunity_with_domain_categories.yaml
+description: >
+  Sales opportunities with domain categorical classifications for efficient pivot table analysis (Entity Model).
+  Fetches ONLY Cat fields from all researchers for fast queries and small payloads.
+  Uses Opportunity → Domain → Research_* collections (entity model).
+  Use this for opportunity dashboards, pipeline analysis, and categorical pivots with entity model.
+
+# THIS IS AN OPTIMIZED DATA MODEL FOR PIVOT TABLES (ENTITY MODEL)
+# Fetches opportunity fields + domain Cat fields (no LLM or research fields)
+# 3-4x faster than opportunity_with_account due to smaller payload
+# Uses Opportunity → Domain → Research_* (entity model) instead of Company_opportunity → Company_source → Company_research_*
+
+# Tagging system
+tags:
+  - sales
+  - pipeline
+  - opportunities
+  - categories
+  - pivot-tables
+  - efficient
+  - cat-fields
+  - entity-model
+
+# Core search configuration
+search_type: graphql
+executor: graphql
+
+# 🎨 Frontend Display Control
+display: true  # User-facing card for efficient opportunity dashboards (entity model)
+
+# Data model definition (Entity Model)
+collection: Opportunity
+
+parameters:
+  type: graphql
+  collection: Opportunity
+
+  # Relationship configuration
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Default settings
+  limit: 10000  # Support large batch operations (categorical data has small payload)
+  limit_default: 10000
+
+# 🎯 TAG-BASED FILTERING - Fetch ONLY Cat fields for efficient pivot tables
+# This ensures we only get categorical classifications, not full research data
+field_tags:
+  - Cat  # Only Cat fields from Research_* collections
+
+# Collections configuration (Entity Model)
+collections:
+  # Primary collection: Opportunity (Entity Model)
+  - collection: Opportunity
+    uses_field_set: standard  # Opportunity fields (stage, amount, probability)
+    primary: true
+    
+    # Reference to Domain (Entity Model) via domainBeacon
+    references:
+      domainBeacon:
+        target_collection: Domain
+        field_set: standard  # Domain identity fields (title, domain, entityType)
+        # ✅ AUTO-DISCOVERY: System automatically discovers ALL nested references
+        # Auto-discovers Research_* collections (entity model)
+        # field_tags=[Cat] applied to ALL nested references
+        relationship_traversal: true
+        dynamic_templates: true
+
+# Field sets
+field_sets:
+  standard:
+    - opportunityName  # Display name for opportunities
+    - stage
+    - amount
+    - probability
+    - closeDate
+    - won
+    - closed
+    - won_amount
+    - win_rate
+    - domain  # Domain field for reference lookup
+    # All standard opportunity fields
+
+# Use cases
+use_cases:
+  - "Opportunity pivot tables by domain categories"
+  - "Pipeline analysis by industry, use case, etc. (entity model)"
+  - "Opportunity distribution by domain categories"
+  - "Sales metrics by domain research dimensions"
+
+# Performance notes
+performance:
+  - 3-4x faster than opportunity_with_account
+  - Cat fields only (no LLM/research bloat)
+  - Optimized for pivot tables
+
+# Comparison with other cards
+comparison:
+  opportunity_with_account: "All fields (complete) - comprehensive but slower (legacy model)"
+  opportunity_with_company_categories: "Cat fields only - fast and efficient for pivot tables (legacy model)"
+  opportunity_with_domain_categories: "Cat fields only - fast and efficient for pivot tables (entity model) - THIS CARD"
+
+# Data model summary
+data_model:
+  primary_collection: Opportunity
+  reference_path: Opportunity → Domain (via domainBeacon) → Research_* (auto-discovered)
+  field_selection:
+    - Opportunity: Standard fields (stage, amount, probability)
+    - Domain: Standard fields (title, domain, entityType)
+    - Research_*: Cat fields only (categorical classifications)
+  excluded_fields:
+    - LLM fields (detailed analysis - use opportunity_with_account instead)
+    - Research fields (raw data - use opportunity_with_account instead)
+
+# Example queries
+examples:
+  - description: "Fetch opportunities with domain categories"
+    query: "data_card_id: opportunity_with_domain_categories, limit: 100"
+  - description: "Pipeline analysis by domain categories"
+    query: "data_card_id: opportunity_with_domain_categories, limit: 100"
+  - description: "Opportunity metrics by domain research dimensions"
+    query: "data_card_id: opportunity_with_domain_categories, limit: 100"
