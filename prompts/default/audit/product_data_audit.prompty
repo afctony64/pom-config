@@ -1,0 +1,72 @@
+---
+name: Product Data Quality Audit
+description: Analyze product research data quality and provide actionable recommendations
+processing_config:
+  mode: report
+inputs:
+  audit_table:
+    description: Markdown table of field coverage data
+    type: string
+  total_records:
+    description: Total number of records audited
+    type: number
+  field_stats:
+    description: Summary statistics per field
+    type: object
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-4o
+  parameters:
+    temperature: 0.3
+    max_tokens: 2000
+---
+system:
+You are a data quality analyst reviewing research collection health.
+
+Your task: Analyze the audit data and provide actionable recommendations.
+
+user:
+# Product Research Data Quality Audit
+
+## Summary Statistics
+- **Total Records:** {{ total_records }}
+
+## Field Coverage Statistics
+{% if field_stats %}
+| Field | Populated | Coverage |
+|-------|-----------|----------|
+{% for field, stats in field_stats.items() %}
+| {{ field }} | {{ stats.count }}/{{ total_records }} | {{ stats.pct }}% |
+{% endfor %}
+{% endif %}
+
+## Sample Records (20)
+{{ audit_table }}
+
+---
+
+## Your Analysis
+
+Please provide:
+
+### 1. Critical Issues (Blocking)
+Identify fields with 0% or very low coverage that need immediate attention.
+
+### 2. Data Quality Patterns
+What patterns do you see? Are certain field types consistently missing?
+
+### 3. Root Cause Hypothesis
+Based on the patterns, what might be causing the gaps?
+
+### 4. Recommended Actions
+Specific commands or steps to fix the issues, prioritized by impact:
+- Which prompts/tools to run
+- Expected improvement
+- Estimated effort
+
+### 5. Quality Score
+Rate overall data readiness (1-10) with justification.
+
+Be specific and actionable. Reference actual field names and percentages.

@@ -1,0 +1,72 @@
+---
+name: Research Quality Audit
+description: Analyze research data quality, identify gaps, and provide recommendations
+processing_config:
+  mode: report
+inputs:
+  company_name:
+    description: Company being analyzed
+    type: string
+    default: ""
+  domain:
+    description: Company domain
+    type: string
+    default: ""
+  # Assets injected directly by report execution engine
+  product_fields_audit:
+    description: Product research fields table (from fieldset_table view card)
+    type: string
+    default: ""
+  classification_summary:
+    description: Classification summary table (from cat_table view card)
+    type: string
+    default: ""
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-4o
+  parameters:
+    temperature: 0.3
+    max_tokens: 1500
+
+# Disable post-processors - this is an analysis report, not data generation
+post_execution_tools: []
+---
+# Gap Analysis: {{ company_name | default(domain, true) }}
+
+Analyze this research data and identify GAPS (empty/missing fields).
+
+## Product Research Fields
+
+{{ product_fields_audit }}
+
+## Classification Summary
+
+{{ classification_summary }}
+
+## Your Analysis
+
+### 🔴 GAPS FOUND
+List fields with EMPTY values from the tables above:
+- **Field Name** → Why it's important → How to fix
+
+### 📊 COVERAGE SCORE
+Count fields from the Product Research table: Populated vs Empty
+- Score: X%
+
+### 🛠️ FIX COMMANDS
+```bash
+# Fill LLM gaps
+docker exec pomothy-backend python -m pom_core.cli.pomflow_cli llm_gap_filler --domain {{ domain }} --researcher product
+
+# Run classification
+docker exec pomothy-backend python -m pom_core.cli.cat_cli --domain {{ domain }} --all-researchers
+```
+
+### ⚡ PRIORITY
+1. **Critical**: Fields blocking reports
+2. **Important**: Fields affecting analysis quality
+3. **Nice-to-have**: Optional enrichment
+
+Be concise. Reference actual field names from the tables.
