@@ -1,7 +1,7 @@
 type: core
-class: Company_opportunity
-description: Schema for company opportunities with flat field structure (no sourceData
-  nesting)
+class: Opportunity
+id: Opportunity
+description: Schema for opportunities with flat field structure (Entity Model - no sourceData nesting)
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -572,20 +572,23 @@ properties:
     description: Company source UUIDs
 
 references:
+- name: domainBeacon
+  target_collection: Domain
+  uuid_source_field: core_url
+  auto_flatten: false
+  description: "Entity Model reference to Domain (the URL/domain IS the entity)"
 - name: sourceEntity
   target_collection: Company_source
-  description: Source entity reference
+  description: "LEGACY: Source entity reference (Company Model)"
 - name: company
   target_collection: Company_source
   uuid_source_field: accountId
   auto_flatten: true
-  description: Reference to the Company_source record using accountId as the lookup
-    key
+  description: "LEGACY: Reference to the Company_source record using accountId as the lookup key (Company Model)"
 group: company
 weaviate_instance: cloud
-collection_name: Company_opportunity
-id: Company_opportunity
-name: Opportunity
+collection_name: Opportunity
+id: Opportunity
 field_sets:
   system:
   - uuid
