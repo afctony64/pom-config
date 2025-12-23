@@ -1,95 +1,79 @@
-# Core Default Prompts
+# Default Prompts
 
-**Purpose:** Core prompts available to all applications as defaults.
-
----
-
-## ⚠️ DEPRECATION NOTICE (December 2024)
-
-**Most prompts in this directory are DEPRECATED.**
-
-Only the following should remain in pom-core:
-- `classifiers/` - Shared utility classifiers
-
-All other prompts are deprecated and should use their canonical versions in PomAI or Pomothy.
-
-See the parent [README.md](../README.md) for full deprecation details.
+> **Status:** Only shared classifiers remain active
 
 ---
 
-## 📁 Structure
+## ✅ Active Prompts (Shared Classifiers)
+
+Only these prompts should be used from `default/`:
 
 ```
 default/
-├── classifiers/     # ✅ KEEP - Shared utility classifiers
-├── benchmark/       # ⚠️ DEPRECATED - Use PomAI version
-├── company/         # ⚠️ DEPRECATED - Use PomAI/Pomothy version
-├── researchers/     # ⚠️ DEPRECATED - Use PomAI version
-└── utility/         # ⚠️ DEPRECATED - Use PomAI version
+└── classifiers/
+    ├── enum_classifier.prompty         # Universal enum classification
+    └── parallel_array_enricher.prompty # Parallel array processing
 ```
 
----
-
-## ✅ Prompts That Belong Here
-
-### Shared Classifiers
-These are correctly in pom-core because they're used by multiple applications:
-
-| Prompt | Purpose |
-|--------|---------|
-| `classifiers/enum_classifier.prompty` | Universal enum classification |
-| `classifiers/parallel_array_enricher.prompty` | Parallel array processing |
+These are **shared utilities** used by multiple applications and are intentionally kept here.
 
 ---
 
-## 🎯 Usage
+## ⚠️ Deprecated Content Moved to Archive
 
-### In pom-core (testing):
+All other prompts that were in `default/` have been **moved to `_archive/`**.
+
+| Old Location | Status | Canonical Location |
+|--------------|--------|--------------------|
+| `default/researchers/` | 🗄️ Archived | `researchers/` |
+| `default/company/` | 🗄️ Archived | `company/` |
+| `default/utility/` | 🗄️ Archived | `utility/` and `seed/` |
+| `default/benchmark/` | 🗄️ Archived | `benchmarks/` |
+
+**See:** `prompts/_archive/README.md` for full mapping.
+
+---
+
+## Usage
+
+### Accessing Classifiers
+
 ```python
-from pom_core.services.core_prompty_service import CorePromptyService
+from pom_core.services.core_model_service import get_core_model_service
 
-service = CorePromptyService()
-# Finds: pom_core/config/prompts/default/classifiers/enum_classifier.prompty
+service = get_core_model_service()
+
+# Access shared classifiers (both paths work)
 template = service.get_template("default/classifiers/enum_classifier")
-```
-
-### In Apps (PomAI/Pomothy):
-```python
-# Search order:
-# 1. App prompts: core/config/prompts/classifiers/enum_classifier.prompty (if exists)
-# 2. pom-core defaults: pom_core/config/prompts/default/classifiers/enum_classifier.prompty (fallback)
-
-service = CorePromptyService()
-# Uses app-specific first, falls back to pom-core default
+# OR
 template = service.get_template("classifiers/enum_classifier")
 ```
 
----
+### For Other Prompts
 
-## ✅ Benefits
+Use the canonical locations without `default/` prefix:
 
-1. **Single Source of Truth** - Shared classifiers in pom-core
-2. **No Duplication** - Apps don't need to copy shared classifiers
-3. **Easy Override** - Apps can override with app-specific versions
-4. **Clear Ownership** - App-specific prompts stay in apps
+```python
+# ✅ CORRECT - Use canonical paths
+template = service.get_template("researchers/researcher")
+template = service.get_template("company/company_deep_dive_intelligence")
 
----
-
-## 📝 Adding Prompts
-
-When adding a new prompt:
-
-1. **Is it a shared classifier/utility?** - Used by multiple apps?
-   - ✅ Yes → Add to `default/classifiers/`
-   - ❌ No → Add to the owning app (PomAI or Pomothy)
-
-2. **Is it app-specific research/chat?**
-   - Research prompts → Add to **PomAI**
-   - Chat prompts → Add to **Pomothy**
-   - ❌ Do NOT add app-specific prompts to pom-core
+# ❌ WRONG - These are archived
+# template = service.get_template("default/researchers/researcher")
+```
 
 ---
 
-**Related:** Issue #269 - Deprecate duplicate prompts
+## Why Only Classifiers?
 
-**Status:** Deprecated prompts remain for backward compatibility but should not be used for new development.
+Classifiers are:
+1. **Truly shared** - Used identically by all Pom applications
+2. **Infrastructure-level** - Not app-specific business logic
+3. **Stable** - Rarely change once defined
+
+All other prompts (researchers, company, etc.) are **application-level** and belong 
+in their canonical locations where they can be versioned and evolved appropriately.
+
+---
+
+*Last updated: December 2024*
