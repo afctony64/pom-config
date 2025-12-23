@@ -1,0 +1,22 @@
+id: stress-test-tenant
+name: Stress Test Tenant
+type: tenant
+description: Dedicated tenant for Weaviate stress testing (extended tests)
+groups: ["testing"]
+
+# Minimal config for stress tests
+user:
+  name: Stress Tester
+  email: stress@test.local
+  role: Stress Tester
+
+analysis_config:
+  mission: "Stress testing Weaviate performance under load"
+  industry_focus: ["testing", "performance"]
+
+# Collection routing for stress test collections
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
+collections:
+  StressTestCollection: "mac"
+  IsolationTestCollection: "mac"
+  Company_source: "mac"

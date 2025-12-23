@@ -116,8 +116,8 @@ properties:
   - customer
   - research
   sets:
-  - extended
   - prompt
+  - array
 - name: keyCustomersIds
   dataType:
   - text[]
@@ -128,8 +128,8 @@ properties:
   tags:
   - system
   sets:
-  - extended
   - prompt
+  - array
 - name: keyCustomerSizeCat
   dataType:
   - text[]
@@ -152,8 +152,8 @@ properties:
   - Cat
   - research
   sets:
-  - extended
   - EnumCat
+  - array
 - name: productUsed
   dataType:
   - text[]
@@ -167,8 +167,8 @@ properties:
   tags:
   - research
   sets:
-  - extended
   - prompt
+  - array
 - name: primaryUseCase
   dataType:
   - text[]
@@ -182,8 +182,8 @@ properties:
   tags:
   - research
   sets:
-  - extended
   - prompt
+  - array
 - name: keyCustomerEvidence
   dataType:
   - text[]
@@ -198,8 +198,8 @@ properties:
   - research
   - evidence
   sets:
-  - extended
   - prompt
+  - array
 - name: customerProfile
   dataType:
   - text
@@ -220,7 +220,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - array
   metadata:
     parallel_to: useCaseCat
 - name: primaryUseCases
@@ -231,8 +231,8 @@ properties:
   tags:
   - research
   sets:
-  - extended
   - prompt
+  - array
 - name: valueProposition
   dataType:
   - text
@@ -261,8 +261,8 @@ properties:
   tags:
   - research
   sets:
-  - extended
   - prompt
+  - array
 - name: growthOpportunity
   dataType:
   - text
@@ -581,9 +581,9 @@ properties:
   - research
   - industry
   sets:
-  - extended
   - prompt
   - EnumCat
+  - array
 - name: keyCustomerNAICS
   dataType:
   - text[]
@@ -600,8 +600,8 @@ properties:
   - industry
   - LLM
   sets:
-  - extended
   - prompt
+  - array
 - name: keyCustomerIndustryCat
   dataType:
   - text[]
@@ -644,9 +644,9 @@ properties:
   - research
   - industry
   sets:
-  - extended
   - prompt
   - EnumCat
+  - array
 - name: keyCustomerIndustrySegmentLLM
   dataType:
   - text[]
@@ -663,8 +663,8 @@ properties:
   - industry
   - segment
   sets:
-  - extended
   - prompt
+  - array
 - name: keyCustomerIndustrySegmentCat
   dataType:
   - text[]

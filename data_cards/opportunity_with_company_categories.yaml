@@ -23,8 +23,10 @@ tags:
   - cat-fields
 
 # Core search configuration
-search_type: graphql
-executor: graphql
+# ✅ UPDATED: Use native fetch executor (GraphQL removed)
+# Native executor supports nested references via QueryReference
+search_type: graphql  # Kept for compatibility, but executor uses native methods
+executor: fetch  # Native fetch executor (supports nested references)
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for efficient opportunity dashboards
@@ -33,12 +35,17 @@ display: true  # User-facing card for efficient opportunity dashboards
 collection: Company_opportunity
 
 parameters:
-  type: graphql
+  type: graphql  # Kept for compatibility
   collection: Company_opportunity
 
   # Relationship configuration
   relationship_traversal: true
   dynamic_templates: true
+  
+  # ✅ FIX #318: Enable nested reference auto-discovery for Company_source
+  # Nested references (10 researchers) are auto-discovered from cached tenant group config
+  # No performance overhead - uses cached config, not schema discovery
+  auto_discover_nested_references: true
 
   # ❌ REMOVED: Explicit references list (conflicts with auto-discovery in collections section)
   # See collections[0].references.company for reference configuration with auto-discovery

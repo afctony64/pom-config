@@ -60,54 +60,54 @@ data_sources:
   #   - data_sources.taxonomy
   #   - data_sources.seed_files
 
-# Weaviate instance routing (REQUIRED for tenant isolation)
+# Collection routing (REQUIRED for tenant isolation)
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
 # Prismatic tenant routes to Weaviate Cloud for production data
 # Credentials come from environment variables (.env) - tenant just specifies instance
-weaviate_routing:
-  collections:
-    # LEGACY COMPANY MODEL: Company_* collections (for backward compatibility with tests)
-    Company_source: "cloud"
-    Company_opportunity: "cloud"
-    # ENTITY MODEL: Opportunity collection (new entity model)
-    Opportunity: "cloud"
-    Company_research_competitor: "cloud"
-    Company_research_customer: "cloud"
-    Company_research_financial: "cloud"
-    Company_research_industry: "cloud"
-    Company_research_journalist: "cloud"
-    Company_research_leadership: "cloud"
-    Company_research_partner: "cloud"
-    Company_research_product: "cloud"
-    Company_research_risk: "cloud"
-    Company_research_social: "cloud"
+collections:
+  # LEGACY COMPANY MODEL: Company_* collections (for backward compatibility with tests)
+  Company_source: "cloud"
+  Company_opportunity: "cloud"
+  # ENTITY MODEL: Opportunity collection (new entity model)
+  Opportunity: "cloud"
+  Company_research_competitor: "cloud"
+  Company_research_customer: "cloud"
+  Company_research_financial: "cloud"
+  Company_research_industry: "cloud"
+  Company_research_journalist: "cloud"
+  Company_research_leadership: "cloud"
+  Company_research_partner: "cloud"
+  Company_research_product: "cloud"
+  Company_research_risk: "cloud"
+  Company_research_social: "cloud"
 
-    # ENTITY MODEL: Research_* collections - all on Cloud
-    Research_competitor: "cloud"
-    Research_customer: "cloud"
-    Research_financial: "cloud"
-    Research_industry: "cloud"
-    Research_journalist: "cloud"
-    Research_leadership: "cloud"
-    Research_partner: "cloud"
-    Research_product: "cloud"
-    Research_risk: "cloud"
-    Research_social: "cloud"
+  # ENTITY MODEL: Research_* collections - all on Cloud
+  Research_competitor: "cloud"
+  Research_customer: "cloud"
+  Research_financial: "cloud"
+  Research_industry: "cloud"
+  Research_journalist: "cloud"
+  Research_leadership: "cloud"
+  Research_partner: "cloud"
+  Research_product: "cloud"
+  Research_risk: "cloud"
+  Research_social: "cloud"
 
-    # Domain collection (source for Entity Model) - on Cloud
-    Domain: "cloud"
+  # Domain collection (source for Entity Model) - on Cloud
+  Domain: "cloud"
 
-    # Page collections (group: url) - GPU-accelerated on Spark
-    Page_facts: "spark"
-    Page_intelligence: "spark"
-    Page_content: "spark"
-    Page_researcher: "spark"
-    Page_source: "spark"
+  # Page collections (group: url) - GPU-accelerated on Spark
+  Page_facts: "spark"
+  Page_intelligence: "spark"
+  Page_content: "spark"
+  Page_researcher: "spark"
+  Page_source: "spark"
 
-    # Knowledge base (for RAG and training data) - on Spark
-    Knowledge_base: "spark"
+  # Knowledge base (for RAG and training data) - on Spark
+  Knowledge_base: "spark"
 
-    # Fact base (canonical facts per Domain × Researcher × Source) - on Spark
-    Fact_base: "spark"
+  # Fact base (canonical facts per Domain × Researcher × Source) - on Spark
+  Fact_base: "spark"
 
-    # API cache (external API responses) - on Spark
-    API_intelligence: "spark"
+  # API cache (external API responses) - on Spark
+  API_intelligence: "spark"

@@ -183,7 +183,7 @@ properties:
   - leadership
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: keyExecutivesIds
   dataType:
@@ -193,7 +193,7 @@ properties:
   - research
   - system
   sets:
-  - extended
+  - array
   - prompt
 - name: keyExecutiveEvidence
   dataType:
@@ -209,7 +209,7 @@ properties:
   - research
   - evidence
   sets:
-  - extended
+  - array
   - prompt
 - name: executiveBackgrounds
   dataType:
@@ -225,7 +225,7 @@ properties:
   - leadership
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: executiveRoles
   dataType:
@@ -239,7 +239,7 @@ properties:
   - leadership
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: executiveTenure
   dataType:
@@ -253,7 +253,7 @@ properties:
   - leadership
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: executiveLinkedIn
   dataType:
@@ -296,7 +296,7 @@ properties:
   - leadership
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: dataSource
   dataType:
@@ -490,7 +490,7 @@ properties:
   dataType:
   - number[]
   sets:
-  - extended
+  - array
   - prompt
   moduleConfig:
     text2vec-weaviate:
@@ -500,7 +500,7 @@ properties:
   dataType:
   - number[]
   sets:
-  - extended
+  - array
   - prompt
   moduleConfig:
     text2vec-weaviate:
@@ -517,7 +517,7 @@ properties:
   dataType:
   - number[]
   sets:
-  - extended
+  - array
   - prompt
   moduleConfig:
     text2vec-weaviate:

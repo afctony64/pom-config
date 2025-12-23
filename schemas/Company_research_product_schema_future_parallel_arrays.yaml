@@ -217,7 +217,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - array
   metadata:
     parallel_to: productTypeCat
 - name: productTypeCat
@@ -306,7 +306,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - array
   metadata:
     parallel_to: productTypeCat
 - name: technologyStackCat
@@ -407,7 +407,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: productsIds
   dataType:
@@ -420,7 +420,7 @@ properties:
   - research
   - system
   sets:
-  - extended
+  - array
   - prompt
 - name: productCategories
   dataType:
@@ -434,7 +434,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: productCategoryLLM
   dataType:
@@ -445,7 +445,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - array
   metadata:
     parallel_to: productCategoryCat
 - name: productCategoryCat
@@ -505,7 +505,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: productFeatures
   dataType:
@@ -520,7 +520,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: productMaturityLLM
   dataType:

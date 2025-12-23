@@ -278,7 +278,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - array
   metadata:
     parallel_to: industrySegmentCat
 - name: naicsCode
@@ -291,7 +291,7 @@ properties:
   - industry
   - research
   sets:
-  - extended
+  - array
   - prompt
   metadata:
     parallel_to: industrySegmentCat
@@ -303,7 +303,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
   metadata:
     parallel_to: industrySegmentCat
@@ -319,7 +319,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - array
   metadata:
     parallel_to: industrySegmentCat
 - name: businessModelCat
@@ -376,7 +376,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - array
   metadata:
     parallel_to: industrySegmentCat
 - name: deliveryModelCat

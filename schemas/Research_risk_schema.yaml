@@ -165,7 +165,7 @@ properties:
   - research
   - security
   sets:
-  - extended
+  - array
   - prompt
 - name: securityDocumentation
   dataType:
@@ -230,7 +230,7 @@ properties:
   - compliance
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: privacyPolicy
   dataType:
@@ -298,7 +298,7 @@ properties:
   - regulatory
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: regulatoryBurden
   dataType:
@@ -321,7 +321,7 @@ properties:
   - research
   - risk
   sets:
-  - extended
+  - array
   - prompt
 - name: marketRiskFactors
   dataType:
@@ -333,7 +333,7 @@ properties:
   - research
   - risk
   sets:
-  - extended
+  - array
   - prompt
 - name: riskProfile
   dataType:

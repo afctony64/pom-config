@@ -130,7 +130,7 @@ properties:
   - partner
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: keyPartnersIds
   dataType:
@@ -140,7 +140,7 @@ properties:
   - research
   - system
   sets:
-  - extended
+  - array
   - prompt
 - name: keyPartnerEvidence
   dataType:
@@ -156,7 +156,7 @@ properties:
   - research
   - evidence
   sets:
-  - extended
+  - array
   - prompt
 - name: partnerTypes
   dataType:
@@ -170,7 +170,7 @@ properties:
   - partner
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: partnerValue
   dataType:
@@ -184,7 +184,7 @@ properties:
   - partner
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: integrationLLM
   dataType:
@@ -205,7 +205,7 @@ properties:
   - research
   - technical
   sets:
-  - extended
+  - array
   - prompt
 - name: marketplacePresence
   dataType:
@@ -216,7 +216,7 @@ properties:
   - partner
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: ecosystemRole
   dataType:

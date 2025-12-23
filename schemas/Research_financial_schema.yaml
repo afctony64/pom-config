@@ -164,7 +164,7 @@ properties:
   - funding
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: keyFinancialMetrics
   dataType:
@@ -175,7 +175,7 @@ properties:
   - metrics
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: growthVelocityLLM
   dataType:
@@ -285,7 +285,7 @@ properties:
   - investors
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: valuation
   dataType:

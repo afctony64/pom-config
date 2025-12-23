@@ -156,7 +156,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - spawn
   - prompt
 - name: keyCompetitorsIds
@@ -167,7 +167,7 @@ properties:
   - research
   - system
   sets:
-  - extended
+  - array
   - prompt
 - name: competitorDomain
   dataType:
@@ -177,7 +177,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - spawn
   - prompt
 - name: keyCompetitorEvidence
@@ -194,7 +194,7 @@ properties:
   - research
   - evidence
   sets:
-  - extended
+  - array
   - prompt
 - name: competitorPositioning
   dataType:
@@ -206,7 +206,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: competitorPriceVs
   dataType:
@@ -218,7 +218,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: competitorAdvantagesVs
   dataType:
@@ -231,7 +231,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: competitorGapsVs
   dataType:
@@ -244,7 +244,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: competitorTargetMarket
   dataType:
@@ -256,7 +256,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - spawn
   - prompt
 - name: differentiationFactors
@@ -266,7 +266,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: competitiveAdvantages
   dataType:
@@ -275,7 +275,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: competitiveThreats
   dataType:
@@ -284,7 +284,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: marketSize
   dataType:
@@ -302,7 +302,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: competitorAnalysisLLM
   dataType:

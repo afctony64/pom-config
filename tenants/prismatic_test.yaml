@@ -1,0 +1,40 @@
+id: prismatic_test
+name: Prismatic Test (Local)
+type: tenant
+description: Local test instance of Prismatic tenant for dry-run testing schema migrations and data restoration
+groups: ["company", "url"]
+
+# User/persona information
+user:
+  name: Prismatic Test User
+  email: prismatic-test@pom-core.org
+  role: Schema Migration Tester
+
+# Analysis configuration
+analysis_config:
+  mission: "Local test environment for Prismatic schema migration and data restoration testing"
+  industry_focus: ["schema_migration", "data_restoration", "production_simulation"]
+
+# Data sources configuration
+data_sources:
+  data_dir: "Data"
+  upload_dir: "Data/uploads"
+
+# Collection routing - ALL collections route to mac-weaviate for testing
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
+collections:
+  # Company collections
+  Company_source: "mac"
+  Company_opportunity: "mac"
+  Company_research_competitor: "mac"
+  Company_research_customer: "mac"
+  Company_research_financial: "mac"
+  Company_research_industry: "mac"
+  Company_research_journalist: "mac"
+  Company_research_leadership: "mac"
+  Company_research_partner: "mac"
+  Company_research_product: "mac"
+  Company_research_risk: "mac"
+  Company_research_social: "mac"
+  Domain: "mac"
+

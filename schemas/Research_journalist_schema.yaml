@@ -142,7 +142,7 @@ properties:
   - press
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: pressReleaseCount
   dataType:

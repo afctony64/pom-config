@@ -207,7 +207,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: socialEngagementScore
   dataType:
@@ -259,7 +259,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: socialProofIndicators
   dataType:
@@ -268,7 +268,7 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - array
   - prompt
 - name: platformPresenceLLM
   dataType:

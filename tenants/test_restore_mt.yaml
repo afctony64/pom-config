@@ -1,0 +1,28 @@
+id: test_restore_mt
+name: Test Restore Multi-Tenancy
+type: tenant
+description: Test tenant for restore multitenancy tests
+groups: ["company"]
+
+# User/persona information (configuration data)
+user:
+  name: Test Restore User
+  email: test-restore@testdb.org
+  role: Restore Tester
+
+# Analysis configuration
+analysis_config:
+  mission: "Test database for restore multitenancy validation"
+  industry_focus: ["restore_testing", "multitenancy_testing"]
+
+# Data sources configuration
+data_sources:
+  data_dir: "Data"
+  upload_dir: "Data/uploads"
+
+# Collection routing - ALL collections route to mac-weaviate for testing
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
+collections:
+  # Company collections
+  Company_research_customer: "mac"
+  Company_source: "mac"
