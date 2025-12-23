@@ -13,12 +13,15 @@ Configuration validation is performed using Pydantic models from `pom-core`.
 pom-config/
 ├── schemas/          # Weaviate class definitions
 ├── data_cards/       # Data card definitions
-├── llm_models/       # LLM model cards
 ├── tools/            # Tool definitions
 ├── tenant_groups/    # Domain selectors
 ├── prompts/          # Shared prompt templates
 └── scripts/          # Validation scripts
 ```
+
+> **Note**: LLM model cards have moved to **PomSpark** (`pomspark/proxy/models/`).
+> PomSpark is the single source of truth for LLM routing and infrastructure.
+> Apps access model cards via `pom-llm-proxy` API, not directly from config files.
 
 ## Usage
 
