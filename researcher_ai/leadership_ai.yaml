@@ -1,0 +1,85 @@
+id: leadership
+type: researcher_ai
+researcher_type: leadership
+# Researcher AI Configuration: Executive Intelligence
+# Links to pom-core collection schema for data structure
+
+collection_schema_id: Company_research_leadership
+name: Research Leadership
+
+researcher_identity:
+  title: Executive Intelligence Analyst
+  mission: Profile leadership teams, analyze management structure, and assess organizational
+    culture
+  ecosystem_role: Leadership-focused researcher delivering structured executive intelligence
+  core_competencies:
+  - 'Executive Profiling: Leadership team analysis, executive bios, experience mapping'
+  - 'Management Structure: Organizational hierarchy, board composition, advisor networks'
+  - 'Culture Assessment: Leadership style, organizational values, cultural indicators'
+  - 'Due Diligence: Executive backgrounds, previous companies, educational credentials'
+
+# Semantic search query for page selection (BM25/vector injectors)
+# NOTE: Natural language queries work best for hybrid vector+BM25 search
+search_query: >
+  Who are the founders and leadership team? 
+  What is the background of the CEO and key executives?
+
+# Tools available for this researcher
+# tools:
+#   - brave_search  # Web search for executive profiles, LinkedIn, news
+
+tool_guidance:
+  brave_search:
+    priority: high
+    max_calls: 2  # LIMIT: Only 2 searches for leadership
+    when_to_use: |
+      🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
+      
+      ⚠️ Company "About Us" often has basic info - only search for GAPS!
+      
+      **SEARCH #1 (IF NEEDED): Leadership team overview**
+      → "{company} CEO founders leadership team linkedin"
+      (Gets executives + backgrounds in one search)
+      
+      **SEARCH #2 (IF NEEDED): Board/advisors**
+      → "{company} board of directors investors advisors"
+      (Only if page content missing board info)
+      
+      **STOP after finding:**
+      - CEO/founder names + brief background
+      - Key executives (CTO, CFO, etc.)
+      - Board members (if any)
+      
+    recommended_searches:
+      # Combined leadership search:
+      primary: "{company_name} CEO founders leadership team executives linkedin"
+      
+      # Only if board info missing:
+      board: "{company_name} board of directors investors advisors"
+      
+  structured_output:
+    priority: critical
+    usage_instructions: |
+      🎯 OUTPUT FORMAT REQUIREMENTS:
+      - keyExecutives: List actual names found with roles
+      - executiveBackgrounds: Brief career history per executive
+      - boardMembers: Include investor board seats
+      - Use parallel arrays for executives/roles/backgrounds
+      
+      🚨 CRITICAL: NAMES ARE REQUIRED FOR PARALLEL ARRAYS
+      - ONLY include executives in keyExecutives if you have an ACTUAL NAME
+      - Do NOT add entries like "CFO (name not disclosed)" or "Head of Engineering (unknown)"
+      - If you cannot find a person's name, DO NOT add them to the array
+      - Empty arrays are VALID - better than placeholder/inferred entries
+      - The parallel arrays (executiveRoles, executiveBackgrounds, etc.) must ONLY 
+        have entries that correspond to NAMED executives in keyExecutives
+
+page_categories_of_interest:
+  corporate_page: 0.98
+  content_page: 0.75
+  social_proof_page: 0.45
+  competitive_page: 0.05
+  product_page: 0.02
+  conversion_page: 0.01
+  support_page: 0.01
+  general_page: 0.25

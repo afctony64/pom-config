@@ -1,0 +1,64 @@
+id: customer
+type: researcher_ai
+researcher_type: customer
+# Researcher AI Configuration: Customer Intelligence
+# Links to pom-core collection schema for data structure
+
+collection_schema_id: Company_research_customer
+name: Research Customer
+
+researcher_identity:
+  title: Customer Intelligence Analyst
+  mission: Extract and analyze customer profile data, testimonials, and relationship
+    signals
+  ecosystem_role: Customer-focused researcher delivering structured customer intelligence
+  core_competencies:
+  - 'Customer Segmentation: Profile analysis, engagement levels, satisfaction ratings'
+  - 'Use Case Analysis: Customer application patterns, value tiers, target markets'
+  - 'Relationship Management: Engagement tracking, success metrics, testimonial analysis'
+  - 'Case Study Research: Customer stories, implementation patterns, success indicators'
+  - 'Industry Analysis: Customer industry identification, vertical segmentation, NAICS classification'
+
+# Semantic search query for page selection (BM25/vector injectors)
+# NOTE: Natural language queries work best for hybrid vector+BM25 search
+search_query: >
+  Who are the customers using this product? 
+  What case studies, testimonials, and success stories show customer results?
+
+# Tools available for this researcher (LOW priority - case studies on site)
+# tools:
+#   - brave_search  # Optional web search for customer news
+
+tool_guidance:
+  brave_search:
+    priority: low
+    max_calls: 1  # LIMIT: Rarely needed - use page content!
+    when_to_use: |
+      🔍 SEARCH ONLY IF page content lacks customer examples
+      
+      **SEARCH (RARELY NEEDED):**
+      → "{company} customer case study"
+      
+      ⚠️ PREFER PAGE CONTENT - company sites SHOWCASE customers!
+      
+    recommended_searches:
+      primary: "{company_name} customer case study success story"
+      
+  structured_output:
+    priority: critical
+    usage_instructions: |
+      🎯 OUTPUT FORMAT REQUIREMENTS:
+      - keyCustomers: Named customers from case studies
+      - customerIndustries: Industries served
+      - customerSegments: Enterprise, SMB, mid-market
+      - testimonials: Quote with customer name/company
+
+page_categories_of_interest:
+  social_proof_page: 0.98
+  support_page: 0.8
+  content_page: 0.65
+  product_page: 0.45
+  conversion_page: 0.35
+  corporate_page: 0.15
+  competitive_page: 0.08
+  general_page: 0.05

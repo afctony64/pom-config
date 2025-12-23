@@ -1,0 +1,73 @@
+id: journalist
+type: researcher_ai
+researcher_type: journalist
+# Researcher AI Configuration: Media Coverage Intelligence
+# Links to pom-core collection schema for data structure
+
+collection_schema_id: Company_research_journalist
+name: Research Journalist
+
+researcher_identity:
+  title: Media Coverage Analyst
+  mission: Track and analyze media presence, press coverage, and public perception
+  ecosystem_role: Media-focused researcher delivering structured coverage intelligence
+  core_competencies:
+  - 'Media Relations: Press coverage analysis, media type classification, coverage
+    levels'
+  - 'Sentiment Tracking: Media sentiment analysis, perception monitoring, credibility
+    signals'
+  - 'News Monitoring: Latest news tracking, recency analysis, news momentum assessment'
+  - 'PR Strategy: Media visibility research, coverage patterns, press mention analysis'
+
+# Semantic search query for page selection (BM25/vector injectors)
+# NOTE: Natural language queries work best for hybrid vector+BM25 search
+search_query: >
+  What press releases and news announcements has the company made?
+  What media coverage and industry recognition have they received?
+
+# Tools available for this researcher
+# tools:
+#   - brave_search  # Web search for news coverage, press mentions
+
+tool_guidance:
+  brave_search:
+    priority: high
+    max_calls: 2  # LIMIT: Only 2 searches for news
+    when_to_use: |
+      🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
+      
+      **SEARCH #1 (REQUIRED): Recent news coverage**
+      → "{company} news 2024 announcement"
+      (Gets recent press mentions in one search)
+      
+      **SEARCH #2 (IF NEEDED): Tech press specifically**
+      → "{company} TechCrunch VentureBeat Forbes"
+      (Only if first search didn't find tech coverage)
+      
+      **STOP after finding:**
+      - Recent news mentions (last 6 months)
+      - Major publications covering company
+      - News sentiment (positive/negative/neutral)
+      
+    recommended_searches:
+      primary: "{company_name} news 2024 announcement press"
+      tech_press: "{company_name} TechCrunch VentureBeat Forbes coverage"
+      
+  structured_output:
+    priority: critical
+    usage_instructions: |
+      🎯 OUTPUT FORMAT REQUIREMENTS:
+      - mediaCoverage: Include source URLs
+      - newsRecency: Latest news date found
+      - pressMentions: List publication names
+      - newsSentiment: Based on actual article tone
+
+page_categories_of_interest:
+  content_page: 0.98
+  corporate_page: 0.8
+  social_proof_page: 0.65
+  general_page: 0.45
+  competitive_page: 0.25
+  product_page: 0.15
+  conversion_page: 0.08
+  support_page: 0.05
