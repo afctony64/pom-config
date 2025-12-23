@@ -1,0 +1,91 @@
+---
+# 📐 24K CONTEXT WINDOW - OSS LOCAL MODELS
+# For models with 24K practical context (gpt-oss:20b, conservative Ollama)
+# DGX Spark 128GB can run multiple instances in parallel
+# Optimized for: Speed, parallelism, focused high-relevance content
+name: Researcher (24K Context - OSS)
+description: |
+  Optimized for 24K context window OSS models.
+  Minimal prompt overhead, maximum data efficiency.
+  Best for: gpt-oss:20b, batch processing, parallel workers.
+  DGX Spark: Can run 8-14 parallel workers depending on model.
+
+inputs:
+  record:
+    description: Company record data to analyze
+    type: object
+  researcher_id:
+    description: Dynamic researcher ID
+    type: string
+  pageData:
+    description: Injected page content from vector search
+    type: array
+    default: null
+
+data_requirements:
+  injectors:
+    # 📄 Page Facts - 24K OPTIMIZED
+    # Budget: ~40K chars for page data (~10K tokens)
+    # Using 25 highest-relevance chunks only
+    # alpha=0.95 for maximum vector relevance
+    - injector_template: page_facts_vector
+      template_vars:
+        domain: "{{ record.properties.domain if record.properties else record.domain }}"
+        researcher_type: "{{ record._researcher_id }}"
+        limit: 25  # 25 chunks × ~1.6K chars = ~40K chars
+        alpha: 0.95  # Higher alpha = stricter relevance filtering
+        inject_as: pageData
+
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-oss:20b
+  parameters:
+    temperature: 0.7
+    max_tokens: 2000
+    response_format:
+      type: json_object
+
+processing_config:
+  source_collection: Company_source
+  target_collections:
+    - Company_research_industry
+  max_turns: 5  # Minimal tool calling for speed
+  iteration_parameter: researcher_id
+  iteration_values: "ALL_RESEARCHERS"
+
+# Context budget (24K = ~96K chars):
+# - System prompt: ~2K tokens (~8K chars)
+# - Page data (25 chunks): ~10K tokens (~40K chars)
+# - Output: ~2K tokens (~8K chars)
+# - Buffer: ~10K tokens
+# Total: ~14K tokens used of 24K (58% utilization)
+---
+
+system:
+{% if researcher %}
+## RESEARCHER: {{ researcher.name or 'Business Analyst' }}
+{% if researcher.description %}{{ researcher.description[:200] }}{% endif %}
+{% endif %}
+
+{% if record %}
+{% set props = record.properties if record.properties else record %}
+## TARGET: {{ props.get('accountName') or props.get('company_name') or 'Unknown' }}
+Domain: {{ props.get('domain') or 'N/A' }}
+{% endif %}
+
+{% if pageData and pageData|length > 0 %}
+## SOURCE DATA ({{ pageData|length }} chunks)
+{% for page in pageData[:25] %}
+[{{ loop.index }}] {{ page.url }}
+{{ page.content[:1500] }}
+---
+{% endfor %}
+{% else %}
+## ⚠️ NO DATA - set confidence=low
+{% endif %}
+
+## TASK
+Analyze company. Return JSON matching schema exactly. Cite URLs.
+

@@ -1,0 +1,135 @@
+---
+name: Benchmark Analyzer
+description: Analyze benchmark results and provide actionable recommendations for strategy selection
+inputs:
+  record:
+    description: Analysis request with domain and task
+    type: object
+  benchmark_context:
+    description: Pre-loaded benchmark data from ComparisonLibrary
+    type: object
+    default: {}
+  researcher:
+    description: Researcher configuration
+    type: object
+  tenant:
+    description: Tenant configuration
+    type: object
+
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: qwen3:8b
+  parameters:
+    temperature: 0.3  # Low-medium for analytical but somewhat creative insights
+
+---
+# 🔬 BENCHMARK ANALYSIS REQUEST
+
+You are a performance analysis expert reviewing benchmark results for a fact extraction system.
+
+## 📋 TASK CONTEXT
+
+**Domain**: {{ record.properties.domain }}
+**Task**: {{ record.properties.task | default('fact_extraction') }}
+
+---
+
+## 📊 BENCHMARK DATA
+
+{% if benchmark_context is defined and benchmark_context %}
+{% if benchmark_context.benchmark_summary is defined %}
+### Summary
+{{ benchmark_context.benchmark_summary | tojson(indent=2) if benchmark_context.benchmark_summary is mapping else benchmark_context.benchmark_summary }}
+{% endif %}
+
+{% if benchmark_context.comparison_report is defined %}
+### Comparison Report
+{{ benchmark_context.comparison_report | tojson(indent=2) if benchmark_context.comparison_report is mapping else benchmark_context.comparison_report }}
+{% endif %}
+
+{% if benchmark_context.prior_prompt_results is defined %}
+### Historical Results
+{{ benchmark_context.prior_prompt_results | tojson(indent=2) if benchmark_context.prior_prompt_results is mapping else benchmark_context.prior_prompt_results }}
+{% endif %}
+{% else %}
+**⚠️ NO BENCHMARK DATA AVAILABLE**
+
+Unable to load benchmark history. Please run benchmarks first using:
+```
+python scripts/benchmark_cli.py --domain {{ record.properties.domain }} --flex ai_tools
+```
+{% endif %}
+
+---
+
+## 🎯 ANALYSIS REQUIREMENTS
+
+Analyze the benchmark data and provide:
+
+### 1. Executive Summary
+- Overall performance assessment
+- Key trends observed
+- Statistical significance of differences
+
+### 2. Key Findings
+Identify 3-5 key findings from the data:
+- Which variants perform best under which conditions?
+- Are there consistent winners or is it context-dependent?
+- Any surprising results or anomalies?
+
+### 3. Performance Rankings
+
+Identify the best performer for each criterion:
+- **Speed**: Fastest execution time
+- **Quality**: Highest fact count / entity count
+- **Coverage**: Best chunk utilization
+- **Overall**: Best balanced performer (throughput)
+
+### 4. Recommendations
+
+Provide actionable recommendations:
+- When to use each strategy
+- Suggested default configuration
+- Trade-offs to consider
+
+---
+
+## ⚠️ ANALYSIS GUIDELINES
+
+1. **Data-Driven**: Base all conclusions on the actual numbers
+2. **Quantify Differences**: Use percentages and concrete metrics
+3. **Consider Context**: Domain size and complexity matter
+4. **Practical Focus**: Make recommendations actionable
+5. **Acknowledge Uncertainty**: Note when data is insufficient
+
+---
+
+## 🚨 STRICT JSON OUTPUT REQUIRED
+
+**OUTPUT VALID JSON ONLY. NO MARKDOWN. NO CODE BLOCKS.**
+
+The JSON must have this exact structure:
+
+{
+  "summary": "One paragraph executive summary...",
+  "key_findings": [
+    "Finding 1 with specific metrics...",
+    "Finding 2 with specific metrics...",
+    "Finding 3 with specific metrics..."
+  ],
+  "best_for_speed": "variant_name or null",
+  "best_for_quality": "variant_name or null",
+  "best_for_coverage": "variant_name or null",
+  "best_overall": "variant_name or null",
+  "recommendations": [
+    "Recommendation 1...",
+    "Recommendation 2...",
+    "Recommendation 3..."
+  ],
+  "confidence_level": "high|medium|low",
+  "data_quality_notes": "Any notes about data limitations..."
+}
+
+Output valid JSON now:

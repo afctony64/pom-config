@@ -1,0 +1,141 @@
+---
+name: Fact Extractor (Benchmark)
+description: Extract atomic facts - NO auto data injection (for benchmarking)
+inputs:
+  record:
+    description: Source record data (Domain)
+    type: object
+  researcher:
+    description: Researcher configuration
+    type: object
+  semanticChunks:
+    description: Content chunks to extract facts from (MUST be pre-injected)
+    type: array
+    default: []
+  context_strategy:
+    description: Context management strategy being used
+    type: string
+    default: "benchmark"
+
+# 🚫 NO data_requirements - chunks must be injected by caller
+# This allows benchmarking different chunk selection strategies
+
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: qwen3:8b
+  parameters:
+    temperature: 0.1
+    response_format:
+      type: json_object
+
+processing_config:
+  source_collection: Domain
+  schema_id: Entity_facts
+  record_key_fields:
+    - domain
+    - entity
+    - fact
+    - context_strategy
+
+output_schema:
+  type: object
+  required: [facts]
+  properties:
+    facts:
+      type: array
+      items:
+        type: object
+        required: [entity, entity_type, fact, confidence]
+        properties:
+          entity:
+            type: string
+            description: Name of the entity this fact is about
+          entity_type:
+            type: string
+            enum: [Product, Feature, Company, Person, Technology, Integration, Service, Pricing]
+            description: Type classification of the entity
+          fact:
+            type: string
+            description: Single atomic fact statement
+          confidence:
+            type: number
+            minimum: 0.0
+            maximum: 1.0
+            description: Confidence score for this extraction
+          source_url:
+            type: string
+            description: URL where this fact was found
+
+---
+# 🎯 FACT EXTRACTOR
+
+You are extracting facts from web content for the **{{ researcher_id | default('product') }}** researcher.
+
+## 📋 ENTITY TYPES
+
+Extract entities of these types:
+- **Product**: Products, platforms, solutions, offerings
+- **Feature**: Capabilities, functionality, specifications
+- **Company**: Organizations, subsidiaries, parent companies
+- **Person**: Executives, founders, key people
+- **Technology**: Tech stack, frameworks, APIs
+- **Integration**: Connectors, partnerships, integrations
+- **Service**: Services offered
+- **Pricing**: Pricing information, tiers, costs
+
+## 📊 SOURCE CONTENT
+
+**Domain**: {{ record.properties.domain if record.properties else record.domain }}
+{% set chunks = semanticChunks if (semanticChunks is defined and semanticChunks | length > 0) else (record.semanticChunks if record.semanticChunks is defined else []) %}
+**Chunks**: {{ chunks | length }}
+
+{% if chunks and chunks | length > 0 %}
+{% for chunk in chunks %}
+{% set props = chunk.properties if chunk.properties else chunk %}
+---
+**[{{ loop.index }}] {{ props.url | default('unknown') }}**
+{{ props.content | default('') }}
+{% endfor %}
+{% else %}
+**NO CONTENT AVAILABLE** - Return empty facts array.
+{% endif %}
+
+## 🎯 EXTRACTION RULES
+
+1. **ONE FACT PER ITEM**: Each fact must be atomic and standalone
+2. **LITERAL ONLY**: Only extract facts directly stated in the text
+3. **NO HALLUCINATION**: Never invent or infer information
+4. **ENTITY REQUIRED**: Every fact must have an entity it describes
+5. **CONFIDENCE**: Rate 0.0-1.0 based on how clearly stated the fact is
+
+## 📤 OUTPUT FORMAT
+
+Output a JSON object with a "facts" array. Each fact object must have:
+- `entity`: Name of the entity (e.g., "Yoco Khumo")
+- `entity_type`: One of: Product, Feature, Company, Person, Technology, Integration, Service, Pricing
+- `fact`: Single atomic fact statement
+- `confidence`: Number 0.0-1.0
+- `source_url`: URL where found (optional)
+
+Example:
+```json
+{
+  "facts": [
+    {
+      "entity": "Yoco Khumo",
+      "entity_type": "Product",
+      "fact": "Yoco Khumo is a standalone card machine with built-in 4G",
+      "confidence": 0.95,
+      "source_url": "https://yoco.com/products"
+    }
+  ]
+}
+```
+
+{% if not chunks or chunks | length == 0 %}
+Return: {"facts": []}
+{% endif %}
+
+Output valid JSON now:
