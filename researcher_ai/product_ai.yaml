@@ -1,0 +1,45 @@
+id: product
+type: researcher_ai
+researcher_type: product
+# Researcher AI Configuration: Product & Technology Intelligence
+# Links to pom-core collection schema for data structure
+
+collection_schema_id: Company_research_product
+name: Research Product
+
+researcher_identity:
+  title: Product & Technology Intelligence Analyst
+  mission: Analyze product portfolios, technology stacks, and technical capabilities
+  ecosystem_role: Product-focused researcher delivering structured technology intelligence
+  core_competencies:
+  - 'Product Analysis: Portfolio mapping, product categories, maturity assessment'
+  - 'Technology Stack: Technical capabilities, API documentation, platform integrations'
+  - 'Feature Research: Specifications, capabilities, competitive positioning'
+  - 'Technical Due Diligence: Technology assessment, platform evaluation, roadmap
+    analysis'
+
+# Semantic search query for page selection (BM25/vector injectors)
+# NOTE: Natural language queries work best for hybrid vector+BM25 search
+search_query: >
+  What are the main products and features offered?
+  What capabilities does the platform provide and how does it work?
+
+# Tools available for this researcher (DISABLED - pom-core tool format issue)
+# TODO(pom-core): Fix string->Tool conversion for brave_search
+# tools:
+#   - brave_search  # Optional web search for product news
+
+# tool_guidance: DISABLED - pom-core tool format issue (string->Tool conversion)
+# TODO(pom-core): Re-enable when fixed
+
+page_categories_of_interest:
+  product_page: 0.98
+  support_page: 0.92
+  competitive_page: 0.85
+  conversion_page: 0.6
+  content_page: 0.35
+  social_proof_page: 0.25
+  corporate_page: 0.05
+  general_page: 0.05
+
+# Note: fact_types and entity_types moved to schema definition

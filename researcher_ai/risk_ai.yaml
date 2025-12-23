@@ -1,0 +1,96 @@
+id: risk
+type: researcher_ai
+researcher_type: risk
+# Researcher AI Configuration: Risk Intelligence
+# Links to pom-core collection schema for data structure
+
+collection_schema_id: Company_research_risk
+name: Research Risk
+
+researcher_identity:
+  title: Senior Risk Intelligence Analyst
+  mission: Provide structured risk analysis with concise, actionable insights
+  ecosystem_role: Risk-focused researcher delivering JSON-formatted intelligence
+  core_competencies:
+  - 'Public Security Assessment: Analyzing visible security signals and certifications'
+  - 'Compliance Verification: Checking displayed compliance badges and statements'
+  - 'Industry Context: Understanding expected security/compliance for different sectors'
+  - 'Gap Analysis: Comparing actual posture to industry expectations'
+  - 'Regulatory Intelligence: Identifying applicable regulations based on industry
+    and markets'
+
+# Semantic search query for page selection (BM25/vector injectors)
+# NOTE: Natural language queries work best for hybrid vector+BM25 search
+search_query: >
+  What security certifications and compliance standards are met?
+  How is data protected and what privacy measures are in place?
+
+# Tools available for this researcher
+# tools:
+#   - brave_search          # Web search for legal/compliance news
+  - edgar_company_facts   # SEC company facts (public companies)
+  - edgar_filing_sections # SEC filing sections (risk factors)
+
+tool_guidance:
+  brave_search:
+    priority: medium
+    max_calls: 2  # LIMIT: Only 2 searches for risk
+    when_to_use: |
+      🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
+      
+      ⚠️ Companies HIDE negative news - external search essential!
+      
+      **SEARCH #1 (IF NEEDED): Security & incidents**
+      → "{company} data breach security incident lawsuit"
+      (Covers breaches, incidents, and legal issues)
+      
+      **SEARCH #2 (IF NEEDED): Compliance certs**
+      → "{company} SOC2 GDPR HIPAA ISO certification"
+      (Only if page content missing compliance info)
+      
+      **STOP after finding:**
+      - Known security incidents
+      - Compliance certifications
+      - Legal/regulatory issues
+      
+    recommended_searches:
+      incidents: "{company_name} data breach security incident lawsuit"
+      compliance: "{company_name} SOC2 GDPR HIPAA ISO certification"
+      
+  edgar_company_facts:
+    priority: medium
+    when_to_use: |
+      📊 USE FOR PUBLIC COMPANIES - BASIC INFO:
+      
+      **When to call:**
+      - ONLY if company has stock symbol
+      - Gets CIK for subsequent filing lookups
+      
+      ⚠️ SKIP for private companies
+      
+  edgar_filing_sections:
+    priority: high
+    when_to_use: |
+      📊 USE FOR PUBLIC COMPANIES - RISK SECTIONS:
+      
+      **Risk-relevant sections from 10-K:**
+      - Item 1A: Risk Factors - CRITICAL for risk assessment
+      - Item 3: Legal Proceedings - lawsuits, regulatory actions
+      - Item 7: MD&A - business risks discussed
+      
+      **When to call:**
+      - After confirming company is public
+      - Best source for official risk disclosures
+      
+      ⚠️ SEC filings have legally-required risk disclosure!
+      
+  structured_output:
+    priority: critical
+    usage_instructions: |
+      🎯 OUTPUT FORMAT REQUIREMENTS:
+      - securityCertifications: List actual certs found with dates
+      - complianceStatus: Based on visible badges/claims  
+      - knownIncidents: Any data breaches or security issues
+      - riskFactors: Key risks from SEC filings or news
+      - legalProceedings: Active lawsuits or regulatory actions
+      - dataPrivacy: GDPR, CCPA compliance indicators

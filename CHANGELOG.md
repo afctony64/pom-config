@@ -5,6 +5,28 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-01-23
+
+### Added
+- **Researcher AI configurations**: Added `researcher_ai/` directory with 10 researcher definitions
+  - `competitor_ai.yaml` - Competitor intelligence researcher
+  - `customer_ai.yaml` - Customer intelligence researcher
+  - `financial_ai.yaml` - Financial intelligence researcher
+  - `industry_ai.yaml` - Industry intelligence researcher
+  - `journalist_ai.yaml` - Journalist intelligence researcher
+  - `leadership_ai.yaml` - Leadership intelligence researcher
+  - `partner_ai.yaml` - Partner intelligence researcher
+  - `product_ai.yaml` - Product & technology intelligence researcher
+  - `risk_ai.yaml` - Risk intelligence researcher
+  - `social_ai.yaml` - Social intelligence researcher
+
+### Changed
+- Researcher definitions are now shared across all Pom applications
+- Enables consistent researcher identities and capabilities across apps
+
+### Related
+- PomAI migration: Researcher AI configs moved from PomAI to pom-config
+
 ## [1.1.0] - 2025-01-23
 
 ### Added
