@@ -59,6 +59,8 @@ inputs:
 ```
 
 > **Note:** All apps use `pom-llm-proxy` for model routing. The proxy handles backend selection, failover, and priority routing automatically.
+>
+> **Available Models:** See [llm_models/](../../llm_models/) for the full list of models and their capabilities.
 
 ### 2. Reference Injected Data
 
