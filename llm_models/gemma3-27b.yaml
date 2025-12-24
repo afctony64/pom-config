@@ -13,3 +13,8 @@ backends:
     optimal_parallelism: 1  # Mac Ollama does NOT handle parallel - always use 1
   spark_cuda:
     optimal_parallelism: 6  # Spark optimal parallel setting
+
+metadata:
+  description: "Google Gemma 3 27B IT-QAT - Large multimodal model with 128K context"
+  category: general
+  status: stable
