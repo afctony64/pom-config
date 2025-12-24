@@ -12,7 +12,7 @@ provider:
 
 adapter_config:
   type: google
-  model: gemini-2.0-flash-exp  # Google API model name (working model for OpenAI-compatible endpoint)
+  model: gemini-2.0-flash-exp  # Google API model name (working model via OpenAI-compatible endpoint)
   base_url: null  # Handled by adapter
 
 parameters:
