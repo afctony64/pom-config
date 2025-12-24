@@ -53,3 +53,7 @@ collections:
   Research_product: "cloud"
   Research_risk: "cloud"
   Research_social: "cloud"
+  
+  # Source collections (for reverse reference lookups)
+  Domain: "cloud"
+  Company_source: "cloud"
