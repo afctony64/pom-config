@@ -2,25 +2,26 @@ type: research
 class: Research_risk
 id: Research_risk
 name: Research Risk
-description: "📚 RESEARCH REPOSITORY: Enterprise Risk Intelligence\n  \n  RESEARCHER:\
-  \ Enterprise Risk Analyst (see Research_risk for researcher identity)\n  \n  KNOWLEDGE\
-  \ TYPE: Entity-specific risk research and analysis\n  \n  MULTI-TENANT ARCHITECTURE:\
-  \ Each tenant represents one entity's complete risk intelligence\n  - Tenant Isolation:\
-  \ Complete data separation per entity\n  - Tenant Activation: Automatic tenant creation\
-  \ and activation\n  - Scalability: Supports unlimited tenants with efficient partitioning\n\
-  \  \n  REPOSITORY CONTENTS:\n  - Enterprise Risk Analysis: Comprehensive risk intelligence\
-  \ and insights\n  - Categorical Classifications: Machine-assigned categories for\
-  \ risk attributes\n  - Quality Metadata: Processing dates, source quality, review\
-  \ flags, confidence levels\n  - Evidence Links: References to supporting data and\
-  \ source materials\n  \n  DATA SOURCES:\n  - AI-analyzed entity websites and risk-specific\
-  \ content\n  - Industry reports and research publications\n  - Public entity information\
-  \ and disclosures\n  - Validated against authoritative sources when available\n\
-  \  \n  QUALITY STANDARDS:\n  - Confidence Scoring: High, Medium, Low, Inferred,\
-  \ Web-verified\n  - Evidence-Based Assessment: Classifications backed by concrete\
-  \ evidence\n  - Source Tracking: Links to originating Domain records\n  - Conservative\
-  \ Calibration: Prefer 'unknown' over incorrect data\n  \n  INTEGRATION: Provides\
-  \ risk intelligence to support holistic entity analysis\n  \n  VECTOR SEARCH CAPABILITIES:\
-  \ Named vectors for similarity search across key risk dimensions"
+description: "\U0001F4DA RESEARCH REPOSITORY: Enterprise Risk Intelligence\n  \n \
+  \ RESEARCHER: Enterprise Risk Analyst (see Research_risk for researcher identity)\n\
+  \  \n  KNOWLEDGE TYPE: Entity-specific risk research and analysis\n  \n  MULTI-TENANT\
+  \ ARCHITECTURE: Each tenant represents one entity's complete risk intelligence\n\
+  \  - Tenant Isolation: Complete data separation per entity\n  - Tenant Activation:\
+  \ Automatic tenant creation and activation\n  - Scalability: Supports unlimited\
+  \ tenants with efficient partitioning\n  \n  REPOSITORY CONTENTS:\n  - Enterprise\
+  \ Risk Analysis: Comprehensive risk intelligence and insights\n  - Categorical Classifications:\
+  \ Machine-assigned categories for risk attributes\n  - Quality Metadata: Processing\
+  \ dates, source quality, review flags, confidence levels\n  - Evidence Links: References\
+  \ to supporting data and source materials\n  \n  DATA SOURCES:\n  - AI-analyzed\
+  \ entity websites and risk-specific content\n  - Industry reports and research publications\n\
+  \  - Public entity information and disclosures\n  - Validated against authoritative\
+  \ sources when available\n  \n  QUALITY STANDARDS:\n  - Confidence Scoring: High,\
+  \ Medium, Low, Inferred, Web-verified\n  - Evidence-Based Assessment: Classifications\
+  \ backed by concrete evidence\n  - Source Tracking: Links to originating Domain\
+  \ records\n  - Conservative Calibration: Prefer 'unknown' over incorrect data\n\
+  \  \n  INTEGRATION: Provides risk intelligence to support holistic entity analysis\n\
+  \  \n  VECTOR SEARCH CAPABILITIES: Named vectors for similarity search across key\
+  \ risk dimensions"
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -128,23 +129,18 @@ properties:
 - name: securityPostureLLM
   dataType:
   - text
-  description: 'Assess security maturity based on visible signals (2-3 sentences,
-    ~100 words max).
-
+  description: |
+    Assess security maturity based on visible signals (2-3 sentences, ~100 words max).
 
     START with overall security maturity:
-
-    - What''s the apparent level of sophistication?
-
+    - What's the apparent level of sophistication?
 
     Then enumerate key visible signals and notable gaps relative to industry standards.
-
-    '
   tags:
   - LLM
   sets:
   - prompt
-  - extended
+  - standard
 - name: trustCenterUrl
   dataType:
   - text
@@ -167,6 +163,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: securityDocumentation
   dataType:
   - text
@@ -204,23 +201,18 @@ properties:
 - name: complianceCertificationLLM
   dataType:
   - text
-  description: 'Document visible compliance certifications and assess maturity (2-3
-    sentences, ~100 words max).
-
+  description: |
+    Document visible compliance certifications and assess maturity (2-3 sentences, ~100 words max).
 
     START with overall compliance posture:
-
-    - What''s present vs notably missing for their industry?
-
+    - What's present vs notably missing for their industry?
 
     Then list specific certifications (present and gaps) with evidence location.
-
-    '
   tags:
   - LLM
   sets:
   - prompt
-  - extended
+  - standard
 - name: complianceBadges
   dataType:
   - text[]
@@ -232,6 +224,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: privacyPolicy
   dataType:
   - text
@@ -269,25 +262,19 @@ properties:
 - name: regulatoryEnvironmentLLM
   dataType:
   - text
-  description: 'Assess the regulatory complexity based on industry and markets (2-3
-    sentences, ~100 words max).
-
+  description: |
+    Assess the regulatory complexity based on industry and markets (2-3 sentences, ~100 words max).
 
     START with the industry context and regulatory intensity:
-
     - What industry are they in and how heavily regulated is it?
-
     - Be specific about the level of oversight
 
-
     Then list 3-5 key applicable regulations and their operational impact.
-
-    '
   tags:
   - LLM
   sets:
   - prompt
-  - extended
+  - standard
 - name: industryRegulations
   dataType:
   - text[]
@@ -300,6 +287,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: regulatoryBurden
   dataType:
   - text
@@ -323,6 +311,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: marketRiskFactors
   dataType:
   - text[]
@@ -335,6 +324,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: riskProfile
   dataType:
   - text
@@ -481,7 +471,6 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
-# Audit fields
 - name: createdAt
   dataType:
   - date

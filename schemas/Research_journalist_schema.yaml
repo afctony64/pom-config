@@ -2,35 +2,35 @@ type: research
 class: Research_journalist
 id: Research_journalist
 name: Research Journalist
-description: "📚 RESEARCH REPOSITORY: Latest News & External Media Coverage\n\
+description: "\U0001F4DA RESEARCH REPOSITORY: Latest News & External Media Coverage\n\
   \  \n  RESEARCHER: News & Media Intelligence Analyst (identity defined in seed data\
   \ for researcher identity)\n  \n  KNOWLEDGE TYPE: Web-searched external news, press\
-  \ releases, and media coverage about this entity\n  \n  PURPOSE: Discover what\
-  \ OTHERS are saying about the entity via proactive web search\n  - Focus on EXTERNAL\
-  \ coverage (not entity's own content)\n  - Prioritize RECENT news (last 30 days\
-  \ most valuable)\n  - Track media sentiment and public perception\n  - Identify\
-  \ key events: funding, partnerships, product launches\n  \n  MULTI-TENANT ARCHITECTURE:\
-  \ Each tenant represents one entity's complete journalist intelligence\n  - Tenant\
-  \ Isolation: Complete data separation per entity\n  - Tenant Activation: Automatic\
-  \ tenant creation and activation\n  - Scalability: Supports unlimited tenants with\
-  \ efficient partitioning\n  \n  REPOSITORY CONTENTS:\n  - Latest News Coverage:\
-  \ Recent external articles and press mentions\n  - Media Outlet Tracking: Which\
-  \ publications are covering this entity\n  - Recency Metadata: Publication dates\
-  \ and temporal analysis\n  - Categorical Classifications: Machine-assigned categories\
-  \ for journalist attributes\n  - Quality Metadata: Processing dates, source quality,\
-  \ review flags, confidence levels\n  - Evidence Links: References to supporting\
-  \ data and source materials\n  \n  DATA SOURCES:\n  - Web search results for latest\
-  \ news coverage\n  - Press release databases and news aggregators\n  - Industry\
-  \ publications and tech media\n  - AI-analyzed entity websites and journalist-specific\
-  \ content (secondary)\n  - Public entity information and disclosures\n  - Validated\
-  \ against authoritative sources when available\n  \n  QUALITY STANDARDS:\n  - Recency\
-  \ Weighting: Recent news valued over historical coverage\n  - Confidence Scoring:\
-  \ High, Medium, Low, Inferred, Web-verified\n  - Evidence-Based Assessment: Classifications\
-  \ backed by concrete evidence\n  - Source Tracking: Links to originating Domain\
-  \ records\n  - Conservative Calibration: Prefer 'unknown' over incorrect data\n\
-  \  \n  INTEGRATION: Provides latest news intelligence to support holistic entity\
-  \ analysis and identify recent events\n  \n  VECTOR SEARCH CAPABILITIES: Named vectors\
-  \ for similarity search across key journalist dimensions"
+  \ releases, and media coverage about this entity\n  \n  PURPOSE: Discover what OTHERS\
+  \ are saying about the entity via proactive web search\n  - Focus on EXTERNAL coverage\
+  \ (not entity's own content)\n  - Prioritize RECENT news (last 30 days most valuable)\n\
+  \  - Track media sentiment and public perception\n  - Identify key events: funding,\
+  \ partnerships, product launches\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents\
+  \ one entity's complete journalist intelligence\n  - Tenant Isolation: Complete\
+  \ data separation per entity\n  - Tenant Activation: Automatic tenant creation and\
+  \ activation\n  - Scalability: Supports unlimited tenants with efficient partitioning\n\
+  \  \n  REPOSITORY CONTENTS:\n  - Latest News Coverage: Recent external articles\
+  \ and press mentions\n  - Media Outlet Tracking: Which publications are covering\
+  \ this entity\n  - Recency Metadata: Publication dates and temporal analysis\n \
+  \ - Categorical Classifications: Machine-assigned categories for journalist attributes\n\
+  \  - Quality Metadata: Processing dates, source quality, review flags, confidence\
+  \ levels\n  - Evidence Links: References to supporting data and source materials\n\
+  \  \n  DATA SOURCES:\n  - Web search results for latest news coverage\n  - Press\
+  \ release databases and news aggregators\n  - Industry publications and tech media\n\
+  \  - AI-analyzed entity websites and journalist-specific content (secondary)\n \
+  \ - Public entity information and disclosures\n  - Validated against authoritative\
+  \ sources when available\n  \n  QUALITY STANDARDS:\n  - Recency Weighting: Recent\
+  \ news valued over historical coverage\n  - Confidence Scoring: High, Medium, Low,\
+  \ Inferred, Web-verified\n  - Evidence-Based Assessment: Classifications backed\
+  \ by concrete evidence\n  - Source Tracking: Links to originating Domain records\n\
+  \  - Conservative Calibration: Prefer 'unknown' over incorrect data\n  \n  INTEGRATION:\
+  \ Provides latest news intelligence to support holistic entity analysis and identify\
+  \ recent events\n  \n  VECTOR SEARCH CAPABILITIES: Named vectors for similarity\
+  \ search across key journalist dimensions"
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -133,6 +133,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: mediaOutlets
   dataType:
   - text[]
@@ -144,6 +145,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: pressReleaseCount
   dataType:
   - int
@@ -152,6 +154,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: newsArticleCount
   dataType:
   - int
@@ -160,6 +163,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: latestNewsDate
   dataType:
   - text
@@ -202,6 +206,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: hasMediaKit
   dataType:
   - boolean
@@ -210,6 +215,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: hasNewsroom
   dataType:
   - boolean
@@ -218,6 +224,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: mediaSentiment
   dataType:
   - text
@@ -226,6 +233,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: mediaTypeLLM
   dataType:
   - text
@@ -237,7 +245,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - standard
 - name: coverageLevelLLM
   dataType:
   - text
@@ -249,7 +257,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - standard
 - name: mediaSentimentLLM
   dataType:
   - text
@@ -261,18 +269,14 @@ properties:
   - LLM
   sets:
   - prompt
-  - extended
+  - standard
 - name: mediaPerception
   dataType:
   - text
-  description: 'AI synthesis: How the entity is portrayed in external media coverage.
-
-    Examples: "Emerging leader in AI space", "Struggling to gain traction", "Solid
-    enterprise player"
-
+  description: |
+    AI synthesis: How the entity is portrayed in external media coverage.
+    Examples: "Emerging leader in AI space", "Struggling to gain traction", "Solid enterprise player"
     Useful to: Customer (trust signals), Risk (reputation), Competitor (positioning)
-
-    '
   tags:
   - media
   - perception
@@ -283,15 +287,10 @@ properties:
 - name: newsMomentum
   dataType:
   - text
-  description: 'AI synthesis: Trajectory of media coverage over time.
-
-    Examples: "Accelerating coverage (3x in 6mo)", "Declining visibility", "Steady
-    drumbeat"
-
-    Useful to: Financial (growth signals), Industry (market traction), Competitor
-    (threat level)
-
-    '
+  description: |
+    AI synthesis: Trajectory of media coverage over time.
+    Examples: "Accelerating coverage (3x in 6mo)", "Declining visibility", "Steady drumbeat"
+    Useful to: Financial (growth signals), Industry (market traction), Competitor (threat level)
   tags:
   - media
   - momentum
@@ -302,14 +301,10 @@ properties:
 - name: credibilitySignals
   dataType:
   - text
-  description: 'AI synthesis: What coverage reveals about entity legitimacy and maturity.
-
-    Examples: "Tier-1 media validation", "Self-promotion only", "Industry recognition
-    evident"
-
+  description: |
+    AI synthesis: What coverage reveals about entity legitimacy and maturity.
+    Examples: "Tier-1 media validation", "Self-promotion only", "Industry recognition evident"
     Useful to: Risk (legitimacy), Customer (trust), Financial (market validation)
-
-    '
   tags:
   - credibility
   - media
@@ -397,18 +392,12 @@ properties:
 - name: sourceQuality
   dataType:
   - text
-  description: 'Quality rating of external tool content provided for analysis [high,
-    medium, low, minimal]:
-
+  description: |
+    Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
     - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
-
     - "medium": Some pageData available but limited relevance or coverage
-
     - "low": Minimal pageData, relying on source overview text only
-
     - "minimal": No pageData, only basic entity metadata available
-
-    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -419,20 +408,13 @@ properties:
 - name: reviewFlag
   dataType:
   - text
-  description: 'Review requirement [none, for_review, needs_verification]:
-
-    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
-    - no review needed
-
+  description: |
+    Review requirement [none, for_review, needs_verification]:
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
     - "for_review": Medium confidence with some gaps, human validation helpful
-
     - "needs_verification": Low confidence or pure inference, human review required
 
-
-    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
-    - these sources are reliable.
-
-    '
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -443,28 +425,16 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
-    low, inferred]:
-
-    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
-    - authoritative)
-
+  description: |
+    Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
     - "web_verified": Confirmed through web_search with multiple external sources
-
     - "llm_knowledge": Strong LLM training knowledge about well-known entities
-
     - "medium": Based on indirect evidence or partial information
-
     - "low": Limited information, educated guesses
-
     - "inferred": No direct evidence, purely analytical inference
 
-
-    Use "high" when pageData is available and relevant, "web_verified" when web_search
-    confirms facts, or "llm_knowledge" when you have strong training knowledge about
-    well-known entities.
-
-    '
+    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge" when you have strong training knowledge about well-known entities.
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -518,7 +488,6 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
-# Audit fields
 - name: createdAt
   dataType:
   - date

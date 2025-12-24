@@ -2,89 +2,50 @@ type: research
 class: Research_industry
 id: Research_industry
 name: Research Industry
-description: '📚 RESEARCH REPOSITORY: Industry & Market Intelligence
+description: |
+  📚 RESEARCH REPOSITORY: Industry & Market Intelligence
 
-
-  RESEARCHER: Senior Industry Intelligence Analyst (see Research_industry for researcher
-  identity)
-
+  RESEARCHER: Senior Industry Intelligence Analyst (see Research_industry for researcher identity)
 
   KNOWLEDGE TYPE: Entity-specific categorized research and analysis
 
-
-  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity''s complete industry
-  intelligence
-
+  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's complete industry intelligence
   - Tenant Isolation: Complete data separation per entity
-
   - Tenant Activation: Automatic tenant creation and activation
-
   - Scalability: Supports unlimited tenants with efficient partitioning
 
-
   REPOSITORY CONTENTS:
-
   - Industry Classifications: NAICS codes (6-digit), sector, industry, industrySegment
-
-  - Business Models: Detailed business model descriptions and categories (SaaS, Marketplace,
-  E-commerce, Consulting)
-
-  - Market Positioning: Competitive landscape, value chain position, market niche
-  analysis
-
+  - Business Models: Detailed business model descriptions and categories (SaaS, Marketplace, E-commerce, Consulting)
+  - Market Positioning: Competitive landscape, value chain position, market niche analysis
   - Vertical Markets: Target markets and vertical specialization
-
   - Delivery Models: How entities deliver products/services
-
   - Quality Metadata: Processing dates, source quality, review flags, confidence levels
 
-
   DATA SOURCES:
-
   - AI-analyzed entity websites and web content
-
   - Industry reports and competitive intelligence
-
   - Market research and positioning content
-
   - Validated against official NAICS taxonomy
 
-
   QUALITY STANDARDS:
-
   - Confidence Scoring: High, Medium, Low, Inferred, Web-verified
-
   - Human Verification: Review flags for validation
-
   - Source Tracking: Links to originating Domain records
-
-  - Conservative Calibration: Prefer ''unknown'' over incorrect data
-
+  - Conservative Calibration: Prefer 'unknown' over incorrect data
 
   INTEGRATION: Provides foundational industry context to:
-
   - Financial research (revenue models, funding, growth analysis)
-
   - Product research (product-market fit, technical positioning)
-
   - Customer research (target segments, acquisition channels)
-
   - Leadership research (industry expertise, founder background)
-
   - Risk research (industry-specific risks, regulatory environment)
-
   - Partnership research (industry ecosystem, strategic alliances)
 
-
   VECTOR SEARCH CAPABILITIES:
-
   - businessModelVector: Search by business model and value chain similarities
-
   - industrySegmentVector: Discover entities with similar industry segments and positioning
-
   - deliveryModelVector: Match by service delivery approaches
-
-  '
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -221,6 +182,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: industry
@@ -257,6 +219,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: industrySegmentLLM
@@ -279,6 +242,7 @@ properties:
   sets:
   - prompt
   - array
+  - standard
   metadata:
     parallel_to: industrySegmentCat
 - name: naicsCode
@@ -293,6 +257,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: naicsDescription
@@ -305,6 +270,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: businessModelLLM
@@ -320,6 +286,7 @@ properties:
   sets:
   - prompt
   - array
+  - standard
   metadata:
     parallel_to: industrySegmentCat
 - name: businessModelCat
@@ -353,30 +320,22 @@ properties:
 - name: deliveryModelLLM
   dataType:
   - text[]
-  description: 'Describe how the entity delivers its products/services to customers
-    (2-3 sentences, ~150 words max).
-
+  description: |
+    Describe how the entity delivers its products/services to customers (2-3 sentences, ~150 words max).
 
     START with the primary delivery mechanism:
-
     - Does it involve physical hardware or is it software-only?
-
     - Is infrastructure cloud-hosted, customer-hosted, or shared?
-
     - How do customers access it (browser, mobile, API, physical device)?
 
-
     Then briefly note deployment approach and key service delivery characteristics.
-
-    Array supports multi-segment classification (ordered by similarity score, [0]
-    is primary)
-
-    '
+    Array supports multi-segment classification (ordered by similarity score, [0] is primary)
   tags:
   - LLM
   sets:
   - prompt
   - array
+  - standard
   metadata:
     parallel_to: industrySegmentCat
 - name: deliveryModelCat
@@ -412,6 +371,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: entityDescription
   dataType:
   - text
@@ -422,6 +382,7 @@ properties:
   - extractable
   sets:
   - prompt
+  - extended
 - name: industrySegmentCat
   dataType:
   - text[]
@@ -535,7 +496,6 @@ properties:
     dataType:
     - uuid[]
     description: Domain source UUIDs
-# Audit fields
 - name: createdAt
   dataType:
   - date
