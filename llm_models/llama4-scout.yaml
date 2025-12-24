@@ -1,0 +1,95 @@
+id: "llama4:scout"
+aliases:
+  - "llama4-scout"
+  - "llama-4-scout"
+name: Llama 4 Scout 17Bx16E
+type: llm_model
+version: "1.0.0"
+
+provider:
+  name: groq
+  api_type: chat
+
+adapter_config:
+  type: groq
+  model: meta-llama/llama-4-scout-17b-16e-instruct
+  base_url: https://api.groq.com/openai/v1
+  base_url_env: GROQ_API_KEY
+
+parameters:
+  temperature: 0.7
+  max_tokens: 4000
+  top_p: 0.9
+
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: true
+  streaming: true
+  vision: false
+  function_calling: true
+  multimodal: false
+
+cost:
+  per_1m_input_tokens: 0.11
+  per_1m_output_tokens: 0.34
+  currency: USD
+  notes: "Groq LPU - Llama 4 Scout fastest/cheapest"
+
+performance:
+  avg_latency_ms: 200
+  tokens_per_second: 594
+  context_window: 131072
+
+metadata:
+  description: "Llama 4 Scout - fastest Llama 4 variant, best value"
+  category: general
+  status: stable
+  release_date: "2025-04-01"
+  last_verified: "2025-12-18"
+  family: llama4
+  family_tier: premium
+  recommended_for:
+    - "Fast responses"
+    - "Cost-effective inference"
+    - "General tasks"
+  not_recommended_for:
+    - "Maximum quality reasoning"
+
+requirements:
+  gpu_vram_mb: 0
+  system_ram_mb: 0
+  cpu_cores: 0
+
+hardware_detection:
+  execution_mode: cloud
+
+routing: [groq]
+
+resource_class:
+  class: A
+  vram_gb: 0
+  throughput_tier: high
+  tokens_per_second_single: 594
+
+tier: A
+tier_rank: 1
+
+dimension_scores:
+  summarization: 88
+  reasoning: 86
+  instruction: 90
+  analysis: 85
+  coding: 82
+  speed: 98
+  context_efficiency: 92
+
+pom_benchmarks:
+  last_calibration: "2025-12-18"
+  calibration_version: "2.0"
+  aggregate:
+    avg_quality: 86
+    avg_latency_ms: 200
+    total_prompts_tested: 0
+
+benchmarks: {}

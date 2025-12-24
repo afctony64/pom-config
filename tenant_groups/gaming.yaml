@@ -41,6 +41,15 @@ researchers:
   - risk         # Build weaknesses, counters  ← SHARED AGENT (recontextualized)
 
 # ══════════════════════════════════════════════════════════════════════════════
+# DISPLAY NAMES - Used in report titles and UI
+# ══════════════════════════════════════════════════════════════════════════════
+display_names:
+  entity: Character
+  entity_plural: Characters
+  customer: Player        # In gaming context
+  customer_plural: Players
+
+# ══════════════════════════════════════════════════════════════════════════════
 # ENTITY MODEL CONFIGURATION (Standard)
 # ══════════════════════════════════════════════════════════════════════════════
 # Uses the Entity Model:

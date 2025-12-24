@@ -1,0 +1,94 @@
+id: "qwen3:32b"
+name: Qwen 3 32B
+type: llm_model
+version: "2.0.0"
+
+# Updated to use Groq provider (Dec 2024) - Groq LPU provides much faster inference
+provider:
+  name: groq
+  api_type: chat
+
+adapter_config:
+  type: groq
+  model: qwen/qwen3-32b
+  base_url: https://api.groq.com/openai/v1
+  base_url_env: GROQ_API_KEY
+
+parameters:
+  temperature: 0.7
+  max_tokens: 4096
+  top_p: 0.9
+
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: true
+  streaming: true
+  vision: false
+  function_calling: true
+  multimodal: false
+
+cost:
+  per_1m_input_tokens: 0.29
+  per_1m_output_tokens: 0.59
+  currency: USD
+  notes: "Groq LPU inference - ultra-fast (~662 tok/s)"
+
+performance:
+  avg_latency_ms: 500
+  tokens_per_second: 662
+  context_window: 131072  # Full 131K context on Groq
+
+metadata:
+  description: "Alibaba Qwen 3 32B on Groq LPU - Best reasoning with ultra-fast inference"
+  category: reasoning
+  status: stable
+  release_date: "2025-04-01"
+  last_verified: "2025-12-22"
+  family: qwen3
+  family_tier: premium
+  recommended_for:
+    - "Complex reasoning tasks"
+    - "Coding and code generation"
+    - "Long context analysis (131K tokens)"
+  not_recommended_for:
+    - "Simple tasks (use smaller models)"
+    - "Cost-sensitive high-volume (use local Ollama)"
+
+requirements:
+  gpu_vram_mb: 0  # Cloud-only
+  system_ram_mb: 0
+  cpu_cores: 0
+
+hardware_detection:
+  execution_mode: cloud
+
+routing: [groq]
+
+resource_class:
+  class: A
+  vram_gb: 0
+  throughput_tier: high
+  tokens_per_second_single: 662
+
+tier: S
+tier_rank: 2
+
+dimension_scores:
+  summarization: 85
+  reasoning: 94
+  instruction: 88
+  analysis: 90
+  coding: 95
+  speed: 95  # Updated - Groq is much faster
+  context_efficiency: 90
+
+pom_benchmarks:
+  last_calibration: "2025-12-22"
+  calibration_version: "2.0"
+  aggregate:
+    avg_quality: 90
+    avg_latency_ms: 500
+    total_prompts_tested: 0
+
+benchmarks: {}

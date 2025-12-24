@@ -1,0 +1,169 @@
+id: "llama3.1:8b"
+name: Llama 3.1 8B Instruct
+type: llm_model
+version: "1.0.0"
+provider:
+  name: ollama
+  api_type: ollama
+adapter_config:
+  type: ollama
+  model: llama3.1:8b-instruct-q4_K_M
+  base_url: null
+  base_url_env: null
+parameters:
+  temperature: 0.7
+  max_tokens: 500
+  top_p: 0.9
+capabilities:
+  structured_output: true
+  reasoning: false
+  tool_calling: false
+  streaming: true
+  vision: false
+  function_calling: false
+cost:
+  per_1m_input_tokens: 0.0
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: Free local inference
+performance:
+  avg_latency_ms: 200
+  tokens_per_second: 88.1  # Mac Metal benchmark (December 2025)
+  context_window: 16384  # Practical for Spark (theoretical: 131072)
+  context_window_max: 131072  # Official max context varies by deployment (commonly ~128K)
+  
+  # Backend-specific benchmarks (December 2025)
+  backends:
+    mac_metal:
+      tokens_per_second: 88.1
+      avg_latency_ms: 190
+      optimal_parallelism: 1  # Mac Ollama does NOT handle parallel - always use 1
+      memory_bandwidth_gbs: 546
+    spark_cuda:
+      tokens_per_second: 18.4
+      avg_latency_ms: 900
+      optimal_parallelism: 4
+      memory_bandwidth_gbs: 273
+    groq:
+      tokens_per_second: 840
+      avg_latency_ms: 50
+      model_id: "llama-3.1-8b-instant"
+metadata:
+  description: Meta Llama 3.1 8B - 128K context, 8 languages
+  category: general
+  status: stable
+  release_date: '2024-07-01'
+  last_verified: '2025-11-05'
+  last_benchmarked: '2025-11-12T14:06:51.908824'
+  recommended_for:
+  - High-throughput tasks
+  not_recommended_for:
+  - Real-time applications
+requirements:
+  gpu_vram_mb: 6000
+  system_ram_mb: 4000
+  cpu_cores: 2.0
+
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 6
+  max_concurrency: 12
+
+# Groq fallback - ultra-fast cloud inference
+groq_fallback:
+  model: "llama-3.1-8b-instant"
+  cost_per_1m_input: 0.05
+  cost_per_1m_output: 0.08
+  tokens_per_second: 840
+
+routing: [mac, spark, groq]  # Mac Metal 88.1 tok/s > Spark 18.4 tok/s > Groq 840 tok/s
+
+# Groq equivalent for ultra priority
+groq_equivalent: "llama-3.1-8b-instant"
+
+# === RESOURCE CLASS (for benchmarking) ===
+resource_class:
+  class: B  # Balanced (6-11GB VRAM)
+  vram_gb: 6.0
+  parallel_capacity_spark: 18  # Max parallel on 128GB GPU
+  recommended_parallel: 14
+  throughput_tier: high
+  tokens_per_second_single: 88  # Mac Metal (December 2025)
+
+# === MODEL RANKING SYSTEM ===
+tier: B
+tier_rank: 4  # Balanced B-tier
+
+context_variants:
+  throughput: {context_window: 8192}
+  balanced: {context_window: 16384}
+  quality: {context_window: 32768}
+  extended: {context_window: 131072, notes: "Very large context; higher memory/latency"}
+
+# === BASE SCORES (from public benchmarks - DO NOT MODIFY) ===
+base_scores:
+  source: "Meta Llama 3.1 Model Card, July 2024"
+  source_url: "https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_1"
+  captured_date: "2025-12-05"
+  raw_benchmarks:
+    mmlu: 68.4
+    gsm8k: 65.8
+    arc_challenge: 60.2
+    hellaswag: 77.5
+    humaneval: 42.5
+    ifeval: 68.2
+    math: 45.3
+  notes: "Llama 3.1 8B with 128K context window"
+
+# === CALIBRATED DIMENSION SCORES (0-100 normalized) ===
+dimension_scores:
+  summarization: 72
+  reasoning: 68
+  instruction: 72
+  analysis: 70
+  coding: 60
+  speed: 70
+  context_efficiency: 78
+
+pom_benchmarks:
+  last_calibration: "2025-12-05"
+  calibration_version: "1.0"
+  prompts_tested: {}
+  aggregate:
+    avg_quality: 68
+    avg_latency_ms: 1200
+    total_prompts_tested: 0
+
+benchmarks:
+  last_run: '2025-11-12T14:06:51.908816'
+  tests_passed: 5/5
+  summary:
+    avg_latency_ms: 2484.7
+    avg_tokens_per_second: 30.1
+    total_time_seconds: 12.42
+  tests:
+    simple_instruction:
+      latency_ms: 253.2
+      tokens_per_second: 5.9
+      time_seconds: 0.253
+      estimated_tokens: 1.5
+    structured_output:
+      latency_ms: 837.8
+      tokens_per_second: 28.6
+      time_seconds: 0.838
+      estimated_tokens: 24.0
+    reasoning:
+      latency_ms: 5043.3
+      tokens_per_second: 35.0
+      time_seconds: 5.043
+      estimated_tokens: 176.8
+    summarization:
+      latency_ms: 1246.1
+      tokens_per_second: 39.1
+      time_seconds: 1.246
+      estimated_tokens: 48.8
+    code_generation:
+      latency_ms: 5043.1
+      tokens_per_second: 41.7
+      time_seconds: 5.043
+      estimated_tokens: 210.2

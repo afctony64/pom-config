@@ -54,6 +54,16 @@ researchers:
   - social        # Social media presence, community engagement
 
 # ══════════════════════════════════════════════════════════════════════════════
+# DISPLAY NAMES - Used in report titles and UI
+# ══════════════════════════════════════════════════════════════════════════════
+# Replaces generic "entity" terminology with domain-specific names
+display_names:
+  entity: Company           # "Entity Dossier" → "Company Dossier"
+  entity_plural: Companies  # "All Entities" → "All Companies"
+  customer: Customer        # Already correct for this domain
+  customer_plural: Customers
+
+# ══════════════════════════════════════════════════════════════════════════════
 # ENTITY MODEL CONFIGURATION (Standard)
 # ══════════════════════════════════════════════════════════════════════════════
 # Uses the Entity Model:

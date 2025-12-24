@@ -1,0 +1,54 @@
+# Groq Qwen3 32B - Ultra-fast inference
+id: "groq-qwen3-32b"
+aliases:
+  - "groq:qwen3-32b"
+  - "qwen3-32b-groq"
+name: Groq Qwen3 32B
+type: llm_model
+version: "1.0.0"
+
+provider:
+  name: groq
+  api_type: chat
+
+adapter_config:
+  type: groq
+  model: qwen/qwen3-32b
+  base_url: https://api.groq.com/openai/v1
+  base_url_env: GROQ_API_KEY
+
+parameters:
+  temperature: 0.7
+  max_tokens: 4096
+  top_p: 0.9
+
+capabilities:
+  structured_output: true
+  reasoning: true
+  tool_calling: true
+  streaming: true
+  vision: false
+  function_calling: true
+  multimodal: false
+
+cost:
+  per_1m_input_tokens: 0.29
+  per_1m_output_tokens: 0.59
+  currency: USD
+  notes: "Groq LPU inference"
+
+performance:
+  avg_latency_ms: 500
+  tokens_per_second: 662
+  context_window: 131072
+
+metadata:
+  description: "Qwen3 32B on Groq LPU - ultra-fast inference (~662 tok/s)"
+  category: reasoning
+  status: stable
+  release_date: "2025-04-01"
+
+routing: [groq]
+
+tier: S
+tier_rank: 2

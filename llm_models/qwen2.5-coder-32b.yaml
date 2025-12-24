@@ -1,0 +1,60 @@
+id: "qwen2.5-coder:32b"
+name: Qwen 2.5 Coder 32B
+type: llm_model
+version: "1.0.0"
+provider: {name: ollama, api_type: ollama}
+adapter_config: {type: ollama, model: "qwen2.5-coder:32b", base_url: null, base_url_env: OLLAMA_HOST}
+parameters: {temperature: 0.7, max_tokens: 4000, top_p: 0.9}
+capabilities: {structured_output: true, reasoning: true, tool_calling: true, streaming: true, vision: false, function_calling: true, multimodal: false}
+cost: {per_1m_input_tokens: 0.0, per_1m_output_tokens: 0.0, currency: USD, notes: "Free local/VastAI"}
+performance: {avg_latency_ms: 2000, tokens_per_second: 25, context_window: 32768}
+metadata:
+  description: "Alibaba Qwen 2.5 Coder 32B - Best-in-class code generation. Note: No Groq equivalent available - uses local Ollama/VastAI only."
+  category: code
+  status: stable
+  release_date: "2025-01-15"
+  last_verified: "2025-12-22"
+  family: qwen2.5-coder
+  family_tier: premium
+  strength: coding
+  recommended_for:
+    - Enterprise code generation
+    - Complex refactoring
+    - System architecture
+    - Code review at scale
+  not_recommended_for:
+    - Quick prototyping (use 7B)
+    - General reasoning
+  notes: "No Groq equivalent available - must use local Ollama or VastAI. For faster inference on Groq, consider qwen3:32b which has similar coding capabilities."
+requirements: {gpu_vram_mb: 20000, system_ram_mb: 24000, cpu_cores: 8.0}
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 4
+  max_concurrency: 6
+vastai_config:
+  enabled: true
+  endpoint_name: "vLLM-Qwen2.5-Coder-32B"
+  huggingface_model: "Qwen/Qwen2.5-Coder-32B-Instruct"
+  cold_workers: 0
+  # NOTE: Large weights; require ample disk for HF cache + image layers.
+  disk_space_gb: 180
+  gpu_requirements: "gpu_ram>=48 num_gpus=1 inet_down>100"
+  template_hash: "03fba9bdccaa8ace9ad931105d8e9eb4"
+  estimated_cold_start_seconds: 240
+  priority: 8
+resource_class: {class: C, vram_gb: 20.0, parallel_capacity_spark: 6, recommended_parallel: 4, throughput_tier: low, tokens_per_second_single: 25}
+tier: A
+tier_rank: 1
+dimension_scores:
+  summarization: 75
+  reasoning: 85
+  instruction: 88
+  analysis: 82
+  coding: 96
+  speed: 40
+  context_efficiency: 90
+pom_benchmarks:
+  last_calibration: "2025-12-15"
+  calibration_version: "1.0"
+  aggregate: {avg_quality: 88, avg_latency_ms: 2000, total_prompts_tested: 0}
+benchmarks: {}

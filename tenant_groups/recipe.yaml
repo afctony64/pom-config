@@ -40,6 +40,15 @@ researchers:
   - risk           # Allergies, food safety  ← SHARED AGENT
 
 # ══════════════════════════════════════════════════════════════════════════════
+# DISPLAY NAMES - Used in report titles and UI
+# ══════════════════════════════════════════════════════════════════════════════
+display_names:
+  entity: Recipe
+  entity_plural: Recipes
+  customer: Cook          # In culinary context
+  customer_plural: Cooks
+
+# ══════════════════════════════════════════════════════════════════════════════
 # ENTITY MODEL CONFIGURATION (Standard)
 # ══════════════════════════════════════════════════════════════════════════════
 # Uses the Entity Model:

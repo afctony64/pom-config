@@ -60,6 +60,15 @@ researchers:
   - competitor    # Competitive analysis, differentiation
 
 # ══════════════════════════════════════════════════════════════════════════════
+# DISPLAY NAMES - Used in report titles and UI
+# ══════════════════════════════════════════════════════════════════════════════
+display_names:
+  entity: Company
+  entity_plural: Companies
+  customer: Customer
+  customer_plural: Customers
+
+# ══════════════════════════════════════════════════════════════════════════════
 # LEGACY ENTITY CONFIGURATION
 # ══════════════════════════════════════════════════════════════════════════════
 # This is the ONLY tenant group that uses Company_source and Company_research_*

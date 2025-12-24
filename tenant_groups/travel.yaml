@@ -43,6 +43,15 @@ researchers:
   - risk          # Safety, health, travel advisories ← SHARED AGENT
 
 # ══════════════════════════════════════════════════════════════════════════════
+# DISPLAY NAMES - Used in report titles and UI
+# ══════════════════════════════════════════════════════════════════════════════
+display_names:
+  entity: Destination
+  entity_plural: Destinations
+  customer: Traveler
+  customer_plural: Travelers
+
+# ══════════════════════════════════════════════════════════════════════════════
 # ENTITY MODEL CONFIGURATION (Standard)
 # ══════════════════════════════════════════════════════════════════════════════
 # Uses the Entity Model:
