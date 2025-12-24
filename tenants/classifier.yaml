@@ -37,19 +37,6 @@ analysis_config:
 
 # Weaviate routing - seeds stored in cloud for production queries
 collections:
-  # Company research collections - legacy model (Company_source → Company_research_*)
-  Company_source: "cloud"
-  Company_research_competitor: "cloud"
-  Company_research_customer: "cloud"
-  Company_research_financial: "cloud"
-  Company_research_industry: "cloud"
-  Company_research_journalist: "cloud"
-  Company_research_leadership: "cloud"
-  Company_research_partner: "cloud"
-  Company_research_product: "cloud"
-  Company_research_risk: "cloud"
-  Company_research_social: "cloud"
-  
   # Research collections - entity model (Domain → Research_*)
   Research_competitor: "cloud"
   Research_customer: "cloud"
