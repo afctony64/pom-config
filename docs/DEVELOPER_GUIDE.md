@@ -284,6 +284,7 @@ Define data access patterns for querying research.
 | [Creating Researchers](guides/CREATING_RESEARCHERS.md) | ResearcherAIConfig complete guide |
 | [Creating Schemas](guides/CREATING_SCHEMAS.md) | WeaviateClassConfig complete guide |
 | [Creating Prompts](guides/CREATING_PROMPTS.md) | PromptyTemplate complete guide |
+| [Using Tools](guides/USING_TOOLS.md) | Tool system concepts and usage |
 
 ---
 
