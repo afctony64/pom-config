@@ -47,7 +47,7 @@ description: Research company products
 model:
   api: chat
   configuration:
-    type: azure_openai
+    type: pom_llm_proxy
 tools:
   - brave_search        # Available for function calling
   - page_researcher     # Injection tool
@@ -57,6 +57,8 @@ inputs:
     type: object
 ---
 ```
+
+> **Note:** All apps use `pom-llm-proxy` for model routing. The proxy handles backend selection, failover, and priority routing automatically.
 
 ### 2. Reference Injected Data
 
@@ -178,8 +180,8 @@ description: Research company products and services
 model:
   api: chat
   configuration:
-    type: azure_openai
-    azure_deployment: gpt-5-mini
+    type: pom_llm_proxy
+    model: gpt-5-mini
 tools:
   - page_researcher       # Injects website pages
   - brave_search          # LLM can search if needed
