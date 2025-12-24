@@ -14,7 +14,15 @@ id: classifier
 name: Global Classifier
 type: tenant
 description: Global tenant for Vec classification seed data (synthetic training records)
-groups: ["company"]
+
+# Tenant group for research capabilities
+tenant_group: corporate
+
+# Entity collection for reference resolution
+entity_collection: Domain
+
+# Groups for collection access
+groups: ["company", "research", "url"]
 
 # No user - this is a system tenant for seed data only
 user:
@@ -27,10 +35,10 @@ analysis_config:
   mission: "Store and serve synthetic seed data for Vec classification"
   industry_focus: ["all"]
 
-# Weaviate routing - same cluster as production for low-latency queries
-# Seeds are stored in the same Weaviate Cloud instance
+# Weaviate routing - seeds stored in cloud for production queries
 collections:
   # Company research collections - legacy model (Company_source → Company_research_*)
+  Company_source: "cloud"
   Company_research_competitor: "cloud"
   Company_research_customer: "cloud"
   Company_research_financial: "cloud"
@@ -56,4 +64,12 @@ collections:
   
   # Source collections (for reverse reference lookups)
   Domain: "cloud"
-  Company_source: "cloud"
+  
+  # Page collections (for benchmarking and data injection)
+  Page_facts: "spark"
+  Page_intelligence: "spark"
+  Page_content: "spark"
+  
+  # Knowledge and fact collections
+  Knowledge_base: "spark"
+  Fact_base: "spark"
