@@ -423,6 +423,8 @@ properties:
   - array
   - prompt
   - extended
+  metadata:
+    parallel_anchor: true
 - name: productsIds
   dataType:
   - text[]
