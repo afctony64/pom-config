@@ -30,7 +30,7 @@ analysis_config:
 # Weaviate routing - same cluster as production for low-latency queries
 # Seeds are stored in the same Weaviate Cloud instance
 collections:
-  # Company research collections - where seed data lives
+  # Company research collections - legacy model (Company_source → Company_research_*)
   Company_research_competitor: "cloud"
   Company_research_customer: "cloud"
   Company_research_financial: "cloud"
@@ -41,3 +41,15 @@ collections:
   Company_research_product: "cloud"
   Company_research_risk: "cloud"
   Company_research_social: "cloud"
+  
+  # Research collections - entity model (Domain → Research_*)
+  Research_competitor: "cloud"
+  Research_customer: "cloud"
+  Research_financial: "cloud"
+  Research_industry: "cloud"
+  Research_journalist: "cloud"
+  Research_leadership: "cloud"
+  Research_partner: "cloud"
+  Research_product: "cloud"
+  Research_risk: "cloud"
+  Research_social: "cloud"
