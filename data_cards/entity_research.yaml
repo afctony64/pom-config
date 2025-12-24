@@ -39,8 +39,8 @@ parameters:
 
   # ✅ FIX: Use direct parallel queries (no traversal overhead)
   # Remove traversal - query each Research_* collection directly
-  relationship_traversal: false
-  dynamic_templates: false
+  relationship_traversal: true
+  dynamic_templates: true
 
   # Fetch one or more entities
   limit: 10000
