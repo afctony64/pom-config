@@ -61,7 +61,7 @@ field_tags:
 collections:
   - collection: Domain
     required: true
-    uses_field_set: extended  # Get Domain context fields (url, domain, description, etc.)
+    uses_field_set: standard  # Get Domain context fields (url, domain, description, etc.)
 
   # Explicit list of all Research_* collections - queried in parallel
   - collection: Research_industry

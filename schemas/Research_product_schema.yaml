@@ -453,7 +453,7 @@ properties:
   - research
   - evidence
   sets:
-  - array
+  - system
   - prompt
   - extended
 - name: productCategories

@@ -2,7 +2,7 @@ type: research
 class: Research_leadership
 id: Research_leadership
 name: Research Leadership
-description: "\U0001F4DA RESEARCH REPOSITORY: Executive Leadership Intelligence\n\
+description: "📚 RESEARCH REPOSITORY: Executive Leadership Intelligence\n\
   \  \n  RESEARCHER: Executive Leadership Analyst (identity defined in seed data for\
   \ researcher identity)\n  \n  KNOWLEDGE TYPE: Entity-specific leadership research\
   \ and analysis\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's\
@@ -121,7 +121,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - standard
+  - extended
 - name: ceoName
   dataType:
   - text
@@ -141,7 +141,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: ceoTenure
   dataType:
   - text
@@ -150,7 +149,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: founderStatus
   dataType:
   - text
@@ -159,7 +157,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: executiveTeamSize
   dataType:
   - number
@@ -168,7 +165,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: executiveExperienceLLM
   dataType:
   - text
@@ -177,7 +173,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - standard
+  - extended
 - name: keyExecutives
   dataType:
   - text[]
@@ -189,7 +185,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: keyExecutivesIds
   dataType:
   - text[]
@@ -200,7 +195,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: keyExecutiveEvidence
   dataType:
   - text[]
@@ -215,9 +209,8 @@ properties:
   - research
   - evidence
   sets:
-  - array
+  - system
   - prompt
-  - extended
 - name: executiveBackgrounds
   dataType:
   - text[]
@@ -234,7 +227,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: executiveRoles
   dataType:
   - text[]
@@ -249,7 +241,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: executiveTenure
   dataType:
   - text[]
@@ -264,7 +255,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: executiveLinkedIn
   dataType:
   - text[]
@@ -277,7 +267,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: leadershipStyleLLM
   dataType:
   - text
@@ -286,7 +275,7 @@ properties:
   - LLM
   sets:
   - prompt
-  - standard
+  - extended
 - name: boardComposition
   dataType:
   - text
@@ -309,7 +298,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: dataSource
   dataType:
   - text
@@ -394,12 +382,18 @@ properties:
 - name: sourceQuality
   dataType:
   - text
-  description: |
-    Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+  description: 'Quality rating of external tool content provided for analysis [high,
+    medium, low, minimal]:
+
     - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
     - "medium": Some pageData available but limited relevance or coverage
+
     - "low": Minimal pageData, relying on source overview text only
+
     - "minimal": No pageData, only basic entity metadata available
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -409,16 +403,28 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: |
-    Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
-    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
     - "web_verified": Confirmed through web_search with multiple external sources
+
     - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
     - "medium": Based on indirect evidence or partial information
+
     - "low": Limited information, educated guesses
+
     - "inferred": No direct evidence, purely analytical inference
 
-    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge" when you have strong training knowledge about well-known entities.
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -429,13 +435,20 @@ properties:
 - name: reviewFlag
   dataType:
   - text
-  description: |
-    Review requirement [none, for_review, needs_verification]:
-    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
+  description: 'Review requirement [none, for_review, needs_verification]:
+
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
+    - no review needed
+
     - "for_review": Medium confidence with some gaps, human validation helpful
+
     - "needs_verification": Low confidence or pure inference, human review required
 
-    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
+
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
+    - these sources are reliable.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -479,7 +492,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -490,7 +502,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -508,7 +519,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -530,6 +540,7 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
+# Audit fields
 - name: createdAt
   dataType:
   - date
