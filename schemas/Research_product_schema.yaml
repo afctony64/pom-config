@@ -450,7 +450,6 @@ properties:
     text2vec-weaviate:
       skip: true
   tags:
-  - research
   - evidence
   sets:
   - system
