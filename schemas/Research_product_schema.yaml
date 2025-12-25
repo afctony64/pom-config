@@ -455,7 +455,6 @@ properties:
   sets:
   - system
   - prompt
-  - extended
 - name: productCategories
   dataType:
   - text[]
