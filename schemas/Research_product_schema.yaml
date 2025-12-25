@@ -183,6 +183,7 @@ properties:
   - prompt
   - array
   - standard
+  - extended
   metadata:
     parallel_to: productTypeCat
 - name: productTypeCat
@@ -282,6 +283,7 @@ properties:
   - prompt
   - array
   - standard
+  - extended
   metadata:
     parallel_to: productTypeCat
 - name: technologyStackCat

@@ -185,6 +185,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: keyExecutivesIds
   dataType:
   - text[]
@@ -195,6 +196,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: keyExecutiveEvidence
   dataType:
   - text[]
@@ -226,6 +228,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: executiveRoles
   dataType:
   - text[]
@@ -240,6 +243,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: executiveTenure
   dataType:
   - text[]
@@ -254,6 +258,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: executiveLinkedIn
   dataType:
   - text[]
@@ -297,6 +302,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: dataSource
   dataType:
   - text
@@ -491,6 +497,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -501,6 +508,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -518,6 +526,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true

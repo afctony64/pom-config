@@ -61,19 +61,30 @@ field_tags:
 collections:
   - collection: Domain
     required: true
-    uses_field_set: standard  # Get Domain context fields (url, domain, description, etc.)
+    uses_field_set: extended  # Get Domain context fields (url, domain, description, etc.)
 
   # Explicit list of all Research_* collections - queried in parallel
+  # Using extended field set to include all arrays
   - collection: Research_industry
+    uses_field_set: extended
   - collection: Research_financial
+    uses_field_set: extended
   - collection: Research_product
+    uses_field_set: extended
   - collection: Research_customer
+    uses_field_set: extended
   - collection: Research_leadership
+    uses_field_set: extended
   - collection: Research_competitor
+    uses_field_set: extended
   - collection: Research_partner
+    uses_field_set: extended
   - collection: Research_risk
+    uses_field_set: extended
   - collection: Research_journalist
+    uses_field_set: extended
   - collection: Research_social
+    uses_field_set: extended
 
 # Chat intelligence integration
 chat_integration:
