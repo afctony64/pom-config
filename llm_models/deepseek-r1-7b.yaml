@@ -1,7 +1,7 @@
-id: "deepseek-r1:7b"
+id: deepseek-r1:7b
 name: DeepSeek R1 7B
 type: llm_model
-version: "1.0.0"
+version: 1.0.0
 provider:
   name: ollama
   api_type: ollama
@@ -29,7 +29,7 @@ cost:
 performance:
   avg_latency_ms: 3302.8
   tokens_per_second: 0
-  context_window: 16384  # Practical for Spark (theoretical: 131072)
+  context_window: 16384
 metadata:
   description: DeepSeek R1 7B with Qwen distillation - Reasoning-focused
   category: reasoning
@@ -44,30 +44,23 @@ requirements:
   gpu_vram_mb: 4500
   system_ram_mb: 4000
   cpu_cores: 2.0
-
 hardware_detection:
   execution_mode: local_gpu
   optimal_concurrency: 8
   max_concurrency: 16
-
-# === RESOURCE CLASS (for benchmarking) ===
 resource_class:
-  class: A  # Ultra-Efficient (distilled 7B, runs light)
+  class: B
   vram_gb: 4.5
-  parallel_capacity_spark: 25  # Max parallel on 128GB GPU
+  parallel_capacity_spark: 25
   recommended_parallel: 20
   throughput_tier: moderate
   tokens_per_second_single: 20
-
-# === MODEL RANKING SYSTEM ===
 tier: B
-tier_rank: 5  # Reasoning-focused B-tier
-
-# === BASE SCORES (from public benchmarks - DO NOT MODIFY) ===
+tier_rank: 5
 base_scores:
-  source: "DeepSeek R1 Technical Report, January 2025"
-  source_url: "https://github.com/deepseek-ai/DeepSeek-R1"
-  captured_date: "2025-12-05"
+  source: DeepSeek R1 Technical Report, January 2025
+  source_url: https://github.com/deepseek-ai/DeepSeek-R1
+  captured_date: '2025-12-05'
   raw_benchmarks:
     mmlu: 65.8
     gsm8k: 78.5
@@ -76,27 +69,23 @@ base_scores:
     humaneval: 38.2
     ifeval: 68.5
     math: 58.4
-  notes: "DeepSeek R1 7B - distilled reasoning model from Qwen"
-
-# === CALIBRATED DIMENSION SCORES (0-100 normalized) ===
+  notes: DeepSeek R1 7B - distilled reasoning model from Qwen
 dimension_scores:
   summarization: 68
-  reasoning: 82  # Strong reasoning due to distillation
+  reasoning: 82
   instruction: 70
   analysis: 72
   coding: 55
   speed: 65
   context_efficiency: 78
-
 pom_benchmarks:
-  last_calibration: "2025-12-05"
-  calibration_version: "1.0"
+  last_calibration: '2025-12-05'
+  calibration_version: '1.0'
   prompts_tested: {}
   aggregate:
     avg_quality: 70
     avg_latency_ms: 1100
     total_prompts_tested: 0
-
 benchmarks:
   last_run: '2025-11-12T14:06:51.898460'
   tests_passed: 5/5

@@ -1,7 +1,7 @@
-id: "mistral:7b"
+id: mistral:7b
 name: Mistral 7B Instruct
 type: llm_model
-version: "1.0.0"
+version: 1.0.0
 provider:
   name: ollama
   api_type: ollama
@@ -32,6 +32,10 @@ cost:
 performance:
   backends:
     mac_metal:
-      optimal_parallelism: 1  # Mac Ollama does NOT handle parallel - always use 1
+      optimal_parallelism: 1
     spark_cuda:
-      optimal_parallelism: 6  # Spark optimal parallel setting
+      optimal_parallelism: 6
+resource_class:
+  class: B
+  vram_gb: 0.0
+  throughput_tier: moderate

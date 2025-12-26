@@ -1,25 +1,20 @@
-# Gemini 3 Pro - LATEST Google model
-id: "gemini-3-pro"
+id: gemini-3-pro
 aliases:
-  - "gemini-2.5-pro"  # Cursor name
+- gemini-2.5-pro
 name: Gemini 3 Pro
 type: llm_model
-version: "1.0.0"
-
+version: 1.0.0
 provider:
   name: google
   api_type: chat
-
 adapter_config:
   type: google
-  model: gemini-2.5-flash  # Google API model name (working model - gemini-3-pro-preview returns empty content)
-  base_url: null  # Handled by adapter
-
+  model: gemini-2.5-flash
+  base_url: null
 parameters:
   temperature: 0.7
   max_tokens: 16384
   top_p: 0.9
-
 capabilities:
   structured_output: true
   reasoning: true
@@ -28,22 +23,22 @@ capabilities:
   vision: true
   function_calling: true
   multimodal: true
-
 cost:
   per_1m_input_tokens: 1.25
-  per_1m_output_tokens: 5.00
+  per_1m_output_tokens: 5.0
   currency: USD
-
 performance:
   avg_latency_ms: 1000
   tokens_per_second: 120
   context_window: 2000000
-
 metadata:
-  description: "Google Gemini 3 Pro - 2M context flagship"
+  description: Google Gemini 3 Pro - 2M context flagship
   category: reasoning
   status: stable
-  release_date: "2025-11-18"
-
+  release_date: '2025-11-18'
 tier: S
 tier_rank: 2
+resource_class:
+  class: C
+  vram_gb: 0.0
+  throughput_tier: moderate

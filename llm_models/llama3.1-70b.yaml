@@ -1,27 +1,22 @@
-id: "llama3.1:70b"
+id: llama3.1:70b
 aliases:
-  - "llama3.1-70b"
-  - "llama-3.1-70b"
+- llama3.1-70b
+- llama-3.1-70b
 name: Llama 3.1 70B Instruct
 type: llm_model
-version: "1.0.0"
-
-# Now using Groq for cloud inference (was VastAI)
+version: 1.0.0
 provider:
   name: groq
   api_type: chat
-
 adapter_config:
   type: groq
-  model: llama-3.3-70b-versatile  # Groq uses Llama 3.3 70B
+  model: llama-3.3-70b-versatile
   base_url: https://api.groq.com/openai/v1
   base_url_env: GROQ_API_KEY
-
 parameters:
   temperature: 0.7
   max_tokens: 4000
   top_p: 0.9
-
 capabilities:
   structured_output: true
   reasoning: true
@@ -30,53 +25,45 @@ capabilities:
   vision: false
   function_calling: true
   multimodal: false
-
 cost:
   per_1m_input_tokens: 0.59
   per_1m_output_tokens: 0.79
   currency: USD
-  notes: "Groq LPU inference - ultra-fast"
-
+  notes: Groq LPU inference - ultra-fast
 performance:
   avg_latency_ms: 300
   tokens_per_second: 400
   context_window: 128000
-
 metadata:
-  description: "Llama 3.3 70B on Groq LPU - ultra-fast large model inference"
+  description: Llama 3.3 70B on Groq LPU - ultra-fast large model inference
   category: general
   status: stable
-  release_date: "2024-12-01"
-  last_verified: "2025-12-18"
+  release_date: '2024-12-01'
+  last_verified: '2025-12-18'
   family: llama3
   family_tier: premium
   strength: general
   recommended_for:
-    - "Complex reasoning tasks"
-    - "Long-form content generation"
-    - "Multi-step analysis"
+  - Complex reasoning tasks
+  - Long-form content generation
+  - Multi-step analysis
   not_recommended_for:
-    - "Cost-sensitive high-volume"
-
+  - Cost-sensitive high-volume
 requirements:
-  gpu_vram_mb: 0  # Cloud-only
+  gpu_vram_mb: 0
   system_ram_mb: 0
   cpu_cores: 0
-
 hardware_detection:
   execution_mode: cloud
-
-routing: [groq]
-
+routing:
+- groq
 resource_class:
-  class: A
+  class: C
   vram_gb: 0
   throughput_tier: high
   tokens_per_second_single: 400
-
 tier: S
 tier_rank: 1
-
 dimension_scores:
   summarization: 92
   reasoning: 94
@@ -85,13 +72,11 @@ dimension_scores:
   coding: 85
   speed: 90
   context_efficiency: 90
-
 pom_benchmarks:
-  last_calibration: "2025-12-18"
-  calibration_version: "2.0"
+  last_calibration: '2025-12-18'
+  calibration_version: '2.0'
   aggregate:
     avg_quality: 92
     avg_latency_ms: 300
     total_prompts_tested: 0
-
 benchmarks: {}

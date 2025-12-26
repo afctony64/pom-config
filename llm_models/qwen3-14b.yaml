@@ -1,7 +1,7 @@
-id: "qwen3:14b"
+id: qwen3:14b
 name: Qwen 3 14B
 type: llm_model
-version: "1.0.0"
+version: 1.0.0
 provider:
   name: ollama
   api_type: ollama
@@ -30,9 +30,10 @@ cost:
 performance:
   avg_latency_ms: 63887
   tokens_per_second: 21
-  context_window: 24576  # Default 24K - AdaptiveContextManager handles ratcheting
+  context_window: 24576
 metadata:
-  description: "Alibaba Qwen 3 14B. Best for reasoning and coding. Note: No Groq equivalent available - uses local Ollama only."
+  description: 'Alibaba Qwen 3 14B. Best for reasoning and coding. Note: No Groq equivalent
+    available - uses local Ollama only.'
   category: reasoning
   status: stable
   release_date: '2025-04-01'
@@ -48,7 +49,8 @@ metadata:
   not_recommended_for:
   - Maximum reasoning quality (use 32b on Groq)
   - Multimodal tasks (use gemma3)
-  notes: "No Groq equivalent - must use local Ollama. For faster inference, use qwen3:32b on Groq."
+  notes: No Groq equivalent - must use local Ollama. For faster inference, use qwen3:32b
+    on Groq.
 requirements:
   gpu_vram_mb: 9300
   system_ram_mb: 12000
@@ -74,14 +76,11 @@ hardware_detection:
     optimal_parallel_workers: 1
     recommended_batch_size: 1
     notes: Slow but workable
-
-# Routing order: Spark before Mac for 14B+ models (faster on GPU)
 routing:
-  - spark
-  - mac
-
+- spark
+- mac
 resource_class:
-  class: B
+  class: C
   vram_gb: 9.3
   parallel_capacity_spark: 13
   recommended_parallel: 10

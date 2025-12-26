@@ -1,26 +1,21 @@
-# GPT 5.2 - LATEST OpenAI model
-id: "gpt-5.2"
+id: gpt-5.2
 aliases:
-  - "gpt-4o"  # Cursor name
+- gpt-4o
 name: GPT 5.2
 type: llm_model
-version: "1.0.0"
-
+version: 1.0.0
 provider:
   name: openai_responses
   api_type: responses
-
 adapter_config:
   type: openai_responses
   model: gpt-5.2
   base_url: null
   base_url_env: OPENAI_API_KEY
-
 parameters:
   temperature: 0.7
   max_tokens: 16384
   top_p: 1.0
-
 capabilities:
   structured_output: true
   reasoning: true
@@ -29,22 +24,22 @@ capabilities:
   vision: true
   function_calling: true
   multimodal: true
-
 cost:
-  per_1m_input_tokens: 2.50
-  per_1m_output_tokens: 10.00
+  per_1m_input_tokens: 2.5
+  per_1m_output_tokens: 10.0
   currency: USD
-
 performance:
   avg_latency_ms: 1500
   tokens_per_second: 100
   context_window: 128000
-
 metadata:
-  description: "OpenAI GPT 5.2 - latest flagship"
+  description: OpenAI GPT 5.2 - latest flagship
   category: reasoning
   status: stable
-  release_date: "2025-12-11"
-
+  release_date: '2025-12-11'
 tier: S
 tier_rank: 2
+resource_class:
+  class: C
+  vram_gb: 0.0
+  throughput_tier: moderate

@@ -1,44 +1,42 @@
-id: "gemma3:1b"
+id: gemma3:1b
 name: Gemma 3 1B
 type: llm_model
-version: "1.0.0"
-
+version: 1.0.0
 provider:
   name: ollama
   api_type: ollama
-
 adapter_config:
   type: ollama
   model: gemma3:1b
   base_url: null
   base_url_env: null
-
 parameters:
   temperature: 0.7
   max_tokens: 500
   top_p: 0.9
-
 capabilities:
   structured_output: true
   reasoning: false
   tool_calling: false
   streaming: true
-  vision: false  # 1B does NOT have vision
+  vision: false
   function_calling: false
   multimodal: false
-
 cost:
   per_1m_input_tokens: 0.0
   per_1m_output_tokens: 0.0
   currency: USD
-  notes: "Free local inference"
-
+  notes: Free local inference
 performance:
   avg_latency_ms: 1000
   context_window: 8192
   tokens_per_second: 50
 backends:
   mac_metal:
-    optimal_parallelism: 1  # Mac Ollama does NOT handle parallel - always use 1
+    optimal_parallelism: 1
   spark_cuda:
-    optimal_parallelism: 50  # Spark optimal parallel setting
+    optimal_parallelism: 50
+resource_class:
+  class: A
+  vram_gb: 0.0
+  throughput_tier: moderate

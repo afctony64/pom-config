@@ -1,26 +1,21 @@
-# Claude 4.5 Haiku - LATEST Anthropic fast model
-id: "claude-4.5-haiku"
+id: claude-4.5-haiku
 aliases:
-  - "claude-3.5-haiku"  # Cursor name
+- claude-3.5-haiku
 name: Claude 4.5 Haiku
 type: llm_model
-version: "1.0.0"
-
+version: 1.0.0
 provider:
   name: anthropic
   api_type: chat
-
 adapter_config:
   type: anthropic
   model: claude-haiku-4-5-20251001
   base_url: null
   base_url_env: ANTHROPIC_API_KEY
-
 parameters:
   temperature: 0.7
   max_tokens: 8192
   top_p: 0.9
-
 capabilities:
   structured_output: true
   reasoning: true
@@ -28,22 +23,22 @@ capabilities:
   streaming: true
   vision: false
   function_calling: true
-
 cost:
   per_1m_input_tokens: 0.25
   per_1m_output_tokens: 1.25
   currency: USD
-
 performance:
   avg_latency_ms: 500
   tokens_per_second: 150
   context_window: 200000
-
 metadata:
-  description: "Anthropic Claude 4.5 Haiku - fast and affordable"
+  description: Anthropic Claude 4.5 Haiku - fast and affordable
   category: general
   status: stable
-  release_date: "2025-10-01"
-
+  release_date: '2025-10-01'
 tier: A
 tier_rank: 3
+resource_class:
+  class: B
+  vram_gb: 0.0
+  throughput_tier: moderate

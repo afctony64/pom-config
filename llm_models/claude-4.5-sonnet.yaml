@@ -1,30 +1,25 @@
-# Claude 4.5 Sonnet - LATEST Anthropic balanced model
-id: "claude-4.5-sonnet"
+id: claude-4.5-sonnet
 aliases:
-  - "claude-4-sonnet"  # Cursor name
-  - "claude-4-sonnet-thinking"
-  - "claude-4.5-sonnet-thinking"
-  - "claude-4.5-sonnet-high-thinking"
-  - "claude-sonnet-4-5"
+- claude-4-sonnet
+- claude-4-sonnet-thinking
+- claude-4.5-sonnet-thinking
+- claude-4.5-sonnet-high-thinking
+- claude-sonnet-4-5
 name: Claude 4.5 Sonnet
 type: llm_model
-version: "1.0.0"
-
+version: 1.0.0
 provider:
   name: anthropic
   api_type: chat
-
 adapter_config:
   type: anthropic
   model: claude-sonnet-4-5-20250929
   base_url: null
   base_url_env: ANTHROPIC_API_KEY
-
 parameters:
   temperature: 0.7
   max_tokens: 16384
   top_p: 0.9
-
 capabilities:
   structured_output: true
   reasoning: true
@@ -33,22 +28,22 @@ capabilities:
   vision: true
   function_calling: true
   multimodal: true
-
 cost:
-  per_1m_input_tokens: 3.00
-  per_1m_output_tokens: 15.00
+  per_1m_input_tokens: 3.0
+  per_1m_output_tokens: 15.0
   currency: USD
-
 performance:
   avg_latency_ms: 1500
   tokens_per_second: 80
   context_window: 200000
-
 metadata:
-  description: "Anthropic Claude 4.5 Sonnet - balanced performance"
+  description: Anthropic Claude 4.5 Sonnet - balanced performance
   category: reasoning
   status: stable
-  release_date: "2025-09-29"
-
+  release_date: '2025-09-29'
 tier: S
 tier_rank: 2
+resource_class:
+  class: C
+  vram_gb: 0.0
+  throughput_tier: moderate

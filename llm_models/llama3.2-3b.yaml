@@ -1,7 +1,7 @@
-id: "llama3.2:3b"
+id: llama3.2:3b
 name: Llama 3.2 3B Instruct
 type: llm_model
-version: "1.0.0"
+version: 1.0.0
 provider:
   name: ollama
   api_type: ollama
@@ -29,6 +29,10 @@ cost:
 performance:
   backends:
     mac_metal:
-      optimal_parallelism: 1  # Mac Ollama does NOT handle parallel - always use 1
+      optimal_parallelism: 1
     spark_cuda:
-      optimal_parallelism: 12  # Spark optimal parallel setting
+      optimal_parallelism: 12
+resource_class:
+  class: A
+  vram_gb: 0.0
+  throughput_tier: moderate

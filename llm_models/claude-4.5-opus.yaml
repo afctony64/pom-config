@@ -1,30 +1,25 @@
-# Claude 4.5 Opus - LATEST Anthropic model
-id: "claude-4.5-opus"
+id: claude-4.5-opus
 aliases:
-  - "claude-4-opus"  # Cursor name
-  - "claude-4-opus-thinking"
-  - "claude-4.5-opus-thinking"
-  - "claude-4.5-opus-high-thinking"
-  - "claude-opus-4-5"
+- claude-4-opus
+- claude-4-opus-thinking
+- claude-4.5-opus-thinking
+- claude-4.5-opus-high-thinking
+- claude-opus-4-5
 name: Claude 4.5 Opus
 type: llm_model
-version: "1.0.0"
-
+version: 1.0.0
 provider:
   name: anthropic
   api_type: chat
-
 adapter_config:
   type: anthropic
   model: claude-opus-4-5-20251101
   base_url: null
   base_url_env: ANTHROPIC_API_KEY
-
 parameters:
   temperature: 0.7
   max_tokens: 32768
   top_p: 0.9
-
 capabilities:
   structured_output: true
   reasoning: true
@@ -33,22 +28,22 @@ capabilities:
   vision: true
   function_calling: true
   multimodal: true
-
 cost:
-  per_1m_input_tokens: 15.00
-  per_1m_output_tokens: 75.00
+  per_1m_input_tokens: 15.0
+  per_1m_output_tokens: 75.0
   currency: USD
-
 performance:
   avg_latency_ms: 2000
   tokens_per_second: 60
   context_window: 200000
-
 metadata:
-  description: "Anthropic Claude 4.5 Opus - most powerful model"
+  description: Anthropic Claude 4.5 Opus - most powerful model
   category: reasoning
   status: stable
-  release_date: "2025-11-01"
-
+  release_date: '2025-11-01'
 tier: S
 tier_rank: 1
+resource_class:
+  class: C
+  vram_gb: 0.0
+  throughput_tier: moderate

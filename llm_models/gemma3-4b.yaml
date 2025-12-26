@@ -1,20 +1,46 @@
-id: "gemma3:4b"
+id: gemma3:4b
 name: Gemma 3 4B
 type: llm_model
-version: "1.0.0"
-provider: {name: ollama, api_type: ollama}
-adapter_config: {type: ollama, model: "gemma3:4b", base_url: null, base_url_env: OLLAMA_HOST}
-parameters: {temperature: 0.7, max_tokens: 1000, top_p: 0.9}
-capabilities: {structured_output: true, reasoning: false, tool_calling: false, streaming: true, vision: true, function_calling: false, multimodal: true}
-cost: {per_1m_input_tokens: 0.0, per_1m_output_tokens: 0.0, currency: USD, notes: "Free local"}
-performance: {avg_latency_ms: 350, tokens_per_second: 110, context_window: 8192}  # Practical (theoretical: 128K)
+version: 1.0.0
+provider:
+  name: ollama
+  api_type: ollama
+adapter_config:
+  type: ollama
+  model: gemma3:4b
+  base_url: null
+  base_url_env: OLLAMA_HOST
+parameters:
+  temperature: 0.7
+  max_tokens: 1000
+  top_p: 0.9
+capabilities:
+  structured_output: true
+  reasoning: false
+  tool_calling: false
+  streaming: true
+  vision: true
+  function_calling: false
+  multimodal: true
+cost:
+  per_1m_input_tokens: 0.0
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: Free local
+performance:
+  avg_latency_ms: 350
+  tokens_per_second: 110
+  context_window: 8192
 backends:
   mac_metal:
-    optimal_parallelism: 1  # Mac Ollama does NOT handle parallel - always use 1
+    optimal_parallelism: 1
   spark_cuda:
-    optimal_parallelism: 6  # Spark optimal parallel setting
-
+    optimal_parallelism: 6
 metadata:
-  description: "Google Gemma 3 4B - Fast inference model with 128K context"
+  description: Google Gemma 3 4B - Fast inference model with 128K context
   category: general
   status: stable
+resource_class:
+  class: A
+  vram_gb: 0.0
+  throughput_tier: moderate
