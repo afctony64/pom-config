@@ -3,21 +3,33 @@ class: Domain
 version: 8.0
 group: url
 weaviate_instance: cloud
-description: |
-  Domain collection - THE UNIVERSAL ENTITY COLLECTION.
+description: 'Domain collection - THE UNIVERSAL ENTITY COLLECTION.
+
 
   KEY CONCEPT: The Entity IS the Domain record.
-  - URL is the entity's digital signature (identity)
+
+  - URL is the entity''s digital signature (identity)
+
   - Could be: company, destination, recipe, film, book
+
   - Tenant isolation defines whose research it is
+
   - TenantGroup defines which researchers to run
+
   - Everything else is DISCOVERED by enrichers and researchers
 
+
   FLOW:
+
   1. URL seed → Domain record created (entity exists)
+
   2. Enrichers discover: content, social_accounts, etc.
+
   3. TenantGroup.researchers analyze → Research_* collections
+
   4. Research records reference back to this Domain
+
+  '
 vectorConfig:
   default:
     text2vec-weaviate:
@@ -40,9 +52,6 @@ invertedIndexConfig:
     b: 0.75
     k1: 1.2
 properties:
-# ============================================================
-# ENTITY IDENTITY - Domain IS the entity
-# ============================================================
 - name: url
   dataType:
   - text
@@ -56,7 +65,6 @@ properties:
   tags:
   - identity
   - web
-
 - name: entityType
   dataType:
   - text
@@ -68,7 +76,6 @@ properties:
   tags:
   - identity
   - categorical
-
 - name: tenantGroup
   dataType:
   - text
@@ -80,10 +87,6 @@ properties:
   tags:
   - context
   - categorical
-
-# ============================================================
-# DISCOVERED CONTENT
-# ============================================================
 - name: title
   dataType:
   - text
@@ -156,6 +159,16 @@ properties:
   - standard
   tags:
   - filtering
+- name: domain_enriched
+  dataType:
+  - boolean
+  description: Whether the domain has been successfully enriched (has title, description, or content >= 50 chars)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - filtering
+  - processing
 - name: blacklist_reason
   dataType:
   - text
@@ -198,8 +211,7 @@ properties:
 - name: enricherResults
   dataType:
   - object[]
-  description: Array of flat enricher objects with all 47 MCPToolResponse fields (Weaviate
-    4.16 compatible)
+  description: Array of flat enricher objects with all 47 MCPToolResponse fields (Weaviate 4.16 compatible)
   indexSearchable: false
   nestedProperties:
   - name: tool_name
@@ -324,8 +336,7 @@ properties:
   - name: fetch_method
     dataType:
     - text
-    description: Fetch method used (aiohttp, playwright, google_fallback) - CRITICAL
-      for performance tracking
+    description: Fetch method used (aiohttp, playwright, google_fallback) - CRITICAL for performance tracking
     indexFilterable: true
     tokenization: field
   - name: title_source
@@ -600,8 +611,7 @@ properties:
 - name: page_count
   dataType:
   - int
-  description: Number of good pages processed in page_content collection for this
-    company
+  description: Number of good pages processed in page_content collection for this company
   indexFilterable: true
   sets:
   - standard
@@ -896,8 +906,7 @@ properties:
 - name: has_hsts
   dataType:
   - boolean
-  description: Has HTTP Strict Transport Security header from http_security_headers
-    enricher
+  description: Has HTTP Strict Transport Security header from http_security_headers enricher
   indexFilterable: true
 - name: has_csp
   dataType:
@@ -943,8 +952,7 @@ properties:
 - name: social_presence_tier
   dataType:
   - text
-  description: Social presence tier (Strong/Good/Basic/Minimal) from social_snapshot
-    enricher
+  description: Social presence tier (Strong/Good/Basic/Minimal) from social_snapshot enricher
   indexFilterable: true
   tokenization: field
   sets:
@@ -982,8 +990,7 @@ properties:
 - name: sitemap_discovery_method
   dataType:
   - text
-  description: Method used to discover sitemaps (robots_txt/well_known/dns) from sitemap_discovery
-    enricher
+  description: Method used to discover sitemaps (robots_txt/well_known/dns) from sitemap_discovery enricher
   indexFilterable: true
   tokenization: field
 - name: total_sitemaps_discovered
@@ -994,20 +1001,17 @@ properties:
 - name: attempted_locations
   dataType:
   - text[]
-  description: Sitemap locations attempted during discovery from sitemap_discovery
-    enricher
+  description: Sitemap locations attempted during discovery from sitemap_discovery enricher
   indexSearchable: true
 - name: successful_locations
   dataType:
   - text[]
-  description: Sitemap locations that were successfully found from sitemap_discovery
-    enricher
+  description: Sitemap locations that were successfully found from sitemap_discovery enricher
   indexSearchable: true
 - name: bot_protected
   dataType:
   - boolean
-  description: Whether sitemap discovery was blocked by bot protection from sitemap_discovery
-    enricher
+  description: Whether sitemap discovery was blocked by bot protection from sitemap_discovery enricher
   indexFilterable: true
 - name: homepage_urls_discovered
   dataType:
@@ -1022,8 +1026,7 @@ properties:
 - name: homepage_discovery_method
   dataType:
   - text
-  description: Method used for homepage discovery (direct/redirect) from homepage_parser
-    enricher
+  description: Method used for homepage discovery (direct/redirect) from homepage_parser enricher
   indexFilterable: true
   tokenization: field
 - name: homepage_has_navigation
@@ -1054,14 +1057,12 @@ properties:
 - name: homepage_valid_content_urls
   dataType:
   - int
-  description: Count of valid content URLs extracted from homepage by homepage_parser
-    enricher
+  description: Count of valid content URLs extracted from homepage by homepage_parser enricher
   indexFilterable: true
 - name: corporate_ip_ranges
   dataType:
   - text[]
-  description: Known corporate IP addresses/ranges for this company (from visitor
-    tracking)
+  description: Known corporate IP addresses/ranges for this company (from visitor tracking)
   indexSearchable: true
   sets:
   - extended
@@ -1072,8 +1073,7 @@ properties:
 - name: visitor_networks
   dataType:
   - text
-  description: JSON array of network information from detected visitors (ISP, location,
-    connection type)
+  description: JSON array of network information from detected visitors (ISP, location, connection type)
   indexSearchable: true
   sets:
   - standard
@@ -1214,126 +1214,90 @@ properties:
   tags:
   - pipeline
   - processing
-# ============================================================
-# REFERENCES - Domain IS the Entity in the new model
-# ============================================================
-# Domain is the universal entity collection.
-# The URL is the entity's digital signature.
-# Researchers reference Domain, not a separate source.
 references:
-# --- LEGACY: Company_source reference (backward compatibility) ---
 - name: company
   target_collection: Company_source
   uuid_source_field: uuid
   auto_flatten: false
-  description: "LEGACY: Reference to Company_source. In new model, Domain IS the entity."
-
-# --- NEW MODEL: Researcher references ---
-# Domain holds references to all researcher outputs for this entity
+  description: 'LEGACY: Reference to Company_source. In new model, Domain IS the entity.'
 - name: research_industry
   target_collection: Research_industry
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Industry researcher analysis for this entity"
-
+  description: Industry researcher analysis for this entity
 - name: research_financial
   target_collection: Research_financial
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Financial researcher analysis for this entity"
-
+  description: Financial researcher analysis for this entity
 - name: research_risk
   target_collection: Research_risk
   uuid_source_field: uuid
   auto_flatten: false
-  description: "DEPRECATED: Use 'risk' instead. Risk researcher analysis."
-
-# --- CANONICAL: Researcher references (named to match researcher_id) ---
-# Reference name matches researcher_id for CLI consistency (e.g., --researcher-id competitor → reference 'competitor')
-# These are the standard references used by pomflow_cli and reverse_references from Research_* schemas
+  description: 'DEPRECATED: Use ''risk'' instead. Risk researcher analysis.'
 - name: industry
   target_collection: Research_industry
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Industry researcher analysis for this entity"
-
+  description: Industry researcher analysis for this entity
 - name: financial
   target_collection: Research_financial
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Financial researcher analysis for this entity"
-
+  description: Financial researcher analysis for this entity
 - name: leadership
   target_collection: Research_leadership
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Leadership researcher analysis for this entity"
-
+  description: Leadership researcher analysis for this entity
 - name: risk
   target_collection: Research_risk
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Risk researcher analysis for this entity"
-
+  description: Risk researcher analysis for this entity
 - name: customer
   target_collection: Research_customer
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Customer researcher analysis for this entity"
-
+  description: Customer researcher analysis for this entity
 - name: competitor
   target_collection: Research_competitor
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Competitor researcher analysis for this entity"
-
+  description: Competitor researcher analysis for this entity
 - name: journalist
   target_collection: Research_journalist
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Journalist/media researcher analysis for this entity"
-
+  description: Journalist/media researcher analysis for this entity
 - name: partner
   target_collection: Research_partner
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Partner researcher analysis for this entity"
-
+  description: Partner researcher analysis for this entity
 - name: product
   target_collection: Research_product
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Product researcher analysis for this entity"
-
+  description: Product researcher analysis for this entity
 - name: social
   target_collection: Research_social
   uuid_source_field: uuid
   auto_flatten: false
-  description: "Social researcher analysis for this entity"
-
+  description: Social researcher analysis for this entity
 collection_name: domain
 uuid_strategy:
   fields:
   - field: domain
     namespace: URL
-    description: Primary strategy using domain for deterministic UUIDs (consistent
-      across collections)
+    description: Primary strategy using domain for deterministic UUIDs (consistent across collections)
   - field: url
     namespace: URL
     description: Fallback strategy using full URL for deterministic UUIDs
 dependencies:
 - type: foundational
-
-# ============================================================
-# DATA SOURCES - Domain IS the entity (self-referential)
-# ============================================================
-# In the new model, Domain is the entity source.
-# Seed data (URLs) create Domain records directly.
-# Company_source is LEGACY (for backward compatibility only).
 data_sources:
-  # NEW MODEL: Domain is self-sourced from URL seeds
   entity_source: Domain
-  # LEGACY: Company_source for backward compatibility
   source_collection: Company_source
 collection_groups:
 - url_collections
@@ -1342,8 +1306,7 @@ schema_config:
 calculated_fields:
 - name: enrichment_completeness
   field_type: calculated
-  formula: 'enrichment_status === ''completed'' ? 1 : (enrichment_status === ''partial''
-    ? 0.5 : 0)'
+  formula: 'enrichment_status === ''completed'' ? 1 : (enrichment_status === ''partial'' ? 0.5 : 0)'
   description: 🔄 Enrichment completeness score (0-1)
   dataType:
   - number
@@ -1359,8 +1322,7 @@ calculated_fields:
   - count
 - name: domain_trust_score
   field_type: calculated
-  formula: '(security_score || 0) * (site_readable ? 1 : 0.5) * (is_blacklisted ?
-    0 : 1)'
+  formula: '(security_score || 0) * (site_readable ? 1 : 0.5) * (is_blacklisted ? 0 : 1)'
   description: 🛡️ Combined domain trust score (calculated locally)
   dataType:
   - number
