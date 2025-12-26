@@ -159,7 +159,6 @@ properties:
   - array
   - spawn
   - prompt
-  - extended
 - name: keyCompetitorsIds
   dataType:
   - text[]
@@ -170,7 +169,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: competitorDomain
   dataType:
   - text[]
@@ -182,7 +180,6 @@ properties:
   - array
   - spawn
   - prompt
-  - extended
 - name: keyCompetitorEvidence
   dataType:
   - text[]
@@ -194,9 +191,10 @@ properties:
     text2vec-weaviate:
       skip: true
   tags:
+  - research
   - evidence
   sets:
-  - system
+  - array
   - prompt
 - name: competitorPositioning
   dataType:
@@ -210,7 +208,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: competitorPriceVs
   dataType:
   - text[]
@@ -223,7 +220,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: competitorAdvantagesVs
   dataType:
   - text[]
@@ -237,7 +233,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: competitorGapsVs
   dataType:
   - text[]
@@ -264,7 +259,6 @@ properties:
   - array
   - spawn
   - prompt
-  - extended
 - name: differentiationFactors
   dataType:
   - text[]
@@ -274,7 +268,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: competitiveAdvantages
   dataType:
   - text[]
@@ -284,7 +277,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: competitiveThreats
   dataType:
   - text[]
@@ -294,7 +286,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: marketSize
   dataType:
   - text
@@ -313,7 +304,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: competitorAnalysisLLM
   dataType:
   - text
