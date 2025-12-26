@@ -419,7 +419,31 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: Confidence level of analysis (high/medium/low/inferred/web_verified)
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
+    - "web_verified": Confirmed through web_search with multiple external sources
+
+    - "llm_knowledge": Strong LLM training knowledge about well-known companies/entities
+
+    - "medium": Based on indirect evidence or partial information
+
+    - "low": Limited information, educated guesses
+
+    - "inferred": No direct evidence, purely analytical inference
+
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
   sets:
   - system
   - metadata
