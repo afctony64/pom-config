@@ -33,6 +33,10 @@ performance:
       optimal_parallelism: 1
     spark_cuda:
       optimal_parallelism: 14
+metadata:
+  description: Mistral Nemo 12B Instruct - High-quality instruction-tuned model
+  category: general
+  status: stable
 resource_class:
   class: C
   vram_gb: 0.0
