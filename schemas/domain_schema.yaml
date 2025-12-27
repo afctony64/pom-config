@@ -1215,11 +1215,8 @@ properties:
   - pipeline
   - processing
 references:
-- name: company
-  target_collection: Company_source
-  uuid_source_field: uuid
-  auto_flatten: false
-  description: 'LEGACY: Reference to Company_source. In new model, Domain IS the entity.'
+# NOTE: 'company' reference removed - it was legacy data from migration.
+# Domain IS the entity in the new model, no reference to Company_source needed.
 - name: research_industry
   target_collection: Research_industry
   uuid_source_field: uuid
