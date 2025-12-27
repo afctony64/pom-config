@@ -104,6 +104,7 @@ properties:
   description: Source of research data
   sets:
   - system
+  - extended
 - name: keyCustomers
   dataType:
   - text[]
@@ -201,6 +202,7 @@ properties:
   sets:
   - prompt
   - array
+  - extended
 - name: customerProfile
   dataType:
   - text
@@ -522,6 +524,7 @@ properties:
   sets:
   - standard
   - VecCat
+  - extended
   metadata:
     classifier_collection: Research_industry
     classifier_vector: industrySegmentVector
@@ -672,6 +675,7 @@ properties:
   - prompt
   - array
   - standard
+  - extended
 - name: keyCustomerIndustrySegmentCat
   dataType:
   - text[]
@@ -806,6 +810,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reasoning
   dataType:
   - text[]
@@ -861,6 +866,7 @@ properties:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true

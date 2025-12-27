@@ -210,6 +210,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: hasNewsroom
   dataType:
   - boolean
@@ -326,6 +327,7 @@ properties:
   description: Source of classification data
   sets:
   - system
+  - extended
 - name: mediaTypeCat
   dataType:
   - text
@@ -419,6 +421,7 @@ properties:
   - system
   - metadata
   - prompt
+  - extended
 - name: reviewFlag
   dataType:
   - text
@@ -443,6 +446,7 @@ properties:
   - system
   - metadata
   - prompt
+  - extended
 - name: analysisConfidence
   dataType:
   - text
@@ -474,6 +478,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: citations
   dataType:
   - text[]
@@ -484,6 +489,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reasoning
   dataType:
   - text[]
@@ -509,6 +515,7 @@ properties:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true

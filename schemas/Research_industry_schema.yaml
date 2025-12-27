@@ -150,6 +150,7 @@ properties:
   sets:
   - system
   - identifier
+  - extended
   tags:
   - identity
 - name: entityName
@@ -193,6 +194,7 @@ properties:
   description: Source of research data
   sets:
   - system
+  - extended
 - name: sector
   dataType:
   - text[]
@@ -466,6 +468,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reviewFlag
   dataType:
   - text
@@ -492,6 +495,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reasoning
   dataType:
   - text[]
@@ -541,6 +545,7 @@ properties:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true

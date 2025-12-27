@@ -291,6 +291,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: valuation
   dataType:
   - text
@@ -305,6 +306,7 @@ properties:
   description: Source of classification data
   sets:
   - system
+  - extended
 - name: fundingStageCat
   dataType:
   - text
@@ -363,6 +365,7 @@ properties:
   - system
   - standard
   - EnumCat
+  - extended
   metadata:
     source_llm: revenueSizeLLM
 - name: growthVelocityCat
@@ -416,6 +419,7 @@ properties:
   sets:
   - standard
   - EnumCat
+  - extended
   metadata:
     source_llm: growthVelocityLLM
 - name: profitabilityProfileCat
@@ -470,6 +474,7 @@ properties:
   sets:
   - standard
   - EnumCat
+  - extended
   metadata:
     source_llm: profitabilityProfileLLM
 - name: processedDate
@@ -575,6 +580,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reasoning
   dataType:
   - text[]
@@ -600,6 +606,7 @@ properties:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true

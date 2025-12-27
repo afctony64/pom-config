@@ -356,6 +356,7 @@ properties:
   description: Source of classification data
   sets:
   - system
+  - extended
 - name: securityPostureCat
   dataType:
   - text
@@ -422,6 +423,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reviewFlag
   dataType:
   - text
@@ -448,6 +450,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reasoning
   dataType:
   - text[]
@@ -473,6 +476,7 @@ properties:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true

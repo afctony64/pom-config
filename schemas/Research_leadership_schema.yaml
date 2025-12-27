@@ -213,6 +213,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: executiveBackgrounds
   dataType:
   - text[]
@@ -269,6 +270,7 @@ properties:
   - research
   sets:
   - prompt
+  - extended
 - name: leadershipStyleLLM
   dataType:
   - text
@@ -307,6 +309,7 @@ properties:
   description: Source of classification data
   sets:
   - system
+  - extended
 - name: founderProfileCat
   dataType:
   - text
@@ -403,6 +406,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: analysisConfidence
   dataType:
   - text
@@ -435,6 +439,7 @@ properties:
   - system
   - metadata
   - prompt
+  - extended
 - name: reviewFlag
   dataType:
   - text
@@ -459,6 +464,7 @@ properties:
   - system
   - metadata
   - prompt
+  - extended
 - name: citations
   dataType:
   - text[]
@@ -469,6 +475,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reasoning
   dataType:
   - text[]
@@ -531,6 +538,7 @@ properties:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true

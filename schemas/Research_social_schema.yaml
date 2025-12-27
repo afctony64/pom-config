@@ -209,6 +209,7 @@ properties:
   sets:
   - array
   - prompt
+  - extended
 - name: socialEngagementScore
   dataType:
   - int
@@ -336,6 +337,7 @@ properties:
   description: Source of classification data
   sets:
   - system
+  - extended
 - name: platformPresenceCat
   dataType:
   - text
@@ -357,6 +359,7 @@ properties:
   sets:
   - standard
   - EnumCat
+  - extended
 - name: socialContentCat
   dataType:
   - text
@@ -416,6 +419,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reviewFlag
   dataType:
   - text
@@ -442,6 +446,7 @@ properties:
   sets:
   - system
   - metadata
+  - extended
 - name: reasoning
   dataType:
   - text[]
@@ -467,6 +472,7 @@ properties:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
