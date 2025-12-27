@@ -139,6 +139,16 @@ properties:
   tags:
   - processing
   - browser
+- name: captcha_detected
+  dataType:
+  - boolean
+  description: Whether CAPTCHA/bot protection was detected during enrichment (FIX #377/#378)
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - processing
+  - browser
 - name: analysis_type
   dataType:
   - text
