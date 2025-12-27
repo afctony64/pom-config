@@ -46,6 +46,10 @@ parameters:
   limit: 10000
   limit_default: 10000
 
+  # ✅ PRIORITY: Data card level field_set (overrides collection-level)
+  # This applies to ALL collections unless overridden at collection level
+  field_set: [standard, extended, array]
+
 # 🎯 TAG-BASED FILTERING - Fetch fields by tags (Cat, LLM, research)
 # No explicit fields - let the system resolve based on tags!
 fields: {}
@@ -58,36 +62,37 @@ field_tags:
 
 # ✅ FIX: Explicit list of all collections - direct parallel queries
 # No traversal, no auto-discovery - just 11 simple queries in parallel
+# Note: field_set is now specified at parameters.level (priority)
+# Collection-level field_set is only used as default/fallback if parameters.field_set is not set
 collections:
   - collection: Domain
     required: true
-    field_set: [standard, extended, array]  # Get Domain context fields (url, domain, description, etc.) + standard fields
+    # field_set: Inherits from parameters.field_set (priority)
+    # Can override here if needed: field_set: [extended, array]
 
   # Explicit list of all Research_* collections - queried in parallel
-  # Using standard + extended + array field sets to include all fields
-  # Standard: Core fields (Cat, LLM, research tags with standard set)
-  # Extended: Additional context fields (citations, metadata)
-  # Array: Parallel arrays (keyCompetitors, competitorPositioning, etc.)
+  # All collections inherit parameters.field_set: [standard, extended, array]
+  # Collection-level field_set can override if needed (but currently not set)
   - collection: Research_industry
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_financial
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_product
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_customer
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_leadership
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_competitor
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_partner
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_risk
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_journalist
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
   - collection: Research_social
-    field_set: [standard, extended, array]
+    # field_set: Inherits from parameters.field_set
 
 # Chat intelligence integration
 chat_integration:
