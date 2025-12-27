@@ -195,6 +195,11 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
+  nestedProperties:
+  - name: domain
+    dataType:
+    - uuid[]
+    description: Domain reference UUIDs
 group: company
 weaviate_instance: cloud
 collection_name: Source
