@@ -38,5 +38,10 @@ backends:
     optimal_parallelism: 50
 resource_class:
   class: A
-  vram_gb: 0.0
-  throughput_tier: moderate
+  vram_gb: 0.6
+  recommended_parallel: 100
+  throughput_tier: high
+metadata:
+  description: Google Gemma 3 1B - Ultra-compact model for high-throughput tasks
+  category: ultra-efficient
+  status: active
