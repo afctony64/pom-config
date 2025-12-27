@@ -18,7 +18,7 @@ tags:
   - entity-model
 
 target_scope: entity_intelligence
-executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+executor: fetch  # ✅ Use native methods (native methods)
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for entity listing
@@ -28,7 +28,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql  # Legacy parameter format (for compatibility)
+  type: fetch  # Legacy parameter format (for compatibility)
   
   # Root collection - Domain IS the entity in entity model
   collection: Domain
@@ -59,7 +59,7 @@ field_tags: []
 collections:
   - collection: Domain
     required: true
-    uses_field_set: standard  # Default: standard fields (domain, url, basic metadata)
+    field_set: standard  # Default: standard fields (domain, url, basic metadata)
 
 # Field definitions for each field set
 field_sets:

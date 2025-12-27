@@ -28,8 +28,8 @@ tags:
   - scale-ready
 
 # Core search configuration
-search_type: graphql
-executor: graphql
+search_type: fetch
+executor: fetch
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for comprehensive opportunity analysis
@@ -39,7 +39,7 @@ display: true  # User-facing card for comprehensive opportunity analysis
 collection: Company_opportunity
 
 parameters:
-  type: graphql
+  type: fetch
   collection: Company_opportunity
 
   # Relationship configuration
@@ -95,7 +95,7 @@ field_tags:
 # Collection compatibility
 collections:
   - collection: Company_opportunity
-    uses_field_set: standard
+    field_set: standard
     primary: true
     references:
       company:
@@ -108,7 +108,7 @@ collections:
         # Cat fields only prevents 502 timeouts at 1000+ records (query complexity limit)
         # 49.83x faster than field_set iteration, reliable at scale!
   - collection: Company_source
-    uses_field_set: standard
+    field_set: standard
     via_reference: company
 
 # Query behavior

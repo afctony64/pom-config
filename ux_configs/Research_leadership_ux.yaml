@@ -1,0 +1,54 @@
+type: ux_config
+name: Leadership Research
+collection: Research_leadership
+schema_id: Research_leadership  # Explicit link to pom-core schema
+fields:
+- name: ceoName
+  aggregations:
+  - count
+  - nunique
+- name: boardComposition
+  aggregations:
+  - count
+  - nunique
+- name: keyExecutives
+  label: Key Executives
+  aggregations:
+  - count
+- name: keyExecutivesIds
+  label: Key Executives Ids
+  aggregations:
+  - count
+- name: executiveBackgrounds
+  label: Executive Backgrounds
+  aggregations:
+  - count
+- name: executiveRoles
+  label: Executive Roles
+  aggregations:
+  - count
+- name: executiveTenure
+  label: Executive Tenure
+  aggregations:
+  - count
+- name: advisors
+  aggregations:
+  - count
+- name: founderProfileCat
+  maxWidth: 200
+  label: Founder Profile
+  aggregations:
+  - count
+  - nunique
+- name: executiveExperienceCat
+  maxWidth: 250
+  label: Executive Experience
+  aggregations:
+  - count
+  - nunique
+- name: leadershipStyleCat
+  maxWidth: 200
+  label: Leadership Style
+  aggregations:
+  - count
+  - nunique

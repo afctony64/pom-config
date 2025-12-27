@@ -1,0 +1,93 @@
+type: ux_config
+name: Risk Research
+collection: Research_risk
+schema_id: Research_risk  # Explicit link to pom-core schema
+fields:
+- name: trustCenterUrl
+  label: Trust Center URL
+  aggregations:
+  - count
+  - nunique
+- name: securityCertifications
+  label: Security Certifications
+  aggregations:
+  - count
+  - nunique
+- name: securityDocumentation
+  label: Security Documentation
+  aggregations:
+  - count
+  - nunique
+- name: expectedSecurityPosture
+  label: Expected Security
+  aggregations:
+  - count
+  - nunique
+- name: securityGap
+  label: Security Gap
+  aggregations:
+  - count
+  - nunique
+- name: complianceBadges
+  label: Compliance Badges
+  aggregations:
+  - count
+  - nunique
+- name: privacyPolicy
+  label: Privacy Policy
+  aggregations:
+  - count
+  - nunique
+- name: expectedCompliance
+  label: Expected Compliance
+  aggregations:
+  - count
+  - nunique
+- name: complianceGap
+  label: Compliance Gap
+  aggregations:
+  - count
+  - nunique
+- name: industryRegulations
+  label: Industry Regulations
+  aggregations:
+  - count
+  - nunique
+- name: regulatoryBurden
+  label: Regulatory Burden
+  aggregations:
+  - count
+  - nunique
+- name: industryRiskFactors
+  label: Industry Risk Factors
+  aggregations:
+  - count
+  - nunique
+- name: marketRiskFactors
+  label: Market Risk Factors
+  aggregations:
+  - count
+  - nunique
+- name: riskProfile
+  label: Risk Profile
+  aggregations:
+  - count
+  - nunique
+- name: securityPostureCat
+  maxWidth: 250
+  label: Security Posture
+  aggregations:
+  - count
+  - nunique
+- name: complianceCertificationCat
+  maxWidth: 250
+  label: Compliance Certification
+  aggregations:
+  - count
+  - nunique
+- name: regulatoryEnvironmentCat
+  maxWidth: 250
+  label: Regulatory Environment
+  aggregations:
+  - count
+  - nunique

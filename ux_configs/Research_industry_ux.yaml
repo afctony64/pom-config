@@ -1,0 +1,50 @@
+type: ux_config
+name: Industry Research
+collection: Research_industry
+schema_id: Research_industry  # Explicit link to pom-core schema
+fields:
+- name: sector
+  label: Sector
+  aggregations:
+  - count
+  - nunique
+- name: industry
+  label: Industry
+  aggregations:
+  - count
+  - nunique
+- name: naicsCode
+  label: NAICS Code
+  aggregations:
+  - count
+  - nunique
+- name: naicsDescription
+  maxWidth: 300
+  label: NAICS Description
+  aggregations:
+  - count
+  - nunique
+- name: industrySegmentCat
+  maxWidth: 300
+  label: Industry Segment
+  aggregations:
+  - count
+  - nunique
+- name: industrySegmentLLM
+  maxWidth: 300
+  label: Industry Segment Analysis
+  aggregations:
+  - count
+  - nunique
+- name: businessModelCat
+  maxWidth: 300
+  label: Business Model
+  aggregations:
+  - count
+  - nunique
+- name: deliveryModelCat
+  maxWidth: 300
+  label: Delivery Model
+  aggregations:
+  - count
+  - nunique

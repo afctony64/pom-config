@@ -1,0 +1,48 @@
+type: ux_config
+name: Partner Research
+collection: Research_partner
+schema_id: Research_partner  # Explicit link to pom-core schema
+fields:
+- name: keyPartners
+  aggregations:
+  - count
+  - nunique
+- name: keyPartnersIds
+  aggregations:
+  - count
+- name: partnerTypes
+  aggregations:
+  - count
+- name: partnerValue
+  aggregations:
+  - count
+- name: integrations
+  aggregations:
+  - count
+  - nunique
+- name: marketplacePresence
+  aggregations:
+  - count
+  - nunique
+- name: ecosystemRole
+  aggregations:
+  - count
+  - nunique
+- name: partnerTypeCat
+  maxWidth: 200
+  label: Partner Type
+  aggregations:
+  - count
+  - nunique
+- name: integrationCat
+  maxWidth: 200
+  label: Integration Level
+  aggregations:
+  - count
+  - nunique
+- name: revenueImpactCat
+  maxWidth: 250
+  label: Revenue Impact
+  aggregations:
+  - count
+  - nunique

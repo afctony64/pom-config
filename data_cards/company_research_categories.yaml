@@ -18,7 +18,7 @@ tags:
   - efficient
 
 target_scope: company_intelligence
-executor: graphql
+executor: fetch
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for efficient pivot tables
@@ -28,7 +28,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql
+  type: fetch
 
   # Root collection
   collection: Company_source
@@ -54,10 +54,10 @@ field_tags:
 # field_tags=[Cat] filters to only Cat fields across all discovered references
 collections:
   - collection: Company_source
-    uses_field_set: standard  # Get minimal Company_source fields (identity only)
+    field_set: standard  # Get minimal Company_source fields (identity only)
     required: true
     # ✅ AUTO-DISCOVERY: No need to list all researcher collections
-    # GraphQLGenerator automatically discovers all nested references:
+    # DataFactory automatically discovers all nested references:
     # financial, industry, product, customer, leadership, competitor, partner, risk, journalist, social
     # field_tags=[Cat] applied to all discovered references
 
@@ -104,7 +104,7 @@ documentation:
   tag_strategy: |
     CATEGORICAL FIELD SELECTION:
 
-    Company_source: uses_field_set='standard' (minimal identity fields)
+    Company_source: field_set='standard' (minimal identity fields)
     Researcher collections: field_tags=[Cat]
 
     This fetches ONLY:

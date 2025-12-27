@@ -23,9 +23,9 @@ tags:
   - cat-fields
 
 # Core search configuration
-# ✅ UPDATED: Use native fetch executor (GraphQL removed)
+# ✅ UPDATED: Use native fetch executor (native methods)
 # Native executor supports nested references via QueryReference
-search_type: graphql  # Kept for compatibility, but executor uses native methods
+search_type: fetch  # Kept for compatibility, but executor uses native methods
 executor: fetch  # Native fetch executor (supports nested references)
 
 # 🎨 Frontend Display Control
@@ -35,7 +35,7 @@ display: true  # User-facing card for efficient opportunity dashboards
 collection: Company_opportunity
 
 parameters:
-  type: graphql  # Kept for compatibility
+  type: fetch  # Kept for compatibility
   collection: Company_opportunity
 
   # Relationship configuration
@@ -65,7 +65,7 @@ field_tags:
 # Collection compatibility
 collections:
   - collection: Company_opportunity
-    uses_field_set: standard  # Opportunity fields (stage, amount, probability)
+    field_set: standard  # Opportunity fields (stage, amount, probability)
     primary: true
     references:
       company:
@@ -77,7 +77,7 @@ collections:
         # field_tags=[Cat] applied to ALL auto-discovered nested references (only Cat fields fetched)
         # No need to manually list nested_references - cleaner and more maintainable!
   - collection: Company_source
-    uses_field_set: standard
+    field_set: standard
     via_reference: company
 
 # Query behavior
@@ -149,8 +149,8 @@ user_documentation:
   tag_strategy: |
     CATEGORICAL FIELD SELECTION:
 
-    Company_opportunity: uses_field_set='standard' (stage, amount, probability, closeDate)
-    Company_source: uses_field_set='standard' (minimal identity fields)
+    Company_opportunity: field_set='standard' (stage, amount, probability, closeDate)
+    Company_source: field_set='standard' (minimal identity fields)
     Researcher collections: field_tags=[Cat]
 
     This fetches ONLY:

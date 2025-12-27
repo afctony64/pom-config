@@ -1,0 +1,61 @@
+type: ux_config
+name: Financial Research
+collection: Research_financial
+schema_id: Research_financial  # Explicit link to pom-core schema
+fields:
+- name: financialHealth
+  aggregations:
+  - count
+  - nunique
+- name: fundingJourney
+  label: Funding Journey
+  aggregations:
+  - count
+- name: keyFinancialMetrics
+  label: Key Metrics
+  aggregations:
+  - count
+- name: keyInvestors
+  label: Key Investors
+  aggregations:
+  - count
+  - nunique
+- name: fundingStageLLM
+  maxWidth: 200
+  label: Funding Stage
+  aggregations:
+  - count
+  - nunique
+- name: revenueSizeLLM
+  maxWidth: 200
+  label: Revenue Size
+  aggregations:
+  - count
+  - nunique
+- name: growthVelocityCat
+  maxWidth: 200
+  label: Growth Velocity
+  aggregations:
+  - count
+  - nunique
+- name: profitabilityProfileCat
+  maxWidth: 250
+  label: Profitability Profile
+  aggregations:
+  - count
+  - nunique
+- name: revenueGrowthRate
+  label: Revenue Growth Rate
+  aggregations:
+  - count
+  - nunique
+- name: totalFunding
+  label: Total Funding
+  aggregations:
+  - count
+  - nunique
+- name: revenues
+  label: Revenues
+  aggregations:
+  - count
+  - nunique

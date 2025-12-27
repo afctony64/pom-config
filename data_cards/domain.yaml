@@ -1,9 +1,9 @@
 # Data Card: Domain with References
 #
-# Purpose: Fetch Domain records with Company_source reference via GraphQL
+# Purpose: Fetch Domain records with Company_source reference with native methods
 # Use Case: Get domain information with associated company data
 #
-# ✅ GraphQL executor with reference traversal to Company_source
+# ✅ Native fetch executor with reference traversal to Company_source
 
 id: domain
 name: Domain with Company Reference
@@ -11,7 +11,7 @@ type: data_card
 file: domain.yaml
 description: >
   Fetches Domain records with extended field set and includes referenced Company_source data.
-  Uses GraphQL executor for efficient reference traversal.
+  Uses Native fetch executor for efficient reference traversal.
 
 # Tagging system
 tags:
@@ -22,8 +22,8 @@ tags:
 
 target_scope: domain_intelligence
 
-# ✅ STANDARD: Use 'graphql' for all data cards
-executor: graphql
+# ✅ STANDARD: Use 'fetch' for all data cards
+executor: fetch
 
 # Enable relationship traversal for cross-references
 relationship_support: true
@@ -34,7 +34,7 @@ personas:
 
 # Query parameters
 parameters:
-  type: graphql  # Must match executor
+  type: fetch  # Must match executor
 
   # Root collection
   collection: Domain
@@ -226,7 +226,7 @@ field_sets:
 # Collection configuration for references
 collections:
   - collection: Domain
-    uses_field_set: standard
+    field_set: standard
     required: true
     references:
       company:

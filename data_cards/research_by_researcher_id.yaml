@@ -17,7 +17,7 @@ tags:
   - entity-model
 
 target_scope: entity_intelligence
-executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+executor: fetch  # ✅ Use native methods (native methods)
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for single researcher queries
@@ -27,7 +27,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql  # Legacy parameter format (for compatibility)
+  type: fetch  # Legacy parameter format (for compatibility)
   
   # Default collection (fallback if researcher_id not provided)
   collection: Research_product

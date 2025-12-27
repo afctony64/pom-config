@@ -32,7 +32,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql  # Legacy parameter format (for compatibility)
+  type: fetch  # Legacy parameter format (for compatibility)
   
   # Default collection (fallback - search will use all collections)
   collection: Research_product

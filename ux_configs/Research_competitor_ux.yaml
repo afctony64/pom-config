@@ -1,0 +1,83 @@
+type: ux_config
+name: Competitor Research
+collection: Research_competitor
+schema_id: Research_competitor  # Explicit link to pom-core schema
+fields:
+- name: competitorAnalysisCat
+  maxWidth: 250
+  label: Competitor Analysis
+  aggregations:
+  - count
+  - nunique
+- name: marketPositionCat
+  maxWidth: 250
+  label: Market Position
+  aggregations:
+  - count
+  - nunique
+- name: competitiveAdvantages
+  label: Competitive Advantages
+  aggregations:
+  - count
+  - nunique
+- name: competitiveMarket
+  aggregations:
+  - count
+  - nunique
+- name: competitivePositioning
+  aggregations:
+  - count
+  - nunique
+- name: competitiveThreats
+  aggregations:
+  - count
+  - nunique
+- name: competitorAdvantagesVs
+  aggregations:
+  - count
+  - nunique
+- name: competitorGapsVs
+  aggregations:
+  - count
+  - nunique
+- name: competitorPositioning
+  aggregations:
+  - count
+  - nunique
+- name: competitorPriceVs
+  label: Competitor Price Vs
+  aggregations:
+  - count
+  - nunique
+- name: competitorTargetMarket
+  label: Competitor Target Market
+  aggregations:
+  - count
+  - nunique
+- name: differentiationFactors
+  label: Differentiation Factors
+  aggregations:
+  - count
+  - nunique
+- name: keyCompetitors
+  label: Key Competitors
+  aggregations:
+  - count
+  - nunique
+- name: keyCompetitorsIds
+  aggregations:
+  - count
+  - nunique
+- name: marketDynamics
+  aggregations:
+  - count
+  - nunique
+- name: marketSize
+  aggregations:
+  - count
+  - nunique
+- name: marketTrends
+  label: Market Trends
+  aggregations:
+  - count
+  - nunique

@@ -34,8 +34,8 @@ target_scope: knowledge_base
 # Show in frontend dropdowns for user-facing search
 display: true
 
-# ✅ STANDARD: Use 'graphql' for all data cards
-executor: graphql
+# ✅ STANDARD: Use 'fetch' for all data cards
+executor: fetch
 
 # No relationship traversal (Page_facts has no references)
 relationship_support: false
@@ -46,7 +46,7 @@ personas:
 
 # Query parameters
 parameters:
-  type: graphql  # Must match executor
+  type: fetch  # Must match executor
 
   # Root collection
   collection: Page_facts
@@ -71,8 +71,8 @@ parameters:
     - description
     - domain
   
-  # Vector search configuration (Note: min_certainty not used by GraphQL)
-  # GraphQL uses hybrid with alpha=0.9 for "vector" strategy
+  # Vector search configuration (Note: min_certainty for fetch queries)
+  # Fetch executor uses hybrid with alpha=0.9 for "vector" strategy
   # For true nearText, use search modules directly
   
   # Domain filter (common use case for Page_facts)
@@ -366,11 +366,11 @@ notes: |
   - BM25: Pure keyword search
   - Hybrid: Configurable alpha balance
   
-  GraphQL generation handled automatically by DataFactory + GraphQLGenerator.
+  Query generation handled automatically by DataFactory.
   
   ---
   
-  GENERATED GRAPHQL EXAMPLES:
+  GENERATED QUERY EXAMPLES:
   
   BM25:
     Get {

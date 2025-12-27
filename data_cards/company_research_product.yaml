@@ -13,7 +13,7 @@ tags:
   - analysis
 
 target_scope: product_intelligence
-executor: graphql
+executor: fetch
 
 # 🎨 Frontend Display Control
 display: true
@@ -23,7 +23,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql
+  type: fetch
   collection: Company_research_product
   limit: 100
   limit_default: 100
@@ -33,7 +33,7 @@ search_strategies:
   - hybrid
   - vector
   - bm25
-  - graphql
+  - fetch
 
 # Fields dict (empty = all fields)
 fields: {}

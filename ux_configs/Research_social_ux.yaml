@@ -1,0 +1,55 @@
+type: ux_config
+name: Social Research
+collection: Research_social
+schema_id: Research_social  # Explicit link to pom-core schema
+fields:
+- name: platformPresenceCat
+  maxWidth: 250
+  label: Platform Presence
+  aggregations:
+  - count
+  - nunique
+- name: socialContentCat
+  maxWidth: 250
+  label: Social Content
+  aggregations:
+  - count
+  - nunique
+- name: communityEngagementCat
+  maxWidth: 250
+  label: Community Engagement
+  aggregations:
+  - count
+  - nunique
+- name: contentThemes
+  aggregations:
+  - count
+  - nunique
+- name: hasCommunityFeatures
+  aggregations:
+  - count
+  - nunique
+- name: hasSocialSharing
+  aggregations:
+  - count
+  - nunique
+- name: socialAccountsFound
+  aggregations:
+  - count
+  - nunique
+- name: socialMaturity
+  aggregations:
+  - count
+  - nunique
+- name: socialPlatforms
+  aggregations:
+  - count
+  - nunique
+- name: socialPresenceTier
+  aggregations:
+  - count
+  - nunique
+- name: socialProofIndicators
+  aggregations:
+  - count
+  - nunique

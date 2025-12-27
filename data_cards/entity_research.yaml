@@ -22,7 +22,7 @@ tags:
   - entity-model
 
 target_scope: entity_intelligence
-executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+executor: fetch  # ✅ Use native methods (native methods)
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for comprehensive entity research
@@ -32,7 +32,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql  # Legacy parameter format (for compatibility)
+  type: fetch  # Legacy parameter format (for compatibility)
 
   # Root collection - Domain IS the entity in entity model
   collection: Domain
@@ -61,31 +61,31 @@ field_tags:
 collections:
   - collection: Domain
     required: true
-    uses_field_set: extended  # Get Domain context fields (url, domain, description, etc.)
+    field_set: [extended, array]  # Get Domain context fields (url, domain, description, etc.)
 
   # Explicit list of all Research_* collections - queried in parallel
   # Using extended field set - arrays should be included via fix
   # Fix should detect arrays when field_set includes arrays (e.g., 'extended' includes arrays)
   - collection: Research_industry
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_financial
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_product
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_customer
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_leadership
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_competitor
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_partner
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_risk
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_journalist
-    uses_field_set: extended
+    field_set: [extended, array]
   - collection: Research_social
-    uses_field_set: extended
+    field_set: [extended, array]
 
 # Chat intelligence integration
 chat_integration:
@@ -138,7 +138,7 @@ documentation:
   tag_strategy: |
     HYBRID FIELD SELECTION:
 
-    Domain: uses_field_set='extended' (url, domain, description, metadata)
+    Domain: field_set='extended' (url, domain, description, metadata)
     Research collections: field_tags=[Cat, LLM, research]
 
     This fetches:

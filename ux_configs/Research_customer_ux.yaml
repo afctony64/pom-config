@@ -1,0 +1,90 @@
+type: ux_config
+name: Customer Research
+collection: Research_customer
+schema_id: Research_customer  # Explicit link to pom-core schema
+fields:
+- name: useCaseCat
+  maxWidth: 200
+  label: Use Case
+  aggregations:
+  - count
+  - nunique
+- name: customerIndustrySegmentCat
+  maxWidth: 250
+  label: Customer Industry Segment
+  aggregations:
+  - count
+  - nunique
+- name: caseStudies
+  aggregations:
+  - count
+  - nunique
+- name: customerProfile
+  aggregations:
+  - count
+  - nunique
+- name: keyCustomers
+  label: Key Customers
+  aggregations:
+  - count
+  - nunique
+- name: keyCustomersIds
+  aggregations:
+  - count
+- name: productUsed
+  aggregations:
+  - count
+- name: primaryUseCase
+  aggregations:
+  - count
+- name: primaryUseCases
+  aggregations:
+  - count
+  - nunique
+- name: customerSuccess
+  aggregations:
+  - count
+  - nunique
+- name: growthOpportunity
+  aggregations:
+  - count
+  - nunique
+- name: valueProposition
+  aggregations:
+  - count
+  - nunique
+- name: customerIndustry
+  label: Customer Industry
+  aggregations:
+  - count
+  - nunique
+- name: keyCustomerNAICS
+  label: Customer Industry NAICS
+  aggregations:
+  - count
+  - nunique
+- name: keyCustomerIndustryCat
+  label: Customer Industry Category
+  aggregations:
+  - count
+  - nunique
+- name: valueDomain
+  label: Value Domain
+  aggregations:
+  - count
+  - nunique
+- name: accountSizeScore
+  label: Account Size Score
+  aggregations:
+  - count
+  - nunique
+- name: expansionPotentialScore
+  label: Expansion Potential Score
+  aggregations:
+  - count
+  - nunique
+- name: strategicValueScore
+  label: Strategic Value Score
+  aggregations:
+  - count
+  - nunique

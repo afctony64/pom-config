@@ -33,8 +33,8 @@ target_scope: researcher
 # 🎨 Frontend Display Control
 display: false  # Internal use only
 
-# ✅ STANDARD: Use 'graphql' for all data cards
-executor: graphql
+# ✅ STANDARD: Use 'fetch' for all data cards
+executor: fetch
 
 # No relationship traversal (simple filter query)
 relationship_support: false
@@ -45,7 +45,7 @@ personas:
 
 # Query parameters
 parameters:
-  type: graphql
+  type: fetch
 
   # Root collection - Page_researcher stores researcher scores
   collection: Page_researcher

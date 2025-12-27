@@ -1,0 +1,74 @@
+type: ux_config
+name: Product Research
+collection: Research_product
+schema_id: Research_product  # Explicit link to pom-core schema
+fields:
+- name: productTypeCat
+  maxWidth: 250
+  label: Product Type
+  aggregations:
+  - count
+  - nunique
+- name: technologyStackCat
+  maxWidth: 250
+  label: Technology Stack
+  aggregations:
+  - count
+  - nunique
+- name: pricingModelCat
+  maxWidth: 250
+  label: Pricing Model
+  aggregations:
+  - count
+  - nunique
+- name: integrationProfileCat
+  maxWidth: 250
+  label: Integration Profile
+  aggregations:
+  - count
+  - nunique
+- name: productMaturityCat
+  maxWidth: 250
+  label: Product Maturity
+  aggregations:
+  - count
+  - nunique
+- name: coreProducts
+  aggregations:
+  - count
+  - nunique
+- name: productMaturityLLM
+  label: Product Maturity Analysis
+  aggregations:
+  - count
+  - nunique
+- name: products
+  label: Products
+  aggregations:
+  - count
+  - nunique
+- name: productsIds
+  aggregations:
+  - count
+- name: productCategories
+  aggregations:
+  - count
+  - nunique
+- name: productPricing
+  aggregations:
+  - count
+  - nunique
+- name: productFeatures
+  label: Product Features
+  aggregations:
+  - count
+  - nunique
+- name: productDomain
+  label: Product Domain
+  aggregations:
+  - count
+  - nunique
+- name: valueProposition
+  aggregations:
+  - count
+  - nunique

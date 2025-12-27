@@ -3,7 +3,7 @@
 # Purpose: Fetch Knowledge_base records with extended field set
 # Use Case: Get comprehensive knowledge base data for analysis
 #
-# ✅ GraphQL executor with extended field set (no references available)
+# ✅ Native fetch executor with extended field set (no references available)
 
 id: knowledge_base
 name: Knowledge Base Extended
@@ -11,7 +11,7 @@ type: data_card
 file: knowledge_base.yaml
 description: >
   Fetches Knowledge_base records with extended field set including all available properties.
-  Uses GraphQL executor for efficient data retrieval.
+  Uses Native fetch executor for efficient data retrieval.
 
 # Tagging system
 tags:
@@ -22,8 +22,8 @@ tags:
 
 target_scope: knowledge_intelligence
 
-# ✅ STANDARD: Use 'graphql' for all data cards
-executor: graphql
+# ✅ STANDARD: Use 'fetch' for all data cards
+executor: fetch
 
 # Enable relationship traversal (no references available, but support enabled)
 relationship_support: true
@@ -34,7 +34,7 @@ personas:
 
 # Query parameters
 parameters:
-  type: graphql  # Must match executor
+  type: fetch  # Must match executor
 
   # Root collection
   collection: Knowledge_base

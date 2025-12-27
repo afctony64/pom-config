@@ -72,7 +72,7 @@ properties:
 - name: domainUuid
   dataType:
   - uuid
-  description: Reference to Company_source.uuid for GraphQL relationships
+  description: Reference to Company_source.uuid for Weaviate relationships
   indexFilterable: true
   sets:
   - standard

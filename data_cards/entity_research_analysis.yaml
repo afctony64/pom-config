@@ -19,7 +19,7 @@ tags:
   - entity-model
 
 target_scope: entity_intelligence
-executor: fetch  # ✅ Use native methods (no GraphQL overhead)
+executor: fetch  # ✅ Use native methods (native methods)
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for LLM analysis
@@ -29,7 +29,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql  # Legacy parameter format (for compatibility)
+  type: fetch  # Legacy parameter format (for compatibility)
 
   # Root collection - Domain IS the entity in entity model
   collection: Domain
@@ -55,7 +55,7 @@ field_tags:
 # field_tags=[LLM] filters to only LLM fields across all discovered references
 collections:
   - collection: Domain
-    uses_field_set: extended  # Get Domain context fields (description, overview, etc.)
+    field_set: extended  # Get Domain context fields (description, overview, etc.)
     required: true
     # ✅ AUTO-DISCOVERY: No need to list all Research_* collections
     # Native methods automatically discover all reverse references:
@@ -111,7 +111,7 @@ documentation:
   tag_strategy: |
     LLM FIELD SELECTION:
 
-    Domain: uses_field_set='extended' (description, overview, context)
+    Domain: field_set='extended' (description, overview, context)
     Research collections: field_tags=[LLM]
 
     This fetches ONLY:

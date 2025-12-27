@@ -18,7 +18,7 @@ tags:
   - qualitative
 
 target_scope: company_intelligence
-executor: graphql
+executor: fetch
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for LLM analysis
@@ -28,7 +28,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql
+  type: fetch
 
   # Root collection
   collection: Company_source
@@ -54,10 +54,10 @@ field_tags:
 # field_tags=[LLM] filters to only LLM fields across all discovered references
 collections:
   - collection: Company_source
-    uses_field_set: extended  # Get Company_source context fields (description, overview, etc.)
+    field_set: extended  # Get Company_source context fields (description, overview, etc.)
     required: true
     # ✅ AUTO-DISCOVERY: No need to list all researcher collections
-    # GraphQLGenerator automatically discovers all nested references:
+    # DataFactory automatically discovers all nested references:
     # financial, industry, product, customer, leadership, competitor, partner, risk, journalist, social
     # field_tags=[LLM] applied to all discovered references
 
@@ -104,7 +104,7 @@ documentation:
   tag_strategy: |
     LLM FIELD SELECTION:
 
-    Company_source: uses_field_set='extended' (description, overview, content)
+    Company_source: field_set='extended' (description, overview, content)
     Researcher collections: field_tags=[LLM]
 
     This fetches ONLY:

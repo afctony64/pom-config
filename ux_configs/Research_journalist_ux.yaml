@@ -1,0 +1,59 @@
+type: ux_config
+name: Press Research
+collection: Research_journalist
+schema_id: Research_journalist  # Explicit link to pom-core schema
+fields:
+- name: latestNewsDate
+  label: Latest News Date
+  aggregations:
+  - count
+  - min
+  - max
+- name: recentNewsCount
+  label: Recent News Count
+  aggregations:
+  - count
+  - sum
+  - avg
+- name: newsRecency
+  label: News Recency
+  aggregations:
+  - count
+  - nunique
+- name: mediaPerception
+  label: Media Perception
+  aggregations:
+  - count
+  - nunique
+- name: newsMomentum
+  label: News Momentum
+  aggregations:
+  - count
+  - nunique
+- name: credibilitySignals
+  label: Credibility Signals
+  aggregations:
+  - count
+  - nunique
+- name: mediaOutlets
+  label: Media Outlets
+  aggregations:
+  - count
+- name: mediaTypeCat
+  maxWidth: 250
+  label: Media Type
+  aggregations:
+  - count
+  - nunique
+- name: coverageLevelCat
+  maxWidth: 250
+  label: Coverage Level
+  aggregations:
+  - count
+  - nunique
+- name: mediaSentimentCat
+  maxWidth: 250
+  label: Media Sentiment
+  aggregations:
+  - count
+  - nunique

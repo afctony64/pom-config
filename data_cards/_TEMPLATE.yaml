@@ -1,6 +1,6 @@
 # Data Card Template
 # Copy this template to create new data cards
-# IMPORTANT: Use 'graphql' executor as the standard for all data cards
+# IMPORTANT: Use 'fetch' executor as the standard for all data cards
 
 id: your_data_card_id
 collection: Your_Collection_Name
@@ -23,13 +23,13 @@ tags:
 
 target_scope: your_target_scope
 
-# ✅ STANDARD: Use 'graphql' for all data cards
-# GraphQL handles:
+# ✅ STANDARD: Use 'fetch' for all data cards
+# Native fetch handles:
 # - Single and multi-target cross-references
 # - Large datasets without timeouts
 # - Consistent data structure
 # - Automatic optimization
-executor: graphql
+executor: fetch
 
 # Enable relationship traversal for cross-references
 relationship_support: true
@@ -40,7 +40,7 @@ personas:
 
 # Query parameters
 parameters:
-  type: graphql  # Must match executor
+  type: fetch  # Must match executor
 
   # Root collection
   collection: Your_Collection_Name

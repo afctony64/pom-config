@@ -21,7 +21,7 @@ tags:
   - comprehensive
 
 target_scope: company_intelligence
-executor: graphql
+executor: fetch
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for comprehensive company research
@@ -31,7 +31,7 @@ personas:
   - "*"
 
 parameters:
-  type: graphql
+  type: fetch
 
   # Root collection
   collection: Company_source
@@ -63,7 +63,7 @@ collections:
     # ✅ NO field_set specified - let field_tags control field selection
     # This ensures field_tags=[Cat, LLM, research] applies to all references without intersection
     # ✅ AUTO-DISCOVERY: No need to list all researcher collections
-    # GraphQLGenerator automatically discovers all nested references:
+    # DataFactory automatically discovers all nested references:
     # financial, industry, product, customer, leadership, competitor, partner, risk, journalist, social
     # field_tags=[Cat, LLM, research] applied to all discovered references (fetches everything)
 
@@ -114,7 +114,7 @@ documentation:
   tag_strategy: |
     HYBRID FIELD SELECTION:
 
-    Company_source: uses_field_set='extended' (6 fields: foundedYear, url, domain, city, country, description)
+    Company_source: field_set='extended' (6 fields: foundedYear, url, domain, city, country, description)
     Researcher collections: field_tags=[Cat, LLM, research]
 
     This fetches:

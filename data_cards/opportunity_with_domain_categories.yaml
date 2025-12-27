@@ -25,8 +25,8 @@ tags:
   - entity-model
 
 # Core search configuration
-search_type: graphql
-executor: graphql
+search_type: fetch
+executor: fetch
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for efficient opportunity dashboards (entity model)
@@ -35,7 +35,7 @@ display: true  # User-facing card for efficient opportunity dashboards (entity m
 collection: Opportunity
 
 parameters:
-  type: graphql
+  type: fetch
   collection: Opportunity
 
   # Relationship configuration
@@ -55,7 +55,7 @@ field_tags:
 collections:
   # Primary collection: Opportunity (Entity Model)
   - collection: Opportunity
-    uses_field_set: standard  # Opportunity fields (stage, amount, probability)
+    field_set: standard  # Opportunity fields (stage, amount, probability)
     primary: true
     
     # Reference to Domain (Entity Model) via domainBeacon

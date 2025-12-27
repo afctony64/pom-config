@@ -3,7 +3,7 @@
 # Purpose: Fetch Page_intelligence records with extended field set
 # Use Case: Get comprehensive page intelligence data for analysis
 #
-# ✅ GraphQL executor with extended field set
+# ✅ Native fetch executor with extended field set
 # ⚠️  NOTE: Company_source reference REMOVED - cross-cluster references not supported
 #     Page_intelligence is on Spark cluster, Company_source is on Cloud cluster
 
@@ -13,7 +13,7 @@ type: data_card
 file: page_intelligence.yaml
 description: >
   Fetches Page_intelligence records with extended field set including all available properties.
-  Uses GraphQL executor for efficient data retrieval.
+  Uses Native fetch executor for efficient data retrieval.
 
 # Tagging system
 tags:
@@ -25,8 +25,8 @@ tags:
 
 target_scope: page_intelligence
 
-# ✅ STANDARD: Use 'graphql' for all data cards
-executor: graphql
+# ✅ STANDARD: Use 'fetch' for all data cards
+executor: fetch
 
 # Disable relationship traversal - cross-cluster references not supported
 relationship_support: false
@@ -37,7 +37,7 @@ personas:
 
 # Query parameters
 parameters:
-  type: graphql  # Must match executor
+  type: fetch  # Must match executor
 
   # Root collection
   collection: Page_intelligence
@@ -221,7 +221,7 @@ field_sets:
 # Collections configuration - no cross-cluster references
 collections:
   - collection: Page_intelligence
-    uses_field_set: standard
+    field_set: standard
     required: true
     # references: REMOVED - Company_source is on different cluster (Cloud vs Spark)
 
