@@ -211,6 +211,7 @@ properties:
   sets:
   - array
   - prompt
+  - standard
 - name: competitorPriceVs
   dataType:
   - text[]
@@ -351,6 +352,7 @@ properties:
     positioning strategy (premium, value, specialist), and competitive moat strength.
   tags:
   - LLM
+  - research
   sets:
   - prompt
   - extended
@@ -375,6 +377,7 @@ properties:
   tags:
   - Cat
   - market
+  - research
   sets:
   - standard
   - EnumCat

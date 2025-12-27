@@ -263,6 +263,7 @@ properties:
     and tone consistency across different outlets.
   tags:
   - LLM
+  - research
   sets:
   - prompt
   - extended
@@ -285,6 +286,7 @@ properties:
   sets:
   - extended
   - prompt
+  - standard
 - name: newsMomentum
   dataType:
   - text

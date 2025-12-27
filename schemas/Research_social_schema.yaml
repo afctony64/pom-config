@@ -295,6 +295,7 @@ properties:
     social proof indicators, and content maturity level.
   tags:
   - LLM
+  - research
   sets:
   - prompt
   - extended
@@ -382,6 +383,7 @@ properties:
   - Cat
   - content
   - social
+  - research
   sets:
   - standard
   - EnumCat

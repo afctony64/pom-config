@@ -119,6 +119,7 @@ properties:
   description: Founder Profile Description
   tags:
   - LLM
+  - research
   sets:
   - prompt
   - extended
@@ -134,6 +135,7 @@ properties:
   sets:
   - extended
   - prompt
+  - standard
 - name: ceoBackground
   dataType:
   - text
@@ -142,6 +144,7 @@ properties:
   - research
   sets:
   - prompt
+  - standard
 - name: ceoTenure
   dataType:
   - text
@@ -150,6 +153,7 @@ properties:
   - research
   sets:
   - prompt
+  - standard
 - name: founderStatus
   dataType:
   - text
@@ -158,6 +162,7 @@ properties:
   - research
   sets:
   - prompt
+  - standard
 - name: executiveTeamSize
   dataType:
   - number
@@ -166,12 +171,14 @@ properties:
   - research
   sets:
   - prompt
+  - standard
 - name: executiveExperienceLLM
   dataType:
   - text
   description: Executive Experience Description
   tags:
   - LLM
+  - research
   sets:
   - prompt
   - extended
@@ -187,6 +194,7 @@ properties:
   sets:
   - array
   - prompt
+  - standard
 - name: keyExecutivesIds
   dataType:
   - text[]
@@ -197,6 +205,7 @@ properties:
   sets:
   - array
   - prompt
+  - standard
 - name: keyExecutiveEvidence
   dataType:
   - text[]
@@ -214,6 +223,7 @@ properties:
   - array
   - prompt
   - extended
+  - standard
 - name: executiveBackgrounds
   dataType:
   - text[]
@@ -230,6 +240,7 @@ properties:
   sets:
   - array
   - prompt
+  - standard
 - name: executiveRoles
   dataType:
   - text[]
@@ -244,6 +255,7 @@ properties:
   sets:
   - array
   - prompt
+  - standard
 - name: executiveTenure
   dataType:
   - text[]
@@ -258,6 +270,7 @@ properties:
   sets:
   - array
   - prompt
+  - standard
 - name: executiveLinkedIn
   dataType:
   - text[]
@@ -271,12 +284,14 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: leadershipStyleLLM
   dataType:
   - text
   description: Leadership Style Description
   tags:
   - LLM
+  - research
   sets:
   - prompt
   - extended
@@ -330,6 +345,7 @@ properties:
   tags:
   - Cat
   - founders
+  - research
   sets:
   - standard
   - EnumCat
@@ -352,6 +368,7 @@ properties:
   tags:
   - Cat
   - experience
+  - research
   sets:
   - standard
   - EnumCat
@@ -375,6 +392,7 @@ properties:
   tags:
   - Cat
   - style
+  - research
   sets:
   - standard
   - EnumCat
@@ -528,6 +546,9 @@ properties:
   sets:
   - extended
   - prompt
+  - standard
+  tags:
+  - research
 - name: industryExperienceScore
   description: Industry experience scores
   dataType:
