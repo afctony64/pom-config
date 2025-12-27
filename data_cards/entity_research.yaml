@@ -62,37 +62,42 @@ field_tags:
 
 # ✅ FIX: Explicit list of all collections - direct parallel queries
 # No traversal, no auto-discovery - just 11 simple queries in parallel
-# Note: field_set is now specified at parameters.level (priority)
-# Collection-level field_set is only used as default/fallback if parameters.field_set is not set
+# 
+# WORKAROUND: Until pom-core Issue #370 is fixed (parameters.field_set priority),
+# we need to explicitly set field_set on each collection.
+# Once Issue #370 is fixed, collections will inherit from parameters.field_set.
+#
+# Priority order (when Issue #370 fixed):
+#   1. parameters.field_set (PRIORITY) - applies to all collections
+#   2. collections[].field_set (DEFAULT/FALLBACK) - used only if parameters not set
+#   3. Default "standard" - final fallback
 collections:
   - collection: Domain
     required: true
-    # field_set: Inherits from parameters.field_set (priority)
-    # Can override here if needed: field_set: [extended, array]
+    field_set: [standard, extended, array]  # WORKAROUND: Explicit until Issue #370 fixed
 
   # Explicit list of all Research_* collections - queried in parallel
-  # All collections inherit parameters.field_set: [standard, extended, array]
-  # Collection-level field_set can override if needed (but currently not set)
+  # WORKAROUND: Explicit field_set until pom-core Issue #370 implements priority order
   - collection: Research_industry
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_financial
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_product
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_customer
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_leadership
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_competitor
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_partner
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_risk
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_journalist
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
   - collection: Research_social
-    # field_set: Inherits from parameters.field_set
+    field_set: [standard, extended, array]
 
 # Chat intelligence integration
 chat_integration:
