@@ -61,31 +61,33 @@ field_tags:
 collections:
   - collection: Domain
     required: true
-    field_set: [extended, array]  # Get Domain context fields (url, domain, description, etc.)
+    field_set: [standard, extended, array]  # Get Domain context fields (url, domain, description, etc.) + standard fields
 
   # Explicit list of all Research_* collections - queried in parallel
-  # Using extended field set - arrays should be included via fix
-  # Fix should detect arrays when field_set includes arrays (e.g., 'extended' includes arrays)
+  # Using standard + extended + array field sets to include all fields
+  # Standard: Core fields (Cat, LLM, research tags with standard set)
+  # Extended: Additional context fields (citations, metadata)
+  # Array: Parallel arrays (keyCompetitors, competitorPositioning, etc.)
   - collection: Research_industry
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_financial
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_product
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_customer
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_leadership
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_competitor
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_partner
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_risk
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_journalist
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
   - collection: Research_social
-    field_set: [extended, array]
+    field_set: [standard, extended, array]
 
 # Chat intelligence integration
 chat_integration:
@@ -138,14 +140,14 @@ documentation:
   tag_strategy: |
     HYBRID FIELD SELECTION:
 
-    Domain: field_set='extended' (url, domain, description, metadata)
-    Research collections: field_tags=[Cat, LLM, research]
+    Domain: field_set=[standard, extended, array] (url, domain, description, metadata + standard fields)
+    Research collections: field_set=[standard, extended, array] + field_tags=[Cat, LLM, research]
 
     This fetches:
-    - Domain: Extended fields (entity identity, URL, metadata)
-    - Researchers: Cat fields (categorical classifications)
-    - Researchers: LLM fields (AI-generated analysis)
-    - Researchers: Research fields (detailed facts)
+    - Domain: Standard + Extended fields (entity identity, URL, metadata)
+    - Researchers: Standard fields (Cat, LLM, research tags with standard set)
+    - Researchers: Extended fields (citations, additional context)
+    - Researchers: Array fields (parallel arrays like keyCompetitors, competitorPositioning, etc.)
 
   usage_examples:
     - name: "Fetch entities with full research data"
