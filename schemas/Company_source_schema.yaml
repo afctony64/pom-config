@@ -541,5 +541,5 @@ calculated_fields:
   chart_role:
   - cat4
 id: Company_source
-name: Source
+name: Company_source
 devtype: Production
