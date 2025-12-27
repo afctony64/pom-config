@@ -2,50 +2,89 @@ type: research
 class: Research_industry
 id: Research_industry
 name: Research Industry
-description: |
-  📚 RESEARCH REPOSITORY: Industry & Market Intelligence
+description: '📚 RESEARCH REPOSITORY: Industry & Market Intelligence
 
-  RESEARCHER: Senior Industry Intelligence Analyst (see Research_industry for researcher identity)
+
+  RESEARCHER: Senior Industry Intelligence Analyst (see Research_industry for researcher
+  identity)
+
 
   KNOWLEDGE TYPE: Entity-specific categorized research and analysis
 
-  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's complete industry intelligence
+
+  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity''s complete industry
+  intelligence
+
   - Tenant Isolation: Complete data separation per entity
+
   - Tenant Activation: Automatic tenant creation and activation
+
   - Scalability: Supports unlimited tenants with efficient partitioning
 
+
   REPOSITORY CONTENTS:
+
   - Industry Classifications: NAICS codes (6-digit), sector, industry, industrySegment
-  - Business Models: Detailed business model descriptions and categories (SaaS, Marketplace, E-commerce, Consulting)
-  - Market Positioning: Competitive landscape, value chain position, market niche analysis
+
+  - Business Models: Detailed business model descriptions and categories (SaaS, Marketplace,
+  E-commerce, Consulting)
+
+  - Market Positioning: Competitive landscape, value chain position, market niche
+  analysis
+
   - Vertical Markets: Target markets and vertical specialization
+
   - Delivery Models: How entities deliver products/services
+
   - Quality Metadata: Processing dates, source quality, review flags, confidence levels
 
+
   DATA SOURCES:
+
   - AI-analyzed entity websites and web content
+
   - Industry reports and competitive intelligence
+
   - Market research and positioning content
+
   - Validated against official NAICS taxonomy
 
+
   QUALITY STANDARDS:
+
   - Confidence Scoring: High, Medium, Low, Inferred, Web-verified
+
   - Human Verification: Review flags for validation
+
   - Source Tracking: Links to originating Domain records
-  - Conservative Calibration: Prefer 'unknown' over incorrect data
+
+  - Conservative Calibration: Prefer ''unknown'' over incorrect data
+
 
   INTEGRATION: Provides foundational industry context to:
+
   - Financial research (revenue models, funding, growth analysis)
+
   - Product research (product-market fit, technical positioning)
+
   - Customer research (target segments, acquisition channels)
+
   - Leadership research (industry expertise, founder background)
+
   - Risk research (industry-specific risks, regulatory environment)
+
   - Partnership research (industry ecosystem, strategic alliances)
 
+
   VECTOR SEARCH CAPABILITIES:
+
   - businessModelVector: Search by business model and value chain similarities
+
   - industrySegmentVector: Discover entities with similar industry segments and positioning
+
   - deliveryModelVector: Match by service delivery approaches
+
+  '
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -182,7 +221,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: industry
@@ -219,24 +257,34 @@ properties:
   - research
   sets:
   - prompt
-  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: industrySegmentLLM
   dataType:
   - text[]
-  description: |
-    Describe the entity's industry segment positioning (100-150 words).
+  description: 'Describe the entity''s industry segment positioning (100-150 words).
+
 
     Address these elements:
+
     1. What they do - their primary activity or offering (be specific, not generic)
+
     2. Who they serve - target customers/clients and their characteristics
+
     3. How they operate - their approach or model for delivering value
-    4. Segment-defining characteristics - what places them in one segment vs adjacent ones
+
+    4. Segment-defining characteristics - what places them in one segment vs adjacent
+    ones
+
 
     Use specific terminology that would appear in industry publications.
+
     Avoid generic terms like "provides solutions" or "offers services."
-    Array supports multi-segment classification (ordered by similarity score, [0] is primary)
+
+    Array supports multi-segment classification (ordered by similarity score, [0]
+    is primary)
+
+    '
   tags:
   - LLM
   sets:
@@ -257,7 +305,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: naicsDescription
@@ -270,7 +317,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   metadata:
     parallel_to: industrySegmentCat
 - name: businessModelLLM
@@ -320,16 +366,25 @@ properties:
 - name: deliveryModelLLM
   dataType:
   - text[]
-  description: |
-    Describe how the entity delivers its products/services to customers (2-3 sentences, ~150 words max).
+  description: 'Describe how the entity delivers its products/services to customers
+    (2-3 sentences, ~150 words max).
+
 
     START with the primary delivery mechanism:
+
     - Does it involve physical hardware or is it software-only?
+
     - Is infrastructure cloud-hosted, customer-hosted, or shared?
+
     - How do customers access it (browser, mobile, API, physical device)?
 
+
     Then briefly note deployment approach and key service delivery characteristics.
-    Array supports multi-segment classification (ordered by similarity score, [0] is primary)
+
+    Array supports multi-segment classification (ordered by similarity score, [0]
+    is primary)
+
+    '
   tags:
   - LLM
   sets:
@@ -371,7 +426,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: entityDescription
   dataType:
   - text
@@ -382,7 +436,6 @@ properties:
   - extractable
   sets:
   - prompt
-  - extended
 - name: industrySegmentCat
   dataType:
   - text[]
@@ -424,31 +477,7 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
-    low, inferred]:
-
-    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
-    - authoritative)
-
-    - "web_verified": Confirmed through web_search with multiple external sources
-
-    - "llm_knowledge": Strong LLM training knowledge about well-known companies/entities
-
-    - "medium": Based on indirect evidence or partial information
-
-    - "low": Limited information, educated guesses
-
-    - "inferred": No direct evidence, purely analytical inference
-
-
-    Use "high" when pageData is available and relevant, "web_verified" when web_search
-    confirms facts, or "llm_knowledge" when you have strong training knowledge about
-    well-known entities.
-
-    '
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
+  description: Confidence level of analysis (high/medium/low/inferred/web_verified)
   sets:
   - system
   - metadata

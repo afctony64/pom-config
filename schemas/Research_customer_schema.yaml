@@ -2,7 +2,7 @@ type: research
 class: Research_customer
 id: Research_customer
 name: Research Customer
-description: "📚 RESEARCH REPOSITORY: Senior Customer Intelligence Intelligence\n\
+description: "\U0001F4DA RESEARCH REPOSITORY: Senior Customer Intelligence Intelligence\n\
   \  \n  RESEARCHER: Senior Customer Intelligence Analyst (identity defined in seed\
   \ data for researcher identity)\n  \n  KNOWLEDGE TYPE: Entity-specific customer\
   \ research and analysis\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents\
@@ -107,8 +107,8 @@ properties:
 - name: keyCustomers
   dataType:
   - text[]
-  description: Array of key customer names (publicly disclosed customer entities
-    with name and brief value summary)
+  description: Array of key customer names (publicly disclosed customer entities with
+    name and brief value summary)
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -154,6 +154,7 @@ properties:
   sets:
   - EnumCat
   - array
+  - standard
 - name: productUsed
   dataType:
   - text[]
@@ -195,10 +196,11 @@ properties:
     text2vec-weaviate:
       skip: true
   tags:
+  - research
   - evidence
   sets:
-  - system
   - prompt
+  - array
 - name: customerProfile
   dataType:
   - text
@@ -220,6 +222,7 @@ properties:
   sets:
   - prompt
   - array
+  - standard
   metadata:
     parallel_to: useCaseCat
 - name: primaryUseCases
@@ -255,8 +258,8 @@ properties:
 - name: caseStudies
   dataType:
   - text[]
-  description: Array of concise case study summaries extracted from entity pages
-    - one line per customer success story with quantifiable results
+  description: Array of concise case study summaries extracted from entity pages -
+    one line per customer success story with quantifiable results
   tags:
   - research
   sets:
@@ -425,8 +428,8 @@ properties:
 - name: customerSector
   dataType:
   - text
-  description: Primary sector of entity's customer base (entity-level summary) -
-    top-level industry classification. Represents the dominant sector across all customers.
+  description: Primary sector of entity's customer base (entity-level summary) - top-level
+    industry classification. Represents the dominant sector across all customers.
     Mirrors Industry.sector field structure.
   enum:
   - Software
@@ -456,8 +459,8 @@ properties:
 - name: customerIndustry
   dataType:
   - text
-  description: Primary industry of entity's customer base (entity-level summary)
-    - mid-level industry classification within sector. Represents the dominant industry
+  description: Primary industry of entity's customer base (entity-level summary) -
+    mid-level industry classification within sector. Represents the dominant industry
     across all customers. Mirrors Industry.industry field structure.
   enum:
   - Enterprise Applications
@@ -504,6 +507,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: customerIndustrySegmentCat
   dataType:
   - text
@@ -583,6 +587,7 @@ properties:
   - prompt
   - EnumCat
   - array
+  - standard
 - name: keyCustomerNAICS
   dataType:
   - text[]
@@ -601,6 +606,7 @@ properties:
   sets:
   - prompt
   - array
+  - standard
 - name: keyCustomerIndustryCat
   dataType:
   - text[]
@@ -646,6 +652,7 @@ properties:
   - prompt
   - EnumCat
   - array
+  - standard
 - name: keyCustomerIndustrySegmentLLM
   dataType:
   - text[]
@@ -664,6 +671,7 @@ properties:
   sets:
   - prompt
   - array
+  - standard
 - name: keyCustomerIndustrySegmentCat
   dataType:
   - text[]
@@ -861,7 +869,6 @@ properties:
     dataType:
     - uuid[]
     description: Domain source UUIDs
-# Audit fields
 - name: createdAt
   dataType:
   - date

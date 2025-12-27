@@ -2,7 +2,7 @@ type: research
 class: Research_leadership
 id: Research_leadership
 name: Research Leadership
-description: "📚 RESEARCH REPOSITORY: Executive Leadership Intelligence\n\
+description: "\U0001F4DA RESEARCH REPOSITORY: Executive Leadership Intelligence\n\
   \  \n  RESEARCHER: Executive Leadership Analyst (identity defined in seed data for\
   \ researcher identity)\n  \n  KNOWLEDGE TYPE: Entity-specific leadership research\
   \ and analysis\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's\
@@ -122,6 +122,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: ceoName
   dataType:
   - text
@@ -174,6 +175,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: keyExecutives
   dataType:
   - text[]
@@ -185,7 +187,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: keyExecutivesIds
   dataType:
   - text[]
@@ -196,7 +197,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: keyExecutiveEvidence
   dataType:
   - text[]
@@ -208,9 +208,10 @@ properties:
     text2vec-weaviate:
       skip: true
   tags:
+  - research
   - evidence
   sets:
-  - system
+  - array
   - prompt
 - name: executiveBackgrounds
   dataType:
@@ -228,7 +229,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: executiveRoles
   dataType:
   - text[]
@@ -243,7 +243,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: executiveTenure
   dataType:
   - text[]
@@ -258,7 +257,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: executiveLinkedIn
   dataType:
   - text[]
@@ -280,6 +278,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: boardComposition
   dataType:
   - text
@@ -302,7 +301,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: dataSource
   dataType:
   - text
@@ -497,7 +495,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -508,7 +505,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -526,7 +522,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -548,7 +543,6 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
-# Audit fields
 - name: createdAt
   dataType:
   - date

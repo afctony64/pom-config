@@ -133,7 +133,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: mediaOutlets
   dataType:
   - text[]
@@ -145,7 +144,6 @@ properties:
   sets:
   - array
   - prompt
-  - extended
 - name: pressReleaseCount
   dataType:
   - int
@@ -154,7 +152,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: newsArticleCount
   dataType:
   - int
@@ -163,7 +160,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: latestNewsDate
   dataType:
   - text
@@ -206,7 +202,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: hasMediaKit
   dataType:
   - boolean
@@ -215,7 +210,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: hasNewsroom
   dataType:
   - boolean
@@ -224,7 +218,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: mediaSentiment
   dataType:
   - text
@@ -233,7 +226,6 @@ properties:
   - research
   sets:
   - prompt
-  - extended
 - name: mediaTypeLLM
   dataType:
   - text
@@ -245,6 +237,7 @@ properties:
   - LLM
   sets:
   - prompt
+  - extended
   - standard
 - name: coverageLevelLLM
   dataType:
@@ -257,6 +250,7 @@ properties:
   - LLM
   sets:
   - prompt
+  - extended
   - standard
 - name: mediaSentimentLLM
   dataType:
@@ -269,14 +263,19 @@ properties:
   - LLM
   sets:
   - prompt
+  - extended
   - standard
 - name: mediaPerception
   dataType:
   - text
-  description: |
-    AI synthesis: How the entity is portrayed in external media coverage.
-    Examples: "Emerging leader in AI space", "Struggling to gain traction", "Solid enterprise player"
+  description: 'AI synthesis: How the entity is portrayed in external media coverage.
+
+    Examples: "Emerging leader in AI space", "Struggling to gain traction", "Solid
+    enterprise player"
+
     Useful to: Customer (trust signals), Risk (reputation), Competitor (positioning)
+
+    '
   tags:
   - media
   - perception
@@ -287,10 +286,15 @@ properties:
 - name: newsMomentum
   dataType:
   - text
-  description: |
-    AI synthesis: Trajectory of media coverage over time.
-    Examples: "Accelerating coverage (3x in 6mo)", "Declining visibility", "Steady drumbeat"
-    Useful to: Financial (growth signals), Industry (market traction), Competitor (threat level)
+  description: 'AI synthesis: Trajectory of media coverage over time.
+
+    Examples: "Accelerating coverage (3x in 6mo)", "Declining visibility", "Steady
+    drumbeat"
+
+    Useful to: Financial (growth signals), Industry (market traction), Competitor
+    (threat level)
+
+    '
   tags:
   - media
   - momentum
@@ -301,10 +305,14 @@ properties:
 - name: credibilitySignals
   dataType:
   - text
-  description: |
-    AI synthesis: What coverage reveals about entity legitimacy and maturity.
-    Examples: "Tier-1 media validation", "Self-promotion only", "Industry recognition evident"
+  description: 'AI synthesis: What coverage reveals about entity legitimacy and maturity.
+
+    Examples: "Tier-1 media validation", "Self-promotion only", "Industry recognition
+    evident"
+
     Useful to: Risk (legitimacy), Customer (trust), Financial (market validation)
+
+    '
   tags:
   - credibility
   - media
@@ -392,12 +400,18 @@ properties:
 - name: sourceQuality
   dataType:
   - text
-  description: |
-    Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+  description: 'Quality rating of external tool content provided for analysis [high,
+    medium, low, minimal]:
+
     - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
     - "medium": Some pageData available but limited relevance or coverage
+
     - "low": Minimal pageData, relying on source overview text only
+
     - "minimal": No pageData, only basic entity metadata available
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -408,13 +422,20 @@ properties:
 - name: reviewFlag
   dataType:
   - text
-  description: |
-    Review requirement [none, for_review, needs_verification]:
-    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
+  description: 'Review requirement [none, for_review, needs_verification]:
+
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
+    - no review needed
+
     - "for_review": Medium confidence with some gaps, human validation helpful
+
     - "needs_verification": Low confidence or pure inference, human review required
 
-    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
+
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
+    - these sources are reliable.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -425,16 +446,28 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: |
-    Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
-    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
+    low, inferred]:
+
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
+    - authoritative)
+
     - "web_verified": Confirmed through web_search with multiple external sources
+
     - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
     - "medium": Based on indirect evidence or partial information
+
     - "low": Limited information, educated guesses
+
     - "inferred": No direct evidence, purely analytical inference
 
-    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge" when you have strong training knowledge about well-known entities.
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search
+    confirms facts, or "llm_knowledge" when you have strong training knowledge about
+    well-known entities.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true

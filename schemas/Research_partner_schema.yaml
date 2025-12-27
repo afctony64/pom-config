@@ -2,7 +2,7 @@ type: research
 class: Research_partner
 id: Research_partner
 name: Research Partner
-description: "📚 RESEARCH REPOSITORY: Strategic Partnership Intelligence\n\
+description: "\U0001F4DA RESEARCH REPOSITORY: Strategic Partnership Intelligence\n\
   \  \n  RESEARCHER: Strategic Partnership Analyst (identity defined in seed data\
   \ for researcher identity)\n  \n  KNOWLEDGE TYPE: Entity-specific partner research\
   \ and analysis\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's\
@@ -120,6 +120,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: keyPartners
   dataType:
   - text[]
@@ -145,17 +146,18 @@ properties:
 - name: keyPartnerEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyPartner from page facts search
-    (parallel to keyPartners array). Stores the factual basis for classifications
-    and extracted values.
+  description: Evidence/context found for each keyPartner from page facts search (parallel
+    to keyPartners array). Stores the factual basis for classifications and extracted
+    values.
   parallel_to: keyPartners
   moduleConfig:
     text2vec-weaviate:
       skip: true
   tags:
+  - research
   - evidence
   sets:
-  - system
+  - array
   - prompt
 - name: partnerTypes
   dataType:
@@ -194,6 +196,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: integrations
   dataType:
   - text[]
@@ -237,6 +240,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: revenueModel
   dataType:
   - text
@@ -455,7 +459,6 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
-# Audit fields
 - name: createdAt
   dataType:
   - date

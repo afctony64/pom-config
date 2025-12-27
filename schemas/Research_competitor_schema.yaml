@@ -2,7 +2,7 @@ type: research
 class: Research_competitor
 id: Research_competitor
 name: Research Competitor
-description: "📚 RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Lookalike\
+description: "\U0001F4DA RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Lookalike\
   \ Entity Discovery)\n  \n  RESEARCHER: Competitive Intelligence Analyst (identity\
   \ defined in seed data for researcher identity)\n  \n  KNOWLEDGE TYPE: Ecosystem\
   \ of DIRECT COMPETITORS as lookalike prospects for the tenant's sales team\n  \n\
@@ -20,15 +20,15 @@ description: "📚 RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Look
   \  - Quality Metadata: Processing dates, source quality, review flags, confidence\
   \ levels\n  - Evidence Links: References to supporting data and source materials\n\
   \  \n  DATA SOURCES:\n  - AI-analyzed entity websites and competitor-specific content\n\
-  \  - Industry reports and research publications\n  - Public entity information\
-  \ and disclosures\n  - Validated against authoritative sources when available\n\
-  \  \n  QUALITY STANDARDS:\n  - Confidence Scoring: High, Medium, Low, Inferred,\
-  \ Web-verified\n  - Evidence-Based Assessment: Classifications backed by concrete\
-  \ evidence\n  - Source Tracking: Links to originating Domain records\n  - Conservative\
-  \ Calibration: Prefer 'unknown' over incorrect data\n  \n  INTEGRATION: Seeds prospect\
-  \ lists by identifying lookalike entities in the same competitive\
-  \ ecosystem\n  \n  VECTOR SEARCH CAPABILITIES: Named vectors for similarity search\
-  \ across key competitor dimensions for lookalike discovery"
+  \  - Industry reports and research publications\n  - Public entity information and\
+  \ disclosures\n  - Validated against authoritative sources when available\n  \n\
+  \  QUALITY STANDARDS:\n  - Confidence Scoring: High, Medium, Low, Inferred, Web-verified\n\
+  \  - Evidence-Based Assessment: Classifications backed by concrete evidence\n  -\
+  \ Source Tracking: Links to originating Domain records\n  - Conservative Calibration:\
+  \ Prefer 'unknown' over incorrect data\n  \n  INTEGRATION: Seeds prospect lists\
+  \ by identifying lookalike entities in the same competitive ecosystem\n  \n  VECTOR\
+  \ SEARCH CAPABILITIES: Named vectors for similarity search across key competitor\
+  \ dimensions for lookalike discovery"
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -172,7 +172,8 @@ properties:
 - name: competitorDomain
   dataType:
   - text[]
-  description: Each competitor's primary domain (parallel to keyCompetitors array). Populated during spawn process or by researcher if known.
+  description: Each competitor's primary domain (parallel to keyCompetitors array).
+    Populated during spawn process or by researcher if known.
   parallel_to: keyCompetitors
   tags:
   - research
@@ -315,6 +316,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: competitorAnalysisCat
   dataType:
   - text
@@ -349,6 +351,7 @@ properties:
   sets:
   - prompt
   - extended
+  - standard
 - name: marketPositionCat
   dataType:
   - text
@@ -548,7 +551,6 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
-# Audit fields
 - name: createdAt
   dataType:
   - date
