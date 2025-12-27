@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 8.0
+version: 8.1
 group: url
 weaviate_instance: cloud
 description: 'Domain collection - THE UNIVERSAL ENTITY COLLECTION.
@@ -168,6 +168,56 @@ properties:
   - standard
   tags:
   - filtering
+  - processing
+- name: is_suitable
+  dataType:
+  - boolean
+  description: Whether the domain is suitable for pipeline processing (real site, not parking page, not spam)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - filtering
+  - processing
+- name: unsuitable_reason
+  dataType:
+  - text
+  description: Reason why domain was marked as not suitable (if applicable)
+  indexFilterable: true
+  tokenization: word
+  sets:
+  - extended
+  tags:
+  - processing
+- name: enrichers_executed
+  dataType:
+  - int
+  description: Number of enrichers that were executed for this domain
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - metrics
+  - processing
+- name: enrichers_successful
+  dataType:
+  - int
+  description: Number of enrichers that completed successfully for this domain
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - metrics
+  - processing
+- name: domain_fields_saved
+  dataType:
+  - int
+  description: Number of domain fields that were saved during enrichment
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - metrics
   - processing
 - name: blacklist_reason
   dataType:
