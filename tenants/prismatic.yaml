@@ -50,15 +50,7 @@ analysis_config:
 
 # Data sources configuration (infrastructure only)
 data_sources:
-  data_dir: "Data/uploads/tenants/prismatic"
-  upload_dir: "Data/uploads/tenants/prismatic"
-
-  # Note: Seed files and taxonomy paths are in tenant_ai configs (PomAI-owned)
-  # See: PomAI/core/config/tenants/prismatic_ai.yaml for:
-  #   - data_sources.taxonomy_base_path
-  #   - data_sources.backup_path
-  #   - data_sources.taxonomy
-  #   - data_sources.seed_files
+  source_collection: Source
 
 # Collection routing (REQUIRED for tenant isolation)
 # Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
@@ -93,7 +85,10 @@ collections:
   Research_risk: "cloud"
   Research_social: "cloud"
 
-  # Domain collection (source for Entity Model) - on Cloud
+  # Source collection (entity-agnostic source) - on Cloud
+  Source: "cloud"
+
+  # Domain collection (primary entity for Entity Model) - on Cloud
   Domain: "cloud"
 
   # Page collections (group: url) - GPU-accelerated on Spark

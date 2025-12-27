@@ -634,9 +634,31 @@ properties:
 - name: accountName
   dataType:
   - text
-  description: Company name for display purposes (copied from Company_source)
+  description: Company name for display purposes (copied from Source)
   indexFilterable: true
   tokenization: field
+- name: entityId
+  dataType:
+  - text
+  description: Original ID from source system (preserved for reference, NOT used for UUID generation)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  tags:
+  - identity
+  - source
+- name: entityName
+  dataType:
+  - text
+  description: Name of the entity (generic - works for companies, people, places, etc.)
+  indexFilterable: true
+  tokenization: word
+  sets:
+  - standard
+  - drill_down
+  tags:
+  - identity
 - name: url_intelligence_count
   dataType:
   - int
