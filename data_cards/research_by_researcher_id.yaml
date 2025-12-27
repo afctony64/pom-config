@@ -56,8 +56,10 @@ field_tags:
   - research
 
 # Single collection configuration
+# ✅ FIX: Added field_set to include array fields as described in description
 collections:
   - collection: Research_product  # Default fallback - DataFactory will override based on researcher_id
+    field_set: [standard, extended, array]  # Include arrays for complete data
     required: true
 
 # Chat intelligence integration

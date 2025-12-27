@@ -68,17 +68,28 @@ field_tags:
 
 # Collection configuration: Search across multiple Research_* collections
 # researcher_types parameter controls which collections to search
+# ✅ FIX: Added field_set to include array fields for complete search results
 collections:
   - collection: Research_industry
+    field_set: [standard, extended, array]
   - collection: Research_financial
+    field_set: [standard, extended, array]
   - collection: Research_product
+    field_set: [standard, extended, array]
   - collection: Research_customer
+    field_set: [standard, extended, array]
   - collection: Research_leadership
+    field_set: [standard, extended, array]
   - collection: Research_competitor
+    field_set: [standard, extended, array]
   - collection: Research_partner
+    field_set: [standard, extended, array]
   - collection: Research_risk
+    field_set: [standard, extended, array]
   - collection: Research_journalist
+    field_set: [standard, extended, array]
   - collection: Research_social
+    field_set: [standard, extended, array]
 
 # Chat intelligence integration
 chat_integration:
