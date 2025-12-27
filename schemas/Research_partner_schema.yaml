@@ -360,6 +360,8 @@ properties:
   - metadata
   - prompt
   - extended
+  tags:
+  - score
 - name: reviewFlag
   dataType:
   - text

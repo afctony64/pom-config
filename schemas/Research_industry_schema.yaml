@@ -221,6 +221,7 @@ properties:
   - Nonprofit
   tags:
   - research
+  - score
   sets:
   - prompt
   metadata:
@@ -257,6 +258,7 @@ properties:
   - Health IT & Digital Health
   tags:
   - research
+  - score
   sets:
   - prompt
   metadata:
@@ -289,6 +291,7 @@ properties:
     '
   tags:
   - LLM
+  - score
   sets:
   - prompt
   - array
@@ -304,6 +307,7 @@ properties:
   - categorical
   - industry
   - research
+  - score
   sets:
   - array
   - prompt
@@ -316,6 +320,7 @@ properties:
     classification (ordered by similarity score, [0] is primary)
   tags:
   - research
+  - score
   sets:
   - array
   - prompt
@@ -331,6 +336,7 @@ properties:
     score, [0] is primary)
   tags:
   - LLM
+  - score
   sets:
   - prompt
   - array
@@ -359,6 +365,7 @@ properties:
   tags:
   - Cat
   - business
+  - score
   sets:
   - standard
   - EnumCat
@@ -389,6 +396,7 @@ properties:
     '
   tags:
   - LLM
+  - score
   sets:
   - prompt
   - array
@@ -414,6 +422,7 @@ properties:
   - Unknown
   tags:
   - Cat
+  - score
   sets:
   - standard
   - EnumCat
@@ -449,6 +458,7 @@ properties:
   tags:
   - Cat
   - benchmark
+  - score
   sets:
   - standard
   - VecCat
@@ -539,6 +549,8 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
+  tags:
+  - score
 - name: references
   description: Cached reference UUIDs
   dataType:

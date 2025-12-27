@@ -200,6 +200,7 @@ properties:
   description: Media coverage score (0-100)
   tags:
   - research
+  - score
   sets:
   - prompt
 - name: hasMediaKit
@@ -422,6 +423,8 @@ properties:
   - metadata
   - prompt
   - extended
+  tags:
+  - score
 - name: reviewFlag
   dataType:
   - text

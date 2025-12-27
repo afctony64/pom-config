@@ -508,6 +508,7 @@ properties:
   - system
   tags:
   - metadata
+  - score
 - name: analysisConfidence
   dataType:
   - text

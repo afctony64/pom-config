@@ -407,6 +407,8 @@ properties:
   - system
   - metadata
   - extended
+  tags:
+  - score
 - name: analysisConfidence
   dataType:
   - text
@@ -505,6 +507,8 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
+  tags:
+  - score
 - name: executionTrackRecordScore
   description: Execution track record scores
   dataType:
@@ -515,6 +519,8 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
+  tags:
+  - score
 - name: homeLeadershipTeamStrength
   description: Leadership team strength
   dataType:
@@ -532,6 +538,8 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
+  tags:
+  - score
 - name: references
   description: Cached reference UUIDs
   dataType:

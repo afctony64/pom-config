@@ -221,6 +221,7 @@ properties:
     [0] is primary)
   tags:
   - LLM
+  - score
   sets:
   - prompt
   - array
@@ -356,6 +357,7 @@ properties:
   tags:
   - Cat
   - usecase
+  - score
   sets:
   - standard
   - VecCat
@@ -372,6 +374,7 @@ properties:
   tags:
   - metadata
   - classification
+  - score
   sets:
   - system
   metadata:
@@ -547,6 +550,7 @@ properties:
   tags:
   - Cat
   - value
+  - score
   sets:
   - standard
   - EnumCat
@@ -691,6 +695,7 @@ properties:
   - Cat
   - industry
   - segment
+  - score
   sets:
   - standard
   - VecCat
@@ -723,6 +728,7 @@ properties:
   - system
   tags:
   - metadata
+  - score
 - name: analysisConfidence
   dataType:
   - text
@@ -828,6 +834,8 @@ properties:
   parallel_to: keyCustomers
   sets:
   - prompt
+  tags:
+  - score
 - name: strategicValueScore
   dataType:
   - number[]
@@ -835,6 +843,8 @@ properties:
   parallel_to: keyCustomers
   sets:
   - prompt
+  tags:
+  - score
 - name: expansionPotentialScore
   dataType:
   - number[]
@@ -842,6 +852,8 @@ properties:
   parallel_to: keyCustomers
   sets:
   - prompt
+  tags:
+  - score
 - name: updated_at
   description: Record update timestamp
   dataType:

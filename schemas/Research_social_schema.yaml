@@ -216,6 +216,7 @@ properties:
   description: Social engagement score (0-100) from enricher
   tags:
   - research
+  - score
   sets:
   - prompt
 - name: hasSocialAuth
@@ -280,6 +281,7 @@ properties:
     score, and how platform choices align with their business model and audience.
   tags:
   - LLM
+  - score
   sets:
   - prompt
   - extended

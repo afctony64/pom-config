@@ -241,6 +241,7 @@ properties:
   - Cat
   - product
   - benchmark
+  - score
   sets:
   - standard
   - VecCat
@@ -257,6 +258,7 @@ properties:
   tags:
   - metadata
   - classification
+  - score
   sets:
   - system
   metadata:
@@ -321,6 +323,7 @@ properties:
     score, [0] is primary)
   tags:
   - LLM
+  - score
   sets:
   - prompt
   - array
@@ -665,6 +668,8 @@ properties:
   - system
   - metadata
   - extended
+  tags:
+  - score
 - name: reviewFlag
   dataType:
   - text
@@ -751,6 +756,8 @@ properties:
   sets:
   - prompt
   - extended
+  tags:
+  - score
 - name: marketFitScore
   dataType:
   - number[]
@@ -758,6 +765,8 @@ properties:
   parallel_to: products
   sets:
   - prompt
+  tags:
+  - score
 - name: maturityAdoptionScore
   dataType:
   - number[]
@@ -765,6 +774,8 @@ properties:
   parallel_to: products
   sets:
   - prompt
+  tags:
+  - score
 - name: revenueContributionScore
   dataType:
   - number[]
@@ -772,6 +783,8 @@ properties:
   parallel_to: products
   sets:
   - prompt
+  tags:
+  - score
 - name: updated_at
   description: Record update timestamp
   dataType:

@@ -410,6 +410,8 @@ properties:
   - system
   - metadata
   - extended
+  tags:
+  - score
 - name: analysisConfidence
   dataType:
   - text
@@ -496,6 +498,8 @@ properties:
   sets:
   - prompt
   - extended
+  tags:
+  - score
 - name: homeInnovationScore
   dataType:
   - number
@@ -503,6 +507,8 @@ properties:
   sets:
   - prompt
   - extended
+  tags:
+  - score
 - name: homeMarketPositionScore
   dataType:
   - number
@@ -510,6 +516,8 @@ properties:
   sets:
   - prompt
   - extended
+  tags:
+  - score
 - name: marketStrengthScore
   dataType:
   - number[]
@@ -517,6 +525,8 @@ properties:
   parallel_to: keyCompetitors
   sets:
   - prompt
+  tags:
+  - score
 - name: innovationScore
   dataType:
   - number[]
@@ -524,6 +534,8 @@ properties:
   parallel_to: keyCompetitors
   sets:
   - prompt
+  tags:
+  - score
 - name: threatLevelScore
   dataType:
   - number[]
@@ -531,6 +543,8 @@ properties:
   parallel_to: keyCompetitors
   sets:
   - prompt
+  tags:
+  - score
 - name: updated_at
   description: Record update timestamp
   dataType:
