@@ -74,12 +74,4 @@ tool_guidance:
       - The parallel arrays (executiveRoles, executiveBackgrounds, etc.) must ONLY 
         have entries that correspond to NAMED executives in keyExecutives
 
-page_categories_of_interest:
-  corporate_page: 0.98
-  content_page: 0.75
-  social_proof_page: 0.45
-  competitive_page: 0.05
-  product_page: 0.02
-  conversion_page: 0.01
-  support_page: 0.01
-  general_page: 0.25
+# page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)

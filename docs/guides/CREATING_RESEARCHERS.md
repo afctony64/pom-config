@@ -129,18 +129,21 @@ researcher_identity:
     - "Growth Tracking: Follower growth trends, churn indicators"
 ```
 
-### Page Categories of Interest
+### Tool Guidance
 
-Relevance scores (0-1) for page types:
+Instructions for how tools should be used:
 
 ```yaml
-page_categories_of_interest:
-  social_proof_page: 0.95    # Testimonials, follower counts
-  content_page: 0.85         # Blog posts, content examples
-  conversion_page: 0.70      # Link pages, affiliates
-  corporate_page: 0.40       # About, contact
-  general_page: 0.10         # Other pages
+tool_guidance:
+  brave_search:
+    priority: high
+    max_calls: 2
+    when_to_use: |
+      Search for external data not available on the entity's website
 ```
+
+> **Note:** `page_categories_of_interest` was previously planned but is NOT implemented in pom-core.
+> Page selection is currently handled by `search_query` for semantic matching.
 
 ### Focus Areas
 
@@ -250,14 +253,7 @@ search_query: |
   What is the engagement rate and follower interaction patterns?
   What audience segments and personas exist?
 
-# Page relevance scoring
-page_categories_of_interest:
-  social_proof_page: 0.95
-  content_page: 0.85
-  conversion_page: 0.70
-  competitive_page: 0.50
-  corporate_page: 0.30
-  general_page: 0.10
+# Note: page_categories_of_interest is NOT implemented - use search_query instead
 
 # Focus areas for analysis
 focus_areas:

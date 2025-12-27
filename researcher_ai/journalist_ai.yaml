@@ -62,12 +62,4 @@ tool_guidance:
       - pressMentions: List publication names
       - newsSentiment: Based on actual article tone
 
-page_categories_of_interest:
-  content_page: 0.98
-  corporate_page: 0.8
-  social_proof_page: 0.65
-  general_page: 0.45
-  competitive_page: 0.25
-  product_page: 0.15
-  conversion_page: 0.08
-  support_page: 0.05
+# page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)

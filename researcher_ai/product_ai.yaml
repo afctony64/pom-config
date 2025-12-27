@@ -32,14 +32,6 @@ search_query: >
 # tool_guidance: DISABLED - pom-core tool format issue (string->Tool conversion)
 # TODO(pom-core): Re-enable when fixed
 
-page_categories_of_interest:
-  product_page: 0.98
-  support_page: 0.92
-  competitive_page: 0.85
-  conversion_page: 0.6
-  content_page: 0.35
-  social_proof_page: 0.25
-  corporate_page: 0.05
-  general_page: 0.05
+# page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
 # Note: fact_types and entity_types moved to schema definition

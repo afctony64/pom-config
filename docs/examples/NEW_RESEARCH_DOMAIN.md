@@ -294,12 +294,7 @@ search_query: |
   What is the engagement rate and follower interaction patterns?
   How authentic is the audience?
 
-page_categories_of_interest:
-  social_proof_page: 0.95
-  content_page: 0.85
-  conversion_page: 0.70
-  corporate_page: 0.30
-  general_page: 0.10
+# Note: page_categories_of_interest is NOT implemented in pom-core
 
 focus_areas:
   - Total follower count across platforms
@@ -360,12 +355,7 @@ search_query: |
   How often do they post and when?
   What content performs best?
 
-page_categories_of_interest:
-  content_page: 0.98
-  social_proof_page: 0.80
-  product_page: 0.60
-  corporate_page: 0.40
-  general_page: 0.10
+# Note: page_categories_of_interest is NOT implemented in pom-core
 
 focus_areas:
   - Primary content categories/niches

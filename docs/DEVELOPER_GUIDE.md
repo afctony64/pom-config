@@ -220,7 +220,7 @@ Define each researcher's identity, focus, and behavior.
 - `researcher_identity` - Title, mission, core competencies
 - `search_query` - Keywords for page discovery
 - `collection_schema_id` - Output schema
-- `page_categories_of_interest` - Which pages to prioritize
+- `tool_guidance` - Instructions for tool usage (brave_search, etc.)
 
 **Example:** [researcher_ai/product_ai.yaml](../researcher_ai/product_ai.yaml)
 

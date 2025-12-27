@@ -98,15 +98,7 @@ tool_guidance:
       
       Example: keyCompetitors[0]='Salesforce' must align with competitorDomain[0]='salesforce.com' and competitorPositioning[0]='Market Leader'
 
-page_categories_of_interest:
-  competitive_page: 0.98
-  product_page: 0.8
-  corporate_page: 0.65
-  content_page: 0.45
-  general_page: 0.25
-  social_proof_page: 0.15
-  conversion_page: 0.1
-  support_page: 0.05
+# page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
 # Entity spawn configuration
 # Spawn fields are auto-detected from schema via sets: [spawn] (pom-core#295)

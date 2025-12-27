@@ -53,12 +53,4 @@ tool_guidance:
       - customerSegments: Enterprise, SMB, mid-market
       - testimonials: Quote with customer name/company
 
-page_categories_of_interest:
-  social_proof_page: 0.98
-  support_page: 0.8
-  content_page: 0.65
-  product_page: 0.45
-  conversion_page: 0.35
-  corporate_page: 0.15
-  competitive_page: 0.08
-  general_page: 0.05
+# page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
