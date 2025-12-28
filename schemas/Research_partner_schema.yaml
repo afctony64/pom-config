@@ -137,12 +137,10 @@ properties:
   dataType:
   - text[]
   description: Parallel array of UUID5 IDs for keyPartners (index-aligned, auto-generated)
-  tags:
-  - research
-  - system
+  parallel_to: keyPartners
+  tags: []
   sets:
-  - array
-  - prompt
+  - system
 - name: keyPartnerEvidence
   dataType:
   - text[]
@@ -153,13 +151,9 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags:
-  - research
-  - evidence
+  tags: []
   sets:
-  - array
-  - prompt
-  - extended
+  - system
 - name: partnerTypes
   dataType:
   - text[]

@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 8.1
+version: 8.0
 group: url
 weaviate_instance: cloud
 description: 'Domain collection - THE UNIVERSAL ENTITY COLLECTION.
@@ -178,56 +178,6 @@ properties:
   - standard
   tags:
   - filtering
-  - processing
-- name: is_suitable
-  dataType:
-  - boolean
-  description: Whether the domain is suitable for pipeline processing (real site, not parking page, not spam)
-  indexFilterable: true
-  sets:
-  - standard
-  tags:
-  - filtering
-  - processing
-- name: unsuitable_reason
-  dataType:
-  - text
-  description: Reason why domain was marked as not suitable (if applicable)
-  indexFilterable: true
-  tokenization: word
-  sets:
-  - extended
-  tags:
-  - processing
-- name: enrichers_executed
-  dataType:
-  - int
-  description: Number of enrichers that were executed for this domain
-  indexFilterable: true
-  sets:
-  - extended
-  tags:
-  - metrics
-  - processing
-- name: enrichers_successful
-  dataType:
-  - int
-  description: Number of enrichers that completed successfully for this domain
-  indexFilterable: true
-  sets:
-  - extended
-  tags:
-  - metrics
-  - processing
-- name: domain_fields_saved
-  dataType:
-  - int
-  description: Number of domain fields that were saved during enrichment
-  indexFilterable: true
-  sets:
-  - extended
-  tags:
-  - metrics
   - processing
 - name: blacklist_reason
   dataType:
@@ -644,31 +594,9 @@ properties:
 - name: accountName
   dataType:
   - text
-  description: Company name for display purposes (copied from Source)
+  description: Company name for display purposes (copied from Company_source)
   indexFilterable: true
   tokenization: field
-- name: entityId
-  dataType:
-  - text
-  description: Original ID from source system (preserved for reference, NOT used for UUID generation)
-  indexFilterable: true
-  tokenization: field
-  sets:
-  - standard
-  tags:
-  - identity
-  - source
-- name: entityName
-  dataType:
-  - text
-  description: Name of the entity (generic - works for companies, people, places, etc.)
-  indexFilterable: true
-  tokenization: word
-  sets:
-  - standard
-  - drill_down
-  tags:
-  - identity
 - name: url_intelligence_count
   dataType:
   - int

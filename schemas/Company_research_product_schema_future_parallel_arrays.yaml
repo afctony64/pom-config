@@ -413,15 +413,13 @@ properties:
   dataType:
   - text[]
   description: Parallel array of UUID5 IDs for products (index-aligned, auto-generated)
+  parallel_to: products
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags:
-  - research
-  - system
+  tags: []
   sets:
-  - array
-  - prompt
+  - system
 - name: productCategories
   dataType:
   - text[]

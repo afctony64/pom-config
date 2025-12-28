@@ -160,12 +160,10 @@ properties:
   dataType:
   - text[]
   description: Parallel array of UUID5 IDs for keyCompetitors (index-aligned, auto-generated)
-  tags:
-  - research
-  - system
+  parallel_to: keyCompetitors
+  tags: []
   sets:
-  - prompt
-  - array
+  - system
 - name: competitorDomain
   dataType:
   - text[]
@@ -186,12 +184,9 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags:
-  - research
-  - evidence
+  tags: []
   sets:
-  - prompt
-  - array
+  - system
 - name: competitorPositioning
   dataType:
   - text[]
