@@ -142,7 +142,7 @@ properties:
 - name: captcha_detected
   dataType:
   - boolean
-  description: Whether CAPTCHA/bot protection was detected during enrichment (FIX #377/#378)
+  description: Whether CAPTCHA/bot protection was detected during enrichment (FIX
   indexFilterable: true
   sets:
   - extended
@@ -651,6 +651,7 @@ properties:
   - intelligence
   - metrics
   - social
+  - digital
 - name: social_og_completeness
   dataType:
   - int
@@ -662,6 +663,7 @@ properties:
   - metrics
   - opengraph
   - social
+  - digital
 - name: social_twitter_implementation
   dataType:
   - int
@@ -673,6 +675,7 @@ properties:
   - metrics
   - social
   - twitter
+  - digital
 - name: social_business_indicators
   dataType:
   - int
@@ -684,6 +687,7 @@ properties:
   - business
   - metrics
   - social
+  - digital
 - name: social_tech_readiness
   dataType:
   - int
@@ -695,6 +699,7 @@ properties:
   - metrics
   - social
   - technology
+  - digital
 - name: social_content_optimization
   dataType:
   - int
@@ -706,6 +711,7 @@ properties:
   - content
   - metrics
   - social
+  - digital
 - name: social_accounts_found
   dataType:
   - int
@@ -717,6 +723,7 @@ properties:
   - accounts
   - discovery
   - social
+  - digital
 - name: social_platforms
   dataType:
   - text[]
@@ -729,6 +736,7 @@ properties:
   - discovery
   - platforms
   - social
+  - digital
 - name: social_engagement_score
   dataType:
   - int
@@ -740,6 +748,7 @@ properties:
   - engagement
   - metrics
   - social
+  - digital
 - name: has_social_auth
   dataType:
   - boolean
@@ -751,6 +760,7 @@ properties:
   - authentication
   - features
   - social
+  - digital
 - name: has_social_sharing
   dataType:
   - boolean
@@ -762,6 +772,7 @@ properties:
   - features
   - sharing
   - social
+  - digital
 - name: has_community_features
   dataType:
   - boolean
@@ -773,6 +784,7 @@ properties:
   - community
   - features
   - social
+  - digital
 - name: social_accounts
   dataType:
   - text
@@ -783,6 +795,7 @@ properties:
   tags:
   - accounts
   - social
+  - digital
 - name: social_authentication
   dataType:
   - text[]
@@ -793,6 +806,7 @@ properties:
   tags:
   - authentication
   - social
+  - digital
 - name: social_sharing_features
   dataType:
   - text[]
@@ -803,6 +817,7 @@ properties:
   tags:
   - sharing
   - social
+  - digital
 - name: community_features
   dataType:
   - text[]
@@ -813,6 +828,7 @@ properties:
   tags:
   - community
   - social
+  - digital
 - name: sitemap_count
   dataType:
   - int
@@ -867,6 +883,8 @@ properties:
   description: Technology stack indicators from robots_txt analysis
   indexSearchable: true
   tokenization: word
+  tags:
+  - digital
 - name: business_model_signals
   dataType:
   - text
@@ -971,6 +989,7 @@ properties:
   - categorical
   - social
   - tier
+  - digital
 - name: social_recommendations
   dataType:
   - text[]
@@ -982,6 +1001,7 @@ properties:
   - actionable
   - recommendations
   - social
+  - digital
 - name: advanced_social_features
   dataType:
   - text
@@ -992,6 +1012,7 @@ properties:
   tags:
   - advanced
   - social
+  - digital
 - name: discovered_sitemaps
   dataType:
   - text[]
@@ -1225,8 +1246,6 @@ properties:
   - pipeline
   - processing
 references:
-# NOTE: 'company' reference removed - it was legacy data from migration.
-# Domain IS the entity in the new model, no reference to Company_source needed.
 - name: research_industry
   target_collection: Research_industry
   uuid_source_field: uuid

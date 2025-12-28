@@ -24,33 +24,54 @@ search_query: >
   What community and social media presence does the company have?
   Where can users find developer resources, forums, and support channels?
 
-# Tools available for this researcher
-# tools:
-#   - brave_search  # Web search for social media presence
+# 🌐 DATA INJECTION: Pre-enriched Domain fields (from enrichers)
+# The digital_presence injector provides already-discovered social/tech data
+# from the Domain record, so the AI doesn't need to rediscover it via search.
+data_requirements:
+  injectors:
+    - injector_template: digital_presence
+      template_vars:
+        domain: "{{ (record.get('properties') or record).get('domain', record.get('domain', '')) }}"
+        tag: "digital"  # Fetch fields tagged with "digital" (social, tech, platform presence)
+        inject_as: "digitalPresence"
+
+# Tools available for this researcher (AITools that can be called by the AI)
+# NOTE: With digitalPresence injection, search is rarely needed - use for gaps only
+tools:
+  - brave_search  # Web search for missing social presence data
 
 tool_guidance:
   brave_search:
     priority: low
-    max_calls: 1  # LIMIT: Only 1 search - social links usually on website
+    max_calls: 1  # LIMIT: Only 1 search - digitalPresence has most data!
     when_to_use: |
-      🔍 SEARCH ONLY IF page content lacks social links
+      🔍 CHECK digitalPresence FIRST - it has enricher-discovered data!
       
-      **SEARCH (IF NEEDED): Social presence**
+      **AVAILABLE FROM digitalPresence (no search needed):**
+      - social_media_score: Overall presence score (0-100)
+      - social_platforms: Array of detected platforms
+      - social_accounts: Discovered account URLs
+      - has_social_auth: OAuth login capability
+      - has_community_features: Forums, Slack, Discord detected
+      - business_technology: Tech stack indicators
+      
+      **SEARCH ONLY IF digitalPresence lacks:**
+      - Specific platform accounts not detected
+      - Community presence not found on website
+      - Recent social activity or follower counts
+      
+      **SEARCH (IF NEEDED):**
       → "{company} LinkedIn Twitter GitHub YouTube"
       
-      **STOP after finding:**
-      - Social media accounts
-      - Developer community (GitHub, etc.)
-      - Content channels
-      
     recommended_searches:
-      primary: "{company_name} LinkedIn Twitter GitHub YouTube community"
+      primary: "{company_name} LinkedIn Twitter GitHub community"
       
   structured_output:
     priority: critical
     usage_instructions: |
       🎯 OUTPUT FORMAT REQUIREMENTS:
-      - socialPlatforms: List actual accounts found with URLs
-      - communityPresence: Forums, Slack, Discord, etc.
+      - Use digitalPresence data as PRIMARY source
+      - socialPlatforms: List actual accounts (from digitalPresence.social_platforms + search)
+      - communityPresence: Forums, Slack, Discord (check has_community_features first)
       - developerCommunity: GitHub, Stack Overflow presence
       - contentChannels: Blog, YouTube, podcast
