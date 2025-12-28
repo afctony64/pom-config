@@ -73,14 +73,14 @@ data_requirements:
   injectors:
     # 📄 PRIMARY: Page Facts Injection
     # Uses semantic search on Page_facts vectors to find relevant content
-    # NOTE: search_queries come from researcher_ai config (e.g., financial_ai.yaml)
+    # NOTE: search_queries are read from researcher_ai config automatically
     - injector_template: page_facts_vector
       template_vars:
         domain: "{{ (record.get('properties') or record).get('domain', record.get('domain', '')) }}"
         researcher_type: "{{ record._researcher_id }}"
-        # search_queries automatically loaded from researcher_ai config
+        # search_queries read from researcher_ai config (Issue #384)
         min_certainty: 0.15
-        limit: 300
+        limit: 100
         inject_as: pageData
     # 📊 SEC Edgar data for public companies (optional)
     - injector_template: mcp
