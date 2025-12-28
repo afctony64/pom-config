@@ -18,7 +18,7 @@ researcher_identity:
   - 'Financial Health: Profitability analysis, burn rate, runway assessment'
 
 # Semantic search queries for page selection (BM25/vector injectors)
-# NOTE: Multiple queries allow targeted searches for different aspects
+# Issue #384/#394: Funding-focused queries for better Page_facts coverage
 # Each query runs separately, results are merged and deduplicated
 search_queries:
   - "What funding rounds has the company raised? Seed Series A Series B Series C"
@@ -26,12 +26,13 @@ search_queries:
   - "Who are the investors and venture capital firms that invested?"
   - "What are the latest funding announcements and press releases?"
 
-# Hybrid search alpha (0=BM25 keyword only, 1=vector only)
-# Low alpha (0.3) prioritizes exact matches like "$9 million Series A"
+# Issue #394: Context retrieval options
+# Low alpha (0.3) prioritizes BM25 exact matches like "$9 million Series A"
 # over generic boilerplate that matches vectorially
-alpha: 0.3
+context_options:
+  hybrid_alpha: 0.3  # BM25-heavy for specific financial terms (funding, investors, Series A)
 
-# Tools available for this researcher
+# Tools available for this researcher (AITools that can be called by the AI)
 tools:
   - brave_search          # Web search for funding, investors, news
   - edgar_company_facts   # SEC company facts (public companies)
@@ -41,25 +42,21 @@ tool_guidance:
   brave_search:
     priority: critical
     max_calls: 4  # LIMIT: 4 searches (external + company press + revenue + news)
-    # tool_choice: auto  # pom-core#192
+    tool_choice: required  # Force brave_search even when page content exists (funding data often missing from pages)
     when_to_use: |
-      🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):
+      🔍 SMART SEARCH STRATEGY (MAX 4 SEARCHES):
       
-      ⚠️ DO NOT search every source - pick 2-3 most relevant!
+      ⚠️ DO NOT search every source - pick 2-4 most relevant!
       
       **SEARCH #1 (REQUIRED): Funding data**
       → "{company} crunchbase pitchbook funding investors"
       (Crunchbase + PitchBook in ONE search - most comprehensive)
       
-      **SEARCH #2 (REQUIRED): Company press releases**
-      → "site:{company_domain} funding announcement press release"
-      (Company's own press pages - may have latest funding not yet on Crunchbase)
-      
-      **SEARCH #3 (IF NEEDED): Revenue/metrics**
+      **SEARCH #2 (IF NEEDED): Revenue/metrics**
       → "{company} revenue ARR valuation"
       (Only if funding search didn't include revenue)
       
-      **SEARCH #4 (IF NEEDED): Recent news**
+      **SEARCH #3 (IF NEEDED): Recent news**
       → "{company} funding announcement 2024"
       (Only for recent developments not in Crunchbase)
       
