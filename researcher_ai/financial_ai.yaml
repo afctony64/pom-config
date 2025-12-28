@@ -26,6 +26,11 @@ search_queries:
   - "Who are the investors and venture capital firms that invested?"
   - "What are the latest funding announcements and press releases?"
 
+# Hybrid search alpha (0=BM25 keyword only, 1=vector only)
+# Low alpha (0.3) prioritizes exact matches like "$9 million Series A"
+# over generic boilerplate that matches vectorially
+alpha: 0.3
+
 # Tools available for this researcher
 tools:
   - brave_search          # Web search for funding, investors, news
