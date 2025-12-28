@@ -42,5 +42,5 @@ resource_class:
   throughput_tier: high
 metadata:
   description: Meta Llama 3.2 3B - Efficient small model with strong reasoning
-  category: ultra-efficient
-  status: active
+  category: general
+  status: stable
