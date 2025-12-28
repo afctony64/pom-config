@@ -22,11 +22,12 @@ researcher_identity:
   - 'Awards & Accolades Analysis: Professional rankings, certifications as competitive
     differentiators'
 
-# Semantic search query for page selection (BM25/vector injectors)
-# NOTE: Natural language queries work best for hybrid vector+BM25 search
-search_query: >
-  How does this product compare to competitors? 
-  What alternatives exist and what differentiates them?
+# Semantic search queries for page selection (BM25/vector injectors)
+# Issue #384: Multiple queries for comprehensive Page_facts coverage
+search_queries:
+  - "How does this product compare to competitors?"
+  - "What alternatives exist and what differentiates them?"
+  - "What customer reviews and market positioning exist?"
 
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
