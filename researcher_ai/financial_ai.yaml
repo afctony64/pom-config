@@ -18,13 +18,12 @@ researcher_identity:
   - 'Financial Health: Profitability analysis, burn rate, runway assessment'
 
 # Semantic search queries for page selection (BM25/vector injectors)
-# Issue #384: Multiple queries for comprehensive Page_facts coverage
+# NOTE: Multiple queries allow targeted searches for different aspects
 # Each query runs separately, results are merged and deduplicated
-# NOTE: Pricing removed - not relevant for financial researcher (causes irrelevant chunks to rank high)
 search_queries:
   - "What funding rounds has the company raised? Seed Series A Series B Series C"
+  - "How much money was raised in the Series A round?"
   - "Who are the investors and venture capital firms that invested?"
-  - "What is the company revenue and financial performance metrics?"
   - "What are the latest funding announcements and press releases?"
 
 # Tools available for this researcher
@@ -37,8 +36,9 @@ tool_guidance:
   brave_search:
     priority: critical
     max_calls: 4  # LIMIT: 4 searches (external + company press + revenue + news)
+    # tool_choice: auto  # pom-core#192
     when_to_use: |
-      🔍 SMART SEARCH STRATEGY (MAX 4 SEARCHES):
+      🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):
       
       ⚠️ DO NOT search every source - pick 2-3 most relevant!
       
@@ -65,8 +65,13 @@ tool_guidance:
       - Revenue estimate (if available)
       
     recommended_searches:
+      # ONE combined search covers most needs:
       primary: "{company_name} crunchbase pitchbook funding investors valuation"
+      
+      # Only if primary didn't have revenue:
       revenue: "{company_name} revenue ARR annual growth owler"
+      
+      # Only for very recent news:
       news: "{company_name} funding announcement 2024 series"
       
   edgar_company_facts:
