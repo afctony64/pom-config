@@ -64,6 +64,91 @@
 
 ---
 
+## 🔴 CRITICAL: CoreModelService Relationship
+
+**pom-config is the ONLY source for CoreModelService. There are NO fallbacks.**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    CONFIGURATION ARCHITECTURE                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │              CoreModelService (pom-core)                  │   │
+│  │                                                           │   │
+│  │  • ONLY loads from pom-config                            │   │
+│  │  • NO fallbacks - fails if pom-config missing            │   │
+│  │  • NO app-level config loading                           │   │
+│  │  • NO bundled configs in pom-core                        │   │
+│  │                                                           │   │
+│  └──────────────────────┬───────────────────────────────────┘   │
+│                         │                                        │
+│                         │ LOADS FROM                             │
+│                         ▼                                        │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │              pom-config (YOU ARE HERE)                    │   │
+│  │                                                           │   │
+│  │  schemas/ data_cards/ llm_models/ tools/ tenant_groups/  │   │
+│  │  tenants/ prompts/ researcher_ai/ collections/           │   │
+│  │                                                           │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### What CoreModelService Loads from pom-config
+
+| Config Type | Directory | Used For |
+|-------------|-----------|----------|
+| **schemas** | `schemas/` | Weaviate collection definitions |
+| **data_cards** | `data_cards/` | DataFactory fetch configurations |
+| **llm_models** | `llm_models/` | LLM model cards (gpt-5-mini, etc.) |
+| **tools** | `tools/` | AI tool definitions |
+| **tenant_groups** | `tenant_groups/` | Tenant grouping configs |
+| **tenants** | `tenants/` | Individual tenant configs |
+| **collections** | `collections/` | Collection configurations |
+| **prompts** | `prompts/` | Core prompt templates (prompty files) |
+
+### What pom-config Does NOT Provide
+
+- **App-specific configs** → Stay in app repos (core/config/, config/)
+- **App-specific prompts** → Apps can override in their own directories
+- **Runtime settings** → Environment variables, not YAML
+
+### Critical Rules
+
+1. **CoreModelService updates MUST be done here in pom-config**
+   - Don't update schemas in app directories - they won't be loaded!
+   - Don't expect pom-core to have fallback configs
+
+2. **Apps MUST mount pom-config**
+   - Set `POM_CONFIG_ROOT` environment variable
+   - Mount `.pom_config_pkg/` in Docker containers
+
+3. **NO FALLBACKS - CoreModelService raises RuntimeError if pom-config missing**
+   - This is by design - configs are critical infrastructure
+   - Apps cannot work without pom-config
+
+### AppModelService Pattern (for Apps)
+
+Apps should use AppModelService that wraps CoreModelService:
+
+```python
+# In app code (PomAI, Pomothy)
+class AppModelService:
+    def __init__(self, app_config_root: Path):
+        self._core = get_core_model_service()  # From pom-config ONLY
+        self._app_root = app_config_root        # App-specific configs
+
+    def get_core_schema(self, name: str):
+        return self._core.get_object('schema', name)  # From pom-config
+
+    def get_app_config(self, name: str):
+        return self._load_app_config(name)  # From app directory
+```
+
+---
+
 ## 📁 REPOSITORY STRUCTURE
 
 ```
