@@ -25,9 +25,9 @@ search_query: >
   What press releases and news announcements has the company made?
   What media coverage and industry recognition have they received?
 
-# Tools available for this researcher
-# tools:
-#   - brave_search  # Web search for news coverage, press mentions
+# Tools available for this researcher (AITools that can be called by the AI)
+tools:
+  - brave_search  # Web search for news coverage, press mentions
 
 tool_guidance:
   brave_search:

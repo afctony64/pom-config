@@ -24,9 +24,9 @@ search_query: >
   Who are the founders and leadership team? 
   What is the background of the CEO and key executives?
 
-# Tools available for this researcher
-# tools:
-#   - brave_search  # Web search for executive profiles, LinkedIn, news
+# Tools available for this researcher (AITools that can be called by the AI)
+tools:
+  - brave_search  # Web search for executive profiles, LinkedIn, news
 
 tool_guidance:
   brave_search:

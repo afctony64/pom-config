@@ -24,13 +24,25 @@ search_query: >
   What are the main products and features offered?
   What capabilities does the platform provide and how does it work?
 
-# Tools available for this researcher (DISABLED - pom-core tool format issue)
-# TODO(pom-core): Fix string->Tool conversion for brave_search
-# tools:
-#   - brave_search  # Optional web search for product news
+# Tools available for this researcher (AITools that can be called by the AI)
+# NOTE: Tool format issue fixed in pom-core v3.0.28+ (execution_engine.py)
+tools:
+  - brave_search  # Web search for product news
 
-# tool_guidance: DISABLED - pom-core tool format issue (string->Tool conversion)
-# TODO(pom-core): Re-enable when fixed
+tool_guidance:
+  brave_search:
+    priority: medium
+    max_calls: 1  # LIMIT: Only 1 search - product info usually on website
+    when_to_use: |
+      🔍 SEARCH ONLY IF page content lacks product details
+      
+      **SEARCH (IF NEEDED): Product announcements**
+      → "{company} product feature announcement"
+      
+      **DON'T SEARCH FOR:**
+      - Basic product info (on website)
+      - Feature lists (check docs)
+      - Pricing (see pricing page)
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 

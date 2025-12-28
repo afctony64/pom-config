@@ -24,9 +24,9 @@ search_query: >
   Who are the technology partners and what integrations are available?
   What partner programs and ecosystem relationships exist?
 
-# Tools available for this researcher
-# tools:
-#   - brave_search  # Web search for partnership announcements
+# Tools available for this researcher (AITools that can be called by the AI)
+tools:
+  - brave_search  # Web search for partnership announcements
 
 tool_guidance:
   brave_search:

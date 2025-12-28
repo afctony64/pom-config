@@ -25,9 +25,9 @@ search_query: >
   What security certifications and compliance standards are met?
   How is data protected and what privacy measures are in place?
 
-# Tools available for this researcher
-# tools:
-#   - brave_search          # Web search for legal/compliance news
+# Tools available for this researcher (AITools that can be called by the AI)
+tools:
+  - brave_search          # Web search for legal/compliance news
   - edgar_company_facts   # SEC company facts (public companies)
   - edgar_filing_sections # SEC filing sections (risk factors)
 

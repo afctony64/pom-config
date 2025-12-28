@@ -23,9 +23,9 @@ search_query: >
   What is the pricing model and what plans are available?
   What funding has the company raised and who are the investors?
 
-# Tools available for this researcher
-# tools:
-#   - brave_search          # Web search for funding, investors, news
+# Tools available for this researcher (AITools that can be called by the AI)
+tools:
+  - brave_search          # Web search for funding, investors, news
   - edgar_company_facts   # SEC company facts (public companies)
   - edgar_filing_sections # SEC filing sections (10-K financials)
 

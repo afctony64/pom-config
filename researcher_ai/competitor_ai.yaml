@@ -28,9 +28,9 @@ search_query: >
   How does this product compare to competitors? 
   What alternatives exist and what differentiates them?
 
-# Tools available for this researcher
-# tools:
-#   - brave_search  # Web search for competitor analysis, G2/Capterra reviews
+# Tools available for this researcher (AITools that can be called by the AI)
+tools:
+  - brave_search  # Web search for competitor analysis, G2/Capterra reviews
 
 tool_guidance:
   brave_search:
