@@ -35,7 +35,7 @@ tool_guidance:
   brave_search:
     priority: critical
     max_calls: 3  # LIMIT: Only 3 searches per company!
-    # tool_choice: auto  # pom-core#192
+    tool_choice: required  # Force brave_search even when page content exists (funding data often missing from pages)
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):
       

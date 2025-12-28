@@ -35,6 +35,7 @@ tool_guidance:
   brave_search:
     priority: medium
     max_calls: 2  # LIMIT: Only 2 searches for risk
+    tool_choice: auto  # Let LLM decide - page content often has compliance info, but breaches need search
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
       

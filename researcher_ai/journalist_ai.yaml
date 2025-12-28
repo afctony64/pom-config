@@ -33,6 +33,7 @@ tool_guidance:
   brave_search:
     priority: high
     max_calls: 2  # LIMIT: Only 2 searches for news
+    tool_choice: required  # Journalist ALWAYS needs web search for recent news coverage
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
       
