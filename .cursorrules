@@ -1,0 +1,229 @@
+# 📦 POM-CONFIG: Shared Configuration Repository Rules
+# Role: You are managing SHARED configurations used by ALL Pom ecosystem applications
+
+---
+
+## 🛑 CRITICAL TRIGGERS - CHECK BEFORE EVERY RESPONSE
+
+| Trigger Word/Phrase | STOP AND DO THIS |
+|---------------------|------------------|
+| "add schema", "new collection" | Check if schema exists, follow Weaviate 4.11 patterns |
+| "add data card", "new data card" | Use existing data cards as templates |
+| "add model", "new llm model" | Follow llm_models/*.yaml patterns |
+| "release", "tag", "version" | Run release workflow (see below) |
+| "breaking change" | Notify ALL app teams via GitHub issues |
+
+⚠️ **PATTERN TO BREAK:** When adding new configs, my DEFAULT is to create from scratch. THIS IS WRONG. Copy an existing config and modify it.
+
+---
+
+## 🌐 POM ECOSYSTEM OVERVIEW
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        POM ECOSYSTEM                             │
+├─────────────────────────────────────────────────────────────────┤
+│  APPLICATIONS (consume pom-config)                               │
+│    ├── Pomothy     - Web application                            │
+│    ├── PomAI       - CLI/Batch processing                       │
+│    └── PomSpark    - Infrastructure (also uses configs)         │
+├─────────────────────────────────────────────────────────────────┤
+│  SHARED RESOURCES                                                │
+│    ├── pom-core    - Python library                             │
+│    ├── pom-config  - Shared YAML configs (YOU ARE HERE)         │
+│    └── pom-docs    - Architecture documentation                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Your Role:** You manage SHARED configurations that ALL apps depend on.
+
+---
+
+## 🚨 CRITICAL: UNDERSTAND YOUR IMPACT
+
+**pom-config is SHARED. When you break pom-config, you break ALL APPS.**
+
+```
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│   PomAI     │  │  Pomothy    │  │  PomSpark   │
+│  (depends)  │  │  (depends)  │  │  (depends)  │
+└──────┬──────┘  └──────┬──────┘  └──────┬──────┘
+       │                │                │
+       └────────────────┼────────────────┘
+                        │
+                ┌───────▼───────┐
+                │  pom-config   │  ← YOU ARE HERE
+                │ (SHARED YAML) │
+                └───────────────┘
+```
+
+**Consumers:**
+- **PomAI** - Uses schemas, data_cards, llm_models, prompts, researcher_ai
+- **Pomothy** - Uses schemas, data_cards, llm_models, prompts
+- **PomSpark** - Uses schemas for validation
+
+---
+
+## 📁 REPOSITORY STRUCTURE
+
+```
+pom-config/
+├── schemas/           ← Weaviate collection schemas
+├── data_cards/        ← Data card definitions for DataFactory
+├── llm_models/        ← LLM model cards (gpt-5-mini, etc.)
+├── tools/             ← AI tool definitions
+├── tenant_groups/     ← Tenant group configurations
+├── tenants/           ← Individual tenant configs
+├── prompts/           ← Shared prompt templates
+│   ├── researchers/   ← Core researcher templates
+│   ├── entity/        ← Entity-agnostic research
+│   ├── company/       ← Company intelligence
+│   └── benchmarks/    ← Benchmark variants
+├── researcher_ai/     ← Researcher AI definitions
+├── collections/       ← Collection configurations
+├── ux_configs/        ← UX configuration
+├── VERSION            ← Current version number
+└── CHANGELOG.md       ← Version history
+```
+
+---
+
+## 🔄 RELEASE WORKFLOW (MANDATORY)
+
+### Before ANY Release
+
+1. **Update VERSION file:**
+   ```bash
+   echo "1.6.15" > VERSION
+   ```
+
+2. **Update CHANGELOG.md:**
+   ```markdown
+   ## [1.6.15] - 2024-12-28
+   
+   ### Added
+   - Description of new configs
+   
+   ### Changed
+   - Description of changes
+   ```
+
+3. **Commit and tag:**
+   ```bash
+   git add -A
+   git commit -m "chore: Release v1.6.15"
+   git tag v1.6.15
+   git push origin main --tags
+   ```
+
+4. **Create GitHub release:**
+   ```bash
+   gh release create v1.6.15 --title "v1.6.15 - Description" --notes "See CHANGELOG.md"
+   ```
+
+5. **Notify app teams:**
+   ```bash
+   # Post to each app repo
+   gh issue create --repo afctony64/PomAI --title "pom-config v1.6.15 available" --body "..."
+   gh issue create --repo afctony64/Pomothy --title "pom-config v1.6.15 available" --body "..."
+   ```
+
+---
+
+## ✅ YOUR RESPONSIBILITIES
+
+**DO:**
+- Follow existing patterns when adding configs
+- Update VERSION and CHANGELOG for every release
+- Create GitHub releases (not just tags)
+- Notify app teams of breaking changes
+- Test configs locally before releasing
+- Use semantic versioning (MAJOR.MINOR.PATCH)
+
+**DO NOT:**
+- Make breaking changes without coordination
+- Delete configs without notifying apps
+- Skip the release workflow
+- Use git tag without gh release create
+- Modify configs that are actively used without testing
+
+---
+
+## 📋 CONFIG TYPE GUIDELINES
+
+### Schemas (schemas/*.yaml)
+- Define Weaviate collection structures
+- Must be compatible with Weaviate 4.11
+- Include all required fields and types
+
+### Data Cards (data_cards/*.yaml)
+- Define how DataFactory fetches data
+- Specify fields, filters, sorting
+- Reference schemas by collection name
+
+### LLM Models (llm_models/*.yaml)
+- Define model aliases (gpt-5-mini, etc.)
+- Include provider, cost, capabilities
+- Shared across all apps
+
+### Prompts (prompts/*.prompty)
+- Shared prompt templates
+- Apps can override with local prompts
+- Follow prompty format
+
+### Researcher AI (researcher_ai/*.yaml)
+- Define researcher identities
+- Specify focus areas and behaviors
+- Used by research pipelines
+
+---
+
+## 🔗 CROSS-REPO ACCESS RULES
+
+| Repository | Access | What You Can Do |
+|------------|--------|-----------------|
+| **pom-config** | ✅ Full | Everything - this is your home repo |
+| **pom-docs** | ✅ Full Write | Update documentation |
+| **pom-core** | ⚠️ Read Only | Read for context, file issues |
+| **PomAI** | ⚠️ Read Only | Read for context |
+| **Pomothy** | ⚠️ Read Only | Read for context |
+| **PomSpark** | ⚠️ Read Only | Read for context |
+
+---
+
+## 📝 COMMIT CONVENTIONS
+
+| Prefix | Use For | Example |
+|--------|---------|---------|
+| `feat:` | New configs | `feat: Add customer_ai researcher` |
+| `fix:` | Config fixes | `fix: Correct schema field type` |
+| `chore:` | Maintenance | `chore: Release v1.6.15` |
+| `docs:` | Documentation | `docs: Update DEVELOPER_GUIDE` |
+
+---
+
+## 🚨 BREAKING CHANGES
+
+If your change could break existing apps:
+
+1. **Coordinate BEFORE making the change:**
+   ```bash
+   gh issue create --repo afctony64/PomAI --title "BREAKING: Proposed change to X"
+   gh issue create --repo afctony64/Pomothy --title "BREAKING: Proposed change to X"
+   ```
+
+2. **Wait for acknowledgment from app teams**
+
+3. **Make the change with major version bump**
+
+4. **Provide migration instructions in release notes**
+
+---
+
+## REMEMBER
+
+- pom-config is SHARED infrastructure
+- Changes affect ALL apps
+- Always create GitHub releases, not just tags
+- Notify apps of new releases
+- Follow existing patterns

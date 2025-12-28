@@ -5,6 +5,57 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.16] - 2024-12-28
+
+### Fixed
+- Financial researcher query configuration fix
+
+## [1.6.15] - 2024-12-28
+
+### Added
+- `tool_choice` parameter to researcher_ai configs
+
+## [1.6.14] - 2024-12-28
+
+### Changed
+- Stable release with all previous 1.6.x improvements
+- First release with proper GitHub release (not just git tag)
+
+## [1.6.0] - 2024-12-28
+
+### Added
+- Collection configurations
+- UX configs directory
+- Enhanced researcher_ai capabilities
+
+## [1.5.2] - 2024-12-28
+
+### Added
+- Multiple search queries support
+
+## [1.5.1] - 2024-12-24
+
+### Added
+- Tools guide documentation
+
+## [1.5.0] - 2024-12-24
+
+### Added
+- Extended tool definitions
+- Additional benchmark prompts
+
+## [1.4.0] - 2024-12-23
+
+### Added
+- Tenant configurations
+- Extended schema definitions
+
+## [1.3.0] - 2024-12-23
+
+### Added
+- Additional data cards
+- Enhanced llm_models configuration
+
 ## [1.2.0] - 2025-01-23
 
 ### Added
