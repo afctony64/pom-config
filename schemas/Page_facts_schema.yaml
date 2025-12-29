@@ -234,6 +234,18 @@ properties:
   - standard
   tags:
   - technical
+- name: site_readable
+  dataType:
+  - boolean
+  description: Whether site content is readable/parseable (has extractable text)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - quality
 - name: page_type
   dataType:
   - text
