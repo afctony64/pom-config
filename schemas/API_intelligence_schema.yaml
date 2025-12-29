@@ -317,10 +317,10 @@ uuid_strategy:
     description: Deterministic UUID based on apiKey (domain + apiSource + endpoint
       + params)
 references:
-- collection: Company_source
-  field: domainUuid
-  target_field: uuid
-  type: many_to_one
+- name: domainUuid
+  target_collection: Company_source
+  uuid_source_field: domainUuid
+  description: Reference to Company_source via domainUuid field
 dependencies:
 - type: foundational
 - collection: Company_source
