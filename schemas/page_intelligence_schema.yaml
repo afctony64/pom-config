@@ -328,8 +328,6 @@ uuid_strategy:
   - field: url
     namespace: URL
     description: Primary strategy using URL for deterministic intelligence UUIDs
-references:
-- collection: Company_source
 dependencies:
 - type: foundational
 data_sources:
