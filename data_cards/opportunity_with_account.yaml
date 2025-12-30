@@ -46,6 +46,16 @@ parameters:
   relationship_traversal: true
   dynamic_templates: true
 
+  # FIX #433: Traversal configuration to prevent circular references
+  # Company_opportunity → Company_source → researchers is complex
+  # Prevent auto-discovery of researcher back-references to Company_source
+  traversal:
+    max_depth: 2                    # Opportunity → Company → Researchers → STOP
+    max_complexity: 200             # Allow more complexity for auto-discovered researchers
+    policies:
+      companyBeacon: skip           # Skip researcher → Company_source (circular)
+      company: skip                 # Skip any back-reference to Company_source
+
   # ❌ REMOVED: Explicit references list (conflicts with collections section configuration)
   # See collections[0].references.company.nested_references for full reference configuration
 

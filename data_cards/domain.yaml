@@ -43,6 +43,14 @@ parameters:
   relationship_traversal: true
   dynamic_templates: true
 
+  # FIX #433: Traversal configuration to prevent circular references
+  # Domain → Company_source is safe, but Domain.competitor could be circular
+  traversal:
+    max_depth: 1                    # Domain → Company_source → STOP
+    policies:
+      competitor: skip              # Skip Domain.competitor (circular to Research_competitor)
+      competitors: skip             # Skip plural form too
+
   # Reference fields to include
   references:
     - company  # Reference to Company_source

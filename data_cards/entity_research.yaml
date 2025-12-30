@@ -42,6 +42,16 @@ parameters:
   relationship_traversal: true
   dynamic_templates: true
 
+  # FIX #433: Traversal configuration to prevent circular references
+  # Research_* collections have domainBeacon → Domain, which could create loops
+  traversal:
+    max_depth: 1                    # Domain → Research_* → STOP (no deeper)
+    max_complexity: 150             # Allow more complexity for 10+ collections
+    policies:
+      competitor: skip              # Skip Domain.competitor → Research_competitor (circular)
+      competitors: skip             # Skip plural form too
+      domainBeacon: skip            # Skip Research_*.domainBeacon → Domain (circular)
+
   # Fetch one or more entities
   limit: 10000
   limit_default: 10000

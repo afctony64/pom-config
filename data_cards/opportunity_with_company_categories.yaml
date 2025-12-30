@@ -41,6 +41,14 @@ parameters:
   # Relationship configuration
   relationship_traversal: true
   dynamic_templates: true
+
+  # FIX #433: Traversal configuration to prevent circular references
+  traversal:
+    max_depth: 2
+    max_complexity: 200
+    policies:
+      companyBeacon: skip
+      company: skip
   
   # ✅ FIX #318: Enable nested reference auto-discovery for Company_source
   # Nested references (10 researchers) are auto-discovered from cached tenant group config

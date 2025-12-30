@@ -38,6 +38,15 @@ parameters:
   relationship_traversal: true
   dynamic_templates: true
 
+  # FIX #433: Traversal configuration to prevent circular references
+  traversal:
+    max_depth: 1
+    max_complexity: 150
+    policies:
+      competitor: skip
+      competitors: skip
+      domainBeacon: skip
+
   # Fetch one or more entities (supports large batch operations)
   limit: 10000
   limit_default: 10000
