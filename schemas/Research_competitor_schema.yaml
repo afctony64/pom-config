@@ -410,6 +410,7 @@ properties:
   dataType:
   - number
   description: Target entity's market strength (1-10)
+  label: Market Strength
   sets:
   - extended
   - prompt
@@ -420,6 +421,7 @@ properties:
   dataType:
   - number
   description: Target entity's innovation capability (1-10)
+  label: Innovation
   sets:
   - extended
   - prompt
@@ -430,6 +432,7 @@ properties:
   dataType:
   - number
   description: Target entity's overall market position (1-10)
+  label: Market Position
   sets:
   - extended
   - prompt
