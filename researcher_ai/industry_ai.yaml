@@ -21,11 +21,31 @@ researcher_identity:
   - Vertical Market Expertise - Information, Professional Services, Manufacturing,
     Finance, Healthcare sectors
 
-# Semantic search query for page selection (BM25/vector injectors)
-# NOTE: Natural language queries work best for hybrid vector+BM25 search
-search_query: >
-  What does this company do and what industry do they operate in?
-  What is their business model and who is their target market?
+# Semantic search queries for page selection (BM25/vector injectors)
+# Issue #437: Multiple queries for comprehensive Page_facts coverage
+search_queries:
+  - "What does this company do and what industry do they operate in?"
+  - "What is their business model and how do they make money?"
+  - "How do they deliver their product or service to customers?"
+  - "What technology stack or platform do they use?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - NAICS industry classification (6-digit code with description)
+  - Business model (B2B-SaaS, Marketplace, Services-Led, Usage-Based, etc.)
+  - Delivery model (Cloud-SaaS, On-Premise, API-First, Hybrid-Cloud, etc.)
+  - Industry segment positioning and vertical focus
+  - Value chain position and market role
+
+# Fact types to extract from source content
+fact_types:
+  - naics_classification
+  - business_model
+  - delivery_model
+  - industry_segment
+  - sector_classification
+  - value_chain_position
+  - target_market
 
 # Tools available for this researcher (LOW priority - mostly use page content)
 # tools:
@@ -48,9 +68,10 @@ tool_guidance:
       
   structured_output:
     priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - naicsCode: 6-digit NAICS classification
-      - businessModel: SaaS, marketplace, consulting, etc.
-      - industryVerticals: Target industries served
-      - marketPosition: Market segment positioning
+    when_to_use: |
+      🎯 SCHEMA-DRIVEN OUTPUT:
+      - All field requirements come from the injected JSON schema
+      - Populate ALL fields defined in the schema (use null only if truly unavailable)
+      - *LLM fields require 100-150 word analytical descriptions
+      - *Cat fields are auto-classified - skip them
+      - Parallel arrays must have identical lengths

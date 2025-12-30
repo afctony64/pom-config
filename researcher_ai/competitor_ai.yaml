@@ -28,6 +28,27 @@ search_queries:
   - "How does this product compare to competitors?"
   - "What alternatives exist and what differentiates them?"
   - "What customer reviews and market positioning exist?"
+  - "What are the competitive advantages and differentiators?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Direct competitor identification (2-5 companies customers compare to)
+  - Per-competitor analysis (positioning, pricing, advantages, gaps)
+  - Overall competitive advantages and differentiation factors
+  - Market trends and competitive threats
+  - Competitor domains for entity spawn
+
+# Fact types to extract from source content
+fact_types:
+  - competitor_names
+  - competitor_domains
+  - competitor_positioning
+  - price_comparison
+  - competitive_advantages_vs
+  - competitive_gaps_vs
+  - differentiation_factors
+  - competitive_threats
+  - market_trends
 
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
@@ -65,32 +86,31 @@ tool_guidance:
       
   structured_output:
     priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - Return ALL responses as valid JSON
-      - Use arrays for lists
-      - Keep descriptions concise (50-100 chars max)
-      - Focus on facts, not prose
-      - Maximum 5 items per category
+    when_to_use: |
+      🎯 SCHEMA-DRIVEN OUTPUT:
+      - All field requirements come from the injected JSON schema
+      - Populate ALL fields defined in the schema (use null only if truly unavailable)
+      - *LLM fields require 150-200 word analytical descriptions
+      - Entity-level arrays: 3-5 items about THIS entity's overall position
+      - *Cat fields are auto-classified - skip them
       
   array_requirements:
     priority: critical
-    usage_instructions: |
-      📊 ARRAY FIELD REQUIREMENTS (schema has full definitions):
+    when_to_use: |
+      📊 PARALLEL ARRAY REQUIREMENTS:
       
-      **Entity-Level Arrays** (text[] without parallel_to):
-      - Describe THIS entity's overall competitive position
-      - Populate 3-5 items each - read field descriptions from schema
-      - These are NOT per-competitor, they're about THIS entity overall
-      
-      **Parallel Arrays** (text[] with parallel_to relationship):
+      **Parallel arrays (marked parallel_to in schema):**
       - Per-competitor data - one value per competitor identified
       - ALL parallel arrays MUST have IDENTICAL length
-      - Index alignment: [i] in one array = [i] in all others
-      - Use "Not disclosed" if data unavailable to maintain alignment
+      - Index alignment: [i] in one array = [i] in all parallel arrays
+      - Use "Not disclosed" or neutral value if data unavailable
       
-      ⚠️ DO NOT leave array fields empty - they are key outputs!
-      ⚠️ For competitor domains, use web search if not found in pageData
+      **Entity-level arrays (no parallel_to):**
+      - Describe THIS entity's overall competitive position
+      - Populate 3-5 items each
+      
+      ⚠️ Parallel array length MUST match - never leave gaps!
+      ⚠️ Competitor domains are CRITICAL for entity spawn - use web search if not in page content!
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
