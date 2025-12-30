@@ -68,7 +68,8 @@ properties:
 - name: entityType
   dataType:
   - text
-  description: Entity type derived from TenantGroup (Company, Destination, Recipe, Film, Book)
+  description: Entity type derived from TenantGroup (Company, Destination, Recipe,
+    Film, Book)
   indexFilterable: true
   tokenization: field
   sets:
@@ -132,7 +133,8 @@ properties:
 - name: requires_browser
   dataType:
   - boolean
-  description: Whether this site requires browser/Playwright for page scraping (JS-rendered or bot-protected)
+  description: Whether this site requires browser/Playwright for page scraping (JS-rendered
+    or bot-protected)
   indexFilterable: true
   sets:
   - extended
@@ -172,7 +174,8 @@ properties:
 - name: domain_enriched
   dataType:
   - boolean
-  description: Whether the domain has been successfully enriched (has title, description, or content >= 50 chars)
+  description: Whether the domain has been successfully enriched (has title, description,
+    or content >= 50 chars)
   indexFilterable: true
   sets:
   - standard
@@ -221,7 +224,8 @@ properties:
 - name: enricherResults
   dataType:
   - object[]
-  description: Array of flat enricher objects with all 47 MCPToolResponse fields (Weaviate 4.16 compatible)
+  description: Array of flat enricher objects with all 47 MCPToolResponse fields (Weaviate
+    4.16 compatible)
   indexSearchable: false
   nestedProperties:
   - name: tool_name
@@ -346,7 +350,8 @@ properties:
   - name: fetch_method
     dataType:
     - text
-    description: Fetch method used (aiohttp, playwright, google_fallback) - CRITICAL for performance tracking
+    description: Fetch method used (aiohttp, playwright, google_fallback) - CRITICAL
+      for performance tracking
     indexFilterable: true
     tokenization: field
   - name: title_source
@@ -621,7 +626,8 @@ properties:
 - name: global_page_count
   dataType:
   - int
-  description: Total page URLs found in sitemaps before filtering. Set by sitemap parser. Compare with planned_page_count for filter efficiency.
+  description: Total page URLs found in sitemaps before filtering. Set by sitemap
+    parser. Compare with planned_page_count for filter efficiency.
   indexFilterable: true
   sets:
   - extended
@@ -639,7 +645,8 @@ properties:
 - name: planned_page_count
   dataType:
   - int
-  description: Number of page URLs queued for processing into Page_intelligence after filtering. Set by sitemap parser. Compare with page_count for processing success.
+  description: Number of page URLs queued for processing into Page_intelligence after
+    filtering. Set by sitemap parser. Compare with page_count for processing success.
   indexFilterable: true
   sets:
   - extended
@@ -654,28 +661,11 @@ properties:
   indexFilterable: true
   tags:
   - temporal
-- name: global_page_count
-  dataType:
-  - int
-  description: Total page URLs found in sitemaps before filtering. Set by sitemap parser. Compare with planned_page_count for filter efficiency.
-  indexFilterable: true
-  sets:
-  - extended
-  tags:
-  - metrics
-  - processing
-  - audit
-- name: global_page_count_updated_at
-  dataType:
-  - date
-  description: Timestamp when global_page_count was last updated
-  indexFilterable: true
-  tags:
-  - temporal
 - name: page_count
   dataType:
   - int
-  description: Actual Page_intelligence records created for this domain. Set by page_intelligence_cli after processing.
+  description: Actual Page_intelligence records created for this domain. Set by page_intelligence_cli
+    after processing.
   indexFilterable: true
   sets:
   - standard
@@ -688,24 +678,6 @@ properties:
   - date
   description: Timestamp when page_count was last updated
   indexFilterable: true
-- name: planned_page_count
-  dataType:
-  - int
-  description: Number of page URLs queued for processing into Page_intelligence. Set by sitemap parser when URLs are unpacked. Compare with page_count for audit (gap = unprocessed pages).
-  indexFilterable: true
-  sets:
-  - extended
-  tags:
-  - metrics
-  - processing
-  - audit
-- name: planned_page_count_updated_at
-  dataType:
-  - date
-  description: Timestamp when planned_page_count was last updated
-  indexFilterable: true
-  tags:
-  - temporal
 - name: intelligence_status
   dataType:
   - text
@@ -1006,7 +978,8 @@ properties:
 - name: has_hsts
   dataType:
   - boolean
-  description: Has HTTP Strict Transport Security header from http_security_headers enricher
+  description: Has HTTP Strict Transport Security header from http_security_headers
+    enricher
   indexFilterable: true
 - name: has_csp
   dataType:
@@ -1052,7 +1025,8 @@ properties:
 - name: social_presence_tier
   dataType:
   - text
-  description: Social presence tier (Strong/Good/Basic/Minimal) from social_snapshot enricher
+  description: Social presence tier (Strong/Good/Basic/Minimal) from social_snapshot
+    enricher
   indexFilterable: true
   tokenization: field
   sets:
@@ -1093,7 +1067,8 @@ properties:
 - name: sitemap_discovery_method
   dataType:
   - text
-  description: Method used to discover sitemaps (robots_txt/well_known/dns) from sitemap_discovery enricher
+  description: Method used to discover sitemaps (robots_txt/well_known/dns) from sitemap_discovery
+    enricher
   indexFilterable: true
   tokenization: field
 - name: total_sitemaps_discovered
@@ -1104,17 +1079,20 @@ properties:
 - name: attempted_locations
   dataType:
   - text[]
-  description: Sitemap locations attempted during discovery from sitemap_discovery enricher
+  description: Sitemap locations attempted during discovery from sitemap_discovery
+    enricher
   indexSearchable: true
 - name: successful_locations
   dataType:
   - text[]
-  description: Sitemap locations that were successfully found from sitemap_discovery enricher
+  description: Sitemap locations that were successfully found from sitemap_discovery
+    enricher
   indexSearchable: true
 - name: bot_protected
   dataType:
   - boolean
-  description: Whether sitemap discovery was blocked by bot protection from sitemap_discovery enricher
+  description: Whether sitemap discovery was blocked by bot protection from sitemap_discovery
+    enricher
   indexFilterable: true
 - name: homepage_urls_discovered
   dataType:
@@ -1129,7 +1107,8 @@ properties:
 - name: homepage_discovery_method
   dataType:
   - text
-  description: Method used for homepage discovery (direct/redirect) from homepage_parser enricher
+  description: Method used for homepage discovery (direct/redirect) from homepage_parser
+    enricher
   indexFilterable: true
   tokenization: field
 - name: homepage_has_navigation
@@ -1160,12 +1139,14 @@ properties:
 - name: homepage_valid_content_urls
   dataType:
   - int
-  description: Count of valid content URLs extracted from homepage by homepage_parser enricher
+  description: Count of valid content URLs extracted from homepage by homepage_parser
+    enricher
   indexFilterable: true
 - name: corporate_ip_ranges
   dataType:
   - text[]
-  description: Known corporate IP addresses/ranges for this company (from visitor tracking)
+  description: Known corporate IP addresses/ranges for this company (from visitor
+    tracking)
   indexSearchable: true
   sets:
   - extended
@@ -1176,7 +1157,8 @@ properties:
 - name: visitor_networks
   dataType:
   - text
-  description: JSON array of network information from detected visitors (ISP, location, connection type)
+  description: JSON array of network information from detected visitors (ISP, location,
+    connection type)
   indexSearchable: true
   sets:
   - standard
@@ -1318,8 +1300,6 @@ properties:
   - pipeline
   - processing
 references:
-# ✅ CLEANED: Removed deprecated research_industry, research_financial, research_risk
-# These don't exist in Weaviate and caused schema mismatch errors
 - name: industry
   target_collection: Research_industry
   uuid_source_field: uuid
@@ -1375,7 +1355,8 @@ uuid_strategy:
   fields:
   - field: domain
     namespace: URL
-    description: Primary strategy using domain for deterministic UUIDs (consistent across collections)
+    description: Primary strategy using domain for deterministic UUIDs (consistent
+      across collections)
   - field: url
     namespace: URL
     description: Fallback strategy using full URL for deterministic UUIDs
@@ -1391,7 +1372,8 @@ schema_config:
 calculated_fields:
 - name: enrichment_completeness
   field_type: calculated
-  formula: 'enrichment_status === ''completed'' ? 1 : (enrichment_status === ''partial'' ? 0.5 : 0)'
+  formula: 'enrichment_status === ''completed'' ? 1 : (enrichment_status === ''partial''
+    ? 0.5 : 0)'
   description: 🔄 Enrichment completeness score (0-1)
   dataType:
   - number
@@ -1407,7 +1389,8 @@ calculated_fields:
   - count
 - name: domain_trust_score
   field_type: calculated
-  formula: '(security_score || 0) * (site_readable ? 1 : 0.5) * (is_blacklisted ? 0 : 1)'
+  formula: '(security_score || 0) * (site_readable ? 1 : 0.5) * (is_blacklisted ?
+    0 : 1)'
   description: 🛡️ Combined domain trust score (calculated locally)
   dataType:
   - number
