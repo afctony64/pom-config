@@ -1,14 +1,16 @@
 id: competitor_research
-collection: Research_competitor  # Start from researcher, not Domain
+collection: Domain  # Keep Domain as root - works with current pom-core
 name: Competitor Research
 type: data_card
 file: competitor_research.yaml
 description: >
-  Fetch Research_competitor records with Domain via explicit reference.
-  Uses Research_competitor as root and traverses to Domain via domainBeacon.
+  Fetch Domain records with Research_competitor via relationship traversal.
   
-  KEY: dynamic_templates: false prevents auto-discovery of Domain's other references.
-  This ensures only competitor + domain data is fetched.
+  NOTE: Uses standard Domain-centered approach. Relationship traversal brings
+  all researchers. Filtering to competitor-only happens at report builder level.
+  
+  BUG REFERENCE: Starting from Research_competitor fails due to pom-core schema
+  mismatch (research_risk property not in Weaviate). Keep Domain as root until fixed.
 
 # Tagging system
 tags:
@@ -29,13 +31,11 @@ personas:
 
 parameters:
   type: fetch
-  collection: Research_competitor  # ROOT IS RESEARCHER
-  relationship_traversal: true     # ✅ Allow explicit reference traversal
-  dynamic_templates: false         # ❌ DISABLE auto-discovery of nested refs
+  collection: Domain
+  relationship_traversal: true
+  dynamic_templates: true
   limit: 10000
   limit_default: 10000
-  
-  # Data card level field_set
   field_set: [standard, extended, array]
 
 # No explicit fields - resolved by field_set
@@ -47,33 +47,26 @@ field_tags:
   - LLM
   - research
 
-# Collections: Research_competitor (root) + Domain (via explicit reference)
+# Collections
 collections:
-  - collection: Research_competitor
-    required: true
-    primary: true
-    field_set: [standard, extended, array]
-    references:
-      domainBeacon:
-        target_collection: Domain
-        field_set: [standard]
-
   - collection: Domain
-    field_set: [standard]
-    via_reference: domainBeacon
+    required: true
+    field_set: [standard, extended, array]
+
+  - collection: Research_competitor
+    field_set: [standard, extended, array]
 
 # Chat integration
 chat_integration:
   best_for:
     - "Competitor intelligence for single entity"
-    - "Fast testing of parallel array rendering"
-    - "Focused competitive analysis"
+    - "Testing parallel array rendering"
+    - "Competitive analysis"
 
   usage_patterns:
-    - "Starts from Research_competitor"
-    - "Traverses to Domain via domainBeacon"
-    - "NO auto-discovery - only competitor + domain"
-    - "Fast execution - single researcher"
+    - "Uses Domain as root (standard approach)"
+    - "Relationship traversal brings all researchers"
+    - "Filter to competitor at report level"
 
   parameter_examples:
     - name: "Single entity competitor intel"
@@ -81,52 +74,23 @@ chat_integration:
 
 # Response structure
 response_structure:
-  root_object: Research_competitor
+  root_object: Domain
   includes_relationships: true
-  relationship_style: explicit_only
+  relationship_style: reverse_traversal
   field_focus: competitor_research
   expected_collections:
-    - Research_competitor
     - Domain
+    - Research_competitor
 
 # Documentation
 documentation:
   overview: |
-    Competitor-focused data card using Research_competitor as root.
+    Competitor-focused data card using Domain-centered approach.
     
-    KEY INSIGHT: 
-    - relationship_traversal: true (allows explicit refs)
-    - dynamic_templates: false (prevents auto-discovery)
-    
-    This combination ensures only Research_competitor → Domain is traversed,
-    NOT Domain → all other Research_* collections.
+    KNOWN LIMITATION: Relationship traversal brings ALL researchers.
+    Filter to competitor-only at report/asset level.
     
     FIELD SET BEHAVIOR:
     - standard: Core fields (Cat, key scalars, core parallel arrays)
     - extended: Deep-dive fields (LLM analysis, detailed arrays, scores)
     - array: All array fields (required for parallel array tables)
-    
-  field_sets: |
-    STANDARD ARRAYS (field_set: [standard, array]):
-    - keyCompetitors (primary)
-    - competitorDomain (parallel)
-    - competitorPositioning (parallel)
-    - competitorTargetMarket (parallel)
-    - competitorPriceVs (parallel)
-    - competitorAdvantagesVs (parallel)
-    - differentiationFactors
-    - competitiveAdvantages
-    
-    EXTENDED ARRAYS (field_set: [standard, extended, array]):
-    - competitorGapsVs (parallel)
-    - competitiveThreats
-    - marketTrends
-    - marketStrengthScore (parallel)
-    - innovationScore (parallel)
-    - threatLevelScore (parallel)
-    
-    SYSTEM ARRAYS (not in reports):
-    - keyCompetitorsIds
-    - keyCompetitorEvidence
-    - citations
-    - reasoning
