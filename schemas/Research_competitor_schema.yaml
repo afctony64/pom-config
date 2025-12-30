@@ -712,6 +712,10 @@ references:
   auto_flatten: false
   description: Reference to the source Domain record for beacon traversal (uses research
     record's own UUID)
+- name: keyCompetitorRefs
+  target_collection: Domain
+  description: References to spawned competitor Domain records (parallel to keyCompetitors
+    array, populated by entity spawn post-processor)
 group: research
 weaviate_instance: cloud
 collection_name: Research_competitor
