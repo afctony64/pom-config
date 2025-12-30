@@ -73,32 +73,68 @@ tool_guidance:
       - Focus on facts, not prose
       - Maximum 5 items per category
       
+  entity_simple_arrays:
+    priority: critical
+    usage_instructions: |
+      📊 REQUIRED SIMPLE ARRAYS (Entity-level, describing THIS company overall):
+      
+      These fields describe THIS entity's competitive position overall - NOT per-competitor:
+      
+      **differentiationFactors** (3-5 items REQUIRED):
+      What makes THIS company unique vs all competitors?
+      Example: ["White-labeled marketplace", "Code-native SDK", "Embedded workflow builder"]
+      
+      **competitiveAdvantages** (3-5 items REQUIRED):
+      What advantages does THIS company have over competitors?
+      Example: ["G2 Leader status", "Fastest time-to-market", "Best-in-class support"]
+      
+      **competitiveThreats** (2-4 items REQUIRED):
+      What competitive threats does THIS company face?
+      Example: ["Enterprise incumbents", "Low-cost alternatives", "In-house builds"]
+      
+      **marketTrends** (2-4 items REQUIRED):
+      What market trends affect THIS company's competitive landscape?
+      Example: ["Shift to embedded iPaaS", "API-first architecture", "Customer-facing integrations"]
+      
+      ⚠️ These are SEPARATE from the per-competitor parallel arrays!
+      ⚠️ DO NOT leave these empty - they are key intelligence outputs!
+      
   parallel_arrays:
     priority: critical
     usage_instructions: |
-      ⚠️ PARALLEL ARRAY ALIGNMENT:
+      ⚠️ PARALLEL ARRAY ALIGNMENT (Per-competitor data):
       
       The following arrays MUST maintain identical length and index alignment:
-      - keyCompetitors
-      - competitorDomain
-      - competitorPositioning
-      - competitorPriceVs
-      - competitorAdvantagesVs
-      - competitorGapsVs
-      - competitorTargetMarket
+      - keyCompetitors (company names)
+      - competitorDomain (website domains)
+      - competitorPositioning (Leader/Challenger/Niche)
+      - competitorTargetMarket (who they target)
+      - competitorPriceVs (Higher/Similar/Lower than THIS company)
+      - competitorAdvantagesVs (their advantages over THIS company)
+      - competitorGapsVs (their gaps compared to THIS company)
       
       RULES:
-      - ALL arrays MUST have IDENTICAL length
+      - ALL arrays MUST have IDENTICAL length (typically 3-5 competitors)
       - Index [i] in one array corresponds to index [i] in all other arrays
       - If data unavailable for a field, use "Not disclosed" to maintain alignment
       - DO NOT leave arrays with mismatched lengths
+      - DO NOT leave any parallel array empty - all 7 arrays must be populated
       
-      🚨 CRITICAL: For EVERY competitor in keyCompetitors, you MUST provide the domain in competitorDomain.
-      - If you identify a competitor, you MUST find their domain (use web search if needed)
-      - If domain truly cannot be found, use "Not disclosed" but maintain array alignment
-      - competitorDomain is REQUIRED - never omit it or leave it empty
+      🚨 CRITICAL: For EVERY competitor in keyCompetitors, you MUST provide:
+      - competitorDomain: Their website (use web search if needed)
+      - competitorPositioning: Their market position (Leader/Challenger/Niche)
+      - competitorTargetMarket: Who they sell to (e.g., "Enterprise", "SMB", "Mid-market")
+      - competitorPriceVs: Price comparison (Higher/Similar/Lower)
+      - competitorAdvantagesVs: Their advantages (e.g., "Larger customer base")
+      - competitorGapsVs: Their gaps vs THIS company (e.g., "No embedded option")
       
-      Example: keyCompetitors[0]='Salesforce' must align with competitorDomain[0]='salesforce.com' and competitorPositioning[0]='Market Leader'
+      Example for keyCompetitors[0]='Salesforce':
+      - competitorDomain[0]='salesforce.com'
+      - competitorPositioning[0]='Market Leader'
+      - competitorTargetMarket[0]='Enterprise'
+      - competitorPriceVs[0]='Higher'
+      - competitorAdvantagesVs[0]='Brand recognition, ecosystem'
+      - competitorGapsVs[0]='Complex setup, higher cost'
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
