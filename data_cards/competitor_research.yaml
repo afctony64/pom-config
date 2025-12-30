@@ -1,0 +1,120 @@
+id: competitor_research
+collection: Domain
+name: Competitor Research
+type: data_card
+file: competitor_research.yaml
+description: >
+  Fetch Domain records with Research_competitor fields only.
+  Fast, focused data card for competitor dossier testing.
+  Part of the Entity Research Suite - single researcher variant.
+
+# Tagging system
+tags:
+  - research
+  - competitor
+  - entity-intelligence
+  - focused
+
+target_scope: entity_intelligence
+executor: fetch
+
+# Frontend Display Control
+display: true
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: fetch
+  collection: Domain
+  relationship_traversal: true
+  dynamic_templates: true
+  limit: 10000
+  limit_default: 10000
+  
+  # Data card level field_set - applies to all collections
+  field_set: [standard, extended, array]
+
+# No explicit fields - resolved by field_set
+fields: {}
+
+# Tags for field filtering
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+# Collections: Domain + Research_competitor only
+collections:
+  - collection: Domain
+    required: true
+    field_set: [standard, extended, array]
+
+  - collection: Research_competitor
+    field_set: [standard, extended, array]
+
+# Chat integration
+chat_integration:
+  best_for:
+    - "Competitor intelligence for single entity"
+    - "Fast testing of parallel array rendering"
+    - "Focused competitive analysis"
+
+  usage_patterns:
+    - "Returns competitor researcher fields only"
+    - "Fast execution - single researcher"
+    - "Perfect for testing field_set behavior"
+
+  parameter_examples:
+    - name: "Single entity competitor intel"
+      params: {where: {domain: "example.com"}}
+
+# Response structure
+response_structure:
+  root_object: Domain
+  includes_relationships: true
+  relationship_style: reverse_traversal
+  field_focus: competitor_research
+  expected_collections:
+    - Domain
+    - Research_competitor
+
+# Documentation
+documentation:
+  overview: |
+    Single-researcher data card for fast competitor intelligence testing.
+    
+    FIELD SET BEHAVIOR:
+    - standard: Core fields (Cat, key scalars, core parallel arrays)
+    - extended: Deep-dive fields (LLM analysis, detailed arrays, scores)
+    - array: All array fields (required for parallel array tables)
+    
+    USAGE:
+    - Use [standard, array] for focused reports with key parallel arrays
+    - Use [standard, extended, array] for full deep-dive
+    
+  field_sets: |
+    STANDARD ARRAYS (field_set: [standard, array]):
+    - keyCompetitors (primary)
+    - competitorDomain (parallel)
+    - competitorPositioning (parallel)
+    - competitorTargetMarket (parallel)
+    - competitorPriceVs (parallel)
+    - competitorAdvantagesVs (parallel)
+    - differentiationFactors
+    - competitiveAdvantages
+    
+    EXTENDED ARRAYS (field_set: [standard, extended, array]):
+    - competitorGapsVs (parallel)
+    - competitiveThreats
+    - marketTrends
+    - marketStrengthScore (parallel)
+    - innovationScore (parallel)
+    - threatLevelScore (parallel)
+    
+    SYSTEM ARRAYS (not in reports):
+    - keyCompetitorsIds
+    - keyCompetitorEvidence
+    - citations
+    - reasoning

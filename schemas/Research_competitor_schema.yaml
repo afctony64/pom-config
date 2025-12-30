@@ -2,7 +2,7 @@ type: research
 class: Research_competitor
 id: Research_competitor
 name: Research Competitor
-description: "\U0001F4DA RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Lookalike\
+description: "📚 RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Lookalike\
   \ Entity Discovery)\n  \n  RESEARCHER: Competitive Intelligence Analyst (identity\
   \ defined in seed data for researcher identity)\n  \n  KNOWLEDGE TYPE: Ecosystem\
   \ of DIRECT COMPETITORS as lookalike prospects for the tenant's sales team\n  \n\
@@ -80,16 +80,45 @@ multiTenancyConfig:
   autoTenantActivation: true
   autoTenantCreation: true
   enabled: true
+
+# =============================================================================
+# FIELD SET DEFINITIONS (for report rendering control)
+# =============================================================================
+# array    - All array fields (text[], number[])
+# system   - Internal fields (IDs, evidence, metadata) - not user-facing
+# standard - Core fields for focused reports
+# extended - Deep dive fields for comprehensive reports
+# prompt   - Fields populated by LLM prompts
+# =============================================================================
+
 properties:
+# -----------------------------------------------------------------------------
+# IDENTITY FIELDS (system)
+# -----------------------------------------------------------------------------
 - name: entityName
   dataType:
   - text
   description: Entity name
   sets:
-  - extended
   - system
+  - extended
   tags:
   - identity
+
+- name: domain
+  dataType:
+  - text
+  description: Entity domain extracted from URL (e.g., example.com)
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - identifier
+  tags:
+  - identity
+  - web
+
 - name: seed
   dataType:
   - boolean
@@ -100,28 +129,17 @@ properties:
       skip: true
   sets:
   - system
-  - metadata
-- name: domain
-  dataType:
-  - text
-  description: Entity domain extracted from URL (e.g., example.com)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - extended
-  - system
-  - identifier
-  tags:
-  - identity
-  - web
+
 - name: dataSource
   dataType:
   - text
   description: Source of research data
   sets:
   - system
-  - extended
+
+# -----------------------------------------------------------------------------
+# SCALAR ANALYSIS FIELDS (standard / extended)
+# -----------------------------------------------------------------------------
 - name: competitiveMarket
   dataType:
   - text
@@ -129,8 +147,9 @@ properties:
   tags:
   - research
   sets:
-  - extended
+  - standard
   - prompt
+
 - name: marketDynamics
   dataType:
   - text
@@ -140,6 +159,7 @@ properties:
   sets:
   - extended
   - prompt
+
 - name: competitivePositioning
   dataType:
   - text
@@ -147,27 +167,34 @@ properties:
   tags:
   - research
   sets:
+  - standard
+  - prompt
+
+- name: marketSize
+  dataType:
+  - text
+  description: Competitive market size and scope assessment
+  tags:
+  - research
+  sets:
   - extended
   - prompt
+
+# -----------------------------------------------------------------------------
+# PRIMARY PARALLEL ARRAYS - Core competitor data (array + standard)
+# -----------------------------------------------------------------------------
 - name: keyCompetitors
   dataType:
   - text[]
-  description: Array of DIRECT competitor names (2-5 entities customers would compare
-    to)
+  description: Array of DIRECT competitor names (2-5 entities customers would compare to)
   tags:
   - research
   sets:
   - array
+  - standard
   - spawn
   - prompt
-- name: keyCompetitorsIds
-  dataType:
-  - text[]
-  description: Parallel array of UUID5 IDs for keyCompetitors (index-aligned, auto-generated)
-  parallel_to: keyCompetitors
-  tags: []
-  sets:
-  - system
+
 - name: competitorDomain
   dataType:
   - text[]
@@ -178,21 +205,10 @@ properties:
   - research
   sets:
   - array
+  - standard
   - spawn
   - prompt
-- name: keyCompetitorEvidence
-  dataType:
-  - text[]
-  description: Evidence/context found for each keyCompetitor from page facts search
-    (parallel to keyCompetitors array). Stores the factual basis for classifications
-    and extracted values.
-  parallel_to: keyCompetitors
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags: []
-  sets:
-  - system
+
 - name: competitorPositioning
   dataType:
   - text[]
@@ -204,8 +220,27 @@ properties:
   - research
   sets:
   - array
-  - prompt
   - standard
+  - prompt
+
+- name: competitorTargetMarket
+  dataType:
+  - text[]
+  description: Each competitor's target market (parallel to keyCompetitors array)
+    - e.g., "Enterprise", "SMB", "Mid-market". Use "Not disclosed" if target market
+    unknown. MUST have same length as keyCompetitors array.
+  parallel_to: keyCompetitors
+  tags:
+  - research
+  sets:
+  - array
+  - standard
+  - spawn
+  - prompt
+
+# -----------------------------------------------------------------------------
+# COMPARISON ARRAYS - Standard (array + standard)
+# -----------------------------------------------------------------------------
 - name: competitorPriceVs
   dataType:
   - text[]
@@ -217,7 +252,9 @@ properties:
   - research
   sets:
   - array
+  - standard
   - prompt
+
 - name: competitorAdvantagesVs
   dataType:
   - text[]
@@ -230,7 +267,12 @@ properties:
   - research
   sets:
   - array
+  - standard
   - prompt
+
+# -----------------------------------------------------------------------------
+# DEEP DIVE ARRAYS - Extended (array + extended)
+# -----------------------------------------------------------------------------
 - name: competitorGapsVs
   dataType:
   - text[]
@@ -243,21 +285,9 @@ properties:
   - research
   sets:
   - array
-  - prompt
   - extended
-- name: competitorTargetMarket
-  dataType:
-  - text[]
-  description: Each competitor's target market (parallel to keyCompetitors array)
-    - e.g., "Enterprise", "SMB", "Mid-market". Use "Not disclosed" if target market
-    unknown. MUST have same length as keyCompetitors array.
-  parallel_to: keyCompetitors
-  tags:
-  - research
-  sets:
-  - array
-  - spawn
   - prompt
+
 - name: differentiationFactors
   dataType:
   - text[]
@@ -266,7 +296,9 @@ properties:
   - research
   sets:
   - array
+  - standard
   - prompt
+
 - name: competitiveAdvantages
   dataType:
   - text[]
@@ -275,7 +307,9 @@ properties:
   - research
   sets:
   - array
+  - standard
   - prompt
+
 - name: competitiveThreats
   dataType:
   - text[]
@@ -284,16 +318,9 @@ properties:
   - research
   sets:
   - array
-  - prompt
-- name: marketSize
-  dataType:
-  - text
-  description: Competitive market size and scope assessment
-  tags:
-  - research
-  sets:
   - extended
   - prompt
+
 - name: marketTrends
   dataType:
   - text[]
@@ -302,7 +329,116 @@ properties:
   - research
   sets:
   - array
+  - extended
   - prompt
+
+# -----------------------------------------------------------------------------
+# SYSTEM ARRAYS - IDs and Evidence (array + system)
+# -----------------------------------------------------------------------------
+- name: keyCompetitorsIds
+  dataType:
+  - text[]
+  description: Parallel array of UUID5 IDs for keyCompetitors (index-aligned, auto-generated)
+  tags:
+  - research
+  sets:
+  - array
+  - system
+  - prompt
+
+- name: keyCompetitorEvidence
+  dataType:
+  - text[]
+  description: Evidence/context found for each keyCompetitor from page facts search
+    (parallel to keyCompetitors array). Stores the factual basis for classifications
+    and extracted values.
+  parallel_to: keyCompetitors
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - evidence
+  sets:
+  - array
+  - system
+  - extended
+
+# -----------------------------------------------------------------------------
+# SCORE ARRAYS - Competitor scores (array + extended)
+# -----------------------------------------------------------------------------
+- name: marketStrengthScore
+  dataType:
+  - number[]
+  description: Each competitor's market strength (1-10)
+  parallel_to: keyCompetitors
+  sets:
+  - array
+  - extended
+  - prompt
+  tags:
+  - score
+
+- name: innovationScore
+  dataType:
+  - number[]
+  description: Each competitor's innovation capability (1-10)
+  parallel_to: keyCompetitors
+  sets:
+  - array
+  - extended
+  - prompt
+  tags:
+  - score
+
+- name: threatLevelScore
+  dataType:
+  - number[]
+  description: Competitive threat level per competitor (1-10)
+  parallel_to: keyCompetitors
+  sets:
+  - array
+  - extended
+  - prompt
+  tags:
+  - score
+
+# -----------------------------------------------------------------------------
+# SCALAR SCORES - Entity scores (extended)
+# -----------------------------------------------------------------------------
+- name: homeMarketStrengthScore
+  dataType:
+  - number
+  description: Target entity's market strength (1-10)
+  sets:
+  - extended
+  - prompt
+  tags:
+  - score
+
+- name: homeInnovationScore
+  dataType:
+  - number
+  description: Target entity's innovation capability (1-10)
+  sets:
+  - extended
+  - prompt
+  tags:
+  - score
+
+- name: homeMarketPositionScore
+  dataType:
+  - number
+  description: Target entity's overall market position (1-10)
+  sets:
+  - extended
+  - prompt
+  tags:
+  - score
+
+# -----------------------------------------------------------------------------
+# LLM ANALYSIS FIELDS (standard + extended)
+# -----------------------------------------------------------------------------
 - name: competitorAnalysisLLM
   dataType:
   - text
@@ -312,9 +448,27 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
-  - extended
   - standard
+  - extended
+  - prompt
+
+- name: marketPositionLLM
+  dataType:
+  - text
+  description: Descriptive analysis of market position and competitive standing. Include
+    market leadership claims (leader, challenger, niche player), market share indicators,
+    positioning strategy (premium, value, specialist), and competitive moat strength.
+  tags:
+  - LLM
+  - research
+  sets:
+  - standard
+  - extended
+  - prompt
+
+# -----------------------------------------------------------------------------
+# CATEGORY FIELDS (standard - for pivot tables)
+# -----------------------------------------------------------------------------
 - name: competitorAnalysisCat
   dataType:
   - text
@@ -338,19 +492,7 @@ properties:
   sets:
   - standard
   - EnumCat
-- name: marketPositionLLM
-  dataType:
-  - text
-  description: Descriptive analysis of market position and competitive standing. Include
-    market leadership claims (leader, challenger, niche player), market share indicators,
-    positioning strategy (premium, value, specialist), and competitive moat strength.
-  tags:
-  - LLM
-  - research
-  sets:
-  - prompt
-  - extended
-  - standard
+
 - name: marketPositionCat
   dataType:
   - text
@@ -375,6 +517,10 @@ properties:
   sets:
   - standard
   - EnumCat
+
+# -----------------------------------------------------------------------------
+# METADATA FIELDS (system)
+# -----------------------------------------------------------------------------
 - name: processedDate
   dataType:
   - text
@@ -384,7 +530,7 @@ properties:
       skip: true
   sets:
   - system
-  - metadata
+
 - name: sourceQuality
   dataType:
   - text
@@ -405,10 +551,10 @@ properties:
       skip: true
   sets:
   - system
-  - metadata
   - extended
   tags:
   - score
+
 - name: analysisConfidence
   dataType:
   - text
@@ -439,9 +585,9 @@ properties:
       skip: true
   sets:
   - system
-  - metadata
-  - prompt
   - extended
+  - prompt
+
 - name: reviewFlag
   dataType:
   - text
@@ -464,9 +610,9 @@ properties:
       skip: true
   sets:
   - system
-  - metadata
-  - prompt
   - extended
+  - prompt
+
 - name: citations
   dataType:
   - text[]
@@ -475,9 +621,10 @@ properties:
     text2vec-weaviate:
       skip: true
   sets:
+  - array
   - system
-  - metadata
   - extended
+
 - name: reasoning
   dataType:
   - text[]
@@ -486,62 +633,9 @@ properties:
     text2vec-weaviate:
       skip: true
   sets:
+  - array
   - system
-  - metadata
-- name: homeMarketStrengthScore
-  dataType:
-  - number
-  description: Target entity's market strength (1-10)
-  sets:
-  - prompt
-  - extended
-  tags:
-  - score
-- name: homeInnovationScore
-  dataType:
-  - number
-  description: Target entity's innovation capability (1-10)
-  sets:
-  - prompt
-  - extended
-  tags:
-  - score
-- name: homeMarketPositionScore
-  dataType:
-  - number
-  description: Target entity's overall market position (1-10)
-  sets:
-  - prompt
-  - extended
-  tags:
-  - score
-- name: marketStrengthScore
-  dataType:
-  - number[]
-  description: Each competitor's market strength (1-10)
-  parallel_to: keyCompetitors
-  sets:
-  - prompt
-  tags:
-  - score
-- name: innovationScore
-  dataType:
-  - number[]
-  description: Each competitor's innovation capability (1-10)
-  parallel_to: keyCompetitors
-  sets:
-  - prompt
-  tags:
-  - score
-- name: threatLevelScore
-  dataType:
-  - number[]
-  description: Competitive threat level per competitor (1-10)
-  parallel_to: keyCompetitors
-  sets:
-  - prompt
-  tags:
-  - score
+
 - name: updated_at
   description: Record update timestamp
   dataType:
@@ -551,13 +645,13 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
+
 - name: references
   description: Cached reference UUIDs
   dataType:
   - object
   sets:
   - system
-  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -570,26 +664,41 @@ properties:
     dataType:
     - uuid[]
     description: Source entity UUIDs
+
 - name: createdAt
   dataType:
   - date
   description: Record creation timestamp
   sets:
   - system
-  - audit
   moduleConfig:
     text2vec-weaviate:
       skip: true
+
 - name: updatedAt
   dataType:
   - date
   description: Last modification timestamp
   sets:
   - system
-  - audit
   moduleConfig:
     text2vec-weaviate:
       skip: true
+
+- name: dossierSummary
+  dataType:
+  - text
+  description: Dossier section summary for this researcher - strategic analysis generated from research data tables
+  indexSearchable: true
+  tokenization: word
+  indexFilterable: false
+  sets:
+  - extended
+  tags:
+  - reporting
+  - llm
+  - summary
+
 references:
 - name: sourceEntity
   target_collection: Domain
