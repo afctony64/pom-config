@@ -654,10 +654,28 @@ properties:
   indexFilterable: true
   tags:
   - temporal
+- name: global_page_count
+  dataType:
+  - int
+  description: Total page URLs found in sitemaps before filtering. Set by sitemap parser. Compare with planned_page_count for filter efficiency.
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - metrics
+  - processing
+  - audit
+- name: global_page_count_updated_at
+  dataType:
+  - date
+  description: Timestamp when global_page_count was last updated
+  indexFilterable: true
+  tags:
+  - temporal
 - name: page_count
   dataType:
   - int
-  description: Number of good pages processed in page_content collection for this company
+  description: Actual Page_intelligence records created for this domain. Set by page_intelligence_cli after processing.
   indexFilterable: true
   sets:
   - standard
