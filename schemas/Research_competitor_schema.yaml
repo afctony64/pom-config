@@ -220,7 +220,7 @@ properties:
   - research
   sets:
   - array
-  - standard
+  - system
   - prompt
 
 - name: competitorTargetMarket
@@ -234,12 +234,12 @@ properties:
   - research
   sets:
   - array
-  - standard
+  - system
   - spawn
   - prompt
 
 # -----------------------------------------------------------------------------
-# COMPARISON ARRAYS - Standard (array + standard)
+# COMPARISON ARRAYS - System (array + system) - Evidence fields, not for display
 # -----------------------------------------------------------------------------
 - name: competitorPriceVs
   dataType:
@@ -252,7 +252,7 @@ properties:
   - research
   sets:
   - array
-  - standard
+  - system
   - prompt
 
 - name: competitorAdvantagesVs
@@ -267,12 +267,9 @@ properties:
   - research
   sets:
   - array
-  - standard
+  - system
   - prompt
 
-# -----------------------------------------------------------------------------
-# DEEP DIVE ARRAYS - Extended (array + extended)
-# -----------------------------------------------------------------------------
 - name: competitorGapsVs
   dataType:
   - text[]
@@ -285,8 +282,12 @@ properties:
   - research
   sets:
   - array
-  - extended
+  - system
   - prompt
+
+# -----------------------------------------------------------------------------
+# DEEP DIVE ARRAYS - Extended (array + extended)
+# -----------------------------------------------------------------------------
 
 - name: differentiationFactors
   dataType:
