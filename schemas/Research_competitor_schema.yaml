@@ -244,9 +244,10 @@ properties:
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: Price comparison vs THIS entity (parallel to keyCompetitors array)
-    - e.g., "$150/user vs our $99", "Similar pricing", "Lower cost". Use "Not disclosed"
+  description: Price comparison vs THIS entity (parallel to keyCompetitors array).
+    E.g., "$150/user vs our $99", "Similar pricing", "Lower cost". Use "Not disclosed"
     if pricing comparison unknown. MUST have same length as keyCompetitors array.
+    CLEAN FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
   parallel_to: keyCompetitors
   tags:
   - research
@@ -328,7 +329,8 @@ properties:
 - name: marketTrends
   dataType:
   - text[]
-  description: Key market trends affecting competitive landscape
+  description: Key market trends affecting competitive landscape.
+    CLEAN FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
   tags:
   - research
   sets:

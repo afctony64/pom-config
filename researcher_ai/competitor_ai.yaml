@@ -95,6 +95,23 @@ tool_guidance:
   citation_format:
     priority: critical
     usage_instructions: |
+      📎 CITATION FORMAT REQUIREMENTS:
+      
+      **CLEAN FACTS ONLY in array values:**
+      ❌ WRONG: "Purpose-built for embedded iPaaS — source: https://example.com"
+      ❌ WRONG: "Purpose-built for embedded iPaaS (https://example.com)"
+      ✅ RIGHT: "Purpose-built for embedded iPaaS serving B2B SaaS companies"
+      
+      **Put ALL source URLs in the citations field:**
+      - Collect all URLs referenced during analysis
+      - Add them to the citations array field
+      - Do NOT embed URLs inline in fact text
+      
+      This separation enables clean display of facts without citation clutter.
+      
+  citation_format:
+    priority: critical
+    usage_instructions: |
       📝 CITATION FORMAT - CLEAN FACTS ONLY:
       
       ❌ WRONG: "Purpose-built for iPaaS — see https://example.com"
