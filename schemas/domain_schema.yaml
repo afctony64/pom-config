@@ -62,6 +62,7 @@ properties:
   indexInverted: true
   sets:
   - standard
+  - status_update
   tags:
   - identity
   - web
@@ -138,6 +139,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - status_update
   tags:
   - processing
   - browser
@@ -197,6 +199,7 @@ properties:
   indexSearchable: true
   sets:
   - standard
+  - status_update
   tags:
   - categorical
   - web
@@ -218,6 +221,7 @@ properties:
   tokenization: field
   sets:
   - standard
+  - status_update
   tags:
   - processing
   - status
@@ -594,6 +598,7 @@ properties:
   description: Timestamp when record was last updated
   sets:
   - system
+  - status_update
   tags:
   - temporal
 - name: accountName
@@ -609,6 +614,7 @@ properties:
   indexFilterable: true
   sets:
   - standard
+  - status_update
   tags:
   - intelligence
   - metrics
@@ -620,6 +626,7 @@ properties:
   indexFilterable: true
   sets:
   - standard
+  - status_update
   tags:
   - status
   - temporal
@@ -631,6 +638,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - status_update
   tags:
   - metrics
   - processing
@@ -642,6 +650,8 @@ properties:
   indexFilterable: true
   tags:
   - temporal
+  sets:
+  - status_update
 - name: planned_page_count
   dataType:
   - int
@@ -650,6 +660,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - status_update
   tags:
   - metrics
   - processing
@@ -661,6 +672,8 @@ properties:
   indexFilterable: true
   tags:
   - temporal
+  sets:
+  - status_update
 - name: page_count
   dataType:
   - int
@@ -669,6 +682,7 @@ properties:
   indexFilterable: true
   sets:
   - standard
+  - status_update
   tags:
   - metrics
   - processing
@@ -678,6 +692,8 @@ properties:
   - date
   description: Timestamp when page_count was last updated
   indexFilterable: true
+  sets:
+  - status_update
 - name: intelligence_status
   dataType:
   - text
@@ -889,6 +905,8 @@ properties:
   - text[]
   description: Complete list of all sitemap URLs discovered
   indexSearchable: true
+  sets:
+  - url_discovery
 - name: sitemap_references
   dataType:
   - text[]
@@ -1064,6 +1082,8 @@ properties:
   - text[]
   description: XML sitemap URLs discovered by sitemap_discovery enricher
   indexSearchable: true
+  sets:
+  - url_discovery
 - name: sitemap_discovery_method
   dataType:
   - text
@@ -1099,6 +1119,8 @@ properties:
   - text[]
   description: URLs discovered from homepage parsing by homepage_parser enricher
   indexSearchable: true
+  sets:
+  - url_discovery
 - name: homepage_total_links
   dataType:
   - int
@@ -1274,6 +1296,7 @@ properties:
   indexSearchable: false
   sets:
   - standard
+  - status_update
   tags:
   - pipeline
   - processing
@@ -1285,6 +1308,7 @@ properties:
   indexSearchable: false
   sets:
   - standard
+  - status_update
   tags:
   - pipeline
   - processing
@@ -1296,6 +1320,7 @@ properties:
   indexSearchable: false
   sets:
   - standard
+  - status_update
   tags:
   - pipeline
   - processing
