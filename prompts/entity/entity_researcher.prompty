@@ -4,14 +4,10 @@ description: >
   Universal entity researcher template for the Self-Assembling Research System.
   Entity-agnostic: works with any TenantGroup (corporate, travel, recipes, etc.)
 
-  ENTITY MODEL (Standard):
+  ENTITY MODEL:
   - Source: Domain (the URL IS the entity)
-  - Output: Research_* collections (no prefix)
+  - Output: Research_* collections
   - Page_facts for evidence (vectorized semantic search)
-
-  LEGACY MODEL (Prismatic only - via TenantGroup):
-  - Source: Company_source
-  - Output: Company_research_* collections
 
 # NOTE: classification section removed - see docs/architecture/FUTURE_PROMPT_FEATURES.md
 # NOTE: quality_control section removed - see docs/architecture/FUTURE_PROMPT_FEATURES.md
@@ -251,20 +247,27 @@ Financial data from SEC filings:
 {{ edgarData | tojson(indent=2) }}
 {% endif %}
 
-{# === TOOL GUIDANCE === #}
-{% if researcher_ai and researcher_ai.tool_guidance and researcher_ai.tool_guidance.brave_search %}
-## 🔧 TOOL USAGE GUIDANCE
+{# === TOOL & FIELD GUIDANCE (renders ALL tool_guidance sections) === #}
+{% if researcher_ai and researcher_ai.tool_guidance %}
+## 🔧 GUIDANCE
 
-**Web Search**:
-- Priority: {{ researcher_ai.tool_guidance.brave_search.priority }}
-- Max Calls: {{ researcher_ai.tool_guidance.brave_search.max_calls }}
-- When to use: {{ researcher_ai.tool_guidance.brave_search.when_to_use }}
-{% if researcher_ai.tool_guidance.brave_search.recommended_searches %}
+{% for section_name, section_config in researcher_ai.tool_guidance.items() %}
+### {{ section_name | replace('_', ' ') | title }}
+{% if section_config.priority %}**Priority**: {{ section_config.priority }}{% endif %}
+{% if section_config.usage_instructions %}
+{{ section_config.usage_instructions }}
+{% endif %}
+{% if section_config.when_to_use %}
+{{ section_config.when_to_use }}
+{% endif %}
+{% if section_config.recommended_searches %}
 **Recommended Searches**:
-{% for key, query in researcher_ai.tool_guidance.brave_search.recommended_searches.items() %}
+{% for key, query in section_config.recommended_searches.items() %}
 - {{ key }}: "{{ query }}"
 {% endfor %}
 {% endif %}
+
+{% endfor %}
 {% endif %}
 
 {# === ANALYSIS TASK === #}
