@@ -1,10 +1,11 @@
 id: competitor_research
-collection: Domain
+collection: Research_competitor  # ✅ START FROM RESEARCHER, not Domain
 name: Competitor Research
 type: data_card
 file: competitor_research.yaml
 description: >
-  Fetch Domain records with Research_competitor fields only.
+  Fetch Research_competitor records with Domain reference.
+  Starts from Research_competitor and traverses to Domain.
   Fast, focused data card for competitor dossier testing.
   Part of the Entity Research Suite - single researcher variant.
 
@@ -27,8 +28,8 @@ personas:
 
 parameters:
   type: fetch
-  collection: Domain
-  relationship_traversal: false  # ✅ DISABLED: Only fetch explicit collections, no auto-discovery
+  collection: Research_competitor  # ✅ ROOT IS RESEARCHER
+  relationship_traversal: true  # ✅ ENABLED: Traverse to Domain only
   dynamic_templates: true
   limit: 10000
   limit_default: 10000
@@ -45,13 +46,13 @@ field_tags:
   - LLM
   - research
 
-# Collections: Domain + Research_competitor only
+# Collections: Research_competitor (root) + Domain (via traversal)
 collections:
-  - collection: Domain
+  - collection: Research_competitor
     required: true
     field_set: [standard, extended, array]
 
-  - collection: Research_competitor
+  - collection: Domain
     field_set: [standard, extended, array]
 
 # Chat integration
@@ -62,7 +63,8 @@ chat_integration:
     - "Focused competitive analysis"
 
   usage_patterns:
-    - "Returns competitor researcher fields only"
+    - "Starts from Research_competitor, traverses to Domain"
+    - "Returns only competitor + domain data"
     - "Fast execution - single researcher"
     - "Perfect for testing field_set behavior"
 
@@ -72,18 +74,21 @@ chat_integration:
 
 # Response structure
 response_structure:
-  root_object: Domain
+  root_object: Research_competitor  # ✅ ROOT IS RESEARCHER
   includes_relationships: true
-  relationship_style: reverse_traversal
+  relationship_style: forward_traversal  # Researcher → Domain
   field_focus: competitor_research
   expected_collections:
-    - Domain
     - Research_competitor
+    - Domain
 
 # Documentation
 documentation:
   overview: |
     Single-researcher data card for fast competitor intelligence testing.
+    
+    KEY INSIGHT: Starts from Research_competitor (not Domain) so that
+    relationship traversal only brings in Domain, not all other researchers.
     
     FIELD SET BEHAVIOR:
     - standard: Core fields (Cat, key scalars, core parallel arrays)
