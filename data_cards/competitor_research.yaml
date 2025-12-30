@@ -47,10 +47,20 @@ collections:
       domainBeacon:
         target_collection: Domain
         field_set: [standard]
+      keyCompetitorRefs:
+        target_collection: Domain
+        field_set: [standard]
+        description: "Traverse to competitor Domain records (parallel to keyCompetitors)"
 
   - collection: Domain
     field_set: [standard]
     via_reference: domainBeacon
+
+  # Competitor Domain records reached via keyCompetitorRefs
+  - collection: Domain
+    alias: CompetitorDomain
+    field_set: [standard]
+    via_reference: keyCompetitorRefs
 
 chat_integration:
   best_for:
@@ -74,6 +84,7 @@ response_structure:
   expected_collections:
     - Research_competitor
     - Domain
+    - CompetitorDomain  # Competitor entities via keyCompetitorRefs
 
 documentation:
   overview: |
@@ -83,4 +94,9 @@ documentation:
     - relationship_traversal: true (allows explicit refs)
     - dynamic_templates: false (prevents auto-discovery)
     
-    This ensures only Research_competitor → Domain is traversed.
+    TRAVERSAL PATHS:
+    1. Research_competitor → Domain (via domainBeacon) = source entity
+    2. Research_competitor → Domain[] (via keyCompetitorRefs) = competitor entities
+    
+    The keyCompetitorRefs allows traversal to each competitor's Domain record,
+    enabling access to competitor entity data (title, description, content, etc.)
