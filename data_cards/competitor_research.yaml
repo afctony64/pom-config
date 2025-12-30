@@ -4,15 +4,15 @@ name: Competitor Research
 type: data_card
 file: competitor_research.yaml
 description: >
-  Fetch Research_competitor records with Domain via explicit reference.
-  Starts from Research_competitor and traverses to Domain via domainBeacon.
-  dynamic_templates: false prevents auto-discovery of Domain's other references.
+  Full competitive intelligence with deep competitor traversal.
+  Starts from Research_competitor, traverses to competitor Domain records via keyCompetitorRefs,
+  then traverses to each competitor's FULL research data (industry, financial, product, etc.).
 
 tags:
   - research
   - competitor
   - entity-intelligence
-  - focused
+  - deep-traversal
 
 target_scope: entity_intelligence
 executor: fetch
@@ -26,7 +26,7 @@ parameters:
   type: fetch
   collection: Research_competitor
   relationship_traversal: true   # ✅ Allow explicit reference traversal
-  dynamic_templates: false       # ✅ DISABLE auto-discovery
+  dynamic_templates: false       # ✅ DISABLE auto-discovery (we define all paths)
   limit: 10000
   limit_default: 10000
   field_set: [standard, extended, array]
@@ -39,6 +39,9 @@ field_tags:
   - research
 
 collections:
+  # ==========================================================================
+  # ROOT: Source entity's competitor research
+  # ==========================================================================
   - collection: Research_competitor
     required: true
     primary: true
@@ -50,13 +53,41 @@ collections:
       keyCompetitorRefs:
         target_collection: Domain
         field_set: [standard]
-        description: "Traverse to competitor Domain records (parallel to keyCompetitors)"
+        # This traversal gives us competitor Domain records with their references
+        references:
+          # From competitor Domain → their researchers
+          industry:
+            target_collection: Research_industry
+            field_set: [standard]
+          financial:
+            target_collection: Research_financial
+            field_set: [standard]
+          product:
+            target_collection: Research_product
+            field_set: [standard]
+          leadership:
+            target_collection: Research_leadership
+            field_set: [standard]
+          customer:
+            target_collection: Research_customer
+            field_set: [standard]
+          competitor:
+            target_collection: Research_competitor
+            field_set: [standard]
+          risk:
+            target_collection: Research_risk
+            field_set: [standard]
 
+  # ==========================================================================
+  # Source entity's Domain
+  # ==========================================================================
   - collection: Domain
     field_set: [standard]
     via_reference: domainBeacon
 
-  # Competitor Domain records reached via keyCompetitorRefs
+  # ==========================================================================
+  # Competitor Domains (with full research data)
+  # ==========================================================================
   - collection: Domain
     alias: CompetitorDomain
     field_set: [standard]
@@ -64,17 +95,18 @@ collections:
 
 chat_integration:
   best_for:
-    - "Competitor intelligence for single entity"
-    - "Fast testing of parallel array rendering"
-    - "Focused competitive analysis"
+    - "Full competitive intelligence with competitor dossiers"
+    - "Deep competitor analysis across all researchers"
+    - "Comparative intelligence reports"
 
   usage_patterns:
-    - "Starts from Research_competitor"
-    - "Traverses to Domain via domainBeacon"
-    - "NO auto-discovery - only competitor + domain"
+    - "Starts from Research_competitor (source entity)"
+    - "Traverses to competitor Domain[] via keyCompetitorRefs"
+    - "From each competitor Domain → their full research data"
+    - "Returns complete dossier for source AND each competitor"
 
   parameter_examples:
-    - name: "Single entity competitor intel"
+    - name: "Full competitor intelligence"
       params: {where: {domain: "example.com"}}
 
 response_structure:
@@ -82,21 +114,37 @@ response_structure:
   includes_relationships: true
   relationship_style: explicit_only
   expected_collections:
-    - Research_competitor
-    - Domain
-    - CompetitorDomain  # Competitor entities via keyCompetitorRefs
+    - Research_competitor      # Source entity's competitor analysis
+    - Domain                   # Source entity's Domain
+    - CompetitorDomain         # Each competitor's Domain
+    - Research_industry        # Each competitor's industry research
+    - Research_financial       # Each competitor's financial research
+    - Research_product         # Each competitor's product research
+    - Research_leadership      # Each competitor's leadership research
+    - Research_customer        # Each competitor's customer research
+    - Research_risk            # Each competitor's risk research
 
 documentation:
   overview: |
-    Competitor-focused data card using Research_competitor as root.
-    
-    KEY: 
-    - relationship_traversal: true (allows explicit refs)
-    - dynamic_templates: false (prevents auto-discovery)
+    Full competitive intelligence data card with deep traversal.
     
     TRAVERSAL PATHS:
-    1. Research_competitor → Domain (via domainBeacon) = source entity
-    2. Research_competitor → Domain[] (via keyCompetitorRefs) = competitor entities
+    1. Research_competitor → Domain (source entity info)
+    2. Research_competitor → Domain[] (via keyCompetitorRefs = competitor entities)
+    3. CompetitorDomain → Research_industry (competitor's industry intel)
+    4. CompetitorDomain → Research_financial (competitor's financial intel)
+    5. CompetitorDomain → Research_product (competitor's product intel)
+    6. CompetitorDomain → Research_leadership (competitor's leadership intel)
+    7. CompetitorDomain → Research_customer (competitor's customer intel)
+    8. CompetitorDomain → Research_competitor (competitor's own competitor intel!)
+    9. CompetitorDomain → Research_risk (competitor's risk intel)
     
-    The keyCompetitorRefs allows traversal to each competitor's Domain record,
-    enabling access to competitor entity data (title, description, content, etc.)
+    RESULT: For each competitor in keyCompetitors, you get their FULL research dossier:
+    - Domain metadata (title, description, url)
+    - Industry classification and analysis
+    - Financial profile (revenue, funding, employees)
+    - Product intelligence (categories, pricing, features)
+    - Leadership analysis
+    - Customer intelligence
+    - Their own competitive landscape!
+    - Risk assessment
