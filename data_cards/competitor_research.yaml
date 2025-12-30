@@ -1,18 +1,13 @@
 id: competitor_research
-collection: Domain  # Keep Domain as root - works with current pom-core
+collection: Research_competitor  # ✅ ROOT = Researcher, not Domain
 name: Competitor Research
 type: data_card
 file: competitor_research.yaml
 description: >
-  Fetch Domain records with Research_competitor via relationship traversal.
-  
-  NOTE: Uses standard Domain-centered approach. Relationship traversal brings
-  all researchers. Filtering to competitor-only happens at report builder level.
-  
-  BUG REFERENCE: Starting from Research_competitor fails due to pom-core schema
-  mismatch (research_risk property not in Weaviate). Keep Domain as root until fixed.
+  Fetch Research_competitor records with Domain via explicit reference.
+  Starts from Research_competitor and traverses to Domain via domainBeacon.
+  dynamic_templates: false prevents auto-discovery of Domain's other references.
 
-# Tagging system
 tags:
   - research
   - competitor
@@ -21,8 +16,6 @@ tags:
 
 target_scope: entity_intelligence
 executor: fetch
-
-# Frontend Display Control
 display: true
 relationship_support: true
 
@@ -31,66 +24,63 @@ personas:
 
 parameters:
   type: fetch
-  collection: Domain
-  relationship_traversal: true
-  dynamic_templates: true
+  collection: Research_competitor
+  relationship_traversal: true   # ✅ Allow explicit reference traversal
+  dynamic_templates: false       # ✅ DISABLE auto-discovery
   limit: 10000
   limit_default: 10000
   field_set: [standard, extended, array]
 
-# No explicit fields - resolved by field_set
 fields: {}
 
-# Tags for field filtering
 field_tags:
   - Cat
   - LLM
   - research
 
-# Collections
 collections:
-  - collection: Domain
-    required: true
-    field_set: [standard, extended, array]
-
   - collection: Research_competitor
+    required: true
+    primary: true
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        field_set: [standard]
 
-# Chat integration
+  - collection: Domain
+    field_set: [standard]
+    via_reference: domainBeacon
+
 chat_integration:
   best_for:
     - "Competitor intelligence for single entity"
-    - "Testing parallel array rendering"
-    - "Competitive analysis"
+    - "Fast testing of parallel array rendering"
+    - "Focused competitive analysis"
 
   usage_patterns:
-    - "Uses Domain as root (standard approach)"
-    - "Relationship traversal brings all researchers"
-    - "Filter to competitor at report level"
+    - "Starts from Research_competitor"
+    - "Traverses to Domain via domainBeacon"
+    - "NO auto-discovery - only competitor + domain"
 
   parameter_examples:
     - name: "Single entity competitor intel"
       params: {where: {domain: "example.com"}}
 
-# Response structure
 response_structure:
-  root_object: Domain
+  root_object: Research_competitor
   includes_relationships: true
-  relationship_style: reverse_traversal
-  field_focus: competitor_research
+  relationship_style: explicit_only
   expected_collections:
-    - Domain
     - Research_competitor
+    - Domain
 
-# Documentation
 documentation:
   overview: |
-    Competitor-focused data card using Domain-centered approach.
+    Competitor-focused data card using Research_competitor as root.
     
-    KNOWN LIMITATION: Relationship traversal brings ALL researchers.
-    Filter to competitor-only at report/asset level.
+    KEY: 
+    - relationship_traversal: true (allows explicit refs)
+    - dynamic_templates: false (prevents auto-discovery)
     
-    FIELD SET BEHAVIOR:
-    - standard: Core fields (Cat, key scalars, core parallel arrays)
-    - extended: Deep-dive fields (LLM analysis, detailed arrays, scores)
-    - array: All array fields (required for parallel array tables)
+    This ensures only Research_competitor → Domain is traversed.
