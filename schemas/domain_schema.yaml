@@ -1246,21 +1246,8 @@ properties:
   - pipeline
   - processing
 references:
-- name: research_industry
-  target_collection: Research_industry
-  uuid_source_field: uuid
-  auto_flatten: false
-  description: Industry researcher analysis for this entity
-- name: research_financial
-  target_collection: Research_financial
-  uuid_source_field: uuid
-  auto_flatten: false
-  description: Financial researcher analysis for this entity
-- name: research_risk
-  target_collection: Research_risk
-  uuid_source_field: uuid
-  auto_flatten: false
-  description: 'DEPRECATED: Use ''risk'' instead. Risk researcher analysis.'
+# ✅ CLEANED: Removed deprecated research_industry, research_financial, research_risk
+# These don't exist in Weaviate and caused schema mismatch errors
 - name: industry
   target_collection: Research_industry
   uuid_source_field: uuid
