@@ -634,6 +634,24 @@ properties:
   - date
   description: Timestamp when page_count was last updated
   indexFilterable: true
+- name: planned_page_count
+  dataType:
+  - int
+  description: Number of page URLs queued for processing into Page_intelligence. Set by sitemap parser when URLs are unpacked. Compare with page_count for audit (gap = unprocessed pages).
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - metrics
+  - processing
+  - audit
+- name: planned_page_count_updated_at
+  dataType:
+  - date
+  description: Timestamp when planned_page_count was last updated
+  indexFilterable: true
+  tags:
+  - temporal
 - name: intelligence_status
   dataType:
   - text
