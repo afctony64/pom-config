@@ -308,7 +308,7 @@ properties:
   - research
   sets:
   - array
-  - standard
+  - system
   - prompt
 
 - name: competitiveThreats
@@ -319,7 +319,7 @@ properties:
   - research
   sets:
   - array
-  - extended
+  - system
   - prompt
 
 - name: marketTrends
@@ -452,7 +452,7 @@ properties:
   tags:
   - LLM
   sets:
-  - standard
+  - system
   - extended
   - prompt
 
@@ -466,7 +466,7 @@ properties:
   - LLM
   - research
   sets:
-  - standard
+  - system
   - extended
   - prompt
 
