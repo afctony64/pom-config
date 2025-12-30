@@ -28,7 +28,7 @@ personas:
 parameters:
   type: fetch
   collection: Domain
-  relationship_traversal: true
+  relationship_traversal: false  # ✅ DISABLED: Only fetch explicit collections, no auto-discovery
   dynamic_templates: true
   limit: 10000
   limit_default: 10000
