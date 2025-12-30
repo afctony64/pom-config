@@ -240,7 +240,9 @@ Define Weaviate collection structure for research output.
 
 **Example:** [schemas/Research_product_schema.yaml](../schemas/Research_product_schema.yaml)
 
-**Guide:** [Creating Schemas](guides/CREATING_SCHEMAS.md)
+**Guides:**
+- [Creating Schemas](guides/CREATING_SCHEMAS.md)
+- [Field Sets & Tags Reference](guides/SCHEMA_FIELD_SETS.md) - Complete guide to sets and tags
 
 ---
 
@@ -285,6 +287,7 @@ Define data access patterns for querying research.
 | [Creating Schemas](guides/CREATING_SCHEMAS.md) | WeaviateClassConfig complete guide |
 | [Creating Prompts](guides/CREATING_PROMPTS.md) | PromptyTemplate complete guide |
 | [Using Tools](guides/USING_TOOLS.md) | Tool system concepts and usage |
+| [Field Sets & Tags](guides/SCHEMA_FIELD_SETS.md) | Complete reference for field classification |
 | [Schema Field Sets](guides/SCHEMA_FIELD_SETS.md) | Define field sets for runtime queries |
 
 ---
