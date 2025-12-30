@@ -292,7 +292,8 @@ properties:
 - name: differentiationFactors
   dataType:
   - text[]
-  description: Key factors that differentiate THIS entity from ALL competitors
+  description: Key factors that differentiate THIS entity from ALL competitors.
+    CLEAN FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
   tags:
   - research
   sets:
@@ -303,7 +304,8 @@ properties:
 - name: competitiveAdvantages
   dataType:
   - text[]
-  description: THIS entity's specific competitive advantages across the board
+  description: THIS entity's specific competitive advantages across the board.
+    CLEAN FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
   tags:
   - research
   sets:
@@ -314,7 +316,8 @@ properties:
 - name: competitiveThreats
   dataType:
   - text[]
-  description: Identified competitive threats and challenges facing THIS entity
+  description: Identified competitive threats and challenges facing THIS entity.
+    CLEAN FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
   tags:
   - research
   sets:
