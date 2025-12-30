@@ -1,13 +1,15 @@
 id: competitor_research
-collection: Research_competitor  # ✅ START FROM RESEARCHER, not Domain
+collection: Domain  # Domain as root - standard approach
 name: Competitor Research
 type: data_card
 file: competitor_research.yaml
 description: >
-  Fetch Research_competitor records with Domain reference.
-  Starts from Research_competitor and traverses to Domain.
-  Fast, focused data card for competitor dossier testing.
+  Fetch Domain records with Research_competitor via relationship traversal.
+  Uses standard Domain-centered approach for compatibility with report builders.
   Part of the Entity Research Suite - single researcher variant.
+  
+  NOTE: Relationship traversal brings in all researchers. Filtering to competitor-only
+  should happen at the report builder/asset level, not the data card level.
 
 # Tagging system
 tags:
@@ -28,8 +30,8 @@ personas:
 
 parameters:
   type: fetch
-  collection: Research_competitor  # ✅ ROOT IS RESEARCHER
-  relationship_traversal: true  # ✅ ENABLED: Traverse to Domain only
+  collection: Domain
+  relationship_traversal: true  # Traverses to Research_* collections
   dynamic_templates: true
   limit: 10000
   limit_default: 10000
@@ -46,13 +48,14 @@ field_tags:
   - LLM
   - research
 
-# Collections: Research_competitor (root) + Domain (via traversal)
+# Collections: Domain + Research_competitor 
+# NOTE: Relationship traversal may bring other researchers - filter at render time
 collections:
-  - collection: Research_competitor
+  - collection: Domain
     required: true
     field_set: [standard, extended, array]
 
-  - collection: Domain
+  - collection: Research_competitor
     field_set: [standard, extended, array]
 
 # Chat integration
@@ -63,9 +66,8 @@ chat_integration:
     - "Focused competitive analysis"
 
   usage_patterns:
-    - "Starts from Research_competitor, traverses to Domain"
-    - "Returns only competitor + domain data"
-    - "Fast execution - single researcher"
+    - "Returns competitor + domain data (plus any traversed researchers)"
+    - "Filter to competitor-only at report/asset level"
     - "Perfect for testing field_set behavior"
 
   parameter_examples:
@@ -74,21 +76,22 @@ chat_integration:
 
 # Response structure
 response_structure:
-  root_object: Research_competitor  # ✅ ROOT IS RESEARCHER
+  root_object: Domain
   includes_relationships: true
-  relationship_style: forward_traversal  # Researcher → Domain
+  relationship_style: reverse_traversal
   field_focus: competitor_research
   expected_collections:
-    - Research_competitor
     - Domain
+    - Research_competitor
 
 # Documentation
 documentation:
   overview: |
-    Single-researcher data card for fast competitor intelligence testing.
+    Competitor-focused data card using standard Domain-centered approach.
     
-    KEY INSIGHT: Starts from Research_competitor (not Domain) so that
-    relationship traversal only brings in Domain, not all other researchers.
+    IMPORTANT: Relationship traversal brings ALL researchers from Domain.
+    To show only competitor data, filter at the report card asset level
+    using the `researchers` parameter (requires builder support).
     
     FIELD SET BEHAVIOR:
     - standard: Core fields (Cat, key scalars, core parallel arrays)
