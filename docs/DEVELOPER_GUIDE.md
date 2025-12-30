@@ -285,6 +285,7 @@ Define data access patterns for querying research.
 | [Creating Schemas](guides/CREATING_SCHEMAS.md) | WeaviateClassConfig complete guide |
 | [Creating Prompts](guides/CREATING_PROMPTS.md) | PromptyTemplate complete guide |
 | [Using Tools](guides/USING_TOOLS.md) | Tool system concepts and usage |
+| [Schema Field Sets](guides/SCHEMA_FIELD_SETS.md) | Define field sets for runtime queries |
 
 ---
 
