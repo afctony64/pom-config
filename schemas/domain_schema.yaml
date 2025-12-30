@@ -618,6 +618,42 @@ properties:
   tags:
   - status
   - temporal
+- name: global_page_count
+  dataType:
+  - int
+  description: Total page URLs found in sitemaps before filtering. Set by sitemap parser. Compare with planned_page_count for filter efficiency.
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - metrics
+  - processing
+  - audit
+- name: global_page_count_updated_at
+  dataType:
+  - date
+  description: Timestamp when global_page_count was last updated
+  indexFilterable: true
+  tags:
+  - temporal
+- name: planned_page_count
+  dataType:
+  - int
+  description: Number of page URLs queued for processing into Page_intelligence after filtering. Set by sitemap parser. Compare with page_count for processing success.
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - metrics
+  - processing
+  - audit
+- name: planned_page_count_updated_at
+  dataType:
+  - date
+  description: Timestamp when planned_page_count was last updated
+  indexFilterable: true
+  tags:
+  - temporal
 - name: page_count
   dataType:
   - int
