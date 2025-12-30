@@ -73,56 +73,24 @@ tool_guidance:
       - Focus on facts, not prose
       - Maximum 5 items per category
       
-  field_requirements:
+  array_requirements:
     priority: critical
     usage_instructions: |
-      📊 FIELD POPULATION REQUIREMENTS:
+      📊 ARRAY FIELD REQUIREMENTS (schema has full definitions):
       
-      **1️⃣ ENTITY-LEVEL ARRAYS** (describe THIS company overall - REQUIRED):
+      **Entity-Level Arrays** (text[] without parallel_to):
+      - Describe THIS entity's overall competitive position
+      - Populate 3-5 items each - read field descriptions from schema
+      - These are NOT per-competitor, they're about THIS entity overall
       
-      ✅ differentiationFactors: 3-5 items
-         What makes THIS entity unique vs ALL competitors?
-         Example: ["White-labeled marketplace", "Code-native SDK", "Embedded workflow builder"]
+      **Parallel Arrays** (text[] with parallel_to relationship):
+      - Per-competitor data - one value per competitor identified
+      - ALL parallel arrays MUST have IDENTICAL length
+      - Index alignment: [i] in one array = [i] in all others
+      - Use "Not disclosed" if data unavailable to maintain alignment
       
-      ✅ competitiveAdvantages: 3-5 items  
-         What advantages does THIS entity have in the market?
-         Example: ["G2 Leader status", "Fastest time-to-market", "Best-in-class support"]
-      
-      ✅ competitiveThreats: 2-4 items
-         What competitive threats is THIS entity facing?
-         Example: ["Enterprise incumbents", "Low-cost alternatives", "In-house builds"]
-      
-      ✅ marketTrends: 2-4 items
-         What market trends affect this competitive landscape?
-         Example: ["Shift to embedded iPaaS", "API-first architecture"]
-      
-      **2️⃣ PARALLEL ARRAYS** (per-competitor data):
-      Fields with parallel_to: keyCompetitors MUST have identical length.
-      ALL of these MUST be populated for each competitor identified:
-      - competitorDomain, competitorPositioning, competitorTargetMarket
-      - competitorPriceVs, competitorAdvantagesVs, competitorGapsVs
-      
-      ⚠️ DO NOT leave array fields empty - they are key intelligence outputs!
-      ⚠️ Use "Not disclosed" if data unavailable to maintain parallel alignment.
-      
-  parallel_arrays:
-    priority: critical
-    usage_instructions: |
-      ⚠️ PARALLEL ARRAY ALIGNMENT:
-      
-      All fields with parallel_to: keyCompetitors MUST have identical length.
-      Index [i] in one array corresponds to index [i] in all other arrays.
-      
-      RULES:
-      - ALL parallel arrays MUST have IDENTICAL length (typically 3-5 competitors)
-      - If data unavailable for a field, use "Not disclosed" to maintain alignment
-      - DO NOT leave arrays with mismatched lengths
-      - DO NOT leave any parallel array empty
-      
-      🚨 CRITICAL: For EVERY competitor in keyCompetitors:
-      - You MUST find their domain (use web search if needed)
-      - You MUST populate ALL parallel fields for that index
-      - If domain truly cannot be found, use "Not disclosed" but maintain alignment
+      ⚠️ DO NOT leave array fields empty - they are key outputs!
+      ⚠️ For competitor domains, use web search if not found in pageData
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
