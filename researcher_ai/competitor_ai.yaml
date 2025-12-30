@@ -73,68 +73,40 @@ tool_guidance:
       - Focus on facts, not prose
       - Maximum 5 items per category
       
-  entity_simple_arrays:
+  field_requirements:
     priority: critical
     usage_instructions: |
-      📊 REQUIRED SIMPLE ARRAYS (Entity-level, describing THIS company overall):
+      📊 FIELD POPULATION REQUIREMENTS:
       
-      These fields describe THIS entity's competitive position overall - NOT per-competitor:
+      **Entity-Level Arrays** (describe THIS company overall):
+      Fields with sets: [array, standard] are REQUIRED - populate 3-5 items each.
+      These describe THIS entity's competitive position - NOT per-competitor data.
       
-      **differentiationFactors** (3-5 items REQUIRED):
-      What makes THIS company unique vs all competitors?
-      Example: ["White-labeled marketplace", "Code-native SDK", "Embedded workflow builder"]
+      **Parallel Arrays** (per-competitor data):
+      Fields with parallel_to relationships MUST maintain identical length.
+      All parallel arrays MUST be populated for each competitor identified.
       
-      **competitiveAdvantages** (3-5 items REQUIRED):
-      What advantages does THIS company have over competitors?
-      Example: ["G2 Leader status", "Fastest time-to-market", "Best-in-class support"]
-      
-      **competitiveThreats** (2-4 items REQUIRED):
-      What competitive threats does THIS company face?
-      Example: ["Enterprise incumbents", "Low-cost alternatives", "In-house builds"]
-      
-      **marketTrends** (2-4 items REQUIRED):
-      What market trends affect THIS company's competitive landscape?
-      Example: ["Shift to embedded iPaaS", "API-first architecture", "Customer-facing integrations"]
-      
-      ⚠️ These are SEPARATE from the per-competitor parallel arrays!
-      ⚠️ DO NOT leave these empty - they are key intelligence outputs!
+      ⚠️ DO NOT leave array fields empty - they are key intelligence outputs!
+      ⚠️ Use "Not disclosed" if data unavailable to maintain parallel alignment.
       
   parallel_arrays:
     priority: critical
     usage_instructions: |
-      ⚠️ PARALLEL ARRAY ALIGNMENT (Per-competitor data):
+      ⚠️ PARALLEL ARRAY ALIGNMENT:
       
-      The following arrays MUST maintain identical length and index alignment:
-      - keyCompetitors (company names)
-      - competitorDomain (website domains)
-      - competitorPositioning (Leader/Challenger/Niche)
-      - competitorTargetMarket (who they target)
-      - competitorPriceVs (Higher/Similar/Lower than THIS company)
-      - competitorAdvantagesVs (their advantages over THIS company)
-      - competitorGapsVs (their gaps compared to THIS company)
+      All fields with parallel_to: keyCompetitors MUST have identical length.
+      Index [i] in one array corresponds to index [i] in all other arrays.
       
       RULES:
-      - ALL arrays MUST have IDENTICAL length (typically 3-5 competitors)
-      - Index [i] in one array corresponds to index [i] in all other arrays
+      - ALL parallel arrays MUST have IDENTICAL length (typically 3-5 competitors)
       - If data unavailable for a field, use "Not disclosed" to maintain alignment
       - DO NOT leave arrays with mismatched lengths
-      - DO NOT leave any parallel array empty - all 7 arrays must be populated
+      - DO NOT leave any parallel array empty
       
-      🚨 CRITICAL: For EVERY competitor in keyCompetitors, you MUST provide:
-      - competitorDomain: Their website (use web search if needed)
-      - competitorPositioning: Their market position (Leader/Challenger/Niche)
-      - competitorTargetMarket: Who they sell to (e.g., "Enterprise", "SMB", "Mid-market")
-      - competitorPriceVs: Price comparison (Higher/Similar/Lower)
-      - competitorAdvantagesVs: Their advantages (e.g., "Larger customer base")
-      - competitorGapsVs: Their gaps vs THIS company (e.g., "No embedded option")
-      
-      Example for keyCompetitors[0]='Salesforce':
-      - competitorDomain[0]='salesforce.com'
-      - competitorPositioning[0]='Market Leader'
-      - competitorTargetMarket[0]='Enterprise'
-      - competitorPriceVs[0]='Higher'
-      - competitorAdvantagesVs[0]='Brand recognition, ecosystem'
-      - competitorGapsVs[0]='Complex setup, higher cost'
+      🚨 CRITICAL: For EVERY competitor in keyCompetitors:
+      - You MUST find their domain (use web search if needed)
+      - You MUST populate ALL parallel fields for that index
+      - If domain truly cannot be found, use "Not disclosed" but maintain alignment
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
