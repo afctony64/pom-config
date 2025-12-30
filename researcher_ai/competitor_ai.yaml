@@ -78,13 +78,29 @@ tool_guidance:
     usage_instructions: |
       📊 FIELD POPULATION REQUIREMENTS:
       
-      **Entity-Level Arrays** (describe THIS company overall):
-      Fields with sets: [array, standard] are REQUIRED - populate 3-5 items each.
-      These describe THIS entity's competitive position - NOT per-competitor data.
+      **1️⃣ ENTITY-LEVEL ARRAYS** (describe THIS company overall - REQUIRED):
       
-      **Parallel Arrays** (per-competitor data):
-      Fields with parallel_to relationships MUST maintain identical length.
-      All parallel arrays MUST be populated for each competitor identified.
+      ✅ differentiationFactors: 3-5 items
+         What makes THIS entity unique vs ALL competitors?
+         Example: ["White-labeled marketplace", "Code-native SDK", "Embedded workflow builder"]
+      
+      ✅ competitiveAdvantages: 3-5 items  
+         What advantages does THIS entity have in the market?
+         Example: ["G2 Leader status", "Fastest time-to-market", "Best-in-class support"]
+      
+      ✅ competitiveThreats: 2-4 items
+         What competitive threats is THIS entity facing?
+         Example: ["Enterprise incumbents", "Low-cost alternatives", "In-house builds"]
+      
+      ✅ marketTrends: 2-4 items
+         What market trends affect this competitive landscape?
+         Example: ["Shift to embedded iPaaS", "API-first architecture"]
+      
+      **2️⃣ PARALLEL ARRAYS** (per-competitor data):
+      Fields with parallel_to: keyCompetitors MUST have identical length.
+      ALL of these MUST be populated for each competitor identified:
+      - competitorDomain, competitorPositioning, competitorTargetMarket
+      - competitorPriceVs, competitorAdvantagesVs, competitorGapsVs
       
       ⚠️ DO NOT leave array fields empty - they are key intelligence outputs!
       ⚠️ Use "Not disclosed" if data unavailable to maintain parallel alignment.
