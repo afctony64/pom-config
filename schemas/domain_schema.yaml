@@ -66,6 +66,7 @@ properties:
   tags:
   - identity
   - web
+  - research  # FIX #457: Include in research data card traversals
 
 - name: domain
   dataType:
@@ -78,6 +79,7 @@ properties:
   - standard
   - status_update
   tags:
+  - research  # FIX #457: Include in research data card traversals
   - categorical
   - web
 
@@ -92,6 +94,7 @@ properties:
   tags:
   - identity
   - categorical
+  - research  # FIX #457: Include in research data card traversals
 
 - name: title
   dataType:
@@ -104,6 +107,7 @@ properties:
   tags:
   - content
   - metadata
+  - research  # FIX #457: Include in research data card traversals
 
 - name: description
   dataType:
@@ -116,6 +120,7 @@ properties:
   tags:
   - content
   - metadata
+  - research  # FIX #457: Include in research data card traversals
 
 # ============================================================================
 # PHYSICAL PRESENCE (8 fields) - NEW in v9.0
