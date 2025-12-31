@@ -220,7 +220,7 @@ properties:
   - research
   sets:
   - array
-  - system
+  - standard
   - prompt
 
 - name: competitorTargetMarket
@@ -234,12 +234,12 @@ properties:
   - research
   sets:
   - array
-  - system
+  - standard
   - spawn
   - prompt
 
 # -----------------------------------------------------------------------------
-# COMPARISON ARRAYS - System (array + system) - Evidence fields, not for display
+# COMPARISON ARRAYS - Core competitive comparison data (array + standard)
 # -----------------------------------------------------------------------------
 - name: competitorPriceVs
   dataType:
@@ -253,7 +253,7 @@ properties:
   - research
   sets:
   - array
-  - system
+  - standard
   - prompt
 
 - name: competitorAdvantagesVs
@@ -268,7 +268,7 @@ properties:
   - research
   sets:
   - array
-  - system
+  - standard
   - prompt
 
 - name: competitorGapsVs
@@ -283,7 +283,7 @@ properties:
   - research
   sets:
   - array
-  - system
+  - standard
   - prompt
 
 # -----------------------------------------------------------------------------
