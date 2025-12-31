@@ -959,9 +959,18 @@ properties:
   - results
 
 # ============================================================================
-# REFERENCES TO RESEARCH COLLECTIONS
+# SPAWN REFERENCES (self-referencing for entity discovery graph)
 # ============================================================================
 references:
+- name: spawnedFromRef
+  target_collection: Domain
+  uuid_source_field: manual
+  auto_flatten: false
+  description: Reference to the Domain that spawned this record during research
+
+# ============================================================================
+# REFERENCES TO RESEARCH COLLECTIONS
+# ============================================================================
 - name: industry
   target_collection: Research_industry
   uuid_source_field: uuid
