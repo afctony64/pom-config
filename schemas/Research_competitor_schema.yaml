@@ -719,6 +719,7 @@ references:
   description: Reference to the source Domain record for beacon traversal (uses research
     record's own UUID)
 - name: keyCompetitorRefs
+  uuid_source_field: manual  # Prevents coercer auto-population - set by entity_spawn
   target_collection: Domain
   description: References to spawned competitor Domain records (parallel to keyCompetitors
     array, populated by entity spawn post-processor)
