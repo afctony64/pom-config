@@ -31,6 +31,13 @@ parameters:
   limit_default: 10000
   field_set: [standard, extended, array]
 
+  # Traversal depth for keyCompetitorRefs → Domain → Research_*
+  traversal:
+    max_depth: 2                   # Research_competitor → Domain (1) → properties resolved (2)
+    max_complexity: 200
+    policies:
+      domainBeacon: skip           # Skip circular Domain refs from researchers
+
 fields: {}
 
 field_tags:
