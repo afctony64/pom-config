@@ -743,6 +743,55 @@ properties:
   - contact
 
 # ============================================================================
+# SPAWN/SEED FIELDS (3 fields) - For entity_spawn post-execution tool
+# ============================================================================
+- name: seed
+  dataType:
+  - boolean
+  description: Whether this domain was spawned and needs enrichment
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - spawn
+  - processing
+
+- name: spawnedFrom
+  dataType:
+  - text
+  description: Domain that spawned this record (e.g., source domain for competitor)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - extended
+  tags:
+  - spawn
+  - provenance
+
+- name: spawnedBy
+  dataType:
+  - text
+  description: Researcher or tool that spawned this record (e.g., "competitor", "entity_spawn")
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - extended
+  tags:
+  - spawn
+  - provenance
+
+- name: needsDomainDiscovery
+  dataType:
+  - boolean
+  description: Whether this domain needs domain discovery (spawned without known domain)
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - spawn
+  - processing
+
+# ============================================================================
 # PROCESSING FLAGS (8 fields)
 # ============================================================================
 - name: domain_enriched
