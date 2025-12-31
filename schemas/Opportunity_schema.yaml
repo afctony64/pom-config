@@ -578,13 +578,13 @@ references:
   auto_flatten: false
   description: "Entity Model reference to Domain (the URL/domain IS the entity)"
 - name: sourceEntity
-  target_collection: Company_source
-  description: "LEGACY: Source entity reference (Company Model)"
-- name: company
-  target_collection: Company_source
-  uuid_source_field: accountId
+  target_collection: Source
+  description: "Reference to Source staging record (if applicable)"
+- name: entity
+  target_collection: Domain
+  uuid_source_field: domain
   auto_flatten: true
-  description: "LEGACY: Reference to the Company_source record using accountId as the lookup key (Company Model)"
+  description: "Reference to Domain entity record (the URL/domain IS the entity)"
 group: company
 weaviate_instance: cloud
 collection_name: Opportunity

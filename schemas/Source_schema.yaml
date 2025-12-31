@@ -1,6 +1,6 @@
 type: core
 class: Source
-description: Generic entity source collection for any tenant group - entity-agnostic source data with domain and search information
+description: Master entity source collection - comprehensive contact/physical record with optional digital presence linking to Domain collection
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -25,6 +25,7 @@ multiTenancyConfig:
 data_sources:
   url_collection: domain
 properties:
+# === IDENTITY FIELDS ===
 - name: uuid
   description: Unique identifier for the record
   dataType:
@@ -41,6 +42,16 @@ properties:
   - standard
   - drill_down
   tags:
+  - identity
+- name: entityId
+  description: External identifier from source system (e.g., Salesforce accountId, CRM ID)
+  dataType:
+  - text
+  sets:
+  - system
+  - identifier
+  tags:
+  - beacon
   - identity
 - name: domain
   description: Domain extracted from URL (e.g., example.com)
@@ -61,6 +72,36 @@ properties:
   tags:
   - identity
   - web
+
+# === ORGANIZATION FIELDS ===
+- name: industry
+  description: Primary industry or sector
+  dataType:
+  - text
+  sets:
+  - standard
+  tags:
+  - categorical
+
+# === PROVENANCE FIELDS ===
+- name: dataSource
+  description: Source of this record (e.g., Salesforce, Import, Manual, API)
+  dataType:
+  - text
+  sets:
+  - system
+  tags:
+  - provenance
+- name: sourceSystem
+  description: Original system this data came from
+  dataType:
+  - text
+  sets:
+  - system
+  tags:
+  - provenance
+
+# === FLEXIBLE METADATA ===
 - name: searchInfo
   description: Search information facts - array of fact objects with factType and fact
   dataType:
@@ -79,6 +120,8 @@ properties:
     description: The actual fact/information discovered
     dataType:
     - text
+
+# === ENRICHMENT FIELDS ===
 - name: title
   description: Entity title/name extracted from website (from URL snapshot)
   dataType:
@@ -114,6 +157,8 @@ properties:
   - extended
   tags:
   - content
+
+# === PROCESSING FLAGS ===
 - name: url_processed
   description: Boolean flag indicating URL enrichment has been completed
   dataType:
@@ -158,6 +203,7 @@ properties:
   tags:
   - processing
   - temporal
+
 # === SYSTEM/SYNC FIELDS ===
 - name: updated_at
   description: Record update timestamp
@@ -200,6 +246,7 @@ properties:
     dataType:
     - uuid[]
     description: Domain reference UUIDs
+
 group: company
 weaviate_instance: cloud
 collection_name: Source
@@ -211,6 +258,10 @@ uuid_strategy:
   - field: url
     namespace: URL
     description: Fallback strategy using full URL for deterministic UUIDs
+  - field: entityId
+    namespace: DNS
+    prefix: entity
+    description: Fallback using external entity ID
   - field: entityName
     namespace: DNS
     prefix: entity

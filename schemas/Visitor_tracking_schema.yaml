@@ -79,7 +79,7 @@ properties:
   - company
   - identity
 - name: company_uuid
-  description: UUID of matched company in Company_source collection
+  description: UUID of matched entity in Domain collection
   dataType:
   - text
   sets:
@@ -301,9 +301,9 @@ uuid_strategy:
 dependencies:
 - type: analytical
   requires:
-  - Company_source
+  - Domain
 data_sources:
-  company_collection: Company_source
+  entity_collection: Domain
 collection_groups:
 - visitor_analytics
 - sales_intelligence

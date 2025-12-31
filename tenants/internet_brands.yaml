@@ -79,10 +79,13 @@ data_sources:
 # Credentials come from environment variables (.env) - tenant just specifies instance
 collections:
   # ═══════════════════════════════════════════════════════════════════════════
-  # ENTITY MODEL (NEW) - Domain + Research_* collections
+  # ENTITY MODEL - Source + Domain + Research_* collections
   # ═══════════════════════════════════════════════════════════════════════════
 
-  # Core entity collection (Domain IS the entity in new model)
+  # Source collection (master entity/contact record - physical presence)
+  Source: "cloud"
+  
+  # Domain collection (digital presence - websites, pages)
   Domain: "cloud"
 
   # Research output collections (Entity Model - replaces Company_research_*)
@@ -108,8 +111,5 @@ collections:
   Page_source: "spark"
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # LEGACY (backward compatibility with old Company_ model)
+  # LEGACY (Company_source removed - migrated to Source collection)
   # ═══════════════════════════════════════════════════════════════════════════
-
-  # Keep Company_source for any existing data/workflows
-  Company_source: "cloud"
