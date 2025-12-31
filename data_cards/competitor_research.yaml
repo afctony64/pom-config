@@ -30,6 +30,7 @@ parameters:
   limit: 10000
   limit_default: 10000
   field_set: [standard, extended, array]
+  preserve_reference_arrays: true  # Keep keyCompetitorRefs as array for iterate_over
 
   # Traversal depth for keyCompetitorRefs → Domain → Research_*
   traversal:
