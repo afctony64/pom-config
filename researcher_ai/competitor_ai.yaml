@@ -140,4 +140,4 @@ entity_spawn:
 
 # Post-execution tools: Run automatically after competitor researcher completes
 post_execution_tools:
-  - competitor_domain_enricher  # Enriches competitorDomain using improved competitor_domain prompt
+  - entity_spawn  # Creates Domain records for competitors and populates keyCompetitorRefs
