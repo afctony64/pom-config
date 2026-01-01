@@ -296,7 +296,6 @@ properties:
   sets:
   - array
   - system
-  - extended
   - post
   metadata:
     order: 209
