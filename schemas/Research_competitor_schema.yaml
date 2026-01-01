@@ -105,7 +105,7 @@ properties:
   - standard
   - EnumCat
   metadata:
-    order: 101
+    order: 131
 - name: competitorAnalysisLLM
   dataType:
   - text
@@ -119,7 +119,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 102
+    order: 132
 - name: marketPositionCat
   dataType:
   - text
@@ -145,7 +145,7 @@ properties:
   - standard
   - EnumCat
   metadata:
-    order: 111
+    order: 133
 - name: marketPositionLLM
   dataType:
   - text
@@ -160,7 +160,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 112
+    order: 134
 - name: keyCompetitors
   dataType:
   - text[]
@@ -190,7 +190,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 202
+    order: 207
 - name: competitorDomain
   dataType:
   - text[]
@@ -205,7 +205,7 @@ properties:
   - spawn
   - post
   metadata:
-    order: 203
+    order: 202
 - name: competitorGapsVs
   dataType:
   - text[]
@@ -221,7 +221,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 204
+    order: 206
 - name: competitorPositioning
   dataType:
   - text[]
@@ -236,7 +236,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 205
+    order: 203
 - name: competitorPriceVs
   dataType:
   - text[]
@@ -252,7 +252,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 206
+    order: 205
 - name: competitorTargetMarket
   dataType:
   - text[]
@@ -267,7 +267,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 207
+    order: 204
 - name: innovationScore
   dataType:
   - number[]
@@ -337,7 +337,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 301
+    order: 122
 - name: competitiveMarket
   dataType:
   - text
@@ -348,7 +348,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 302
+    order: 111
 - name: competitivePositioning
   dataType:
   - text
@@ -359,7 +359,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 303
+    order: 121
 - name: competitiveThreats
   dataType:
   - text[]
@@ -372,7 +372,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 304
+    order: 124
 - name: differentiationFactors
   dataType:
   - text[]
@@ -385,7 +385,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 305
+    order: 123
 - name: dossierSummary
   dataType:
   - text
@@ -395,49 +395,53 @@ properties:
   tokenization: word
   indexFilterable: false
   sets:
+  - standard
   - extended
   tags:
   - reporting
   - llm
   - summary
   metadata:
-    order: 306
+    order: 101
 - name: homeInnovationScore
   dataType:
   - number
   description: Target entity's innovation capability (1-10)
   label: Innovation
   sets:
+  - standard
   - extended
   - prompt
   tags:
   - score
   metadata:
-    order: 411
+    order: 141
 - name: homeMarketPositionScore
   dataType:
   - number
   description: Target entity's overall market position (1-10)
   label: Market Position
   sets:
+  - standard
   - extended
   - prompt
   tags:
   - score
   metadata:
-    order: 412
+    order: 142
 - name: homeMarketStrengthScore
   dataType:
   - number
   description: Target entity's market strength (1-10)
   label: Market Strength
   sets:
+  - standard
   - extended
   - prompt
   tags:
   - score
   metadata:
-    order: 413
+    order: 143
 - name: marketDynamics
   dataType:
   - text
@@ -448,7 +452,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 310
+    order: 113
 - name: marketSize
   dataType:
   - text
@@ -459,7 +463,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 311
+    order: 112
 - name: marketTrends
   dataType:
   - text[]
@@ -472,7 +476,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 312
+    order: 114
 - name: analysisConfidence
   dataType:
   - text
