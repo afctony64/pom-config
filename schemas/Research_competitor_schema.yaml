@@ -194,8 +194,11 @@ properties:
 - name: competitorDomain
   dataType:
   - text[]
-  description: Each competitor's primary domain (parallel to keyCompetitors array).
-    Search for official website domain for each competitor.
+  description: >
+    Primary domain for each competitor (parallel to keyCompetitors array).
+    ENRICHMENT SEARCH: "{competitor_name} official website domain company".
+    Format: "competitor.com" (no https://, no www).
+    Use "Not disclosed" if cannot find. MUST align with keyCompetitors.
   parallel_to: keyCompetitors
   tags:
   - research
@@ -225,47 +228,52 @@ properties:
 - name: competitorPositioning
   dataType:
   - text[]
-  description: Each competitor's market positioning (parallel to keyCompetitors array)
-    - e.g., "Market Leader", "Challenger", "Niche Player". Use "Not disclosed" if
-    positioning unknown. MUST have same length as keyCompetitors array.
+  description: >
+    Market positioning for each competitor (parallel to keyCompetitors array).
+    ENRICHMENT SEARCH: "{competitor_name} market position leader challenger G2 Gartner".
+    Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging Player".
+    Use "Not disclosed" if unknown. MUST align with keyCompetitors.
   parallel_to: keyCompetitors
   tags:
   - research
   sets:
   - array
   - standard
-  - prompt
+  - post
   metadata:
     order: 203
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: Price comparison vs THIS entity (parallel to keyCompetitors array).
-    E.g., "$150/user vs our $99", "Similar pricing", "Lower cost". Use "Not disclosed"
-    if pricing comparison unknown. MUST have same length as keyCompetitors array.
-    CLEAN FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
+  description: >
+    Price comparison vs THIS entity (parallel to keyCompetitors array).
+    ENRICHMENT SEARCH: "{competitor_name} pricing cost vs {entity_name} comparison".
+    Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative", "Similar tier".
+    Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS ONLY.
   parallel_to: keyCompetitors
   tags:
   - research
   sets:
   - array
   - standard
-  - prompt
+  - post
   metadata:
     order: 205
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: Each competitor's target market (parallel to keyCompetitors array)
-    - e.g., "Enterprise", "SMB", "Mid-market". Use "Not disclosed" if target market
-    unknown. MUST have same length as keyCompetitors array.
+  description: >
+    Target market for each competitor (parallel to keyCompetitors array).
+    ENRICHMENT SEARCH: "{competitor_name} target market customers enterprise SMB".
+    Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
+    Use "Not disclosed" if unknown. MUST align with keyCompetitors.
   parallel_to: keyCompetitors
   tags:
   - research
   sets:
   - array
   - standard
-  - prompt
+  - post
   metadata:
     order: 204
 - name: innovationScore
@@ -284,8 +292,10 @@ properties:
 - name: keyCompetitorEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyCompetitor from page facts and web search.
-    Summarize factual basis for classifications and extracted values.
+  description: >
+    Evidence/context found for each keyCompetitor from page facts and web search (parallel to keyCompetitors).
+    Auto-populated during enrichment. Contains source text snippets about competitive positioning,
+    pricing, features mentioned for this competitor. MUST align with keyCompetitors.
   parallel_to: keyCompetitors
   moduleConfig:
     text2vec-weaviate:

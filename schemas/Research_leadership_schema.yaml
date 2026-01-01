@@ -250,9 +250,11 @@ properties:
 - name: executiveBackgrounds
   dataType:
   - text[]
-  description: Executive background and experience for each executive (parallel to keyExecutives array) - e.g., "MBA from
-    top university, 15yr industry veteran", "Technical degree, ex-Fortune 500", "Management consulting, serial entrepreneur".
-    Use "Not disclosed" if background unknown. MUST have same length as keyExecutives array.
+  description: >
+    Executive background and experience (parallel to keyExecutives array).
+    ENRICHMENT SEARCH: "{executive_name} {role} career background education experience".
+    Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups", "McKinsey alum, serial entrepreneur".
+    Use "Not disclosed" if unknown. MUST align with keyExecutives.
   parallel_to: keyExecutives
   tags:
   - executive
@@ -260,7 +262,7 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  - post
   - standard
   metadata:
     order: 203
@@ -283,8 +285,11 @@ properties:
 - name: executiveTenure
   dataType:
   - text[]
-  description: Tenure/time at entity for each executive (parallel to keyExecutives array) - e.g., "5 years", "Since founding",
-    "2 years", "6 months". Use "Not disclosed" if tenure unknown. MUST have same length as keyExecutives array.
+  description: >
+    Tenure/time at entity for each executive (parallel to keyExecutives array).
+    ENRICHMENT SEARCH: "{executive_name} joined {company} tenure years".
+    Examples: "5 years", "Since founding (2019)", "2 years", "6 months".
+    Use "Not disclosed" if unknown. MUST align with keyExecutives.
   parallel_to: keyExecutives
   tags:
   - executive
@@ -292,21 +297,23 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  - post
   - standard
   metadata:
     order: 204
 - name: executiveLinkedIn
   dataType:
   - text[]
-  description: LinkedIn profile URL for each executive (parallel to keyExecutives array) - e.g., "https://www.linkedin.com/in/john-doe/",
-    "https://www.linkedin.com/in/jane-smith/". Use "Not disclosed" if LinkedIn profile unknown or not public. MUST have same
-    length as keyExecutives array.
+  description: >
+    LinkedIn profile URL for each executive (parallel to keyExecutives array).
+    ENRICHMENT SEARCH: "{executive_name} {role} {company} linkedin profile".
+    Format: https://www.linkedin.com/in/username/
+    Use "Not disclosed" if LinkedIn profile unknown. MUST align with keyExecutives.
   parallel_to: keyExecutives
   tags:
   - research
   sets:
-  - prompt
+  - post
   - extended
   - standard
   metadata:

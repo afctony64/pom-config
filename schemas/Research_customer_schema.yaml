@@ -222,8 +222,10 @@ properties:
 - name: keyCustomerEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyCustomer from page facts search (parallel to keyCustomers array). Stores
-    the factual basis for classifications and extracted values.
+  description: >
+    Evidence/context found for each keyCustomer from page facts search (parallel to keyCustomers array).
+    Stores factual basis for classifications. Auto-populated during enrichment.
+    Contains source text snippets mentioning this customer.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -231,6 +233,7 @@ properties:
   tags: []
   sets:
   - system
+  - post
   metadata:
     order: 908
 - name: useCaseLLM
@@ -635,9 +638,11 @@ properties:
 - name: keyCustomerNAICS
   dataType:
   - text[]
-  description: NAICS description for each keyCustomer (parallel to keyCustomers array) - 6-digit NAICS classification with
-    name (e.g., "Software Publishers (511210)"). Use "Unknown" if NAICS cannot be determined. MUST have same length as keyCustomers
-    array.
+  description: >
+    NAICS description for each keyCustomer (parallel to keyCustomers array).
+    ENRICHMENT SEARCH: "{customer_name} company industry NAICS classification".
+    Format: "Software Publishers (511210)", "Commercial Banking (522110)".
+    Use "Unknown" if cannot determine. MUST align with keyCustomers.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -647,7 +652,7 @@ properties:
   - industry
   - LLM
   sets:
-  - prompt
+  - post
   - array
   - standard
   metadata:
@@ -701,9 +706,11 @@ properties:
 - name: keyCustomerIndustrySegmentLLM
   dataType:
   - text[]
-  description: Specific industry segment/vertical for each keyCustomer (parallel to keyCustomers array) - detailed categorization
-    within the broader industry for each customer. Array index aligns with keyCustomers array. Source for classification to
-    keyCustomerIndustrySegmentCat.
+  description: >
+    Specific industry segment/vertical for each keyCustomer (parallel to keyCustomers array).
+    ENRICHMENT SEARCH: "{customer_name} company industry vertical segment market".
+    Examples: "B2B SaaS for healthcare", "Enterprise fintech", "SMB retail tech".
+    Source for classification to keyCustomerIndustrySegmentCat. MUST align with keyCustomers.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -713,7 +720,7 @@ properties:
   - industry
   - segment
   sets:
-  - prompt
+  - post
   - array
   - standard
   - extended
