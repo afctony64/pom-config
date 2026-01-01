@@ -7,8 +7,20 @@ fields:
   aggregations:
   - count
   - nunique
-- name: fundingJourney
-  label: Funding Journey
+- name: fundingRounds
+  label: Funding Rounds
+  aggregations:
+  - count
+- name: fundingAmounts
+  label: Funding Amounts
+  aggregations:
+  - count
+- name: fundingDates
+  label: Funding Dates
+  aggregations:
+  - count
+- name: fundingInvestors
+  label: Funding Investors
   aggregations:
   - count
 - name: keyFinancialMetrics

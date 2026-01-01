@@ -28,9 +28,6 @@ fields:
   aggregations:
   - count
   - nunique
-- name: keyCustomersIds
-  aggregations:
-  - count
 - name: productUsed
   aggregations:
   - count
