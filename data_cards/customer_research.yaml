@@ -1,0 +1,135 @@
+id: customer_research
+collection: Research_customer  # ✅ ROOT = Researcher, not Domain
+name: Customer Research
+type: data_card
+file: customer_research.yaml
+description: >
+  Customer intelligence with customer segment analysis and key customer traversal.
+  Starts from Research_customer, traverses to customer Domain records via keyCustomerRefs,
+  then traverses to each customer's research data (industry, financial, product, etc.).
+
+tags:
+  - research
+  - customer
+  - entity-intelligence
+  - deep-traversal
+
+target_scope: entity_intelligence
+executor: fetch
+display: true
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: fetch
+  collection: Research_customer
+  relationship_traversal: true   # ✅ Allow explicit reference traversal
+  dynamic_templates: false       # ✅ DISABLE auto-discovery (we define all paths)
+  limit: 10000
+  limit_default: 10000
+  field_set: [standard, extended, array]
+  preserve_reference_arrays: true  # Keep keyCustomerRefs as array for iterate_over
+
+  # Traversal depth for keyCustomerRefs → Domain → Research_*
+  traversal:
+    max_depth: 2                   # Research_customer → Domain (1) → properties resolved (2)
+    max_complexity: 200
+    policies:
+      domainBeacon: skip           # Skip circular Domain refs from researchers
+
+fields: {}
+
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+collections:
+  # ==========================================================================
+  # ROOT: Source entity's customer research
+  # ==========================================================================
+  - collection: Research_customer
+    required: true
+    primary: true
+    field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        field_set: [standard]
+      keyCustomerRefs:
+        target_collection: Domain
+        field_set: [standard]
+        # This traversal gives us customer Domain records with their references
+        references:
+          # From customer Domain → their researchers
+          industry:
+            target_collection: Research_industry
+            field_set: [standard]
+          financial:
+            target_collection: Research_financial
+            field_set: [standard]
+          product:
+            target_collection: Research_product
+            field_set: [standard]
+
+  # ==========================================================================
+  # Source entity's Domain
+  # ==========================================================================
+  - collection: Domain
+    field_set: [standard]
+    via_reference: domainBeacon
+
+  # ==========================================================================
+  # Customer Domains (with research data)
+  # ==========================================================================
+  - collection: Domain
+    alias: CustomerDomain
+    field_set: [standard]
+    via_reference: keyCustomerRefs
+
+chat_integration:
+  best_for:
+    - "Customer segment intelligence"
+    - "Key customer analysis and profiles"
+    - "Use case and value proposition research"
+
+  usage_patterns:
+    - "Starts from Research_customer (source entity)"
+    - "Traverses to customer Domain[] via keyCustomerRefs"
+    - "From each customer Domain → their research data"
+    - "Returns customer profile for source AND key customers"
+
+  parameter_examples:
+    - name: "Full customer intelligence"
+      params: {where: {domain: "example.com"}}
+
+response_structure:
+  root_object: Research_customer
+  includes_relationships: true
+  relationship_style: explicit_only
+  expected_collections:
+    - Research_customer        # Source entity's customer analysis
+    - Domain                   # Source entity's Domain
+    - CustomerDomain           # Each customer's Domain
+    - Research_industry        # Each customer's industry research
+    - Research_financial       # Each customer's financial research
+    - Research_product         # Each customer's product research
+
+documentation:
+  overview: |
+    Customer intelligence data card with key customer traversal.
+    
+    TRAVERSAL PATHS:
+    1. Research_customer → Domain (source entity info)
+    2. Research_customer → Domain[] (via keyCustomerRefs = customer entities)
+    3. CustomerDomain → Research_industry (customer's industry)
+    4. CustomerDomain → Research_financial (customer's size/revenue)
+    5. CustomerDomain → Research_product (customer's products)
+    
+    RESULT: For each customer in keyCustomers, you get:
+    - Domain metadata (title, description, url)
+    - Industry classification
+    - Financial profile (size, revenue)
+    - Product intelligence
