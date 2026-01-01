@@ -33,7 +33,22 @@ data_sources:
 # Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
 # Note: Add new collections here as they are created to ensure test isolation
 collections:
-  # Company collections
+  # ENTITY MODEL: Domain (primary entity)
+  Domain: "mac"
+  
+  # ENTITY MODEL: Research_* collections (current production)
+  Research_competitor: "mac"
+  Research_customer: "mac"
+  Research_financial: "mac"
+  Research_industry: "mac"
+  Research_journalist: "mac"
+  Research_leadership: "mac"
+  Research_partner: "mac"
+  Research_product: "mac"
+  Research_risk: "mac"
+  Research_social: "mac"
+  
+  # LEGACY: Company_* collections (backward compatibility)
   Company_source: "mac"
   Company_opportunity: "mac"
   Company_research_competitor: "mac"
@@ -46,13 +61,17 @@ collections:
   Company_research_product: "mac"
   Company_research_risk: "mac"
   Company_research_social: "mac"
+  
   # Page collections
   Page_facts: "mac"
   Page_intelligence: "mac"
   Page_source: "mac"
   Page_content: "mac"
   Page_researcher: "mac"
+  
   # Other collections
-  Domain: "mac"
   Knowledge_base: "mac"
   API_intelligence: "mac"
+  Fact_base: "mac"
+  Source: "mac"
+  Opportunity: "mac"
