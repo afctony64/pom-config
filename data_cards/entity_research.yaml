@@ -48,11 +48,10 @@ parameters:
     max_depth: 1                    # Domain → Research_* → STOP (no deeper)
     max_complexity: 150             # Allow more complexity for 10+ collections
     policies:
-      # ✅ FIXED: Use explicit reference path names, not collection names
-      # These skip reference PATHS during traversal, not collection queries
-      Domain.competitor: skip       # Skip Domain.competitor reference traversal
-      Domain.competitors: skip      # Skip Domain.competitors reference traversal
-      "*.domainBeacon": skip        # Skip any collection's domainBeacon back-reference
+      # Only block back-references that would create infinite loops
+      # DO NOT block forward references like Domain.competitor - we need that data!
+      domainBeacon: skip            # Skip Research_*.domainBeacon → Domain (prevents loops)
+      spawnedFromRef: skip          # Skip Domain.spawnedFromRef → Domain (prevents loops)
 
   # Fetch one or more entities
   limit: 10000
