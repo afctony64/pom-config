@@ -34,7 +34,7 @@ namedVectors:
     vectorizer: text2vec-weaviate
     sourceProperties:
     - fundingStageLLM
-    - fundingJourney
+    - fundingRounds
     - totalFunding
     - keyInvestors
     - valuation
@@ -174,10 +174,10 @@ properties:
   - prompt
   metadata:
     order: 111
-- name: fundingJourney
+- name: fundingRounds
   dataType:
   - text[]
-  description: Funding Journey
+  description: Funding rounds - each funding event (e.g., "Seed Round", "Series A", "Series B")
   tags:
   - financial
   - funding
@@ -187,6 +187,50 @@ properties:
   - prompt
   metadata:
     order: 201
+    parallel_anchor: true
+- name: fundingAmounts
+  dataType:
+  - text[]
+  description: Amount raised per funding round (parallel to fundingRounds) - e.g., "$5M", "$20M", "Undisclosed"
+  tags:
+  - financial
+  - funding
+  sets:
+  - array
+  - prompt
+  - standard
+  metadata:
+    parallel_to: fundingRounds
+    order: 202
+- name: fundingDates
+  dataType:
+  - text[]
+  description: Date of each funding round (parallel to fundingRounds) - e.g., "2023-06", "2024-01", "Q1 2024"
+  tags:
+  - financial
+  - funding
+  sets:
+  - array
+  - prompt
+  - standard
+  metadata:
+    parallel_to: fundingRounds
+    order: 203
+- name: fundingInvestors
+  dataType:
+  - text[]
+  description: Lead investors for each funding round (parallel to fundingRounds) - e.g., "Sequoia Capital", "a16z, Greylock"
+  tags:
+  - financial
+  - funding
+  - investors
+  sets:
+  - array
+  - prompt
+  - standard
+  metadata:
+    parallel_to: fundingRounds
+    order: 204
 - name: keyFinancialMetrics
   dataType:
   - text[]
