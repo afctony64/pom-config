@@ -41,17 +41,18 @@ target_domains:
     - Accounting Practices
 
 # Independent agents selected for this domain (10 total)
+# Order defines display sequence in reports and navigation
 researchers:
-  - industry      # Practice areas, professional classifications
-  - financial     # Fee structures, revenue models
-  - leadership    # Attorneys, partners, professional staff
-  - risk          # Compliance, malpractice, regulatory
-  - customer      # Client testimonials, case results
-  - competitor    # Local market positioning
-  - journalist    # News coverage, press mentions, media sentiment
-  - partner       # Strategic partnerships, referral networks
-  - product       # Services offered, practice capabilities
-  - social        # Social media presence, community engagement
+  - industry      # 1 - Practice areas, professional classifications
+  - customer      # 2 - Client testimonials, case results
+  - competitor    # 3 - Local market positioning
+  - product       # 4 - Services offered, practice capabilities
+  - financial     # 5 - Fee structures, revenue models
+  - leadership    # 6 - Attorneys, partners, professional staff
+  - partner       # 7 - Strategic partnerships, referral networks
+  - risk          # 8 - Compliance, malpractice, regulatory
+  - journalist    # 9 - News coverage, press mentions, media sentiment
+  - social        # 10 - Social media presence, community engagement
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DISPLAY NAMES - Used in report titles and UI
