@@ -37,22 +37,29 @@ tool_guidance:
       
       ⚠️ Company "About Us" often has basic info - only search for GAPS!
       
-      **SEARCH #1 (IF NEEDED): Leadership team overview**
+      **SEARCH #1 (IF NEEDED): Leadership team + LinkedIn profiles**
       → "{company} CEO founders leadership team linkedin"
-      (Gets executives + backgrounds in one search)
+      (Gets executives + backgrounds + LinkedIn profile URLs in one search)
       
       **SEARCH #2 (IF NEEDED): Board/advisors**
       → "{company} board of directors investors advisors"
       (Only if page content missing board info)
       
+      **EXTRACT FROM RESULTS:**
+      - Executive names + roles
+      - LinkedIn profile URLs (format: linkedin.com/in/username)
+      - Background information (previous companies, education)
+      - Tenure information
+      
       **STOP after finding:**
       - CEO/founder names + brief background
       - Key executives (CTO, CFO, etc.)
+      - LinkedIn URLs for executives (populate executiveLinkedIn array)
       - Board members (if any)
       
     recommended_searches:
-      # Combined leadership search:
-      primary: "{company_name} CEO founders leadership team executives linkedin"
+      # Combined leadership + LinkedIn search:
+      primary: "{company_name} CEO founders leadership team executives linkedin profiles"
       
       # Only if board info missing:
       board: "{company_name} board of directors investors advisors"
@@ -61,17 +68,31 @@ tool_guidance:
     priority: critical
     usage_instructions: |
       🎯 OUTPUT FORMAT REQUIREMENTS:
-      - keyExecutives: List actual names found with roles
-      - executiveBackgrounds: Brief career history per executive
+      - keyExecutives: List actual names found (e.g., "John Smith", "Jane Doe")
+      - executiveRoles: Role/title for each executive (parallel to keyExecutives)
+      - executiveBackgrounds: Brief career history per executive (parallel to keyExecutives)
+      - executiveTenure: Time at company per executive (parallel to keyExecutives)
+      - executiveLinkedIn: LinkedIn profile URL per executive (parallel to keyExecutives)
       - boardMembers: Include investor board seats
-      - Use parallel arrays for executives/roles/backgrounds
+      
+      🔗 LINKEDIN PROFILES (CRITICAL):
+      - Extract LinkedIn URLs from brave_search results for each executive
+      - Format: "https://www.linkedin.com/in/username/"
+      - Use "Not disclosed" if LinkedIn profile not found
+      - executiveLinkedIn MUST have same length as keyExecutives array
+      
+      📊 ALL PARALLEL ARRAYS MUST ALIGN:
+      keyExecutives:       ["John Smith", "Jane Doe"]
+      executiveRoles:      ["CEO", "CTO"]
+      executiveBackgrounds: ["15yr industry veteran", "Ex-Google engineer"]
+      executiveTenure:     ["5 years", "2 years"]
+      executiveLinkedIn:   ["https://linkedin.com/in/johnsmith/", "Not disclosed"]
       
       🚨 CRITICAL: NAMES ARE REQUIRED FOR PARALLEL ARRAYS
       - ONLY include executives in keyExecutives if you have an ACTUAL NAME
       - Do NOT add entries like "CFO (name not disclosed)" or "Head of Engineering (unknown)"
       - If you cannot find a person's name, DO NOT add them to the array
       - Empty arrays are VALID - better than placeholder/inferred entries
-      - The parallel arrays (executiveRoles, executiveBackgrounds, etc.) must ONLY 
-        have entries that correspond to NAMED executives in keyExecutives
+      - ALL parallel arrays must have IDENTICAL length matching keyExecutives
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
