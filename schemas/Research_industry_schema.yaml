@@ -140,28 +140,135 @@ multiTenancyConfig:
   autoTenantCreation: true
   enabled: true
 properties:
-- name: entityId
+- name: businessModelCat
   dataType:
-  - text
-  description: Unique entity identifier from source record
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  - identifier
-  - extended
+  - text[]
+  description: Primary business model - classify based on revenue structure, customer
+    type (B2B/B2C), pricing approach, and service delivery. Consider subscription
+    vs transactional, market focus, and monetization strategy. Array supports multi-segment
+    classification (ordered by similarity score, [0] is primary)
+  enum:
+  - B2B-SaaS
+  - B2B-Enterprise
+  - B2B-SMB
+  - B2C-Subscription
+  - B2C-Transactional
+  - Marketplace
+  - Usage-Based
+  - Freemium
+  - Services-Led
+  - Hybrid-Model
+  - Unknown
   tags:
-  - identity
-- name: entityName
+  - Cat
+  - business
+  - score
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: businessModelLLM
+    order: 101
+- name: businessModelLLM
   dataType:
-  - text
-  description: Entity name
-  sets:
-  - extended
-  - system
+  - text[]
+  description: Descriptive analysis of business model and revenue generation approach.
+    Include how they make money (B2B SaaS subscriptions, marketplace commissions,
+    professional services), customer acquisition model, and go-to-market strategy
+    fundamentals. Array supports multi-segment classification (ordered by similarity
+    score, [0] is primary)
   tags:
-  - identity
+  - LLM
+  - score
+  sets:
+  - prompt
+  - array
+  - standard
+  metadata:
+    order: 102
+- name: deliveryModelCat
+  dataType:
+  - text[]
+  description: Product delivery model - classify based on deployment architecture,
+    hosting approach, and service management. Consider cloud-native vs on-premise,
+    self-service vs managed, and infrastructure requirements. Array supports multi-segment
+    classification (ordered by similarity score, [0] is primary)
+  enum:
+  - Cloud-SaaS
+  - Cloud-Native
+  - On-Premise
+  - Hybrid-Cloud
+  - Private-Cloud
+  - Managed-Service
+  - API-First
+  - Edge-Distributed
+  - Unknown
+  tags:
+  - Cat
+  - score
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: deliveryModelLLM
+    order: 111
+- name: deliveryModelLLM
+  dataType:
+  - text[]
+  description: 'Describe how the entity delivers its products/services to customers
+    (2-3 sentences, ~150 words max). START with the primary delivery mechanism: Does
+    it involve physical hardware or is it software-only? Is infrastructure cloud-hosted,
+    customer-hosted, or shared? How do customers access it (browser, mobile, API,
+    physical device)? Then briefly note deployment approach and key service delivery
+    characteristics. Array supports multi-segment classification (ordered by similarity
+    score, [0] is primary)'
+  tags:
+  - LLM
+  - score
+  sets:
+  - prompt
+  - array
+  - standard
+  metadata:
+    order: 112
+- name: industrySegmentCat
+  dataType:
+  - text[]
+  description: Industry sub-segment classification - highly granular semantic categorization
+    requiring vector-based similarity matching with seed data. Hundreds of possible
+    nuanced sub-industries (e.g., DevOps vs Security vs Analytics in Software Infrastructure,
+    or Management Consulting vs Legal Services in Professional Services). Array supports
+    multi-segment classification (ordered by similarity score, [0] is primary)
+  tags:
+  - Cat
+  - benchmark
+  - score
+  sets:
+  - standard
+  - VecCat
+  metadata:
+    order: 121
+    source_llm: industrySegmentLLM
+- name: industrySegmentLLM
+  dataType:
+  - text[]
+  description: 'Describe the entity''s industry segment positioning (100-150 words).
+    Address these elements: 1. What they do - their primary activity or offering (be
+    specific, not generic) 2. Who they serve - target customers/clients and their
+    characteristics 3. How they operate - their approach or model for delivering value
+    4. Segment-defining characteristics - what places them in one segment vs adjacent
+    ones. Use specific terminology that would appear in industry publications. Avoid
+    generic terms like "provides solutions" or "offers services." Array supports multi-segment
+    classification (ordered by similarity score, [0] is primary)'
+  tags:
+  - LLM
+  - score
+  sets:
+  - prompt
+  - array
+  - standard
+  metadata:
+    order: 122
 - name: domain
   dataType:
   - text
@@ -176,56 +283,46 @@ properties:
   tags:
   - identity
   - web
-- name: seed
-  dataType:
-  - boolean
-  description: Seed data flag (true = seed/training data, false = production data)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - metadata
-  - seed
-  sets:
-  - system
-- name: dataSource
+  metadata:
+    order: 301
+- name: entityDescription
   dataType:
   - text
-  description: Source of research data
-  sets:
-  - system
-  - extended
-- name: sector
-  dataType:
-  - text[]
-  description: Broad economic sector - mutually exclusive top-level industry classification.
-    Array supports multi-segment classification (ordered by similarity score, [0]
-    is primary)
-  enum:
-  - Software
-  - Professional Services
-  - Financial Services
-  - Healthcare
-  - Manufacturing
-  - Construction
-  - Education
-  - Retail
-  - Agriculture
-  - Transportation
-  - Energy
-  - Real Estate
-  - Hospitality
-  - Media & Entertainment
-  - Telecommunications
-  - Government
-  - Nonprofit
+  description: Comprehensive entity description
   tags:
   - research
-  - score
+  - contextual
+  - extractable
   sets:
   - prompt
   metadata:
-    parallel_to: industrySegmentCat
+    order: 302
+- name: entityId
+  dataType:
+  - text
+  description: Unique entity identifier from source record
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - identifier
+  - extended
+  tags:
+  - identity
+  metadata:
+    order: 303
+- name: entityName
+  dataType:
+  - text
+  description: Entity name
+  sets:
+  - extended
+  - system
+  tags:
+  - identity
+  metadata:
+    order: 304
 - name: industry
   dataType:
   - text[]
@@ -262,42 +359,7 @@ properties:
   sets:
   - prompt
   metadata:
-    parallel_to: industrySegmentCat
-- name: industrySegmentLLM
-  dataType:
-  - text[]
-  description: 'Describe the entity''s industry segment positioning (100-150 words).
-
-
-    Address these elements:
-
-    1. What they do - their primary activity or offering (be specific, not generic)
-
-    2. Who they serve - target customers/clients and their characteristics
-
-    3. How they operate - their approach or model for delivering value
-
-    4. Segment-defining characteristics - what places them in one segment vs adjacent
-    ones
-
-
-    Use specific terminology that would appear in industry publications.
-
-    Avoid generic terms like "provides solutions" or "offers services."
-
-    Array supports multi-segment classification (ordered by similarity score, [0]
-    is primary)
-
-    '
-  tags:
-  - LLM
-  - score
-  sets:
-  - prompt
-  - array
-  - standard
-  metadata:
-    parallel_to: industrySegmentCat
+    order: 305
 - name: naicsCode
   dataType:
   - text[]
@@ -312,7 +374,7 @@ properties:
   - array
   - prompt
   metadata:
-    parallel_to: industrySegmentCat
+    order: 306
 - name: naicsDescription
   dataType:
   - text[]
@@ -325,110 +387,38 @@ properties:
   - array
   - prompt
   metadata:
-    parallel_to: industrySegmentCat
-- name: businessModelLLM
+    order: 307
+- name: sector
   dataType:
   - text[]
-  description: Descriptive analysis of business model and revenue generation approach.
-    Include how they make money (B2B SaaS subscriptions, marketplace commissions,
-    professional services), customer acquisition model, and go-to-market strategy
-    fundamentals. Array supports multi-segment classification (ordered by similarity
-    score, [0] is primary)
-  tags:
-  - LLM
-  - score
-  sets:
-  - prompt
-  - array
-  - standard
-  metadata:
-    parallel_to: industrySegmentCat
-- name: businessModelCat
-  dataType:
-  - text[]
-  description: Primary business model - classify based on revenue structure, customer
-    type (B2B/B2C), pricing approach, and service delivery. Consider subscription
-    vs transactional, market focus, and monetization strategy. Array supports multi-segment
-    classification (ordered by similarity score, [0] is primary)
-  enum:
-  - B2B-SaaS
-  - B2B-Enterprise
-  - B2B-SMB
-  - B2C-Subscription
-  - B2C-Transactional
-  - Marketplace
-  - Usage-Based
-  - Freemium
-  - Services-Led
-  - Hybrid-Model
-  - Unknown
-  tags:
-  - Cat
-  - business
-  - score
-  sets:
-  - standard
-  - EnumCat
-  metadata:
-    parallel_to: industrySegmentCat
-    source_llm: businessModelLLM
-- name: deliveryModelLLM
-  dataType:
-  - text[]
-  description: 'Describe how the entity delivers its products/services to customers
-    (2-3 sentences, ~150 words max).
-
-
-    START with the primary delivery mechanism:
-
-    - Does it involve physical hardware or is it software-only?
-
-    - Is infrastructure cloud-hosted, customer-hosted, or shared?
-
-    - How do customers access it (browser, mobile, API, physical device)?
-
-
-    Then briefly note deployment approach and key service delivery characteristics.
-
+  description: Broad economic sector - mutually exclusive top-level industry classification.
     Array supports multi-segment classification (ordered by similarity score, [0]
     is primary)
-
-    '
+  enum:
+  - Software
+  - Professional Services
+  - Financial Services
+  - Healthcare
+  - Manufacturing
+  - Construction
+  - Education
+  - Retail
+  - Agriculture
+  - Transportation
+  - Energy
+  - Real Estate
+  - Hospitality
+  - Media & Entertainment
+  - Telecommunications
+  - Government
+  - Nonprofit
   tags:
-  - LLM
+  - research
   - score
   sets:
   - prompt
-  - array
-  - standard
   metadata:
-    parallel_to: industrySegmentCat
-- name: deliveryModelCat
-  dataType:
-  - text[]
-  description: Product delivery model - classify based on deployment architecture,
-    hosting approach, and service management. Consider cloud-native vs on-premise,
-    self-service vs managed, and infrastructure requirements. Array supports multi-segment
-    classification (ordered by similarity score, [0] is primary)
-  enum:
-  - Cloud-SaaS
-  - Cloud-Native
-  - On-Premise
-  - Hybrid-Cloud
-  - Private-Cloud
-  - Managed-Service
-  - API-First
-  - Edge-Distributed
-  - Unknown
-  tags:
-  - Cat
-  - score
-  sets:
-  - standard
-  - EnumCat
-  metadata:
-    parallel_to: industrySegmentCat
-    source_llm: deliveryModelLLM
+    order: 308
 - name: valueChainPosition
   dataType:
   - text
@@ -437,56 +427,8 @@ properties:
   - research
   sets:
   - prompt
-- name: entityDescription
-  dataType:
-  - text
-  description: Comprehensive entity description
-  tags:
-  - research
-  - contextual
-  - extractable
-  sets:
-  - prompt
-- name: industrySegmentCat
-  dataType:
-  - text[]
-  description: Industry sub-segment classification - highly granular semantic categorization
-    requiring vector-based similarity matching with seed data. Hundreds of possible
-    nuanced sub-industries (e.g., DevOps vs Security vs Analytics in Software Infrastructure,
-    or Management Consulting vs Legal Services in Professional Services). Array supports
-    multi-segment classification (ordered by similarity score, [0] is primary)
-  tags:
-  - Cat
-  - benchmark
-  - score
-  sets:
-  - standard
-  - VecCat
   metadata:
-    parallel_anchor: true
-- name: processedDate
-  dataType:
-  - text
-  description: Date when this analysis was completed
-  sets:
-  - system
-  - metadata
-- name: sourceQuality
-  dataType:
-  - text
-  description: Quality assessment of source data (high/medium/low/minimal)
-  sets:
-  - system
-  - metadata
-  - extended
-- name: reviewFlag
-  dataType:
-  - text
-  description: Review flag for human validation (none/for_review/needs_verification)
-  sets:
-  - system
-  - metadata
-  - prompt
+    order: 309
 - name: analysisConfidence
   dataType:
   - text
@@ -495,6 +437,8 @@ properties:
   - system
   - metadata
   - prompt
+  metadata:
+    order: 901
 - name: citations
   dataType:
   - text[]
@@ -506,6 +450,57 @@ properties:
   - system
   - metadata
   - extended
+  metadata:
+    order: 902
+- name: classificationThreshold
+  description: Classification threshold
+  dataType:
+  - number
+  sets:
+  - system
+  metadata:
+    order: 903
+- name: createdAt
+  dataType:
+  - date
+  description: Record creation timestamp
+  sets:
+  - system
+  - audit
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  metadata:
+    order: 904
+- name: dataSource
+  dataType:
+  - text
+  description: Source of research data
+  sets:
+  - system
+  - extended
+  metadata:
+    order: 905
+- name: matchedSeeds
+  description: Matched seed names
+  dataType:
+  - text[]
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  metadata:
+    order: 906
+- name: processedDate
+  dataType:
+  - text
+  description: Date when this analysis was completed
+  sets:
+  - system
+  - metadata
+  metadata:
+    order: 907
 - name: reasoning
   dataType:
   - text[]
@@ -516,41 +511,8 @@ properties:
   sets:
   - system
   - metadata
-- name: updated_at
-  description: Record update timestamp
-  dataType:
-  - date
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-- name: classificationThreshold
-  description: Classification threshold
-  dataType:
-  - number
-  sets:
-  - system
-- name: matchedSeeds
-  description: Matched seed names
-  dataType:
-  - text[]
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-- name: segmentSimilarities
-  description: Segment similarity scores
-  dataType:
-  - number[]
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - score
+  metadata:
+    order: 908
 - name: references
   description: Cached reference UUIDs
   dataType:
@@ -566,16 +528,55 @@ properties:
     dataType:
     - uuid[]
     description: Domain source UUIDs
-- name: createdAt
+  metadata:
+    order: 909
+- name: reviewFlag
   dataType:
-  - date
-  description: Record creation timestamp
+  - text
+  description: Review flag for human validation (none/for_review/needs_verification)
   sets:
   - system
-  - audit
+  - metadata
+  - prompt
+  metadata:
+    order: 910
+- name: seed
+  dataType:
+  - boolean
+  description: Seed data flag (true = seed/training data, false = production data)
   moduleConfig:
     text2vec-weaviate:
       skip: true
+  tags:
+  - metadata
+  - seed
+  sets:
+  - system
+  metadata:
+    order: 911
+- name: segmentSimilarities
+  description: Segment similarity scores
+  dataType:
+  - number[]
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - score
+  metadata:
+    order: 912
+- name: sourceQuality
+  dataType:
+  - text
+  description: Quality assessment of source data (high/medium/low/minimal)
+  sets:
+  - system
+  - metadata
+  - extended
+  metadata:
+    order: 913
 - name: updatedAt
   dataType:
   - date
@@ -586,6 +587,19 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
+  metadata:
+    order: 914
+- name: updated_at
+  description: Record update timestamp
+  dataType:
+  - date
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  metadata:
+    order: 915
 references:
 - name: domainBeacon
   target_collection: Domain
