@@ -195,7 +195,7 @@ properties:
   dataType:
   - text[]
   description: Each competitor's primary domain (parallel to keyCompetitors array).
-    Populated during spawn process or by researcher if known.
+    Search for official website domain for each competitor.
   parallel_to: keyCompetitors
   tags:
   - research
@@ -203,7 +203,7 @@ properties:
   - array
   - standard
   - spawn
-  - prompt
+  - post
   metadata:
     order: 203
 - name: competitorGapsVs
@@ -265,7 +265,6 @@ properties:
   sets:
   - array
   - standard
-  - spawn
   - prompt
   metadata:
     order: 207
@@ -285,9 +284,8 @@ properties:
 - name: keyCompetitorEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyCompetitor from page facts search
-    (parallel to keyCompetitors array). Stores the factual basis for classifications
-    and extracted values.
+  description: Evidence/context found for each keyCompetitor from page facts and web search.
+    Summarize factual basis for classifications and extracted values.
   parallel_to: keyCompetitors
   moduleConfig:
     text2vec-weaviate:
@@ -299,6 +297,7 @@ properties:
   - array
   - system
   - extended
+  - post
   metadata:
     order: 209
 - name: marketStrengthScore
@@ -336,7 +335,7 @@ properties:
   - research
   sets:
   - array
-  - standard
+  - extended
   - prompt
   metadata:
     order: 301
@@ -384,7 +383,7 @@ properties:
   - research
   sets:
   - array
-  - standard
+  - extended
   - prompt
   metadata:
     order: 305
@@ -471,7 +470,7 @@ properties:
   - research
   sets:
   - array
-  - extended
+  - standard
   - prompt
   metadata:
     order: 312
@@ -616,10 +615,6 @@ properties:
     dataType:
     - uuid[]
     description: Domain source UUIDs
-  - name: sourceEntity
-    dataType:
-    - uuid[]
-    description: Source entity UUIDs
   metadata:
     order: 910
 - name: reviewFlag
@@ -708,20 +703,14 @@ properties:
   metadata:
     order: 915
 references:
-- name: sourceEntity
-  target_collection: Domain
-  description: Source entity reference
 - name: domainBeacon
   target_collection: Domain
-  uuid_source_field: uuid
-  auto_flatten: false
-  description: Reference to the source Domain record for beacon traversal (uses research
-    record's own UUID)
+  uuid_source_field: domain
+  description: Reference to source Domain record (UUID3 from domain field)
 - name: keyCompetitorRefs
-  uuid_source_field: manual
+  uuid_source_field: competitorDomain
   target_collection: Domain
-  description: References to spawned competitor Domain records (parallel to keyCompetitors
-    array, populated by entity spawn post-processor)
+  description: References to competitor Domain records (UUID3 from competitorDomain array)
 group: research
 weaviate_instance: cloud
 collection_name: Research_competitor
