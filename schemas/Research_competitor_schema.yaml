@@ -280,7 +280,7 @@ properties:
   tags:
   - score
   metadata:
-    order: 208
+    order: 401
 - name: keyCompetitorEvidence
   dataType:
   - text[]
@@ -311,7 +311,7 @@ properties:
   tags:
   - score
   metadata:
-    order: 210
+    order: 402
 - name: threatLevelScore
   dataType:
   - number[]
@@ -324,7 +324,7 @@ properties:
   tags:
   - score
   metadata:
-    order: 211
+    order: 403
 - name: competitiveAdvantages
   dataType:
   - text[]
@@ -413,7 +413,7 @@ properties:
   tags:
   - score
   metadata:
-    order: 307
+    order: 411
 - name: homeMarketPositionScore
   dataType:
   - number
@@ -425,7 +425,7 @@ properties:
   tags:
   - score
   metadata:
-    order: 308
+    order: 412
 - name: homeMarketStrengthScore
   dataType:
   - number
@@ -437,7 +437,7 @@ properties:
   tags:
   - score
   metadata:
-    order: 309
+    order: 413
 - name: marketDynamics
   dataType:
   - text
@@ -503,7 +503,6 @@ properties:
       skip: true
   sets:
   - system
-  - extended
   - prompt
   metadata:
     order: 901
@@ -517,7 +516,6 @@ properties:
   sets:
   - array
   - system
-  - extended
   metadata:
     order: 902
 - name: createdAt
@@ -558,7 +556,6 @@ properties:
   description: Entity name
   sets:
   - system
-  - extended
   tags:
   - identity
   metadata:
@@ -636,7 +633,6 @@ properties:
       skip: true
   sets:
   - system
-  - extended
   - prompt
   metadata:
     order: 911
@@ -672,7 +668,6 @@ properties:
       skip: true
   sets:
   - system
-  - extended
   tags:
   - score
   metadata:
