@@ -207,7 +207,6 @@ properties:
   - array
   - standard
   metadata:
-    parallel_to: productTypeCat
     order: 122
 - name: productTypeCat
   dataType:
@@ -225,7 +224,6 @@ properties:
   - standard
   - VecCat
   metadata:
-    parallel_anchor: true
     order: 121
 - name: productTypeSimilarities
   dataType:
@@ -242,7 +240,6 @@ properties:
   sets:
   - system
   metadata:
-    parallel_to: productTypeCat
     order: 916
 - name: productTypeMatchedSeeds
   dataType:
@@ -257,7 +254,6 @@ properties:
   sets:
   - system
   metadata:
-    parallel_to: productTypeCat
     order: 917
 - name: productTypeThreshold
   dataType:
@@ -295,7 +291,6 @@ properties:
   - standard
   - EnumCat
   metadata:
-    parallel_to: productTypeCat
     source_llm: productTypeLLM
     order: 123
 - name: technologyStackLLM
@@ -311,7 +306,6 @@ properties:
   - array
   - standard
   metadata:
-    parallel_to: productTypeCat
     order: 125
 - name: technologyStackCat
   dataType:
