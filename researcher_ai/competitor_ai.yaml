@@ -139,5 +139,10 @@ entity_spawn:
   enabled: true  # Schema defines fields via sets: [spawn]
 
 # Post-execution tools: Run automatically after competitor researcher completes
+# Priority-ordered: lower number runs first
 post_execution_tools:
-  - entity_spawn  # Creates Domain records for competitors and populates keyCompetitorRefs
+  - parallel_array_enricher  # Priority 10: Fill post fields (keyCompetitorEvidence)
+  - entity_spawn             # Priority 20: Create Domain records for competitors
+  - enum_cat                 # Priority 30: Classify EnumCat fields (competitorAnalysisCat, etc.)
+  - vec_cat                  # Priority 40: Classify VecCat fields (if any)
+  # References are now generated automatically by schema_coercer on upsert
