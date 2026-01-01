@@ -2,50 +2,83 @@ type: research
 class: Research_social
 id: Research_social
 name: Research Social
-description: |
-  📚 RESEARCH REPOSITORY: Social Media Intelligence
+description: '📚 RESEARCH REPOSITORY: Social Media Intelligence
+
 
   RESEARCHER: Social Media Intelligence Analyst (see Research_social for researcher identity)
 
+
   KNOWLEDGE TYPE: Dual-layer social intelligence combining platform presence and content strategy
 
+
   LAYER 1 - PLATFORM PRESENCE:
+
   - Technical social implementation (accounts, auth, sharing)
+
   - Platform coverage and engagement metrics
+
   - Community features (Discord, forums, Slack)
 
+
   LAYER 2 - SOCIAL POSITION:
+
   - Content strategy and messaging themes
+
   - Community building approach
+
   - Social proof and brand positioning
 
-  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's complete social intelligence
+
+  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity''s complete social intelligence
+
   - Tenant Isolation: Complete data separation per entity
+
   - Tenant Activation: Automatic tenant creation and activation
+
   - Scalability: Supports unlimited tenants with efficient partitioning
 
+
   REPOSITORY CONTENTS:
-  - Platform Presence Analysis: What platforms they're on and how they implement them
+
+  - Platform Presence Analysis: What platforms they''re on and how they implement them
+
   - Social Strategy Analysis: How they use social in their go-to-market
+
   - Community Engagement: How they build and nurture community
+
   - Categorical Classifications: Machine-assigned categories for social attributes
+
   - Quality Metadata: Processing dates, source quality, review flags, confidence levels
+
   - Evidence Links: References to supporting data and source materials
 
+
   DATA SOURCES:
+
   - Domain enricher data (platform presence, technical implementation)
+
   - Page content data (content strategy, messaging, community approach)
+
   - AI-synthesized analysis combining both layers
 
+
   QUALITY STANDARDS:
+
   - Confidence Scoring: High, Medium, Low, Inferred, Web-verified
+
   - Evidence-Based Assessment: Classifications backed by concrete evidence
+
   - Source Tracking: Links to originating Domain records
-  - Conservative Calibration: Prefer 'unknown' over incorrect data
+
+  - Conservative Calibration: Prefer ''unknown'' over incorrect data
+
 
   INTEGRATION: Provides social intelligence to support holistic entity analysis
 
+
   VECTOR SEARCH CAPABILITIES: Named vectors for similarity search across platform, content, and community dimensions
+
+  '
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -133,6 +166,8 @@ properties:
       skip: true
   sets:
   - system
+  metadata:
+    order: 915
 - name: entityName
   dataType:
   - text
@@ -181,6 +216,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 112
 - name: socialPlatforms
   dataType:
   - text[]
@@ -191,6 +228,8 @@ properties:
   - array
   - prompt
   - extended
+  metadata:
+    order: 201
 - name: socialEngagementScore
   dataType:
   - int
@@ -200,6 +239,8 @@ properties:
   - score
   sets:
   - prompt
+  metadata:
+    order: 113
 - name: hasSocialAuth
   dataType:
   - boolean
@@ -208,6 +249,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 114
 - name: hasSocialSharing
   dataType:
   - boolean
@@ -217,6 +260,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 115
 - name: hasCommunityFeatures
   dataType:
   - boolean
@@ -226,6 +271,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 116
 - name: socialPresenceTier
   dataType:
   - text
@@ -235,6 +282,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 117
 - name: contentThemes
   dataType:
   - text[]
@@ -244,6 +293,8 @@ properties:
   sets:
   - array
   - prompt
+  metadata:
+    order: 202
 - name: socialProofIndicators
   dataType:
   - text[]
@@ -253,6 +304,8 @@ properties:
   sets:
   - array
   - prompt
+  metadata:
+    order: 203
 - name: platformPresenceLLM
   dataType:
   - text
@@ -266,6 +319,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 122
 - name: socialContentLLM
   dataType:
   - text
@@ -279,33 +334,45 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 124
 - name: communityEngagementLLM
   dataType:
   - text
-  description: |
-    Describe community engagement and relationship building (2 sentences, ~75 words max).
+  description: 'Describe community engagement and relationship building (2 sentences, ~75 words max).
+
 
     START with overall engagement approach:
+
     - How actively does the entity engage with its community?
 
+
     Then list primary channels and note interaction level (two-way vs broadcast-only).
+
+    '
   tags:
   - LLM
   sets:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 126
 - name: socialMaturity
   dataType:
   - text
-  description: |
-    AI synthesis: Overall social media maturity assessment.
+  description: 'AI synthesis: Overall social media maturity assessment.
+
     Examples: "Strategic community builder", "Tactical presence", "Early stage"
+
+    '
   tags:
   - research
   sets:
   - extended
   - prompt
+  metadata:
+    order: 111
 - name: dataSource
   dataType:
   - text
@@ -335,6 +402,8 @@ properties:
   - standard
   - EnumCat
   - extended
+  metadata:
+    order: 121
 - name: socialContentCat
   dataType:
   - text
@@ -358,6 +427,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 123
 - name: communityEngagementCat
   dataType:
   - text
@@ -379,6 +450,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 125
 - name: processedDate
   dataType:
   - text

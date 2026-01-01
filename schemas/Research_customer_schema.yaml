@@ -90,6 +90,7 @@ properties:
   - text
   description: Entity name
   sets:
+  - extended
   - system
   tags:
   - identity
@@ -106,7 +107,7 @@ properties:
   - system
   - metadata
   metadata:
-    order: 912
+    order: 911
 - name: domain
   dataType:
   - text
@@ -115,6 +116,7 @@ properties:
     text2vec-weaviate:
       skip: true
   sets:
+  - extended
   - system
   - identifier
   tags:
@@ -128,6 +130,7 @@ properties:
   description: Source of research data
   sets:
   - system
+  - extended
   metadata:
     order: 904
 - name: keyCustomers
@@ -141,7 +144,6 @@ properties:
   - customer
   - research
   sets:
-  - standard
   - prompt
   - array
   metadata:
@@ -197,7 +199,6 @@ properties:
   tags:
   - research
   sets:
-  - standard
   - prompt
   - array
   metadata:
@@ -214,7 +215,6 @@ properties:
   tags:
   - research
   sets:
-  - standard
   - prompt
   - array
   metadata:
@@ -232,7 +232,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 219
+    order: 908
 - name: useCaseLLM
   dataType:
   - text[]
@@ -258,7 +258,7 @@ properties:
   - prompt
   - array
   metadata:
-    order: 211
+    order: 141
 - name: valueProposition
   dataType:
   - text
@@ -291,11 +291,10 @@ properties:
   tags:
   - research
   sets:
-  - standard
   - prompt
   - array
   metadata:
-    order: 210
+    order: 142
 - name: growthOpportunity
   dataType:
   - text
@@ -378,7 +377,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 126
+    order: 123
 - name: useCaseCat
   dataType:
   - text[]
@@ -411,7 +410,7 @@ properties:
   - system
   metadata:
     parallel_to: useCaseCat
-    order: 917
+    order: 134
 - name: useCaseMatchedSeeds
   dataType:
   - text[]
@@ -426,7 +425,7 @@ properties:
   - system
   metadata:
     parallel_to: useCaseCat
-    order: 918
+    order: 135
 - name: useCaseThreshold
   dataType:
   - number
@@ -440,7 +439,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 919
+    order: 136
 - name: customerRegionCat
   dataType:
   - text
@@ -464,7 +463,7 @@ properties:
   - standard
   - EnumCat
   metadata:
-    order: 123
+    order: 124
 - name: customerSector
   dataType:
   - text
@@ -496,7 +495,7 @@ properties:
   - prompt
   - standard
   metadata:
-    order: 124
+    order: 125
 - name: customerIndustry
   dataType:
   - text
@@ -534,7 +533,7 @@ properties:
   - prompt
   - standard
   metadata:
-    order: 125
+    order: 126
 - name: customerIndustrySegmentLLM
   dataType:
   - text
@@ -550,7 +549,7 @@ properties:
   - extended
   - standard
   metadata:
-    order: 128
+    order: 127
 - name: customerIndustrySegmentCat
   dataType:
   - text
@@ -568,7 +567,7 @@ properties:
   metadata:
     classifier_collection: Research_industry
     classifier_vector: industrySegmentVector
-    order: 127
+    order: 128
 - name: valueDomain
   dataType:
   - text[]
@@ -719,7 +718,7 @@ properties:
   - standard
   - extended
   metadata:
-    order: 207
+    order: 206
 - name: keyCustomerIndustrySegmentCat
   dataType:
   - text[]
@@ -742,43 +741,61 @@ properties:
     classifier_collection: Research_industry
     classifier_vector: industrySegmentVector
     source_llm: keyCustomerIndustrySegmentLLM
-    order: 206
+    order: 207
 - name: sourceQuality
   dataType:
   - text
-  description: |
-    Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+
     - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
     - "medium": Some pageData available but limited relevance or coverage
+
     - "low": Minimal pageData, relying on source overview text only
+
     - "minimal": No pageData, only basic entity metadata available
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
   sets:
+  - extended
+  - metadata
   - system
   tags:
   - metadata
   - score
   metadata:
-    order: 913
+    order: 912
 - name: analysisConfidence
   dataType:
   - text
-  description: |
-    Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+
     - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
+
     - "web_verified": Confirmed through web_search with multiple external sources
+
     - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
     - "medium": Based on indirect evidence or partial information
+
     - "low": Limited information, educated guesses
+
     - "inferred": No direct evidence, purely analytical inference
 
-    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge" when you have strong training knowledge about well-known entities.
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge"
+    when you have strong training knowledge about well-known entities.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
   sets:
+  - extended
+  - metadata
   - system
   - prompt
   tags:
@@ -788,23 +805,30 @@ properties:
 - name: reviewFlag
   dataType:
   - text
-  description: |
-    Review requirement [none, for_review, needs_verification]:
+  description: 'Review requirement [none, for_review, needs_verification]:
+
     - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
+
     - "for_review": Medium confidence with some gaps, human validation helpful
+
     - "needs_verification": Low confidence or pure inference, human review required
 
+
     If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
   sets:
+  - extended
+  - metadata
   - system
   - prompt
   tags:
   - review
   metadata:
-    order: 911
+    order: 910
 - name: processedDate
   dataType:
   - text
@@ -813,13 +837,15 @@ properties:
     text2vec-weaviate:
       skip: true
   sets:
+  - extended
+  - metadata
   - system
   tags:
   - metadata
   - research
   - timestamp
   metadata:
-    order: 908
+    order: 909
 - name: citations
   dataType:
   - text[]
@@ -829,6 +855,8 @@ properties:
       skip: true
   sets:
   - system
+  - metadata
+  - extended
   metadata:
     order: 902
 - name: reasoning
@@ -842,7 +870,7 @@ properties:
   - system
   - metadata
   metadata:
-    order: 909
+    order: 916
 - name: accountSizeScore
   dataType:
   - number[]
@@ -886,7 +914,7 @@ properties:
     text2vec-weaviate:
       skip: true
   metadata:
-    order: 915
+    order: 914
 - name: uuid
   description: UUID field
   dataType:
@@ -897,13 +925,14 @@ properties:
     text2vec-weaviate:
       skip: true
   metadata:
-    order: 916
+    order: 917
 - name: references
   description: Cached reference UUIDs
   dataType:
   - object
   sets:
   - system
+  - extended
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -913,7 +942,7 @@ properties:
     - uuid[]
     description: Domain source UUIDs
   metadata:
-    order: 910
+    order: 915
 - name: createdAt
   dataType:
   - date
@@ -937,7 +966,7 @@ properties:
     text2vec-weaviate:
       skip: true
   metadata:
-    order: 914
+    order: 913
 references:
 - name: domainBeacon
   target_collection: Domain

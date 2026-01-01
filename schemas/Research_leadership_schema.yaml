@@ -136,6 +136,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 122
 - name: ceoName
   dataType:
   - text
@@ -148,6 +150,8 @@ properties:
   - extended
   - prompt
   - standard
+  metadata:
+    order: 111
 - name: ceoBackground
   dataType:
   - text
@@ -157,6 +161,8 @@ properties:
   sets:
   - prompt
   - standard
+  metadata:
+    order: 112
 - name: ceoTenure
   dataType:
   - text
@@ -166,6 +172,8 @@ properties:
   sets:
   - prompt
   - standard
+  metadata:
+    order: 113
 - name: founderStatus
   dataType:
   - text
@@ -175,6 +183,8 @@ properties:
   sets:
   - prompt
   - standard
+  metadata:
+    order: 114
 - name: executiveTeamSize
   dataType:
   - number
@@ -184,6 +194,8 @@ properties:
   sets:
   - prompt
   - standard
+  metadata:
+    order: 115
 - name: executiveExperienceLLM
   dataType:
   - text
@@ -195,6 +207,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 124
 - name: keyExecutives
   dataType:
   - text[]
@@ -207,6 +221,8 @@ properties:
   - array
   - prompt
   - standard
+  metadata:
+    order: 201
 - name: keyExecutivesIds
   dataType:
   - text[]
@@ -215,6 +231,8 @@ properties:
   tags: []
   sets:
   - system
+  metadata:
+    order: 915
 - name: keyExecutiveEvidence
   dataType:
   - text[]
@@ -227,6 +245,8 @@ properties:
   tags: []
   sets:
   - system
+  metadata:
+    order: 916
 - name: executiveBackgrounds
   dataType:
   - text[]
@@ -242,6 +262,8 @@ properties:
   - array
   - prompt
   - standard
+  metadata:
+    order: 203
 - name: executiveRoles
   dataType:
   - text[]
@@ -256,6 +278,8 @@ properties:
   - array
   - prompt
   - standard
+  metadata:
+    order: 202
 - name: executiveTenure
   dataType:
   - text[]
@@ -270,6 +294,8 @@ properties:
   - array
   - prompt
   - standard
+  metadata:
+    order: 204
 - name: executiveLinkedIn
   dataType:
   - text[]
@@ -283,6 +309,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 205
 - name: leadershipStyleLLM
   dataType:
   - text
@@ -294,6 +322,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 126
 - name: boardComposition
   dataType:
   - text
@@ -305,6 +335,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 127
 - name: advisors
   dataType:
   - text[]
@@ -317,7 +349,7 @@ properties:
   - array
   - prompt
   metadata:
-    order: 212
+    order: 206
 - name: dataSource
   dataType:
   - text
@@ -349,6 +381,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 121
 - name: executiveExperienceCat
   dataType:
   - text
@@ -371,6 +405,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 123
 - name: leadershipStyleCat
   dataType:
   - text
@@ -394,6 +430,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 125
 - name: processedDate
   dataType:
   - text
@@ -405,12 +443,17 @@ properties:
 - name: sourceQuality
   dataType:
   - text
-  description: |
-    Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+
     - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
     - "medium": Some pageData available but limited relevance or coverage
+
     - "low": Minimal pageData, relying on source overview text only
+
     - "minimal": No pageData, only basic entity metadata available
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -423,16 +466,25 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: |
-    Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+
     - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
+
     - "web_verified": Confirmed through web_search with multiple external sources
+
     - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
     - "medium": Based on indirect evidence or partial information
+
     - "low": Limited information, educated guesses
+
     - "inferred": No direct evidence, purely analytical inference
 
-    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge" when you have strong training knowledge about well-known entities.
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge"
+    when you have strong training knowledge about well-known entities.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -444,13 +496,18 @@ properties:
 - name: reviewFlag
   dataType:
   - text
-  description: |
-    Review requirement [none, for_review, needs_verification]:
+  description: 'Review requirement [none, for_review, needs_verification]:
+
     - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
+
     - "for_review": Medium confidence with some gaps, human validation helpful
+
     - "needs_verification": Low confidence or pure inference, human review required
 
+
     If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -504,6 +561,8 @@ properties:
       skip: true
   tags:
   - score
+  metadata:
+    order: 401
 - name: executionTrackRecordScore
   description: Execution track record scores
   dataType:
@@ -516,6 +575,8 @@ properties:
       skip: true
   tags:
   - score
+  metadata:
+    order: 403
 - name: homeLeadershipTeamStrength
   description: Leadership team strength
   dataType:
@@ -526,6 +587,8 @@ properties:
   - standard
   tags:
   - research
+  metadata:
+    order: 116
 - name: industryExperienceScore
   description: Industry experience scores
   dataType:
@@ -538,6 +601,8 @@ properties:
       skip: true
   tags:
   - score
+  metadata:
+    order: 402
 - name: references
   description: Cached reference UUIDs
   dataType:

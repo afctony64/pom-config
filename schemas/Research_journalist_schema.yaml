@@ -142,6 +142,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 115
 - name: mediaOutlets
   dataType:
   - text[]
@@ -154,7 +156,7 @@ properties:
   - array
   - prompt
   metadata:
-    order: 203
+    order: 201
 - name: pressReleaseCount
   dataType:
   - int
@@ -163,6 +165,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 124
 - name: newsArticleCount
   dataType:
   - int
@@ -171,6 +175,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 125
 - name: latestNewsDate
   dataType:
   - text
@@ -182,6 +188,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 121
 - name: recentNewsCount
   dataType:
   - int
@@ -193,6 +201,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 122
 - name: newsRecency
   dataType:
   - text
@@ -204,6 +214,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 123
 - name: mediaCoverageScore
   dataType:
   - int
@@ -213,6 +225,8 @@ properties:
   - score
   sets:
   - prompt
+  metadata:
+    order: 116
 - name: hasMediaKit
   dataType:
   - boolean
@@ -222,6 +236,8 @@ properties:
   sets:
   - prompt
   - extended
+  metadata:
+    order: 117
 - name: hasNewsroom
   dataType:
   - boolean
@@ -230,6 +246,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 118
 - name: mediaSentiment
   dataType:
   - text
@@ -239,7 +257,7 @@ properties:
   sets:
   - prompt
   metadata:
-    order: 113
+    order: 111
 - name: mediaTypeLLM
   dataType:
   - text
@@ -252,6 +270,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 132
 - name: coverageLevelLLM
   dataType:
   - text
@@ -264,6 +284,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 134
 - name: mediaSentimentLLM
   dataType:
   - text
@@ -277,13 +299,18 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 136
 - name: mediaPerception
   dataType:
   - text
-  description: |
-    AI synthesis: How the entity is portrayed in external media coverage.
+  description: 'AI synthesis: How the entity is portrayed in external media coverage.
+
     Examples: "Emerging leader in AI space", "Struggling to gain traction", "Solid enterprise player"
+
     Useful to: Customer (trust signals), Risk (reputation), Competitor (positioning)
+
+    '
   tags:
   - media
   - perception
@@ -292,13 +319,18 @@ properties:
   - extended
   - prompt
   - standard
+  metadata:
+    order: 112
 - name: newsMomentum
   dataType:
   - text
-  description: |
-    AI synthesis: Trajectory of media coverage over time.
+  description: 'AI synthesis: Trajectory of media coverage over time.
+
     Examples: "Accelerating coverage (3x in 6mo)", "Declining visibility", "Steady drumbeat"
+
     Useful to: Financial (growth signals), Industry (market traction), Competitor (threat level)
+
+    '
   tags:
   - media
   - momentum
@@ -306,13 +338,18 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 113
 - name: credibilitySignals
   dataType:
   - text
-  description: |
-    AI synthesis: What coverage reveals about entity legitimacy and maturity.
+  description: 'AI synthesis: What coverage reveals about entity legitimacy and maturity.
+
     Examples: "Tier-1 media validation", "Self-promotion only", "Industry recognition evident"
+
     Useful to: Risk (legitimacy), Customer (trust), Financial (market validation)
+
+    '
   tags:
   - credibility
   - media
@@ -320,6 +357,8 @@ properties:
   sets:
   - extended
   - prompt
+  metadata:
+    order: 114
 - name: dataSource
   dataType:
   - text
@@ -349,6 +388,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 131
 - name: coverageLevelCat
   dataType:
   - text
@@ -368,6 +409,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 133
 - name: mediaSentimentCat
   dataType:
   - text
@@ -389,6 +432,8 @@ properties:
   sets:
   - standard
   - EnumCat
+  metadata:
+    order: 135
 - name: processedDate
   dataType:
   - text
@@ -400,12 +445,17 @@ properties:
 - name: sourceQuality
   dataType:
   - text
-  description: |
-    Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+
     - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
     - "medium": Some pageData available but limited relevance or coverage
+
     - "low": Minimal pageData, relying on source overview text only
+
     - "minimal": No pageData, only basic entity metadata available
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -419,13 +469,18 @@ properties:
 - name: reviewFlag
   dataType:
   - text
-  description: |
-    Review requirement [none, for_review, needs_verification]:
+  description: 'Review requirement [none, for_review, needs_verification]:
+
     - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
+
     - "for_review": Medium confidence with some gaps, human validation helpful
+
     - "needs_verification": Low confidence or pure inference, human review required
 
+
     If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -437,16 +492,25 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: |
-    Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+
     - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
+
     - "web_verified": Confirmed through web_search with multiple external sources
+
     - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
     - "medium": Based on indirect evidence or partial information
+
     - "low": Limited information, educated guesses
+
     - "inferred": No direct evidence, purely analytical inference
 
-    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge" when you have strong training knowledge about well-known entities.
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge"
+    when you have strong training knowledge about well-known entities.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true

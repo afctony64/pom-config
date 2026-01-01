@@ -148,6 +148,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 131
 - name: financialHealth
   dataType:
   - text
@@ -160,7 +162,7 @@ properties:
   - extended
   - prompt
   metadata:
-    order: 114
+    order: 112
 - name: revenueProfile
   dataType:
   - text
@@ -171,7 +173,7 @@ properties:
   - standard
   - prompt
   metadata:
-    order: 112
+    order: 111
 - name: fundingJourney
   dataType:
   - text[]
@@ -183,6 +185,8 @@ properties:
   sets:
   - array
   - prompt
+  metadata:
+    order: 201
 - name: keyFinancialMetrics
   dataType:
   - text[]
@@ -194,6 +198,8 @@ properties:
   sets:
   - array
   - prompt
+  metadata:
+    order: 202
 - name: growthVelocityLLM
   dataType:
   - text
@@ -205,6 +211,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 126
 - name: profitabilityProfileLLM
   dataType:
   - text
@@ -216,6 +224,8 @@ properties:
   - prompt
   - extended
   - standard
+  metadata:
+    order: 128
 - name: revenueSizeLLM
   dataType:
   - text
@@ -228,7 +238,7 @@ properties:
   - extended
   - standard
   metadata:
-    order: 131
+    order: 122
 - name: edgarCoreMetrics
   dataType:
   - text
@@ -239,6 +249,8 @@ properties:
   sets:
   - system
   - metadata
+  metadata:
+    order: 301
 - name: financialRatios
   dataType:
   - text
@@ -250,6 +262,8 @@ properties:
   sets:
   - system
   - metadata
+  metadata:
+    order: 303
 - name: edgarMetadata
   dataType:
   - text
@@ -260,6 +274,8 @@ properties:
   sets:
   - system
   - metadata
+  metadata:
+    order: 302
 - name: fundingStageLLM
   dataType:
   - text
@@ -271,7 +287,7 @@ properties:
   - extended
   - standard
   metadata:
-    order: 133
+    order: 124
 - name: revenues
   dataType:
   - text
@@ -280,6 +296,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 132
 - name: revenueGrowthRate
   dataType:
   - text
@@ -288,6 +306,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 133
 - name: totalFunding
   dataType:
   - text
@@ -296,6 +316,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 134
 - name: keyInvestors
   dataType:
   - text[]
@@ -308,6 +330,8 @@ properties:
   - array
   - prompt
   - extended
+  metadata:
+    order: 203
 - name: valuation
   dataType:
   - text
@@ -316,6 +340,8 @@ properties:
   - research
   sets:
   - prompt
+  metadata:
+    order: 135
 - name: dataSource
   dataType:
   - text
@@ -386,23 +412,37 @@ properties:
 - name: growthVelocityCat
   dataType:
   - text
-  description: |
-    Revenue growth rate classification. Requires EXPLICIT growth metrics - do not guess.
+  description: 'Revenue growth rate classification. Requires EXPLICIT growth metrics - do not guess.
+
 
     CLASSIFICATION RULES (explicit evidence required):
+
     - Hyper-Growth: Stated >100% YoY growth, explicit "hypergrowth" claims
+
     - Fast-Growth: Stated 50-100% YoY growth, explicit rapid expansion metrics
+
     - Strong-Growth: Stated 25-50% YoY growth, explicit consistent expansion
+
     - Steady-Growth: Stated 10-25% YoY growth, explicit market share gains
+
     - Moderate-Growth: Stated 5-10% YoY growth, explicit incremental growth
+
     - Slow-Growth: Stated <5% YoY growth, explicit maintenance mode
+
     - Flat: Explicit stable/flat revenue, stated no growth
+
     - Declining: Explicit revenue decline, stated contraction
 
+
     USE Unknown WHEN:
+
     - No explicit growth rate or trend stated
+
     - Funding alone is NOT evidence of growth rate
+
     - Product launches alone are NOT evidence of revenue growth
+
+    '
   enum:
   - Hyper-Growth
   - Fast-Growth
@@ -422,25 +462,39 @@ properties:
   - extended
   metadata:
     source_llm: growthVelocityLLM
+    order: 125
 - name: profitabilityProfileCat
   dataType:
   - text
-  description: |
-    Profitability status classification. Requires EXPLICIT evidence - do not guess.
+  description: 'Profitability status classification. Requires EXPLICIT evidence - do not guess.
+
 
     CLASSIFICATION RULES (explicit evidence required):
+
     - Highly-Profitable: Stated profit margins >20%, "highly profitable", strong positive EBITDA
+
     - Profitable: Explicit profitability claims, positive cash flow statements, "profitable"
+
     - Break-Even: Stated "break-even", revenue equals costs, transition mentions
+
     - Growth-Investment: Explicit "reinvesting for growth", "prioritizing growth over profit"
+
     - Early-Stage-Burn: Explicit "burn rate", "runway" discussions, stated losses
+
     - Path-To-Profitability: Explicit "path to profitability", stated improving unit economics
+
     - Distressed: Explicit financial difficulties, restructuring announcements, going concern
 
+
     USE Unknown WHEN:
+
     - No explicit profitability/loss statements found
+
     - Only funding information without profitability context
+
     - Entity age alone is NOT evidence of profitability
+
+    '
   enum:
   - Highly-Profitable
   - Profitable
@@ -459,6 +513,7 @@ properties:
   - extended
   metadata:
     source_llm: profitabilityProfileLLM
+    order: 127
 - name: processedDate
   dataType:
   - text
@@ -470,12 +525,17 @@ properties:
 - name: sourceQuality
   dataType:
   - text
-  description: |
-    Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
+
     - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
+
     - "medium": Some pageData available but limited relevance or coverage
+
     - "low": Minimal pageData, relying on source overview text only
+
     - "minimal": No pageData, only basic entity metadata available
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -489,16 +549,25 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: |
-    Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
+
     - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
+
     - "web_verified": Confirmed through web_search with multiple external sources
+
     - "llm_knowledge": Strong LLM training knowledge about well-known entities
+
     - "medium": Based on indirect evidence or partial information
+
     - "low": Limited information, educated guesses
+
     - "inferred": No direct evidence, purely analytical inference
 
-    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge" when you have strong training knowledge about well-known entities.
+
+    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge"
+    when you have strong training knowledge about well-known entities.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -512,13 +581,18 @@ properties:
 - name: reviewFlag
   dataType:
   - text
-  description: |
-    Review requirement [none, for_review, needs_verification]:
+  description: 'Review requirement [none, for_review, needs_verification]:
+
     - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
+
     - "for_review": Medium confidence with some gaps, human validation helpful
+
     - "needs_verification": Low confidence or pure inference, human review required
 
+
     If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
+
+    '
   moduleConfig:
     text2vec-weaviate:
       skip: true

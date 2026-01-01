@@ -2,50 +2,85 @@ type: research
 class: Research_industry
 id: Research_industry
 name: Research Industry
-description: |
-  📚 RESEARCH REPOSITORY: Industry & Market Intelligence
+description: '📚 RESEARCH REPOSITORY: Industry & Market Intelligence
+
 
   RESEARCHER: Senior Industry Intelligence Analyst (see Research_industry for researcher identity)
 
+
   KNOWLEDGE TYPE: Entity-specific categorized research and analysis
 
-  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's complete industry intelligence
+
+  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity''s complete industry intelligence
+
   - Tenant Isolation: Complete data separation per entity
+
   - Tenant Activation: Automatic tenant creation and activation
+
   - Scalability: Supports unlimited tenants with efficient partitioning
 
+
   REPOSITORY CONTENTS:
+
   - Industry Classifications: NAICS codes (6-digit), sector, industry, industrySegment
+
   - Business Models: Detailed business model descriptions and categories (SaaS, Marketplace, E-commerce, Consulting)
+
   - Market Positioning: Competitive landscape, value chain position, market niche analysis
+
   - Vertical Markets: Target markets and vertical specialization
+
   - Delivery Models: How entities deliver products/services
+
   - Quality Metadata: Processing dates, source quality, review flags, confidence levels
 
+
   DATA SOURCES:
+
   - AI-analyzed entity websites and web content
+
   - Industry reports and competitive intelligence
+
   - Market research and positioning content
+
   - Validated against official NAICS taxonomy
 
+
   QUALITY STANDARDS:
+
   - Confidence Scoring: High, Medium, Low, Inferred, Web-verified
+
   - Human Verification: Review flags for validation
+
   - Source Tracking: Links to originating Domain records
-  - Conservative Calibration: Prefer 'unknown' over incorrect data
+
+  - Conservative Calibration: Prefer ''unknown'' over incorrect data
+
 
   INTEGRATION: Provides foundational industry context to:
+
   - Financial research (revenue models, funding, growth analysis)
+
   - Product research (product-market fit, technical positioning)
+
   - Customer research (target segments, acquisition channels)
+
   - Leadership research (industry expertise, founder background)
+
   - Risk research (industry-specific risks, regulatory environment)
+
   - Partnership research (industry ecosystem, strategic alliances)
 
+
   VECTOR SEARCH CAPABILITIES:
+
   - businessModelVector: Search by business model and value chain similarities
+
   - industrySegmentVector: Discover entities with similar industry segments and positioning
+
   - deliveryModelVector: Match by service delivery approaches
+
+  '
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -144,7 +179,7 @@ properties:
   - EnumCat
   metadata:
     source_llm: businessModelLLM
-    order: 101
+    order: 111
 - name: businessModelLLM
   dataType:
   - text[]
@@ -159,7 +194,7 @@ properties:
   - array
   - standard
   metadata:
-    order: 102
+    order: 112
 - name: deliveryModelCat
   dataType:
   - text[]
@@ -184,7 +219,7 @@ properties:
   - EnumCat
   metadata:
     source_llm: deliveryModelLLM
-    order: 111
+    order: 121
 - name: deliveryModelLLM
   dataType:
   - text[]
@@ -201,7 +236,7 @@ properties:
   - array
   - standard
   metadata:
-    order: 112
+    order: 122
 - name: industrySegmentCat
   dataType:
   - text[]
@@ -217,7 +252,7 @@ properties:
   - standard
   - VecCat
   metadata:
-    order: 123
+    order: 131
     source_llm: industrySegmentLLM
 - name: industrySegmentLLM
   dataType:
@@ -236,7 +271,7 @@ properties:
   - array
   - standard
   metadata:
-    order: 133
+    order: 132
 - name: domain
   dataType:
   - text
@@ -251,7 +286,7 @@ properties:
   - identity
   - web
   metadata:
-    order: 905
+    order: 906
 - name: entityDescription
   dataType:
   - text
@@ -263,7 +298,7 @@ properties:
   sets:
   - prompt
   metadata:
-    order: 302
+    order: 301
 - name: entityId
   dataType:
   - text
@@ -278,7 +313,7 @@ properties:
   tags:
   - identity
   metadata:
-    order: 303
+    order: 302
 - name: entityName
   dataType:
   - text
@@ -288,7 +323,7 @@ properties:
   tags:
   - identity
   metadata:
-    order: 906
+    order: 907
 - name: industry
   dataType:
   - text[]
@@ -324,7 +359,7 @@ properties:
   sets:
   - prompt
   metadata:
-    order: 305
+    order: 303
 - name: naicsCode
   dataType:
   - text[]
@@ -339,7 +374,7 @@ properties:
   - array
   - prompt
   metadata:
-    order: 306
+    order: 201
 - name: naicsDescription
   dataType:
   - text[]
@@ -352,7 +387,7 @@ properties:
   - array
   - prompt
   metadata:
-    order: 307
+    order: 202
 - name: sector
   dataType:
   - text[]
@@ -382,7 +417,7 @@ properties:
   sets:
   - prompt
   metadata:
-    order: 308
+    order: 304
 - name: valueChainPosition
   dataType:
   - text
@@ -392,7 +427,7 @@ properties:
   sets:
   - prompt
   metadata:
-    order: 309
+    order: 305
 - name: analysisConfidence
   dataType:
   - text
@@ -420,7 +455,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 903
+    order: 904
 - name: createdAt
   dataType:
   - date
@@ -440,7 +475,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 904
+    order: 905
 - name: matchedSeeds
   description: Matched seed names
   dataType:
@@ -451,7 +486,7 @@ properties:
     text2vec-weaviate:
       skip: true
   metadata:
-    order: 906
+    order: 908
 - name: processedDate
   dataType:
   - text
@@ -459,7 +494,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 907
+    order: 909
 - name: reasoning
   dataType:
   - text[]
@@ -470,7 +505,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 908
+    order: 910
 - name: references
   description: Cached reference UUIDs
   dataType:
@@ -486,7 +521,7 @@ properties:
     - uuid[]
     description: Domain source UUIDs
   metadata:
-    order: 909
+    order: 911
 - name: reviewFlag
   dataType:
   - text
@@ -495,7 +530,7 @@ properties:
   - system
   - prompt
   metadata:
-    order: 910
+    order: 912
 - name: seed
   dataType:
   - boolean
@@ -509,7 +544,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 911
+    order: 913
 - name: segmentSimilarities
   description: Segment similarity scores
   dataType:
@@ -522,7 +557,7 @@ properties:
   tags:
   - score
   metadata:
-    order: 912
+    order: 914
 - name: sourceQuality
   dataType:
   - text
@@ -530,7 +565,7 @@ properties:
   sets:
   - system
   metadata:
-    order: 912
+    order: 915
 - name: updatedAt
   dataType:
   - date
@@ -542,7 +577,7 @@ properties:
     text2vec-weaviate:
       skip: true
   metadata:
-    order: 913
+    order: 916
 - name: updated_at
   description: Record update timestamp
   dataType:
@@ -553,7 +588,7 @@ properties:
     text2vec-weaviate:
       skip: true
   metadata:
-    order: 914
+    order: 917
 references:
 - name: domainBeacon
   target_collection: Domain
