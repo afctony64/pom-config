@@ -190,16 +190,17 @@ properties:
 - name: keyFinancialMetrics
   dataType:
   - text[]
-  description: Key Financial Metrics
+  description: Key Financial Metrics - evidence extracted from sources
   tags:
   - financial
   - metrics
-  - research
+  - evidence
   sets:
   - array
-  - prompt
+  - system
+  - post
   metadata:
-    order: 202
+    order: 902
 - name: growthVelocityLLM
   dataType:
   - text
