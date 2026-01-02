@@ -1,22 +1,19 @@
 type: ux_config
 name: Competitor Research
 collection: Research_competitor
-schema_id: Research_competitor  # Explicit link to pom-core schema
+schema_id: Research_competitor
 fields:
 - name: competitorAnalysisCat
   max_width: 250
-  label: Competitor Analysis
   aggregations:
   - count
   - nunique
 - name: marketPositionCat
   max_width: 250
-  label: Market Position
   aggregations:
   - count
   - nunique
 - name: competitiveAdvantages
-  label: Competitive Advantages
   aggregations:
   - count
   - nunique
@@ -33,65 +30,54 @@ fields:
   - count
   - nunique
 - name: competitorAdvantagesVs
-  label: Advantages
   min_width: 450
   aggregations:
   - count
   - nunique
 - name: competitorGapsVs
-  label: Gaps
   min_width: 450
   aggregations:
   - count
   - nunique
 - name: innovationScore
-  label: Innovation
   min_width: 100
   max_width: 120
   aggregations:
   - count
   - nunique
 - name: marketStrengthScore
-  label: Market Strength
   min_width: 100
   max_width: 140
   aggregations:
   - count
   - nunique
 - name: threatLevelScore
-  label: Threat Level
   min_width: 100
   max_width: 130
   aggregations:
   - count
   - nunique
 - name: competitorDomain
-  label: Domain
   aggregations:
   - count
   - nunique
 - name: competitorPositioning
-  label: Positioning
   aggregations:
   - count
   - nunique
 - name: competitorPriceVs
-  label: Price
   aggregations:
   - count
   - nunique
 - name: competitorTargetMarket
-  label: Target Market
   aggregations:
   - count
   - nunique
 - name: differentiationFactors
-  label: Differentiation Factors
   aggregations:
   - count
   - nunique
 - name: keyCompetitors
-  label: Key Competitors
   aggregations:
   - count
   - nunique
@@ -108,7 +94,6 @@ fields:
   - count
   - nunique
 - name: marketTrends
-  label: Market Trends
   aggregations:
   - count
   - nunique

@@ -106,6 +106,7 @@ properties:
   - EnumCat
   metadata:
     order: 131
+  label: Competitor Analysis
 - name: competitorAnalysisLLM
   dataType:
   - text
@@ -146,6 +147,7 @@ properties:
   - EnumCat
   metadata:
     order: 133
+  label: Market Position
 - name: marketPositionLLM
   dataType:
   - text
@@ -175,6 +177,7 @@ properties:
   - prompt
   metadata:
     order: 201
+  label: Key Competitors
 - name: competitorAdvantagesVs
   dataType:
   - text[]
@@ -191,14 +194,16 @@ properties:
   - prompt
   metadata:
     order: 207
+  label: Advantages
 - name: competitorDomain
   dataType:
   - text[]
-  description: >
-    Primary domain for each competitor (parallel to keyCompetitors array).
-    ENRICHMENT SEARCH: "{competitor_name} official website domain company".
-    Format: "competitor.com" (no https://, no www).
-    Use "Not disclosed" if cannot find. MUST align with keyCompetitors.
+  description: 'Primary domain for each competitor (parallel to keyCompetitors array).
+    ENRICHMENT SEARCH: "{competitor_name} official website domain company". Format:
+    "competitor.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST
+    align with keyCompetitors.
+
+    '
   parallel_to: keyCompetitors
   tags:
   - research
@@ -209,6 +214,7 @@ properties:
   - post
   metadata:
     order: 202
+  label: Domain
 - name: competitorGapsVs
   dataType:
   - text[]
@@ -225,14 +231,16 @@ properties:
   - prompt
   metadata:
     order: 206
+  label: Gaps
 - name: competitorPositioning
   dataType:
   - text[]
-  description: >
-    Market positioning for each competitor (parallel to keyCompetitors array).
-    ENRICHMENT SEARCH: "{competitor_name} market position leader challenger G2 Gartner".
-    Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging Player".
-    Use "Not disclosed" if unknown. MUST align with keyCompetitors.
+  description: 'Market positioning for each competitor (parallel to keyCompetitors
+    array). ENRICHMENT SEARCH: "{competitor_name} market position leader challenger
+    G2 Gartner". Examples: "Market Leader", "Strong Challenger", "Niche Specialist",
+    "Emerging Player". Use "Not disclosed" if unknown. MUST align with keyCompetitors.
+
+    '
   parallel_to: keyCompetitors
   tags:
   - research
@@ -242,14 +250,17 @@ properties:
   - post
   metadata:
     order: 203
+  label: Positioning
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: >
-    Price comparison vs THIS entity (parallel to keyCompetitors array).
+  description: 'Price comparison vs THIS entity (parallel to keyCompetitors array).
     ENRICHMENT SEARCH: "{competitor_name} pricing cost vs {entity_name} comparison".
-    Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative", "Similar tier".
-    Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS ONLY.
+    Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative", "Similar
+    tier". Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS
+    ONLY.
+
+    '
   parallel_to: keyCompetitors
   tags:
   - research
@@ -259,14 +270,16 @@ properties:
   - post
   metadata:
     order: 205
+  label: Price
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: >
-    Target market for each competitor (parallel to keyCompetitors array).
+  description: 'Target market for each competitor (parallel to keyCompetitors array).
     ENRICHMENT SEARCH: "{competitor_name} target market customers enterprise SMB".
     Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
     Use "Not disclosed" if unknown. MUST align with keyCompetitors.
+
+    '
   parallel_to: keyCompetitors
   tags:
   - research
@@ -276,6 +289,7 @@ properties:
   - post
   metadata:
     order: 204
+  label: Target Market
 - name: innovationScore
   dataType:
   - number[]
@@ -289,13 +303,16 @@ properties:
   - score
   metadata:
     order: 401
+  label: Innovation
 - name: keyCompetitorEvidence
   dataType:
   - text[]
-  description: >
-    Evidence/context found for each keyCompetitor from page facts and web search (parallel to keyCompetitors).
-    Auto-populated during enrichment. Contains source text snippets about competitive positioning,
-    pricing, features mentioned for this competitor. MUST align with keyCompetitors.
+  description: 'Evidence/context found for each keyCompetitor from page facts and
+    web search (parallel to keyCompetitors). Auto-populated during enrichment. Contains
+    source text snippets about competitive positioning, pricing, features mentioned
+    for this competitor. MUST align with keyCompetitors.
+
+    '
   parallel_to: keyCompetitors
   moduleConfig:
     text2vec-weaviate:
@@ -322,6 +339,7 @@ properties:
   - score
   metadata:
     order: 402
+  label: Market Strength
 - name: threatLevelScore
   dataType:
   - number[]
@@ -335,6 +353,7 @@ properties:
   - score
   metadata:
     order: 403
+  label: Threat Level
 - name: competitiveAdvantages
   dataType:
   - text[]
@@ -348,6 +367,7 @@ properties:
   - prompt
   metadata:
     order: 122
+  label: Competitive Advantages
 - name: competitiveMarket
   dataType:
   - text
@@ -396,6 +416,7 @@ properties:
   - prompt
   metadata:
     order: 123
+  label: Differentiation Factors
 - name: dossierSummary
   dataType:
   - text
@@ -487,6 +508,7 @@ properties:
   - prompt
   metadata:
     order: 114
+  label: Market Trends
 - name: analysisConfidence
   dataType:
   - text
@@ -716,7 +738,8 @@ references:
 - name: keyCompetitorRefs
   uuid_source_field: competitorDomain
   target_collection: Domain
-  description: References to competitor Domain records (UUID3 from competitorDomain array)
+  description: References to competitor Domain records (UUID3 from competitorDomain
+    array)
 group: research
 weaviate_instance: cloud
 collection_name: Research_competitor
