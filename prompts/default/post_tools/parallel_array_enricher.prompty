@@ -49,18 +49,9 @@ tool_guidance:
     priority: high
     max_calls: 3
     when_to_use: |
-      Use brave_search to find specific data for each field based on its description.
-      
-      **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
-      Examples of what to look for in descriptions:
-      - "official website domain" → Search: "{element} {industry} official website"
-      - "LinkedIn profile" → Search: "{element} {role} linkedin profile"
-      - "company size" → Search: "{element} employees company size"
-      
-      **DISAMBIGUATION:**
-      - For common names, include: {source_context.title} and {source_context.industry}
-      - For executives: include their role and company name
-      - For competitors: include the industry vertical
+      Use brave_search to find data for fields. 
+      Combine: element + ROW DATA values + entity name for disambiguation.
+      Read field descriptions for ENRICHMENT SEARCH patterns.
 
 data_requirements:
   include_enrichment_data: true
@@ -101,12 +92,11 @@ model:
 system:
 You are extracting information about **{{ element }}** to fill parallel array fields.
 
-**CONTEXT:**
-{% if source_context %}
-Source: {{ source_context.title|default(source_context.domain) }} ({{ source_context.industry|default('technology') }})
+**ENTITY:** {{ source_context.title|default(source_context.domain) }} ({{ source_context.industry|default('technology') }})
+**ARRAY:** {{ anchor_field }} (e.g., keyCompetitors, keyExecutives, keyCustomers)
+{% if row_context %}
+**ROW DATA:** {% for key, value in row_context.items() %}{% if value and value != 'Not disclosed' %}{{ key }}={{ value }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
 {% endif %}
-
-**RELATIONSHIP:** {{ anchor_field|replace('key', '')|replace('s', '')|lower }} of {{ source_context.title|default(source_context.domain) }}
 
 **FIELDS TO FILL (READ THE DESCRIPTIONS - they contain search guidance!):**
 {% for field in post_fields %}
@@ -114,16 +104,9 @@ Source: {{ source_context.title|default(source_context.domain) }} ({{ source_con
 {% endfor %}
 
 **SEARCH STRATEGY:**
-1. Check page_facts first for any existing data
-2. Use brave_search for fields that need web lookup:
-   - For domains: Search "{element} {industry} official website"
-   - For LinkedIn: Search "{element} {role} {company} linkedin profile"
-   - For company info: Search "{element} company {specific_metric}"
-3. Include {{ source_context.industry|default('technology') }} context to disambiguate common names
-
-**DISAMBIGUATION EXAMPLES:**
-- "Paragon" in iPaaS context → "Paragon iPaaS integration platform" (not Paragon crypto or Paragon bank)
-- "John Smith" at Prismatic → "John Smith CEO Prismatic linkedin"
+1. Check page_facts first for existing data
+2. For brave_search, combine: **{{ element }}** + **ROW DATA values** + **{{ source_context.title|default(source_context.domain) }}**
+3. Read the field descriptions - they contain ENRICHMENT SEARCH patterns
 
 **OUTPUT:** Return JSON with field names as keys. Use null if not found.
 
@@ -147,13 +130,9 @@ user:
 {% endif %}
 
 **INSTRUCTIONS:**
-1. Review the field descriptions above - they tell you HOW to search
-2. Use brave_search for any fields that need web data:
-   - competitorDomain → search for official website
-   - executiveLinkedIn → search for LinkedIn profile
-   - customerDomain → search for company website
-   - etc.
-3. Return JSON with values for: {% for field in post_fields %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+1. Read field descriptions - they contain ENRICHMENT SEARCH patterns
+2. For brave_search: use **{{ element }}** + **ROW DATA** + **{{ source_context.title|default(source_context.domain) }}**
+3. Return JSON for: {% for field in post_fields %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}
 
 ```json
 {
