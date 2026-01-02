@@ -107,6 +107,19 @@ properties:
   tags:
   - content
   - metadata
+
+- name: entityName
+  dataType:
+  - text
+  description: Human-readable entity name (e.g., "Paragon" instead of "useparagon.com")
+  label: Entity Name
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - standard
+  tags:
+  - identity
+  - metadata
   - research  # FIX #457: Include in research data card traversals
 
 - name: description
