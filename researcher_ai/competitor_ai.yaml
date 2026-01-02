@@ -37,7 +37,7 @@ tool_guidance:
   brave_search:
     priority: high
     max_calls: 2  # LIMIT: Only 2 searches for competitors
-    tool_choice: required  # Competitor data from G2/Capterra is essential (company pages are biased)
+    tool_choice: auto  # Changed from required - let AI decide if page content is sufficient
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
       
