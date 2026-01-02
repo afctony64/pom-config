@@ -154,7 +154,12 @@ properties:
 - name: customerDomain
   dataType:
   - text[]
-  description: Official website domain for each key customer (parallel to keyCustomers array). Search for company official website. Used for spawning Domain records.
+  description: >
+    Primary domain for each key customer (parallel to keyCustomers array).
+    ENRICHMENT SEARCH: "{customer_name} official website domain company".
+    Format: "customer.com" (no https://, no www, just the domain).
+    Use "Not disclosed" if cannot find. MUST align with keyCustomers array.
+    Used for spawning Domain records.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
