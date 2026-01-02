@@ -115,18 +115,15 @@ Source: {{ source_context.title|default(source_context.domain) }} ({{ source_con
 
 **SEARCH STRATEGY:**
 1. Check page_facts first for any existing data
-2. Use brave_search for fields that need web lookup - ALWAYS include company name for disambiguation:
-   - For domains: Search "{{ element }} {{ source_context.industry|default('technology') }} official website"
-   - For LinkedIn: Search "{{ element }} [their role] {{ source_context.title|default(source_context.domain) }} linkedin profile"
-   - For company info: Search "{{ element }} company employees size"
+2. Use brave_search for fields that need web lookup:
+   - For domains: Search "{element} {industry} official website"
+   - For LinkedIn: Search "{element} {role} {company} linkedin profile"
+   - For company info: Search "{element} company {specific_metric}"
+3. Include {{ source_context.industry|default('technology') }} context to disambiguate common names
 
-**CRITICAL - DISAMBIGUATION:**
-The company is **{{ source_context.title|default(source_context.domain) }}**.
-ALWAYS include "{{ source_context.title|default(source_context.domain) }}" in LinkedIn searches to find the right person!
-
-Example: If searching for executive "Michael Zuercher" with role "CEO":
-- WRONG: "Michael Zuercher linkedin" (finds wrong person)
-- RIGHT: "Michael Zuercher CEO {{ source_context.title|default(source_context.domain) }} linkedin" (finds correct person)
+**DISAMBIGUATION EXAMPLES:**
+- "Paragon" in iPaaS context → "Paragon iPaaS integration platform" (not Paragon crypto or Paragon bank)
+- "John Smith" at Prismatic → "John Smith CEO Prismatic linkedin"
 
 **OUTPUT:** Return JSON with field names as keys. Use null if not found.
 
