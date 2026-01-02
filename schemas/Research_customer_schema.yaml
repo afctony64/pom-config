@@ -136,7 +136,7 @@ properties:
 - name: keyCustomers
   dataType:
   - text[]
-  description: Array of key customer names (publicly disclosed customer entities with name and brief value summary)
+  description: Array of key customer NAMES ONLY (company/organization names of publicly disclosed customers). Do NOT include case study summaries, value descriptions, or results here - those belong in the parallel caseStudies field. Examples: ["Microsoft", "Acme Corp", "TechCo"].
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -146,21 +146,26 @@ properties:
   sets:
   - prompt
   - array
+  - spawn
   metadata:
     order: 201
-- name: keyCustomersIds
+- name: customerDomain
   dataType:
   - text[]
-  description: Parallel array of UUID5 IDs for keyCustomers (index-aligned, auto-generated)
+  description: Official website domain for each key customer (parallel to keyCustomers array). Search for company official website. Used for spawning Domain records.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags: []
+  tags:
+  - customer
+  - research
   sets:
-  - system
+  - spawn
+  - post
+  - array
   metadata:
-    order: 907
+    order: 202
 - name: keyCustomerSizeCat
   dataType:
   - text[]
@@ -230,12 +235,14 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags: []
+  tags:
+  - customer
+  - research
   sets:
-  - system
   - post
+  - system
   metadata:
-    order: 908
+    order: 203
 - name: useCaseLLM
   dataType:
   - text[]
@@ -289,15 +296,15 @@ properties:
 - name: caseStudies
   dataType:
   - text[]
-  description: Array of concise case study summaries extracted from entity pages - one line per customer success story with
-    quantifiable results
+  description: Case study summary for each keyCustomer (parallel to keyCustomers array) - one concise line per customer success story with quantifiable results. Use "Not disclosed" if no case study available for a customer. MUST have same length as keyCustomers array.
+  parallel_to: keyCustomers
   tags:
   - research
   sets:
   - prompt
   - array
   metadata:
-    order: 142
+    order: 210
 - name: growthOpportunity
   dataType:
   - text

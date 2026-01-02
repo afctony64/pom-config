@@ -48,9 +48,19 @@ tool_guidance:
     priority: critical
     usage_instructions: |
       🎯 OUTPUT FORMAT REQUIREMENTS:
-      - keyCustomers: Named customers from case studies
+      - keyCustomers: NAMES ONLY (e.g., ["Microsoft", "Acme Corp"]) - NO case study text!
+      - caseStudies: PARALLEL to keyCustomers - one summary per customer at same index
       - customerIndustries: Industries served
       - customerSegments: Enterprise, SMB, mid-market
-      - testimonials: Quote with customer name/company
+      
+      ⚠️ CRITICAL PARALLEL ARRAY ALIGNMENT:
+      keyCustomers[0] = "Microsoft" → caseStudies[0] = "Microsoft reduced costs by 40%..."
+      keyCustomers[1] = "Acme Corp" → caseStudies[1] = "Acme improved efficiency..."
 
-# page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
+# Post-execution tools for customer research
+post_execution_tools:
+  - parallel_array_enricher  # Finds customerDomain + evidence via search
+  - entity_spawn             # Creates Domain records for customers
+  - enum_cat                 # Classifies EnumCat fields
+  - vec_cat                  # Classifies VecCat fields
+  - pdf_report_saver         # Generates report
