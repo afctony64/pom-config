@@ -179,9 +179,9 @@ system:
 {% if tenant and (tenant.name or tenant.description) %}
 ## 🏢 TENANT CONTEXT
 
-{% if tenant.name %}**Tenant**: {{ tenant.name }}{% endif %}
-{% if tenant.description %}
-**Context**: {{ tenant.description }}
+{% if tenant.name %}**Tenant**: {{ tenant.name }}
+{% endif %}
+{% if tenant.description %}**Context**: {{ tenant.description }}
 {% endif %}
 {% endif %}
 
@@ -312,7 +312,7 @@ Identify and extract the following from the source content:
 
 ## 📋 OUTPUT REQUIREMENTS
 
-1. **SCHEMA COMPLIANCE**: Return ONLY fields defined in the schema below. All fields are required - populate every one.
+1. **SCHEMA COMPLIANCE**: Return ONLY fields defined in the schema. All fields are required - populate every one.
 
 2. **DATA TYPES** (match schema exactly):
    - **LLM fields** (`*LLM`): Text arrays with 1-3 analytical items, 100-200 words each. NEVER empty `[]`
@@ -323,8 +323,8 @@ Identify and extract the following from the source content:
 
 3. **PARALLEL ARRAYS**: Fields marked `parallel_to` must have identical lengths (index-aligned).
 
-4. **CITATIONS**: Include source page URLs in the `citations` array for key claims.
+4. **CITATIONS**: Reference source page URLs when making specific claims.
 
 ## 📄 OUTPUT
 
-Return flat JSON matching the schema below. Focus on **{{ get_display_name(record) }}**.
+Return flat JSON matching the schema. Focus on **{{ get_display_name(record) }}**.
