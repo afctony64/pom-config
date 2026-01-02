@@ -4,13 +4,13 @@ collection: Research_competitor
 schema_id: Research_competitor  # Explicit link to pom-core schema
 fields:
 - name: competitorAnalysisCat
-  maxWidth: 250
+  max_width: 250
   label: Competitor Analysis
   aggregations:
   - count
   - nunique
 - name: marketPositionCat
-  maxWidth: 250
+  max_width: 250
   label: Market Position
   aggregations:
   - count
@@ -34,34 +34,34 @@ fields:
   - nunique
 - name: competitorAdvantagesVs
   label: Advantages
-  minWidth: 450
+  min_width: 450
   aggregations:
   - count
   - nunique
 - name: competitorGapsVs
   label: Gaps
-  minWidth: 450
+  min_width: 450
   aggregations:
   - count
   - nunique
 - name: innovationScore
   label: Innovation
-  minWidth: 100
-  maxWidth: 120
+  min_width: 100
+  max_width: 120
   aggregations:
   - count
   - nunique
 - name: marketStrengthScore
   label: Market Strength
-  minWidth: 100
-  maxWidth: 140
+  min_width: 100
+  max_width: 140
   aggregations:
   - count
   - nunique
 - name: threatLevelScore
   label: Threat Level
-  minWidth: 100
-  maxWidth: 130
+  min_width: 100
+  max_width: 130
   aggregations:
   - count
   - nunique
