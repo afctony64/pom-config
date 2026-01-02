@@ -63,70 +63,14 @@ tool_guidance:
       # Only if primary didn't find competitors:
       comparison: "{company_name} vs competitors comparison market"
       
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - Return ALL responses as valid JSON
-      - Use arrays for lists
-      - Keep descriptions concise (50-100 chars max)
-      - Focus on facts, not prose
-      - Maximum 5 items per category
-      
-  array_requirements:
-    priority: critical
-    usage_instructions: |
-      📊 ARRAY FIELD REQUIREMENTS (schema has full definitions):
-      
-      **Entity-Level Arrays** (text[] without parallel_to):
-      - Describe THIS entity's overall competitive position
-      - Populate 3-5 items each - read field descriptions from schema
-      - These are NOT per-competitor, they're about THIS entity overall
-      
-      **Parallel Arrays** (text[] with parallel_to relationship):
-      - Per-competitor data - one value per competitor identified
-      - ALL parallel arrays MUST have IDENTICAL length
-      - Index alignment: [i] in one array = [i] in all others
-      - Use "Not disclosed" if data unavailable to maintain alignment
-      
-      ⚠️ DO NOT leave array fields empty - they are key outputs!
-      ⚠️ For competitor domains, use web search if not found in pageData
-      
   citation_format:
-    priority: critical
+    priority: high
     usage_instructions: |
-      📎 CITATION FORMAT REQUIREMENTS:
+      📝 CLEAN FACTS ONLY - no inline URLs:
+      ❌ "Purpose-built for iPaaS — see https://example.com"
+      ✅ "Purpose-built for embedded iPaaS serving B2B SaaS"
       
-      **CLEAN FACTS ONLY in array values:**
-      ❌ WRONG: "Purpose-built for embedded iPaaS — source: https://example.com"
-      ❌ WRONG: "Purpose-built for embedded iPaaS (https://example.com)"
-      ✅ RIGHT: "Purpose-built for embedded iPaaS serving B2B SaaS companies"
-      
-      **Put ALL source URLs in the citations field:**
-      - Collect all URLs referenced during analysis
-      - Add them to the citations array field
-      - Do NOT embed URLs inline in fact text
-      
-      This separation enables clean display of facts without citation clutter.
-      
-  citation_format:
-    priority: critical
-    usage_instructions: |
-      📝 CITATION FORMAT - CLEAN FACTS ONLY:
-      
-      ❌ WRONG: "Purpose-built for iPaaS — see https://example.com"
-      ❌ WRONG: "High satisfaction (source: https://g2.com/review)"
-      ❌ WRONG: "Market leader — multiple pages confirm this (url1, url2)"
-      
-      ✅ CORRECT: "Purpose-built for embedded iPaaS serving B2B SaaS"
-      ✅ CORRECT: "High customer satisfaction with G2 Leader recognition"
-      ✅ CORRECT: "Market leader in embedded integration platforms"
-      
-      **RULES:**
-      - Array values = CLEAN FACTS only (no URLs, no "see:", no em dashes)
-      - ALL source URLs go in the `citations` field as a separate array
-      - Each array item should be self-contained and readable
-      - Keep items concise: 50-100 characters max
+      Put ALL source URLs in the `citations` array field.
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
