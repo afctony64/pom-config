@@ -310,30 +310,21 @@ Identify and extract the following from the source content:
 {% endfor %}
 {% endif %}
 
-## 🚨 CRITICAL OUTPUT REQUIREMENTS
+## 📋 OUTPUT REQUIREMENTS
 
-1. **USE EXACT SCHEMA FIELD NAMES**: You MUST use the exact field names specified in the JSON schema below. Do NOT convert to snake_case or use alternative names.
+1. **SCHEMA COMPLIANCE**: Return ONLY fields defined in the schema below. All fields are required - populate every one.
 
-2. **STRICT SCHEMA COMPLIANCE**: The schema is set to `strict: true` - you MUST only return fields that are defined in the schema properties.
-
-3. **POPULATE ALL SCHEMA FIELDS**: Generate complete analysis for ALL fields shown in the schema. Every field in `properties` must have a value (use `null` only if truly unavailable).
-
-4. **FLAT JSON STRUCTURE**: Return a flat JSON object with all fields at the root level - no nested objects or arrays unless the schema explicitly defines them as array types.
-
-5. **APPROPRIATE DATA TYPES** (match what's defined in the schema):
-   - **`*LLM` fields (text[] arrays)**: Fields ending in `LLM` return arrays of 1-3 descriptive strings (100-200 words each)
+2. **DATA TYPES** (match schema exactly):
+   - **LLM fields** (`*LLM`): Text arrays with 1-3 analytical items, 100-200 words each. NEVER empty `[]`
    - **String fields**: Single text values
-   - **List fields**: Arrays of items
+   - **Array fields**: Lists of items as specified
    - **Numbers**: Numeric scores and metrics
-   - **null**: Only when data is truly unavailable (avoid empty arrays `[]`)
-   - ⚠️ **ONLY use field names that appear in the JSON schema below** - do NOT invent or guess field names
+   - **null**: Only when data is truly unavailable
 
-6. **LLM TEXT FIELDS**: Fields ending in `LLM` return text arrays with analytical content (1-3 items, 100-200 words each). NEVER return empty arrays `[]`. Follow the field descriptions in the schema for specific guidance.
+3. **PARALLEL ARRAYS**: Fields marked `parallel_to` must have identical lengths (index-aligned).
 
-7. **PARALLEL ARRAYS**: For array fields marked as `parallel_to`, ensure all related arrays have the same length.
+4. **CITATIONS**: Include source page URLs in the `citations` array for key claims.
 
-## ⚠️ SCHEMA ENFORCEMENT
+## 📄 OUTPUT
 
-The JSON schema below defines the EXACT structure you must return. The schema will be dynamically injected with the complete field definitions for this researcher's collection.
-
-Focus your analysis specifically on **{{ get_display_name(record) }}** using the page content provided.
+Return flat JSON matching the schema below. Focus on **{{ get_display_name(record) }}**.
