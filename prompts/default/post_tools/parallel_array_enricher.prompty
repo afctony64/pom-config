@@ -1,0 +1,165 @@
+---
+name: Parallel Array Enricher
+id: parallel_array_enricher
+description: "Schema-driven enricher for parallel array elements. Uses field descriptions to guide searches."
+
+stage: post_execution
+reusable: true
+category: enrich
+
+classification:
+  task_type: extraction
+  complexity: low
+  context_size: small
+  priority: speed
+
+version: 1.2.0
+authors:
+  - AI Assistant
+
+inputs:
+  element:
+    description: "The anchor element to deep-dive on (e.g., 'Boomi', 'John Smith')"
+    type: string
+  anchor_field:
+    description: "The anchor field name (e.g., 'keyCompetitors', 'keyExecutives')"
+    type: string
+  row_context:
+    description: "All parallel array data for this row (LLM-filled fields)"
+    type: object
+  post_fields:
+    description: "Array of {name, description} for fields to fill"
+    type: array
+  tenant_context:
+    description: "Tenant context (name, industry_focus)"
+    type: object
+  researcher_context:
+    description: "Researcher context (title, mission)"
+    type: object
+  source_context:
+    description: "Source entity context (domain, title, industry)"
+    type: object
+
+# Tools the LLM can call to search for specific field data
+tools:
+  - brave_search
+
+tool_guidance:
+  brave_search:
+    priority: high
+    max_calls: 3
+    when_to_use: |
+      Use brave_search to find specific data for each field based on its description.
+      
+      **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
+      Examples of what to look for in descriptions:
+      - "official website domain" → Search: "{element} {industry} official website"
+      - "LinkedIn profile" → Search: "{element} {role} linkedin profile"
+      - "company size" → Search: "{element} employees company size"
+      
+      **DISAMBIGUATION:**
+      - For common names, include: {source_context.title} and {source_context.industry}
+      - For executives: include their role and company name
+      - For competitors: include the industry vertical
+
+data_requirements:
+  include_enrichment_data: true
+  injectors:
+    # Page facts - broad search without domain filter
+    - injector_template: data
+      template_vars:
+        collection: Page_facts
+        query: "{{ element }}"
+        alpha: 0.5
+        limit: 10
+        inject_as: page_facts
+  
+  error_handling:
+    missing_data: "continue"
+    empty_results: "continue"
+    api_failures: "continue"
+
+outputs:
+  fields:
+    type: object
+    description: "Object with field values keyed by field name"
+
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-nano
+    type: pom-llm-proxy
+  parameters:
+    response_format:
+      type: json_object
+    reasoning_effort: low
+    max_retries: 2
+
+---
+
+system:
+You are extracting information about **{{ element }}** to fill parallel array fields.
+
+**CONTEXT:**
+{% if source_context %}
+Source: {{ source_context.title|default(source_context.domain) }} ({{ source_context.industry|default('technology') }})
+{% endif %}
+
+**RELATIONSHIP:** {{ anchor_field|replace('key', '')|replace('s', '')|lower }} of {{ source_context.title|default(source_context.domain) }}
+
+**FIELDS TO FILL (READ THE DESCRIPTIONS - they contain search guidance!):**
+{% for field in post_fields %}
+- **{{ field.name }}**: {{ field.description }}
+{% endfor %}
+
+**SEARCH STRATEGY:**
+1. Check page_facts first for any existing data
+2. Use brave_search for fields that need web lookup:
+   - For domains: Search "{element} {industry} official website"
+   - For LinkedIn: Search "{element} {role} {company} linkedin profile"
+   - For company info: Search "{element} company {specific_metric}"
+3. Include {{ source_context.industry|default('technology') }} context to disambiguate common names
+
+**DISAMBIGUATION EXAMPLES:**
+- "Paragon" in iPaaS context → "Paragon iPaaS integration platform" (not Paragon crypto or Paragon bank)
+- "John Smith" at Prismatic → "John Smith CEO Prismatic linkedin"
+
+**OUTPUT:** Return JSON with field names as keys. Use null if not found.
+
+user:
+**SUBJECT:** {{ element }}
+
+{% if row_context %}
+**KNOWN DATA:**
+{% for key, value in row_context.items() %}
+{% if value and value != 'Not disclosed' %}
+- {{ key }}: {{ value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if page_facts_response is defined and page_facts_response and page_facts_response.results %}
+**PAGE FACTS:**
+{% for fact in page_facts_response.results[:5] %}
+- {{ fact.content|default(fact.properties.content|default(''))|truncate(200) }}
+{% endfor %}
+{% endif %}
+
+**INSTRUCTIONS:**
+1. Review the field descriptions above - they tell you HOW to search
+2. Use brave_search for any fields that need web data:
+   - competitorDomain → search for official website
+   - executiveLinkedIn → search for LinkedIn profile
+   - customerDomain → search for company website
+   - etc.
+3. Return JSON with values for: {% for field in post_fields %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+```json
+{
+{% for field in post_fields %}
+  "{{ field.name }}": "value or null"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+}
+```
