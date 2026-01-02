@@ -126,7 +126,10 @@ properties:
 - name: partnerTypeLLM
   dataType:
   - text
-  description: Partner Type Description
+  description: |
+    Describe the entity's partnership ecosystem (100-150 words). Include: types of partners 
+    (technology, channel, integration, strategic), partner program structure, notable partner 
+    names, and partnership strategy (open ecosystem vs selective partnerships).
   tags:
   - LLM
   sets:
@@ -206,7 +209,10 @@ properties:
 - name: integrationLLM
   dataType:
   - text
-  description: Integration Description
+  description: |
+    Describe partnership integration depth (100-150 words). Include: how partners integrate 
+    technically (APIs, native connectors, embedded), co-selling arrangements, joint solutions, 
+    and integration maturity (marketplace listing vs deep product integration).
   tags:
   - LLM
   sets:
@@ -257,7 +263,10 @@ properties:
 - name: revenueImpactLLM
   dataType:
   - text
-  description: Revenue Impact Description
+  description: |
+    Describe partnership revenue impact (100-150 words). Include: revenue sharing models, 
+    referral programs, channel contribution to sales, partner-sourced vs direct revenue 
+    balance, and any stated partnership revenue metrics.
   tags:
   - LLM
   sets:

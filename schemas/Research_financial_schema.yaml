@@ -324,7 +324,10 @@ properties:
 - name: fundingStageLLM
   dataType:
   - text
-  description: Funding Stage Description
+  description: |
+    Describe the entity's funding history and current stage (100-150 words). Include: funding rounds 
+    completed (Seed, Series A/B/C, etc.), total capital raised, key investors, latest valuation if 
+    known, and funding trajectory (bootstrapped, venture-backed, PE-owned, public).
   tags:
   - LLM
   sets:

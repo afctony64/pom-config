@@ -334,7 +334,10 @@ properties:
 - name: pricingModelLLM
   dataType:
   - text
-  description: Pricing Model Description
+  description: |
+    Describe the entity's pricing and revenue model (100-150 words). Include: pricing structure 
+    (per-seat, usage-based, tiered, enterprise), target customer segments by tier, free trial or 
+    freemium availability, and any publicly stated pricing. Note if pricing requires contacting sales.
   tags:
   - LLM
   sets:
@@ -386,7 +389,11 @@ properties:
 - name: integrationProfileLLM
   dataType:
   - text
-  description: Integration Profile Description
+  description: |
+    Describe the entity's integration capabilities (100-150 words). Include: API availability and 
+    documentation quality, pre-built integrations and marketplace, webhook support, authentication 
+    methods (OAuth, API keys), and developer resources. Note integration philosophy (API-first vs 
+    limited integrations).
   tags:
   - LLM
   sets:
