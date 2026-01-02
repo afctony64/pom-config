@@ -136,7 +136,9 @@ properties:
 - name: keyCustomers
   dataType:
   - text[]
-  description: Array of key customer NAMES ONLY (company/organization names of publicly disclosed customers). Do NOT include case study summaries, value descriptions, or results here - those belong in the parallel caseStudies field. Examples: ["Microsoft", "Acme Corp", "TechCo"].
+  description: >
+    Array of key customer NAMES ONLY (company/organization names of publicly disclosed customers).
+    Do NOT include case study summaries, value descriptions, or results here - those belong in the parallel caseStudies field.
   moduleConfig:
     text2vec-weaviate:
       skip: true
