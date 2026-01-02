@@ -166,8 +166,7 @@ properties:
 - name: keyCompetitors
   dataType:
   - text[]
-  description: Array of DIRECT competitor names (2-5 entities customers would compare
-    to)
+  description: 'Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN names without qualifiers or parenthetical notes like "(Embedded)", "(OEM)", "(Dell)". Examples: "Workato" not "Workato (Embedded)", "Boomi" not "Boomi (Dell Boomi)". Clean names required for domain lookups.'
   tags:
   - research
   sets:
