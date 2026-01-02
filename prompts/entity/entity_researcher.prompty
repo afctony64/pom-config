@@ -328,9 +328,7 @@ Identify and extract the following from the source content:
    - **null**: Only when data is truly unavailable (avoid empty arrays `[]`)
    - ⚠️ **ONLY use field names that appear in the JSON schema below** - do NOT invent or guess field names
 
-6. **LLM + Cat FIELD PATTERN**:
-   - `*LLM` fields: **Text arrays** with analytical content (1-3 items, 100-200 words each). NEVER return empty arrays `[]`
-   - `*Cat` fields: Will be auto-populated by classify_all post-processor - skip these
+6. **LLM TEXT FIELDS**: Fields ending in `LLM` return text arrays with analytical content (1-3 items, 100-200 words each). NEVER return empty arrays `[]`. Follow the field descriptions in the schema for specific guidance.
 
 7. **PARALLEL ARRAYS**: For array fields marked as `parallel_to`, ensure all related arrays have the same length.
 
