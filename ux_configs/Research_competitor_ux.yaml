@@ -33,24 +33,34 @@ fields:
   - count
   - nunique
 - name: competitorAdvantagesVs
+  label: Advantages
+  minWidth: 300
   aggregations:
   - count
   - nunique
 - name: competitorGapsVs
+  label: Gaps
+  minWidth: 300
+  aggregations:
+  - count
+  - nunique
+- name: competitorDomain
+  label: Domain
   aggregations:
   - count
   - nunique
 - name: competitorPositioning
+  label: Positioning
   aggregations:
   - count
   - nunique
 - name: competitorPriceVs
-  label: Competitor Price Vs
+  label: Price
   aggregations:
   - count
   - nunique
 - name: competitorTargetMarket
-  label: Competitor Target Market
+  label: Target Market
   aggregations:
   - count
   - nunique
