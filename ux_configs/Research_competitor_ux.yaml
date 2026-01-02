@@ -34,13 +34,34 @@ fields:
   - nunique
 - name: competitorAdvantagesVs
   label: Advantages
-  minWidth: 300
+  minWidth: 450
   aggregations:
   - count
   - nunique
 - name: competitorGapsVs
   label: Gaps
-  minWidth: 300
+  minWidth: 450
+  aggregations:
+  - count
+  - nunique
+- name: innovationScore
+  label: Innovation
+  minWidth: 100
+  maxWidth: 120
+  aggregations:
+  - count
+  - nunique
+- name: marketStrengthScore
+  label: Market Strength
+  minWidth: 100
+  maxWidth: 140
+  aggregations:
+  - count
+  - nunique
+- name: threatLevelScore
+  label: Threat Level
+  minWidth: 100
+  maxWidth: 130
   aggregations:
   - count
   - nunique
