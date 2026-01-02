@@ -312,19 +312,27 @@ Identify and extract the following from the source content:
 
 ## 📋 OUTPUT REQUIREMENTS
 
-1. **SCHEMA COMPLIANCE**: Return ONLY fields defined in the schema. All fields are required - populate every one.
+### Schema Compliance
+Return ONLY the fields defined in the JSON schema (provided via structured output). All fields are required.
 
-2. **DATA TYPES** (match schema exactly):
-   - **LLM fields** (`*LLM`): Text arrays with 1-3 analytical items, 100-200 words each. NEVER empty `[]`
-   - **String fields**: Single text values
-   - **Array fields**: Lists of items as specified
-   - **Numbers**: Numeric scores and metrics
-   - **null**: Only when data is truly unavailable
+### Field Types
+- **LLM fields** (suffix `*LLM`): Text arrays with 1-3 analytical items, ~100-200 words each
+- **String fields**: Single text values
+- **Array fields**: Lists of items as specified
+- **Numbers**: Numeric scores and metrics
 
-3. **PARALLEL ARRAYS**: Fields marked `parallel_to` must have identical lengths (index-aligned).
+### Null Policy
+- **Required fields**: Must always appear in output JSON
+- **null**: Use ONLY when no data found after searching all sources
+- **Empty arrays `[]`**: NEVER use - include at least one item explaining why data unavailable
+- **LLM fields**: ALWAYS populate with analysis; if speculative, note low confidence
 
-4. **CITATIONS**: Reference source page URLs when making specific claims.
+### Parallel Arrays
+Fields marked `parallel_to` must have identical array lengths (index-aligned data).
+
+### Citations
+Reference source page URLs when making specific claims.
 
 ## 📄 OUTPUT
 
-Return flat JSON matching the schema. Focus on **{{ get_display_name(record) }}**.
+Return flat JSON matching the structured output schema. Focus on **{{ get_display_name(record) }}**.
