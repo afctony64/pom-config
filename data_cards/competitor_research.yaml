@@ -82,6 +82,15 @@ collections:
           competitor:
             target_collection: Research_competitor
             field_set: [standard]
+          partner:
+            target_collection: Research_partner
+            field_set: [standard]
+          journalist:
+            target_collection: Research_journalist
+            field_set: [standard]
+          social:
+            target_collection: Research_social
+            field_set: [standard]
           risk:
             target_collection: Research_risk
             field_set: [standard]
@@ -131,6 +140,9 @@ response_structure:
     - Research_leadership      # Each competitor's leadership research
     - Research_customer        # Each competitor's customer research
     - Research_risk            # Each competitor's risk research
+    - Research_partner         # Each competitor's partner research
+    - Research_journalist      # Each competitor's journalist research
+    - Research_social          # Each competitor's social research
 
 documentation:
   overview: |
