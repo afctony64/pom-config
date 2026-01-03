@@ -273,12 +273,19 @@ Financial data from SEC filings:
 {# === ANALYSIS TASK === #}
 ## 🎯 ANALYSIS TASK
 
-Analyze **{{ get_display_name(record) }}** using the page content provided above.
+Analyze **{{ get_display_name(record) }}** using the data sources provided above.
 
 **Data Source Priority**:
+{% if digitalPresence %}
+1. **Digital Presence Data** (digitalPresence) - PRIMARY SOURCE (pre-enriched)
+2. **Page Content** (pageData) - For additional context, cite URLs
+{% else %}
 1. **Page Content** (pageData) - PRIMARY SOURCE, cite URLs
-2. **SEC Edgar Data** (if available) - For financial metrics
-3. **Web Search** (if tools available) - For additional context
+{% endif %}
+{% if edgarData and edgarData.available %}
+{{ '2' if digitalPresence else '2' }}. **SEC Edgar Data** - For financial metrics
+{% endif %}
+3. **Web Search** (if tools available) - For gaps not covered above
 4. **Training Knowledge** - For context and industry norms
 
 {# === FOCUS AREAS === #}
