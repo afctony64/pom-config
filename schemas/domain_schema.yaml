@@ -894,6 +894,18 @@ properties:
   - temporal
   - processing
 
+- name: content_unreadable
+  dataType:
+  - boolean
+  description: Whether content extraction failed for this domain (SPA/Gatsby sites) - skip in future page_facts runs
+  indexFilterable: true
+  sets:
+  - extended
+  - status_update
+  tags:
+  - pipeline
+  - processing
+
 - name: knowledge_base
   dataType:
   - boolean
