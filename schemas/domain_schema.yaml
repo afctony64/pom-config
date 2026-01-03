@@ -870,6 +870,30 @@ properties:
   - pipeline
   - processing
 
+- name: page_facts_count
+  dataType:
+  - int
+  description: Count of Page_facts records (chunks) for this domain. Used for efficient filtering in page_facts_cli.
+  indexFilterable: true
+  sets:
+  - extended
+  - status_update
+  tags:
+  - pipeline
+  - processing
+  - count
+
+- name: page_facts_count_updated_at
+  dataType:
+  - date
+  description: Timestamp when page_facts_count was last updated
+  sets:
+  - system
+  - status_update
+  tags:
+  - temporal
+  - processing
+
 - name: knowledge_base
   dataType:
   - boolean
