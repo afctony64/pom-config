@@ -857,6 +857,19 @@ properties:
   - pipeline
   - processing
 
+- name: page_count
+  dataType:
+  - int
+  description: Count of Page_intelligence records (pages) discovered for this domain
+  indexFilterable: true
+  sets:
+  - standard
+  - status_update
+  tags:
+  - pipeline
+  - processing
+  - count
+
 - name: page_facts
   dataType:
   - boolean
