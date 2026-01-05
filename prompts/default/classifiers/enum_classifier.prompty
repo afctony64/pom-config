@@ -45,7 +45,7 @@ model:
   configuration:
     # Use OpenAI as primary (Ollama fallback requires local server)
     type: pom-llm-proxy
-    model: gpt-5-mini
+    model: gpt-5-nano
   parameters:
     temperature: 0.1
     max_tokens: 2000
