@@ -857,6 +857,19 @@ properties:
   - pipeline
   - processing
 
+- name: page_count
+  dataType:
+  - int
+  description: Count of Page_intelligence records (pages) discovered for this domain
+  indexFilterable: true
+  sets:
+  - standard
+  - status_update
+  tags:
+  - pipeline
+  - processing
+  - count
+
 - name: page_facts
   dataType:
   - boolean
@@ -865,6 +878,42 @@ properties:
   indexSearchable: false
   sets:
   - standard
+  - status_update
+  tags:
+  - pipeline
+  - processing
+
+- name: page_facts_count
+  dataType:
+  - int
+  description: Count of Page_facts records (chunks) for this domain. Used for efficient filtering in page_facts_cli.
+  indexFilterable: true
+  sets:
+  - extended
+  - status_update
+  tags:
+  - pipeline
+  - processing
+  - count
+
+- name: page_facts_count_updated_at
+  dataType:
+  - date
+  description: Timestamp when page_facts_count was last updated
+  sets:
+  - system
+  - status_update
+  tags:
+  - temporal
+  - processing
+
+- name: content_unreadable
+  dataType:
+  - boolean
+  description: Whether content extraction failed for this domain (SPA/Gatsby sites) - skip in future page_facts runs
+  indexFilterable: true
+  sets:
+  - extended
   - status_update
   tags:
   - pipeline

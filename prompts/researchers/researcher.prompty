@@ -26,7 +26,7 @@ model:
   api: responses
   configuration:
     type: pom-llm-proxy
-    model: gpt-5-mini
+    model: gpt-5-nano
     # tools loaded dynamically from researcher_ai.yaml at runtime
   parameters:
     response_format:
