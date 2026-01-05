@@ -49,9 +49,18 @@ tool_guidance:
     priority: high
     max_calls: 3
     when_to_use: |
-      Use brave_search to find data for fields. 
-      Combine: element + ROW DATA values + entity name for disambiguation.
-      Read field descriptions for ENRICHMENT SEARCH patterns.
+      Use brave_search to find specific data for each field based on its description.
+      
+      **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
+      Examples of what to look for in descriptions:
+      - "official website domain" → Search: "{element} {industry} official website"
+      - "LinkedIn profile" → Search: "{element} {role} linkedin profile"
+      - "company size" → Search: "{element} employees company size"
+      
+      **DISAMBIGUATION:**
+      - For common names, include: {source_context.title} and {source_context.industry}
+      - For executives: include their role and company name
+      - For competitors: include the industry vertical
 
 data_requirements:
   include_enrichment_data: true
@@ -104,9 +113,17 @@ You are extracting information about **{{ element }}** to fill parallel array fi
 {% endfor %}
 
 **SEARCH STRATEGY:**
-1. Check page_facts first for existing data
-2. For brave_search, combine: **{{ element }}** + **ROW DATA values** + **{{ source_context.title|default(source_context.domain) }}**
-3. Read the field descriptions - they contain ENRICHMENT SEARCH patterns
+1. Check page_facts first for any existing data
+2. Use brave_search for fields that need web lookup - ALWAYS include company name for disambiguation:
+   - For domains: Search "{{ element }} {{ source_context.industry|default('technology') }} official website"
+   - For LinkedIn: Search "{{ element }} [their role] {{ source_context.title|default(source_context.domain) }} linkedin profile"
+   - For company info: Search "{{ element }} company employees size"
+
+**CRITICAL - DOMAIN FINDING:**
+- Do NOT use LinkedIn, Crunchbase, G2, or profile sites as domains
+- Extract the actual company domain from search results (e.g., useparagon.com, not paragon.dev)
+- If multiple similar results exist, pick the one that is a competitor/alternative to {{ source_context.title|default(source_context.domain) }}
+- Example: "Paragon" in iPaaS context → search "Paragon iPaaS integration platform official website" (not Paragon crypto or Paragon bank)
 
 **OUTPUT:** Return JSON with field names as keys. Use null if not found.
 
@@ -130,9 +147,15 @@ user:
 {% endif %}
 
 **INSTRUCTIONS:**
-1. Read field descriptions - they contain ENRICHMENT SEARCH patterns
-2. For brave_search: use **{{ element }}** + **ROW DATA** + **{{ source_context.title|default(source_context.domain) }}**
-3. Return JSON for: {% for field in post_fields %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+1. Review the field descriptions above - they tell you HOW to search
+2. Use brave_search for any fields that need web data:
+   - competitorDomain → search for official website (NOT LinkedIn, G2, Crunchbase)
+   - executiveLinkedIn → search for LinkedIn profile
+   - customerDomain → search for company website
+   - etc.
+3. For domains: ALWAYS search with industry context to find the RIGHT company
+   - Example: "Paragon" + "iPaaS" + "official website" → finds useparagon.com (not paragon.dev or paragon crypto)
+4. Return JSON with values for: {% for field in post_fields %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}
 
 ```json
 {
