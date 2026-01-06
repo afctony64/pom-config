@@ -1,6 +1,14 @@
 ---
+# ⚠️ DEPRECATED: This prompt has been replaced by entity/entity_researcher
+# Canonical location: prompts/entity/entity_researcher.prompty
+# This file is kept for backward compatibility but should not be used for new work.
+# Migration: Use "entity/entity_researcher" instead of "researchers/researcher"
+deprecated: true
+deprecated_date: "2024-12"
+deprecated_canonical: "entity/entity_researcher"
+
 name: Researcher
-description: Universal researcher template - model injected at runtime
+description: "[DEPRECATED] Universal researcher template - USE entity/entity_researcher INSTEAD"
 inputs:
   record:
     description: Company record data to analyze
@@ -52,6 +60,14 @@ processing_config:
   iteration_values: "ALL_RESEARCHERS"  # Reference to constant (or explicit list: [industry, product, financial, ...])
 
 # 🔧 POST-EXECUTION TOOLS: Run automatically after researcher completes
+# 
+# These tools process the LLM output and add additional fields:
+# - classify_all: Auto-classifies *LLM fields to *Cat fields (EnumCat + VecCat)
+#
+# Additional tools may be added via researcher_ai configs (see researcher_ai/*.yaml)
+# Tools are automatically merged: prompt_tools + researcher_tools = final_list
+#
+# See: docs/guides/PROMPT_POST_TOOLS_QUICK_REFERENCE.md for details
 post_execution_tools:
   - classify_all  # Completes EnumCat + VecCat fields after LLM runs
 

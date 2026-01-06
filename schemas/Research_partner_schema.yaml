@@ -476,6 +476,23 @@ properties:
   - system
   metadata:
     order: 908
+- name: researcher_model_id
+  dataType:
+  - text
+  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models.
+  indexFilterable: true
+  indexSearchable: false
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - metadata
+  tags:
+  - model
+  - versioning
+  metadata:
+    order: 918
 - name: updated_at
   description: Record update timestamp
   dataType:

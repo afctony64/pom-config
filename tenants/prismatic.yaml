@@ -23,6 +23,22 @@ groups: ["research", "url"]
 # This separates seed data from production data for cleaner architecture
 classifier_tenant: classifier
 
+# ══════════════════════════════════════════════════════════════════════════════
+# MODEL VERSIONING: Track which LLM model generated research data
+# ══════════════════════════════════════════════════════════════════════════════
+# Enables parallel research with different models and model comparison.
+# - default_researcher_model: Model used for reporting queries (stable baseline)
+# - current_researcher_model: Model used for new research runs (can change)
+#
+# When both are set:
+# - DataFactory auto-filters Research_* queries by default_researcher_model
+# - New research records are tagged with current_researcher_model
+#
+# To switch models: Change current_researcher_model, run research, then update
+# default_researcher_model when ready to switch reporting to new model data.
+default_researcher_model: gpt-5-mini
+current_researcher_model: gpt-5-mini
+
 # User/persona information (configuration data)
 user:
   name: Michael

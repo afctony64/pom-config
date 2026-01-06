@@ -23,8 +23,6 @@ model:
 
 processing_config:
   mode: report  # ✅ Report mode - generates JSON for report executor, does NOT write to collections
-  prompt_dependencies:
-    - Researcher  # ✅ Depends on Researcher - means ALL instances when researcher_id="all"
 
 ---
 # 📝 RESEARCHER SYNOPSIS

@@ -94,12 +94,20 @@ priority_config:
     embedding_generation: max_throughput
 
 # Routing configuration
-routing: [mac, spark]  # Default: Mac primary, Spark fallback
+# Issue #72: Updated routing to prefer Groq for parallel processing (prevents timeout failures)
+# Ollama is SERIAL - only 1 request at a time. Groq handles parallel requests natively.
+routing:
+  preferred_backend: groq   # Prefer Groq for parallel capability and speed
+  fallback_backends: [spark, mac]  # Fall back to Spark CUDA, then Mac Metal
+  parallel_capable: true    # This model supports parallel processing via Groq
+  serial_backends: [mac, spark]  # These are serial - avoid for parallel workloads
 routing_priority:
   ultra: groq              # Instant response via Groq LPU (~500 tok/s)
-  fast: mac                # Interactive via Mac Metal (~85 tok/s)
-  batch: spark             # Background jobs via Spark CUDA (~42 tok/s)
-  max_throughput: ollama-lb  # Load balanced for max throughput (~127 tok/s)
+  urgent: groq             # Issue #72: Route urgent to Groq for reliability
+  fast: groq               # Issue #72: Route fast to Groq (was mac - caused serial bottleneck)
+  chat: groq               # Issue #72: Chat needs parallel capability
+  batch: spark             # Background jobs via Spark CUDA - single stream OK
+  max_throughput: groq     # Issue #72: Groq for max throughput, not serial ollama-lb
 
 metadata:
   description: "Alibaba Qwen 3 8B - Current default for Fact Sanitizer"
@@ -123,14 +131,14 @@ requirements:
 
 hardware_detection:
   execution_mode: local_gpu
-  optimal_concurrency: 6  # For Spark only
+  optimal_concurrency: 6  # For Spark only - from parallelism benchmark Dec 19
   max_concurrency: 12  # For Spark only
   mac_metal:
     optimal_parallel_workers: 1  # Mac Ollama does NOT handle parallel - always 1
     recommended_batch_size: 1
     notes: "Mac processes requests sequentially - parallel requests queue"
   dgx_spark:
-    optimal_parallel_workers: 6  # Spark handles parallel well
+    optimal_parallel_workers: 6  # Spark handles parallel well - from parallelism benchmark Dec 19
     recommended_batch_size: 1
     memory_usage_gb: 5.2
     estimated_throughput: 0.5
@@ -155,8 +163,8 @@ hardware_detection:
 resource_class:
   class: B  # Balanced (6-11GB VRAM)
   vram_gb: 5.2
-  parallel_capacity_spark: 20  # Max parallel on 128GB unified memory
-  recommended_parallel: 6  # For Spark only
+  parallel_capacity_spark: 6  # Optimal parallel from benchmark Dec 19 (NOT 20 - Spark cannot handle that many)
+  recommended_parallel: 6  # For Spark only - from parallelism benchmark Dec 19
   recommended_parallel_mac: 1  # Mac always uses 1 (doesn't handle parallel)
   throughput_tier: moderate
   tokens_per_second_single: 25

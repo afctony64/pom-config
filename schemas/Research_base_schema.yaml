@@ -137,6 +137,14 @@ base_properties:
     description: "AI reasoning steps"
     tags: [provenance, ai]
 
+  # --- MODEL VERSIONING ---
+  - name: researcher_model_id
+    dataType: [text]
+    description: "LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models."
+    indexFilterable: true
+    indexSearchable: false
+    tags: [model, versioning, system]
+
   # --- DOMAIN REFERENCE (Cross-reference to source Domain record) ---
   - name: references
     dataType: [object]

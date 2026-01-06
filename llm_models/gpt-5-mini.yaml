@@ -3,10 +3,10 @@ name: GPT 5 Mini
 type: llm_model
 version: 1.0.0
 provider:
-  name: openai_responses
-  api_type: responses
+  name: openai
+  api_type: chat
 adapter_config:
-  type: openai_responses
+  type: openai
   model: gpt-5-mini
   base_url: null
   base_url_env: OPENAI_API_KEY
