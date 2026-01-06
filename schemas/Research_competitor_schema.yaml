@@ -166,7 +166,11 @@ properties:
 - name: keyCompetitors
   dataType:
   - text[]
-  description: 'Array of 2-5 DIRECT competitor OFFICIAL COMPANY NAMES. Use the company name exactly as it appears on their website/logo - no product lines, editions, or parenthetical notes. Example: "Workato" not "Workato Embedded". Clean names required for domain lookups.'
+  description: 'Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN OFFICIAL
+    NAMES without qualifiers, product variants, or parenthetical notes. Examples:
+    "Workato" (not "Workato Embedded"), "Boomi" (not "Boomi iPaaS"), "Zapier" (not
+    "Zapier for Enterprise"). These names are used for domain lookups - spurious
+    data breaks entity spawn.'
   tags:
   - research
   sets:
