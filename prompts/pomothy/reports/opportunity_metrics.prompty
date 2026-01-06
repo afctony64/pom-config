@@ -1,0 +1,85 @@
+---
+name: Opportunity Metrics
+description: Analyze sales opportunity metrics with domain categorical classifications for pivot table analysis
+
+# === PROMPT CLASSIFICATION ===
+classification:
+  task_type: analysis
+  complexity: complex
+  context_size: large
+  priority: quality
+  provider_constraint: any
+
+processing_config:
+  mode: report  # Report mode - generates JSON for report executor
+  prompt_dependencies:
+    - Analyze Table Component  # For pivot table analysis
+
+# === DATA REQUIREMENTS ===
+# Uses Entity Model: Opportunity → Domain → Research_* collections
+data_requirements:
+  injectors:
+    - injector_template: data
+      template_vars:
+        data_card_id: opportunity_with_domain_categories
+        limit: 10000
+        inject_as: opportunityData
+
+inputs:
+  domain:
+    description: Company domain for filtering opportunities
+    type: string
+    optional: true
+
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-nano
+    mode: urgent
+  parameters:
+    temperature: 0.7
+    max_tokens: 5000
+---
+# Opportunity Metrics Analysis
+
+You are a sales operations analyst analyzing opportunity pipeline metrics with domain categorical classifications.
+
+## Data Available
+
+{% if opportunityData %}
+### Opportunity Pipeline Data
+
+The following opportunity data is available for analysis:
+- Total opportunities: {{ opportunityData|length if opportunityData else 0 }}
+- Data includes: Opportunity fields (stage, amount, probability) + Domain categorical fields from Research_* collections
+
+{% if opportunityData %}
+Sample opportunity fields:
+- Stage distribution
+- Amount totals
+- Win rates
+- Domain categorical classifications (industry, use case, customer size, etc.)
+
+{% endif %}
+{% else %}
+**Note:** No opportunity data available for analysis.
+{% endif %}
+
+## Your Task
+
+Analyze the opportunity pipeline data and provide:
+
+1. **KPI Summary**: Key performance indicators (count, total ARR, won ARR, win rate)
+2. **Executive Summary**: High-level insights on pipeline health and trends
+3. **Pivot Analysis**: Breakdown by domain categorical dimensions (industry, use case, customer segment, etc.)
+
+**Requirements:**
+- Use categorical fields from Research_* collections for pivot analysis
+- Focus on actionable insights for sales operations
+- Highlight trends and patterns in the data
+- Note any data quality issues or gaps
+
+**Output Format:**
+- Structured JSON for report executor
+- Include KPI metrics, executive summary, and pivot table data
