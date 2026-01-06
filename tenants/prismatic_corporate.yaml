@@ -66,16 +66,3 @@ collections:
   Fact_base: "spark"
   API_intelligence: "spark"
 
-  # LEGACY: Keep Company_* routing for comparison
-  Company_source: "cloud"
-  Company_opportunity: "cloud"
-  Company_research_competitor: "cloud"
-  Company_research_customer: "cloud"
-  Company_research_financial: "cloud"
-  Company_research_industry: "cloud"
-  Company_research_journalist: "cloud"
-  Company_research_leadership: "cloud"
-  Company_research_partner: "cloud"
-  Company_research_product: "cloud"
-  Company_research_risk: "cloud"
-  Company_research_social: "cloud"

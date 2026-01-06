@@ -37,8 +37,6 @@ data_sources:
 # fortune_1000 tenant routes to Cloud by default (fallback to collection-level routing if not specified)
 collections:
   # Explicitly route to Cloud (optional - falls back to collection-level routing if not specified)
-  Company_research_industry: "cloud"
-  Company_source: "cloud"
   Domain: "cloud"  # Domain collection routing for spider pipeline
   Page_intelligence: "cloud"  # Page intelligence for spider pipeline
   Page_facts: "cloud"  # Page facts for spider pipeline

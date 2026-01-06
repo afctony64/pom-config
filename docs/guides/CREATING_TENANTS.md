@@ -414,8 +414,8 @@ Older tenants may use the Company model:
 
 ```yaml
 tenant_group: company
-# Source: Company_source
-# Output: Company_research_* collections
+# Source: Domain (Entity Model)
+# Output: Research_* collections (Entity Model)
 ```
 
 ---
