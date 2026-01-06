@@ -16,7 +16,7 @@ parameters:
   top_p: 1.0
   reasoning_effort: medium
 capabilities:
-  structured_output: true
+  structured_output: json_strict  # OpenAI supports strict JSON schema enforcement
   reasoning: true
   reasoning_summary: true
   tool_calling: true

@@ -17,7 +17,7 @@ parameters:
   max_tokens: 16384
   top_p: 1.0
 capabilities:
-  structured_output: true
+  structured_output: json_strict  # OpenAI supports strict JSON schema enforcement
   reasoning: true
   tool_calling: true
   streaming: true
