@@ -22,7 +22,7 @@ description: |
   4. Researcher provides specialized analysis (LLM + Cat fields)
 
   FIELD PATTERN:
-  - Base fields: Domain reference, metadata, quality, citations
+  - Base fields: Identity, context, timestamps, citations, references
   - Researcher adds: {subject}LLM, {subject}Cat, {subject}VecCat
 
 # ============================================================
@@ -68,20 +68,6 @@ base_properties:
     tags: [context]
 
   # --- SOURCE TRACKING ---
-  - name: primaryDomain
-    dataType: [text]
-    description: "Primary domain URL for this entity"
-    indexFilterable: true
-    tokenization: field
-    tags: [source, web]
-
-  - name: dataSource
-    dataType: [text]
-    description: "Data source: ai_analysis, web_scrape, api, manual"
-    indexFilterable: true
-    tokenization: field
-    tags: [source]
-
   - name: seed
     dataType: [boolean]
     description: "Seed/training data flag"
@@ -101,41 +87,12 @@ base_properties:
     indexFilterable: true
     tags: [temporal]
 
-  - name: sourceQuality
-    dataType: [text]
-    description: "Source quality: high, medium, low, minimal"
-    indexFilterable: true
-    tokenization: field
-    tags: [quality]
-    enum: [high, medium, low, minimal, unknown]
-
-  - name: analysisConfidence
-    dataType: [text]
-    description: "Confidence: high, medium, low, inferred, web_verified"
-    indexFilterable: true
-    tokenization: field
-    tags: [quality]
-    enum: [high, medium, low, inferred, web_verified, unknown]
-
-  - name: reviewFlag
-    dataType: [text]
-    description: "Review status: none, for_review, needs_verification, verified"
-    indexFilterable: true
-    tokenization: field
-    tags: [quality]
-    enum: [none, for_review, needs_verification, verified]
-
   # --- AI PROVENANCE ---
   - name: citations
     dataType: ["text[]"]
     description: "Source URLs used for analysis"
     indexSearchable: true
     tags: [provenance]
-
-  - name: reasoning
-    dataType: ["text[]"]
-    description: "AI reasoning steps"
-    tags: [provenance, ai]
 
   # --- MODEL VERSIONING ---
   - name: researcher_model_id
