@@ -121,9 +121,9 @@ You are extracting information about **{{ element }}** to fill parallel array fi
 
 **CRITICAL - DOMAIN FINDING:**
 - Do NOT use LinkedIn, Crunchbase, G2, or profile sites as domains
-- Extract the actual company domain from search results (e.g., useparagon.com, not paragon.dev)
+- Extract the actual company domain from search results
 - If multiple similar results exist, pick the one that is a competitor/alternative to {{ source_context.title|default(source_context.domain) }}
-- Example: "Paragon" in iPaaS context → search "Paragon iPaaS integration platform official website" (not Paragon crypto or Paragon bank)
+- Example: For "CompanyName" in {{ source_context.industry|default('technology') }} context → search "CompanyName {{ source_context.industry|default('technology') }} integration platform official website" to find the right company (not other companies with similar names)
 
 **OUTPUT:** Return JSON with field names as keys. Use null if not found.
 
@@ -154,7 +154,7 @@ user:
    - customerDomain → search for company website
    - etc.
 3. For domains: ALWAYS search with industry context to find the RIGHT company
-   - Example: "Paragon" + "iPaaS" + "official website" → finds useparagon.com (not paragon.dev or paragon crypto)
+   - Example: "CompanyName" + "{{ source_context.industry|default('technology') }}" + "official website" → finds the correct company domain (not other companies with similar names)
 4. Return JSON with values for: {% for field in post_fields %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}
 
 ```json
