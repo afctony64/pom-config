@@ -5,6 +5,22 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.48] - 2025-01-03
+
+### Added
+- `shared-config.env` - Centralized non-secret configuration file
+  - System paths: RESEARCHER_SEED_OUTPUT_DIR, SHARED_REPORTS_PATH, POM_CONFIG_ROOT
+  - System behavior: POMSPARK_MODE, WEAVIATE_MODE, LOG_LEVEL
+  - Service URLs: MAC_OLLAMA_URL, SPARK_OLLAMA_URL, TRANSFORMERS_URL
+- This follows the same pattern as other pom-config files (schemas, data_cards, etc.)
+- Loaded by pom-core via `pom_core/config/settings/env.py`
+
+### Changed
+- Non-secret shared configuration now uses pom-config instead of `~/.shared-config.env`
+- Same update workflow: `./scripts/pom_config.sh update`
+
+See: pom-core #547, pom-docs/docs/infrastructure/SHARED_CONFIG_GUIDE.md
+
 ## [1.6.16] - 2024-12-28
 
 ### Fixed
