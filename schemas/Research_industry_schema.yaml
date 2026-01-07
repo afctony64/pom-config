@@ -131,6 +131,15 @@ namedVectors:
         model: Snowflake/snowflake-arctic-embed-l-v2.0
         dimensions: 1024
         vectorizeClassName: false
+  industryLLMVector:
+    vectorizer: text2vec-weaviate
+    sourceProperties:
+    - industrySegmentLLM
+    moduleConfig:
+      text2vec-weaviate:
+        model: Snowflake/snowflake-arctic-embed-l-v2.0
+        dimensions: 1024
+        vectorizeClassName: false
 multiTenancyConfig:
   autoTenantActivation: true
   autoTenantCreation: true
