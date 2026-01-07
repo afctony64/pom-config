@@ -96,11 +96,8 @@ priority_config:
 # Routing configuration
 # Issue #72: Updated routing to prefer Groq for parallel processing (prevents timeout failures)
 # Ollama is SERIAL - only 1 request at a time. Groq handles parallel requests natively.
-routing:
-  preferred_backend: groq   # Prefer Groq for parallel capability and speed
-  fallback_backends: [spark, mac]  # Fall back to Spark CUDA, then Mac Metal
-  parallel_capable: true    # This model supports parallel processing via Groq
-  serial_backends: [mac, spark]  # These are serial - avoid for parallel workloads
+# Note: routing is a list of backends in priority order; detailed config in routing_priority
+routing: [groq, spark, mac]  # Prefer Groq, fallback to Spark CUDA, then Mac Metal
 routing_priority:
   ultra: groq              # Instant response via Groq LPU (~500 tok/s)
   urgent: groq             # Issue #72: Route urgent to Groq for reliability

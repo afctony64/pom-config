@@ -190,8 +190,8 @@ hardware_detection:
 resource_class:
   class: B                        # A=Light(<6GB), B=Balanced(6-11GB), C=Heavy(12GB+)
   vram_gb: 0.0                    # Actual VRAM usage
-  parallel_capacity_spark: 0      # Max parallel instances on 128GB
-  recommended_parallel: 0         # Recommended parallel for batch
+  parallel_capacity_spark: 1      # Max parallel instances on 128GB (min: 1)
+  recommended_parallel: 1         # Recommended parallel for batch (min: 1)
   throughput_tier: moderate       # high | moderate | low
   tokens_per_second_single: 0     # Single-instance tok/s
 

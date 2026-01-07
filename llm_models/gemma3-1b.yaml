@@ -43,5 +43,5 @@ resource_class:
   throughput_tier: high
 metadata:
   description: Google Gemma 3 1B - Ultra-compact model for high-throughput tasks
-  category: ultra-efficient
-  status: active
+  category: general  # ultra-efficient capability, but category must be: general|reasoning|chat|code|vision|embedding
+  status: stable     # active → stable (valid: stable|beta|experimental|deprecated)
