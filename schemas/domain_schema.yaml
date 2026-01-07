@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 9.0
+version: 9.1
 group: url
 weaviate_instance: cloud
 description: |
@@ -886,7 +886,7 @@ properties:
 - name: page_facts_count
   dataType:
   - int
-  description: Count of Page_facts records (chunks) for this domain. Used for efficient filtering in page_facts_cli.
+  description: Count of unique URLs with Page_facts records for this domain. Updated by page_facts_cli after processing.
   indexFilterable: true
   sets:
   - extended
@@ -895,6 +895,34 @@ properties:
   - pipeline
   - processing
   - count
+
+- name: chunk_count
+  dataType:
+  - int
+  description: Total number of Page_facts chunks (text segments) for this domain. Multiple chunks per page. Quality indicator for SPAs with lots of content.
+  indexFilterable: true
+  sets:
+  - extended
+  - status_update
+  tags:
+  - pipeline
+  - processing
+  - count
+  - quality
+
+- name: total_content_chars
+  dataType:
+  - int
+  description: Total character count across all Page_facts content for this domain. Quality indicator - SPAs may have 1 page but lots of content.
+  indexFilterable: true
+  sets:
+  - extended
+  - status_update
+  tags:
+  - pipeline
+  - processing
+  - count
+  - quality
 
 - name: page_facts_count_updated_at
   dataType:
