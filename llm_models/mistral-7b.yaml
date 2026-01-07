@@ -37,5 +37,19 @@ performance:
       optimal_parallelism: 6
 resource_class:
   class: B
-  vram_gb: 0.0
+  vram_gb: 4.0
+  parallel_capacity_spark: 6
+  recommended_parallel: 6
   throughput_tier: moderate
+
+metadata:
+  description: Mistral 7B Instruct - General purpose instruction-following model
+  category: general
+  status: stable
+  release_date: "2024-01-01"
+  last_verified: "2025-01-07"
+  recommended_for:
+    - "General instruction following"
+    - "Chat and conversation"
+  not_recommended_for:
+    - "Complex reasoning tasks"
