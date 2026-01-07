@@ -263,7 +263,6 @@ properties:
   metadata:
     order: 131
     source_llm: industrySegmentLLM
-    classifier_vector: industryLLMVector
 - name: industrySegmentLLM
   dataType:
   - text[]
