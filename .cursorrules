@@ -39,6 +39,19 @@
 
 ---
 
+## 📚 SHARED DOCUMENTATION (pom-docs)
+
+**Single source of truth for architecture:** `~/Projects/pom-docs/`
+
+| Topic | Document |
+|-------|----------|
+| pom-config Strategy | `docs/architecture/POM_CONFIG_STRATEGY.md` |
+| Shared Config Guide | `docs/infrastructure/SHARED_CONFIG_GUIDE.md` |
+| Dev Environment | `docs/infrastructure/DEVELOPER_ENVIRONMENT_GUIDE.md` |
+| Cursor Rules Standard | `docs/architecture/CURSORRULES_STANDARDIZATION.md` |
+
+---
+
 ## 🚨 CRITICAL: UNDERSTAND YOUR IMPACT
 
 **pom-config is SHARED. When you break pom-config, you break ALL APPS.**
