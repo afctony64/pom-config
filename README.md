@@ -34,9 +34,53 @@ pom-config/
 ├── researcher_ai/    # Researcher AI configurations
 ├── llm_models/       # LLM model cards
 ├── prompts/          # Shared prompt templates
+├── profiles/         # Mode-specific environment configs
+├── frontend/         # Shared frontend test utilities (TypeScript)
 ├── docs/             # Developer documentation
 └── scripts/          # Validation scripts
 ```
+
+## Frontend Test Utilities
+
+**New in v1.6.82:** Shared frontend testing utilities for React apps.
+
+```
+frontend/
+└── test/
+    ├── index.ts                 # Barrel export
+    ├── mocks/
+    │   ├── TenantContextMock.ts
+    │   ├── AuthContextMock.ts
+    │   └── GlobalDataMock.ts
+    └── helpers/
+        └── renderWithProviders.tsx
+```
+
+**Why in pom-config (not pom-core)?**
+- pom-core is Python; frontend tests are TypeScript
+- pom-config already handles multi-format assets (YAML, Jinja2, Env)
+- Same sync mechanism: `./scripts/pom_config.sh update`
+- See [ADR: Frontend Test Utilities](https://github.com/afctony64/pom-docs/blob/main/docs/architecture/FRONTEND_TEST_UTILITIES_ADR.md)
+
+See [frontend/README.md](frontend/README.md) for usage.
+
+## Testing Philosophy
+
+**pom-config does NOT have unit tests.** Here's why:
+
+| Concern | Where Tested | Why |
+|---------|--------------|-----|
+| YAML syntax | Apps + Validation scripts | pom-core Pydantic models validate on load |
+| Schema correctness | Pomothy/PomAI acceptance tests | Real database operations prove validity |
+| Frontend mocks | App test suites | Mocks validated by component tests that use them |
+| Prompts | Benchmark tests in apps | LLM output quality tests |
+
+**pom-config is configuration, not code.** Testing configuration means testing it in context - when apps consume it.
+
+**What pom-config DOES have:**
+- `scripts/validate_all_configs.py` - Syntax/structure validation
+- CI linting for YAML format
+- TypeScript compilation check for frontend utilities
 
 ## Quick Start
 
