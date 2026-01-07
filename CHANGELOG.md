@@ -5,6 +5,23 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.81] - 2025-01-03
+
+### Added
+- `profiles/` directory with mode-specific configurations:
+  - `profiles/home.env` - Mac + Spark configuration
+  - `profiles/travel.env` - Mac-only configuration
+  - `profiles/ooo.env` - Spark unattended configuration
+  - `profiles/README.md` - Usage documentation
+- Extended `shared-config.env` with complete service URLs:
+  - Weaviate URLs (MAC_WEAVIATE_URL, SPARK_WEAVIATE_URL, WEAVIATE_GRPC_URL)
+  - Ollama URLs (OLLAMA_URL, MAC_OLLAMA_URL, SPARK_OLLAMA_URL)
+  - Transformers URLs (MAC_TRANSFORMERS_URL, SPARK_TRANSFORMERS_URL)
+  - Other services (LLM_PROXY_URL, REDIS_URL)
+
+### Changed
+- `shared-config.env` now references profiles for mode switching
+
 ## [1.6.80] - 2025-01-03
 
 ### Added
