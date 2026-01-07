@@ -5,6 +5,25 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.82] - 2025-01-07
+
+### Added
+- `frontend/` directory with shared frontend testing utilities:
+  - `frontend/test/mocks/TenantContextMock.ts` - Mock TenantContext for unit tests
+  - `frontend/test/mocks/AuthContextMock.ts` - Mock AuthContext for unit tests
+  - `frontend/test/mocks/GlobalDataMock.ts` - Mock UnifiedGlobalDataProvider for unit tests
+  - `frontend/test/helpers/renderWithProviders.tsx` - Custom render with all providers
+  - `frontend/test/index.ts` - Barrel export for all test utilities
+  - `frontend/README.md` - Usage documentation
+
+### Changed
+- Frontend testing now follows same shared pattern as schemas, data_cards, prompts
+- All Pom apps can import consistent mocks via `@pom-config/frontend/test`
+
+### Related
+- Pomothy issue: Frontend test coverage review
+- pom-docs: `docs/web/FRONTEND_TESTING_STANDARDS.md`
+
 ## [1.6.81] - 2025-01-03
 
 ### Added
