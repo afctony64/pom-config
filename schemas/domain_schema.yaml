@@ -833,6 +833,17 @@ properties:
   tags:
   - filtering
 
+- name: enrichment_attempts
+  dataType:
+  - int
+  description: Number of failed enrichment attempts (max 3, then domain is skipped)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - filtering
+  - processing
+
 - name: blacklist_reason
   dataType:
   - text
