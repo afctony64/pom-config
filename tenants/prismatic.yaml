@@ -64,6 +64,139 @@ analysis_config:
       naics_focus: ["518210", "511210", "541511"]  # Software publishers, data processing, custom computer programming
       market_signals: ["SaaS metrics", "API subdomain patterns", "Developer community"]
 
+# ══════════════════════════════════════════════════════════════════════════════
+# RESEARCHER EXAMPLES: Domain-specific output examples per researcher
+# ══════════════════════════════════════════════════════════════════════════════
+# Full schema examples showing expected LLM + Cat field values.
+# Used by:
+# - Entity researcher prompts (LLM field examples)
+# - Post-execution tools like enum_cat (Cat field examples)
+#
+# Examples use GENERAL software patterns (not niche/domain-specific).
+# The classifier should learn patterns, not specific industry knowledge.
+researcher_examples:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # INDUSTRY RESEARCHER - Business model, delivery model, industry classification
+  # ═══════════════════════════════════════════════════════════════════════════
+  industry:
+    # LLM fields - what the entity researcher should produce
+    businessModelLLM:
+      - "B2B software company selling annual subscriptions to enterprise customers. Revenue primarily from recurring SaaS licenses with tiered pricing based on users and features. Sales-led go-to-market with inside sales for SMB and field sales for enterprise accounts."
+    deliveryModelLLM:
+      - "Cloud-hosted software accessed through web browser and mobile apps. No installation required - customers log in and start using immediately. All infrastructure managed by provider with automatic updates and 99.9% uptime SLA."
+    industrySegmentLLM:
+      - "Enterprise software provider offering business applications to corporate customers. Serves mid-market and enterprise companies across multiple industries. Competes with legacy on-premise software and other cloud vendors."
+    sector:
+      - "Software"
+    industry:
+      - "Enterprise Applications"
+    naicsCode:
+      - "511210"
+    naicsDescription:
+      - "Software Publishers"
+    valueChainPosition: "Software vendor selling directly to end-user businesses"
+    entityDescription: "Enterprise software company providing cloud-based business applications"
+    # Cat fields - expected classification results
+    businessModelCat:
+      - "B2B-SaaS"
+    deliveryModelCat:
+      - "Cloud-SaaS"
+    industrySegmentCat:
+      - "Enterprise Software"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CUSTOMER RESEARCHER - Customer profiles, segments, and characteristics
+  # ═══════════════════════════════════════════════════════════════════════════
+  customer:
+    # LLM fields
+    keyCustomersLLM:
+      - "Enterprise customers include Fortune 500 companies across technology, financial services, and healthcare sectors. Named customers include Adobe, Atlassian, and ServiceNow."
+    customerProfileLLM:
+      - "Target customers are mid-market and enterprise B2B SaaS companies with 50-5000 employees. They typically have developer teams building customer-facing products and need to offer native integrations."
+    # Cat fields
+    customerSizeCat:
+      - "Enterprise"
+    keyCustomerSizeCat:
+      - "Enterprise"
+    customerSectorCat:
+      - "Technology"
+    keyCustomerSectorCat:
+      - "Technology"
+    customerRegionCat:
+      - "North America"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # COMPETITOR RESEARCHER - Competitive landscape and positioning
+  # ═══════════════════════════════════════════════════════════════════════════
+  competitor:
+    # LLM fields
+    keyCompetitorsLLM:
+      - "Direct competitors include Workato, Boomi, and MuleSoft in the iPaaS space. Indirect competitors include point-to-point integration tools and in-house development teams."
+    competitivePositionLLM:
+      - "Differentiated through embedded iPaaS focus rather than general enterprise iPaaS. Targets B2B SaaS companies building native integrations into their products."
+    # Cat fields
+    competitorAnalysisCat:
+      - "Highly Competitive"
+    marketPositionCat:
+      - "Challenger"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PRODUCT RESEARCHER - Technology, features, and product characteristics
+  # ═══════════════════════════════════════════════════════════════════════════
+  product:
+    # LLM fields
+    technologyStackLLM:
+      - "Cloud-native platform built on modern microservices architecture. Uses React for frontend, Node.js and Python for backend services, with PostgreSQL and Redis for data storage."
+    coreProductsLLM:
+      - "Primary product is an embedded iPaaS platform enabling B2B SaaS companies to build native integrations. Includes visual integration designer, embedded marketplace, and developer SDK."
+    pricingModelLLM:
+      - "Usage-based pricing with platform fee. Tiers based on number of active integrations and API calls. Enterprise tier includes dedicated support and custom SLAs."
+    # Cat fields
+    technologyStackCat:
+      - "Modern Cloud-Native"
+    pricingModelCat:
+      - "Usage-Based"
+    integrationProfileCat:
+      - "API-First"
+    productMaturityCat:
+      - "Growth Stage"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # FINANCIAL RESEARCHER - Funding, revenue, and growth metrics
+  # ═══════════════════════════════════════════════════════════════════════════
+  financial:
+    # LLM fields
+    fundingHistoryLLM:
+      - "Series B funded with $20M raised to date. Investors include prominent enterprise SaaS VCs. Most recent round closed in 2023."
+    revenueEstimateLLM:
+      - "Estimated ARR of $10-20M based on customer count and typical enterprise SaaS pricing. Growing 100%+ YoY based on press releases and hiring velocity."
+    # Cat fields
+    fundingStageCat:
+      - "Series B"
+    revenueSizeCat:
+      - "$10M-$50M"
+    growthVelocityCat:
+      - "Hypergrowth"
+    profitabilityProfileCat:
+      - "Pre-Profit Growth"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # LEADERSHIP RESEARCHER - Executive team and founder profiles
+  # ═══════════════════════════════════════════════════════════════════════════
+  leadership:
+    # LLM fields
+    keyExecutivesLLM:
+      - "CEO is a repeat founder with prior exits in enterprise software. CTO has experience at major tech companies. Leadership team has deep enterprise SaaS experience."
+    founderBackgroundLLM:
+      - "Technical founder with engineering background. Previously built and sold B2B software companies. Strong network in enterprise software ecosystem."
+    # Cat fields
+    founderProfileCat:
+      - "Serial Entrepreneur"
+    executiveExperienceCat:
+      - "Enterprise Software Veterans"
+    leadershipStyleCat:
+      - "Product-Led"
+
 # Data sources configuration (infrastructure only)
 data_sources:
   source_collection: Source

@@ -99,6 +99,14 @@ model:
 ---
 
 system:
+{% if _rendered_system_message %}
+## Researcher Context
+{{ _rendered_system_message[:1500] }}{% if _rendered_system_message|length > 1500 %}
+... (truncated){% endif %}
+
+---
+{% endif %}
+
 You are extracting information about **{{ element }}** to fill parallel array fields.
 
 **ENTITY:** {{ source_context.title|default(source_context.domain) }} ({{ source_context.industry|default('technology') }})
@@ -126,6 +134,16 @@ You are extracting information about **{{ element }}** to fill parallel array fi
 - Example: For "CompanyName" in {{ source_context.industry|default('technology') }} context → search "CompanyName {{ source_context.industry|default('technology') }} integration platform official website" to find the right company (not other companies with similar names)
 
 **OUTPUT:** Return JSON with field names as keys. Use null if not found.
+
+{% if researcher_example %}
+## Example Output
+
+For reference, here's an example of expected field values for this researcher type:
+
+```json
+{{ researcher_example | tojson(indent=2) }}
+```
+{% endif %}
 
 user:
 **SUBJECT:** {{ element }}

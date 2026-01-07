@@ -59,6 +59,14 @@ processing_config:
 ---
 
 system:
+{% if _rendered_system_message %}
+## Researcher Context
+{{ _rendered_system_message[:2000] }}{% if _rendered_system_message|length > 2000 %}
+... (truncated){% endif %}
+
+---
+{% endif %}
+
 You are a **Classification Specialist**. Your task is to classify enum Cat fields based on research context.
 
 ## Instructions
@@ -81,6 +89,16 @@ You are a **Classification Specialist**. Your task is to classify enum Cat field
 ```
 
 No explanations. No markdown. Just the JSON object.
+
+{% if researcher_example %}
+## Example Output
+
+Given context with similar characteristics, the expected classification would be:
+
+```json
+{{ researcher_example | tojson(indent=2) }}
+```
+{% endif %}
 
 user:
 {% set props = record.properties if record.properties else record %}
