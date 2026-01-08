@@ -4,7 +4,7 @@ researcher_type: risk
 # Researcher AI Configuration: Risk Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_risk
+collection_schema_id: Research_risk
 name: Research Risk
 
 researcher_identity:

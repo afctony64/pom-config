@@ -4,7 +4,7 @@ researcher_type: product
 # Researcher AI Configuration: Product & Technology Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_product
+collection_schema_id: Research_product
 name: Research Product
 
 researcher_identity:

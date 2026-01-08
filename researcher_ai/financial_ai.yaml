@@ -4,7 +4,7 @@ researcher_type: financial
 # Researcher AI Configuration: Financial Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_financial
+collection_schema_id: Research_financial
 name: Research Financial
 
 researcher_identity:

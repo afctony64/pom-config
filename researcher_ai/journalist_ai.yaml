@@ -4,7 +4,7 @@ researcher_type: journalist
 # Researcher AI Configuration: Media Coverage Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_journalist
+collection_schema_id: Research_journalist
 name: Research Journalist
 
 researcher_identity:

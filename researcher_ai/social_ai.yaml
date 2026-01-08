@@ -4,7 +4,7 @@ researcher_type: social
 # Researcher AI Configuration: Social Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_social
+collection_schema_id: Research_social
 name: Research Social
 
 researcher_identity:

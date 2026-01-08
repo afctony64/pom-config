@@ -4,7 +4,7 @@ researcher_type: partner
 # Researcher AI Configuration: Partnership Ecosystem Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_partner
+collection_schema_id: Research_partner
 name: Research Partner
 
 researcher_identity:

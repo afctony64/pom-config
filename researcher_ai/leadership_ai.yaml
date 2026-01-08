@@ -4,7 +4,7 @@ researcher_type: leadership
 # Researcher AI Configuration: Executive Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_leadership
+collection_schema_id: Research_leadership
 name: Research Leadership
 
 researcher_identity:

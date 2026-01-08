@@ -4,7 +4,7 @@ researcher_type: industry
 # Researcher AI Configuration: Industry Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_industry
+collection_schema_id: Research_industry
 name: Research Industry
 
 researcher_identity:

@@ -4,7 +4,7 @@ researcher_type: customer
 # Researcher AI Configuration: Customer Intelligence
 # Links to pom-core collection schema for data structure
 
-collection_schema_id: Company_research_customer
+collection_schema_id: Research_customer
 name: Research Customer
 
 researcher_identity:
