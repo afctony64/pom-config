@@ -47,19 +47,6 @@ search_queries:
   - "What is the company contact email and phone number? Get in touch contact us"
   - "About the company story our history dream founders husband wife team"
 
-context_options:
-  strategy: balanced
-  page_affinity:
-    enabled: true
-    priority_pages:
-      - about
-      - contact
-      - company
-      - team
-    boost_factor: 2.0
-  semantic_filter:
-    enabled: false  # Disable semantic filtering to keep all retrieved pages
-
 
 tool_guidance:
   structured_output:
