@@ -13,13 +13,19 @@ update_mode: true  # UPDATE existing records, don't CREATE new
 confidence_based_update: true  # Only overwrite if new data has higher confidence
 execution_order: 100  # Runs LAST after all other researchers
 
-# RESTRICTED: Only these fields can be written to Domain
-allowed_output_fields:
-  - entityName
-  - country
-  - foundedYear
-  - headquarters
-  - contactEmail
+# DOCUMENTATION: Fields this researcher populates on Domain
+# (Actual field restrictions come from the prompt schema)
+output_fields:
+  - entityName      # Official company name
+  - country         # ISO 2-letter code
+  - foundedYear     # Year founded (int)
+  - headquarters    # Full location string
+  - email           # Primary contact email
+  - phone           # Primary phone number
+  - address         # Street address
+  - city            # City
+  - region          # State/Province
+  - postalCode      # ZIP/Postal code
 
 # PROTECTED: Never touch these fields regardless of output
 protected_fields:
@@ -73,8 +79,10 @@ tool_guidance:
   structured_output:
     priority: critical
     usage_instructions: |
-      OUTPUT FORMAT - IDENTITY FIELDS ONLY:
-      
+      OUTPUT FORMAT - IDENTITY & CONTACT FIELDS:
+
+      IDENTITY FIELDS:
+      ────────────────
       entityName:
         Extract the official company name (NOT page title, NOT tagline)
         Sources (priority order):
@@ -83,27 +91,45 @@ tool_guidance:
         3. Copyright footer: "© 2024 Acme Corporation"
         4. About page: "Acme Corporation is a leading..."
         5. Legal/Terms: "Acme Corporation, Inc. ('Company')"
-        
         NEVER use: "Home", taglines, domain names
-      
+
+      foundedYear:
+        Integer year (e.g., 2015)
+        Extract from About page, company history
+        Use null if not found
+
+      LOCATION FIELDS:
+      ────────────────
+      headquarters:
+        Full location string: "San Francisco, CA, USA"
+        Extract from Contact page, About page, footer
+
       country:
         ISO 2-letter code (US, UK, CA, AU, DE, etc.)
         Extract from headquarters, contact page, or legal/terms
-        Use "Unknown" if not found
-      
-      foundedYear:
-        Number (e.g., 2015)
-        Extract from About page, company history
-        Use null if not found
-      
-      headquarters:
-        Full location: "San Francisco, CA, USA"
-        Extract from Contact page, About page, footer
-      
-      contactEmail:
-        General contact email (not sales@, support@)
-        Extract from Contact page
-      
+
+      address:
+        Street address only (e.g., "123 Main Street, Suite 100")
+
+      city:
+        City name (e.g., "San Francisco")
+
+      region:
+        State/Province (e.g., "CA" or "California")
+
+      postalCode:
+        ZIP/Postal code (e.g., "94105")
+
+      CONTACT FIELDS:
+      ────────────────
+      email:
+        General contact email (prefer info@, contact@, hello@)
+        Avoid: sales@, support@, careers@
+
+      phone:
+        Primary phone number in standard format
+        Extract from Contact page, footer
+
       CONFIDENCE RULE:
-      Only output fields where you have HIGH confidence
-      Empty/null is better than guessing
+      Only output fields where you have HIGH confidence.
+      Empty/null is better than guessing.

@@ -40,7 +40,7 @@ target_domains:
     - Consulting Firms
     - Accounting Practices
 
-# Independent agents selected for this domain (10 total)
+# Independent agents selected for this domain (11 total)
 # Order defines display sequence in reports and navigation
 researchers:
   - industry      # 1 - Practice areas, professional classifications
@@ -53,6 +53,7 @@ researchers:
   - risk          # 8 - Compliance, malpractice, regulatory
   - journalist    # 9 - News coverage, press mentions, media sentiment
   - social        # 10 - Social media presence, community engagement
+  - domain        # 11 - Entity identity backfill (runs last, update_mode)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DISPLAY NAMES - Used in report titles and UI

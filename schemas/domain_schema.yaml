@@ -135,6 +135,29 @@ properties:
   - metadata
   - research  # FIX #457: Include in research data card traversals
 
+- name: foundedYear
+  dataType:
+  - int
+  description: Year the entity was founded/established
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - identity
+  - metadata
+
+- name: headquarters
+  dataType:
+  - text
+  description: Headquarters location (e.g., "San Francisco, CA, USA")
+  indexSearchable: true
+  tokenization: word
+  sets:
+  - extended
+  tags:
+  - identity
+  - location
+
 # ============================================================================
 # PHYSICAL PRESENCE (8 fields) - NEW in v9.0
 # ============================================================================

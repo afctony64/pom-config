@@ -58,6 +58,7 @@ researchers:
   - social        # Social presence, community, brand
   - journalist    # Press coverage, analyst reports
   - competitor    # Competitive analysis, differentiation
+  - domain        # Entity identity backfill (runs last, update_mode)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DISPLAY NAMES - Used in report titles and UI
