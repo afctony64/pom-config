@@ -49,33 +49,18 @@ researcher_identity:
   - 'Contact Extraction: General contact email and address'
   - 'Source Validation: Respect existing enricher data, only fill gaps with higher confidence'
 
-# Semantic search query for page selection
-# Focus on identity-specific pages
-search_query: >
-  Who is this company? What is the company name and where are they located?
-  About us, company information, contact details, headquarters location.
+# Semantic search queries for page facts retrieval
+# Each query targets specific identity-related content across all crawled pages
+search_queries:
+  - "What is the official company name? About us company overview who we are"
+  - "Where is the company headquarters located? Contact us address location office"
+  - "When was the company founded? Company history timeline about"
+  - "What is the company contact email and phone number? Get in touch contact us"
 
-# Minimal tool usage - prioritize page content
-tools:
-  - brave_search
+# No external tools needed - page facts contain all identity information
+# tools: []
 
 tool_guidance:
-  brave_search:
-    priority: low
-    max_calls: 1
-    when_to_use: |
-      MINIMAL SEARCH (MAX 1 CALL):
-      
-      PRIORITIZE PAGE CONTENT! Only search if:
-      - Company name unclear from About page
-      - Headquarters/country not found anywhere on site
-      
-      Search query if needed:
-      "{domain} company name headquarters location"
-      
-    recommended_searches:
-      primary: "{domain} company headquarters founded"
-
   structured_output:
     priority: critical
     usage_instructions: |
