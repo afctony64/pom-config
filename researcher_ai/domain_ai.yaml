@@ -43,7 +43,7 @@ researcher_identity:
 search_queries:
   - "What is the official company name? About us company overview who we are"
   - "Where is the company headquarters located? Contact us address location office"
-  - "When was the company founded or launched? Company history timeline milestones Series A"
+  - "When was the company founded, started, or launched? Company history timeline milestones Series A bootstrapped"
   - "What is the company contact email and phone number? Get in touch contact us"
 
 tool_guidance:
@@ -60,7 +60,7 @@ tool_guidance:
         Integer year (e.g., 2022)
         
         LOOK FOR THESE PATTERNS:
-        - "Founded in 2022" / "Established 2022"
+        - "Founded in 2022" / "Established 2022" / "Started in 2022"
         - "Launched [Company] in 2022" / "Launched 2022"
         - "Since 2022"
         - Timeline showing earliest year: "2022: Launched..."
