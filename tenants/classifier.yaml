@@ -60,3 +60,8 @@ collections:
   # Knowledge and fact collections
   Knowledge_base: "spark"
   Fact_base: "spark"
+  
+  # Legacy Company model collections (for backward compatibility with existing seeds)
+  Company_research_industry: "spark"
+  Company_research_product: "spark"
+  Company_research_customer: "spark"
