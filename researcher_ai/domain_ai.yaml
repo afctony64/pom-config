@@ -45,6 +45,8 @@ search_queries:
   - "Where is the company headquarters located? Contact us address location office"
   - "When was the company founded, started, or launched? Company history timeline milestones Series A bootstrapped"
   - "What is the company contact email and phone number? Get in touch contact us"
+  - "About the company story our history dream founders husband wife team"
+
 
 tool_guidance:
   structured_output:
