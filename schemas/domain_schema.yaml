@@ -121,6 +121,7 @@ properties:
   - identity
   - metadata
   - research  # FIX #457: Include in research data card traversals
+  - LLM  # Issue #560: Domain Researcher can update this field
 
 - name: description
   dataType:
@@ -145,6 +146,7 @@ properties:
   tags:
   - identity
   - metadata
+  - LLM  # Issue #560: Domain Researcher can update this field
 
 - name: headquarters
   dataType:
@@ -157,6 +159,7 @@ properties:
   tags:
   - identity
   - location
+  - LLM  # Issue #560: Domain Researcher can update this field
 
 # ============================================================================
 # PHYSICAL PRESENCE (8 fields) - NEW in v9.0
@@ -184,6 +187,7 @@ properties:
   tags:
   - contact
   - physical
+  - LLM  # Issue #560: Domain Researcher can update this field
 
 - name: address
   dataType:
@@ -232,6 +236,7 @@ properties:
   tags:
   - location
   - physical
+  - LLM  # Issue #560: Domain Researcher can update this field
 
 - name: postalCode
   dataType:
