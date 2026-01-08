@@ -1,0 +1,352 @@
+# =============================================================================
+# POM ECOSYSTEM SERVICES REGISTRY
+# =============================================================================
+#
+# SINGLE SOURCE OF TRUTH for all service ports and configurations.
+#
+# This file defines all services across the Pom ecosystem. Docker Compose files,
+# validation scripts, and documentation should reference this file.
+#
+# Port Assignments:
+#   - 4000: RESERVED (Cursor MCP Server - DO NOT USE)
+#   - 5000: RESERVED (macOS ControlCenter - DO NOT USE)
+#   - 3000: RESERVED (Common dev servers - avoid if possible)
+#
+# =============================================================================
+
+# =============================================================================
+# FRONTENDS
+# =============================================================================
+frontends:
+
+  pomothy_frontend:
+    name: Pomothy Admin UI
+    container: pomothy-frontend
+    port: 5174                    # External port (changed from 5173 to avoid Cursor conflict)
+    internal_port: 5173           # Container internal port (Vite default)
+    type: vite
+    healthcheck: /
+    auto_start: true              # Starts with ./scripts/dev.sh home
+    description: Web admin interface for Pomothy intelligence platform
+
+  pomai_frontend:
+    name: PomAI Dev Tools
+    container: pomai-frontend
+    port: 5173                    # External port
+    internal_port: 5173           # Container internal port
+    type: vite
+    healthcheck: /
+    auto_start: true              # Starts with ./scripts/dev.sh home
+    description: Development tools and debugging UI for PomAI
+
+  report_server:
+    name: Unified Report Dashboard
+    container: mac-report-server
+    port: 8886                    # External port
+    internal_port: 80             # nginx internal port
+    type: nginx
+    healthcheck: /health
+    auto_start: true              # Starts with ./scripts/dev.sh home
+    description: HTML reports from all Pom projects (PomAI, Pomothy, PomSpark, pom-core)
+
+# =============================================================================
+# BACKENDS
+# =============================================================================
+backends:
+
+  pomothy_backend:
+    name: Pomothy API
+    container: pomothy-backend
+    port: 8001                    # External and internal port
+    internal_port: 8001
+    type: fastapi
+    healthcheck: /health/ready
+    auto_start: true
+    description: FastAPI backend for Pomothy web application
+
+  pomai_backend_mac:
+    name: PomAI Backend (Mac)
+    container: pomai-backend-mac
+    port: null                    # No external port - CLI/batch only
+    type: python
+    healthcheck: null
+    auto_start: false             # Only in TRAVEL mode (profile: travel)
+    description: CLI and batch processing backend for Mac (TRAVEL mode)
+
+  pomai_backend_spark:
+    name: PomAI Backend (Spark)
+    container: pomai-backend-spark
+    port: null                    # No external port - CLI/batch only
+    type: python
+    healthcheck: null
+    auto_start: true              # Starts on Spark in HOME mode
+    location: spark
+    description: CLI and batch processing backend on Spark GPU server
+
+  pom_core_dev:
+    name: pom-core Development
+    container: pom-core-dev
+    port: null                    # No external port - development container
+    type: python
+    healthcheck: null
+    auto_start: true
+    description: Development container for pom-core library
+
+# =============================================================================
+# LLM PROXY
+# =============================================================================
+llm_proxy:
+
+  mac_llm_proxy:
+    name: LLM Proxy (Mac)
+    container: pom-llm-proxy
+    port: 4001                    # External port (avoid 4000 - Cursor MCP)
+    internal_port: 8000           # FastAPI internal port
+    type: fastapi
+    healthcheck: /health
+    auto_start: true
+    description: OpenAI-compatible LLM routing proxy on Mac
+
+  spark_llm_proxy:
+    name: LLM Proxy (Spark)
+    container: spark-pom-llm-proxy
+    port: 4001                    # External port on Spark
+    internal_port: 8000
+    type: fastapi
+    healthcheck: /health
+    auto_start: true
+    location: spark
+    description: OpenAI-compatible LLM routing proxy on Spark
+
+# =============================================================================
+# DATABASES
+# =============================================================================
+databases:
+
+  mac_weaviate:
+    name: Weaviate (Mac)
+    container: mac-weaviate
+    port: 8080                    # HTTP API
+    grpc_port: 50051              # gRPC API
+    type: weaviate
+    healthcheck: /v1/.well-known/ready
+    auto_start: true
+    description: Local vector database on Mac (single source of truth)
+
+  spark_weaviate:
+    name: Weaviate (Spark)
+    container: spark-weaviate
+    port: 8080                    # HTTP API (on Spark host)
+    grpc_port: 50051              # gRPC API
+    type: weaviate
+    healthcheck: /v1/.well-known/ready
+    auto_start: true
+    location: spark
+    description: High-memory vector database on Spark
+
+  mac_redis:
+    name: Redis (Mac)
+    container: mac-redis
+    port: 6379
+    type: redis
+    healthcheck: redis-cli ping
+    auto_start: true
+    description: Cache and queue on Mac
+
+  spark_redis:
+    name: Redis (Spark)
+    container: spark-redis
+    port: 6379
+    type: redis
+    healthcheck: redis-cli ping
+    auto_start: true
+    location: spark
+    description: Cache and queue on Spark
+
+# =============================================================================
+# AI SERVICES
+# =============================================================================
+ai_services:
+
+  ollama_lb:
+    name: Ollama Load Balancer
+    container: ollama-lb
+    port: 11430                   # External port
+    internal_port: 80             # nginx internal port
+    type: nginx
+    healthcheck: null             # nginx process check only
+    auto_start: true
+    description: Routes LLM requests to Spark GPU (HOME) or Mac Metal (TRAVEL)
+
+  mac_ollama_native:
+    name: Ollama (Mac Native)
+    container: null               # Native process, not Docker
+    port: 11435
+    type: ollama
+    healthcheck: /api/tags
+    auto_start: false             # Manual start with ./scripts/mac-ollama-metal.sh
+    description: Native Mac Metal Ollama - 87 tok/s (vs 12 tok/s in Docker)
+
+  spark_ollama:
+    name: Ollama (Spark GPU)
+    container: spark-ollama
+    port: 11434                   # On Spark host
+    type: ollama
+    healthcheck: /api/tags
+    auto_start: true
+    location: spark
+    description: CUDA GPU Ollama with 32 parallel threads
+
+  mac_transformers_native:
+    name: Transformers (Mac Native)
+    container: null               # Native process, not Docker
+    port: 8093
+    type: transformers
+    healthcheck: /health
+    auto_start: false             # Manual start with ./scripts/mac-transformers-metal.sh
+    description: Native Mac Metal embeddings service
+
+  spark_transformers_lb:
+    name: Transformers Load Balancer (Spark)
+    container: spark-transformers-lb
+    port: 80                      # Internal only on Spark
+    type: nginx
+    healthcheck: /health
+    auto_start: true
+    location: spark
+    description: Load balancer for GPU transformer instances on Spark
+
+# =============================================================================
+# OBSERVABILITY
+# =============================================================================
+observability:
+
+  mac_loki:
+    name: Loki (Mac)
+    container: mac-loki
+    port: 3102                    # Changed from 3100 to avoid Supabase Studio
+    type: loki
+    auto_start: true
+    description: Log aggregation
+
+  mac_tempo:
+    name: Tempo (Mac)
+    container: mac-tempo
+    port: 3200                    # API port
+    otlp_grpc_port: 4317          # OTLP gRPC
+    otlp_http_port: 4318          # OTLP HTTP
+    type: tempo
+    auto_start: true
+    description: Distributed tracing
+
+  mac_jaeger:
+    name: Jaeger (Mac)
+    container: mac-jaeger
+    port: 16686                   # UI port
+    type: jaeger
+    healthcheck: /
+    auto_start: true
+    description: Tracing UI
+
+  spark_prometheus:
+    name: Prometheus (Spark)
+    container: prometheus
+    port: 9095
+    type: prometheus
+    location: spark
+    auto_start: true
+    description: Metrics collection on Spark
+
+  spark_grafana:
+    name: Grafana (Spark)
+    container: grafana
+    port: 3002
+    type: grafana
+    location: spark
+    auto_start: true
+    description: Monitoring dashboard on Spark
+
+# =============================================================================
+# DEVELOPMENT TOOLS
+# =============================================================================
+dev_tools:
+
+  mac_redis_insight:
+    name: Redis Insight
+    container: mac-redis-insight
+    port: 5540
+    type: web
+    auto_start: true
+    description: Redis GUI
+
+  mac_minio:
+    name: MinIO
+    container: mac-minio
+    port: 9000                    # S3 API
+    console_port: 9001            # Web console
+    type: minio
+    auto_start: true
+    description: S3-compatible storage
+
+  mac_mailhog:
+    name: MailHog
+    container: mac-mailhog
+    port: 8025                    # Web UI
+    smtp_port: 1025               # SMTP
+    type: mailhog
+    auto_start: true
+    description: Email testing
+
+# =============================================================================
+# SUPABASE (Local Auth & Database)
+# =============================================================================
+supabase:
+
+  mac_supabase_studio:
+    name: Supabase Studio
+    container: mac-supabase-studio
+    port: 3100
+    type: web
+    auto_start: true
+    description: Supabase admin UI
+
+  mac_supabase_kong:
+    name: Supabase Kong
+    container: mac-supabase-kong
+    port: 8100                    # API gateway
+    type: kong
+    auto_start: true
+    description: Supabase API gateway
+
+  mac_supabase_db:
+    name: Supabase PostgreSQL
+    container: mac-supabase-db
+    port: 5432
+    type: postgresql
+    auto_start: true
+    description: Supabase database
+
+  mac_supabase_auth:
+    name: Supabase Auth (GoTrue)
+    container: mac-supabase-auth
+    port: 9999
+    type: gotrue
+    auto_start: true
+    description: Supabase authentication
+
+# =============================================================================
+# RESERVED PORTS (DO NOT USE)
+# =============================================================================
+reserved_ports:
+  - port: 4000
+    reason: Cursor MCP Server
+    severity: critical
+  - port: 5000
+    reason: macOS ControlCenter / AirPlay
+    severity: critical
+  - port: 3000
+    reason: Common dev server default (React, Next.js)
+    severity: warning
+  - port: 8080
+    reason: Already used by Weaviate
+    severity: info
