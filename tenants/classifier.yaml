@@ -41,7 +41,7 @@ collections:
   Research_competitor: "cloud"
   Research_customer: "cloud"
   Research_financial: "cloud"
-  Research_industry: "cloud"
+  Research_industry: "spark"
   Research_journalist: "cloud"
   Research_leadership: "cloud"
   Research_partner: "cloud"
