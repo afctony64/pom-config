@@ -199,6 +199,51 @@ properties:
   - standard
   metadata:
     order: 115
+- name: employeeCount
+  dataType:
+  - number
+  description: Approximate total employee count. Extract from About pages, LinkedIn, or company announcements.
+  tags:
+  - research
+  - headcount
+  sets:
+  - standard
+  - prompt
+  metadata:
+    order: 116
+- name: employeeSizeCat
+  dataType:
+  - text
+  description: |
+    Employee size band classification. Requires EXPLICIT employee count evidence - do not guess.
+    
+    CLASSIFICATION RULES (explicit evidence required):
+    - Micro: Stated 1-10 employees
+    - Small: Stated 11-50 employees
+    - Medium: Stated 51-200 employees
+    - Large: Stated 201-1000 employees
+    - Enterprise: Stated 1001-5000 employees
+    - Corporate: Stated 5000+ employees
+    
+    USE Unknown WHEN:
+    - No explicit employee count found
+    - Only vague terms like "small team" without numbers
+  enum:
+  - Micro
+  - Small
+  - Medium
+  - Large
+  - Enterprise
+  - Corporate
+  - Unknown
+  tags:
+  - Cat
+  - headcount
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    order: 117
 - name: executiveExperienceLLM
   dataType:
   - text

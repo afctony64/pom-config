@@ -562,6 +562,47 @@ properties:
   metadata:
     source_llm: profitabilityProfileLLM
     order: 127
+- name: foundedYear
+  dataType:
+  - number
+  description: Year the entity was founded (e.g., 2015). Extract from About pages, company history, or founding announcements.
+  tags:
+  - research
+  - identity
+  sets:
+  - standard
+  - prompt
+  metadata:
+    order: 141
+- name: headcountGrowthCat
+  dataType:
+  - text
+  description: |
+    Employee headcount growth classification. Requires EXPLICIT growth evidence - do not guess.
+    
+    CLASSIFICATION RULES (explicit evidence required):
+    - Rapid-Growth: Stated >50% YoY headcount growth, explicit "rapid hiring"
+    - Steady-Growth: Stated 10-50% YoY headcount growth, consistent hiring
+    - Stable: Explicit stable headcount, maintenance hiring only
+    - Declining: Explicit layoffs, headcount reduction announcements
+    
+    USE Unknown WHEN:
+    - No explicit headcount or growth information found
+  enum:
+  - Rapid-Growth
+  - Steady-Growth
+  - Stable
+  - Declining
+  - Unknown
+  tags:
+  - Cat
+  - growth
+  - headcount
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    order: 142
 - name: processedDate
   dataType:
   - text

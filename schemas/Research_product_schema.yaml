@@ -596,6 +596,40 @@ properties:
   metadata:
     source_llm: productMaturityLLM
     order: 135
+- name: goToMarketCat
+  dataType:
+  - text
+  description: |
+    Go-to-market strategy classification. Requires EXPLICIT GTM evidence - do not guess.
+    
+    CLASSIFICATION RULES (explicit evidence required):
+    - Product-Led-Growth: Explicit free trial, freemium, self-service signup, viral loops
+    - Sales-Led: Explicit enterprise sales team, "contact sales", demo requests
+    - Partner-Led: Explicit channel partnerships, reseller network, marketplace focus
+    - Community-Led: Explicit open source, developer community, community-first messaging
+    - Marketing-Led: Explicit content marketing, inbound focus, marketing-driven acquisition
+    - Hybrid: Multiple explicit GTM motions described
+    
+    USE Unknown WHEN:
+    - No explicit GTM strategy or sales motion described
+    - Only product information without sales/acquisition context
+  enum:
+  - Product-Led-Growth
+  - Sales-Led
+  - Partner-Led
+  - Community-Led
+  - Marketing-Led
+  - Hybrid
+  - Unknown
+  tags:
+  - Cat
+  - gtm
+  - research
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    order: 137
 - name: processedDate
   dataType:
   - text
