@@ -8,24 +8,22 @@ collection_schema_id: Domain
 name: Domain Identity
 
 # Special flags for Domain-targeting researcher
-update_mode: true  # UPDATE existing records, don't CREATE new
-confidence_based_update: true  # Only overwrite if new data has higher confidence
-execution_order: 100  # Runs LAST after all other researchers
+update_mode: true
+confidence_based_update: true
+execution_order: 100
 
-# DOCUMENTATION: Fields this researcher populates on Domain
 output_fields:
-  - entityName      # Official company name
-  - country         # ISO 2-letter code
-  - foundedYear     # Year founded (int)
-  - headquarters    # Full location string
-  - email           # Primary contact email
-  - phone           # Primary phone number
-  - address         # Street address
-  - city            # City
-  - region          # State/Province
-  - postalCode      # ZIP/Postal code
+  - entityName
+  - country
+  - foundedYear
+  - headquarters
+  - email
+  - phone
+  - address
+  - city
+  - region
+  - postalCode
 
-# PROTECTED: Never touch these fields regardless of output
 protected_fields:
   - domain
   - url
@@ -47,92 +45,67 @@ researcher_identity:
   - 'Contact Extraction: General contact email and address'
   - 'Source Validation: Respect existing enricher data, only fill gaps with higher confidence'
 
-# Semantic search queries for page facts retrieval
-# Each query targets specific identity-related content across all crawled pages
 search_queries:
   - "What is the official company name? About us company overview who we are"
   - "Where is the company headquarters located? Contact us address location office"
   - "When was the company founded? Company history timeline about"
   - "What is the company contact email and phone number? Get in touch contact us"
 
-# Brave search for fields not found in page content
 tools:
   - brave_search
 
 tool_guidance:
   brave_search:
-    priority: low
+    priority: medium
     max_calls: 1
     when_to_use: |
-      ONLY USE BRAVE SEARCH IF PAGE CONTENT IS MISSING KEY FIELDS:
+      ⚠️ MANDATORY SEARCH RULE:
       
-      1. FIRST: Extract all fields from the provided page facts
-      2. THEN: If foundedYear OR headquarters is STILL MISSING, do ONE search:
+      After reviewing ALL page content, if you CANNOT find the founding year
+      (foundedYear), you MUST call brave_search before returning your response.
       
-      Search query: "{company_name} founded year headquarters location"
+      DO NOT return foundedYear: 0 or foundedYear: null without first searching!
       
-      EXAMPLE FLOW:
-      - Page facts show: entityName="Acme Corp", country="US", but NO foundedYear
-      - Search: "Acme Corp founded year headquarters location"
-      - Extract: foundedYear=2015, headquarters="San Francisco, CA"
+      REQUIRED SEARCH PATTERN:
+      1. Review page content for founding year
+      2. If NOT found → CALL brave_search with query: "{company_name} founded year history"
+      3. Extract foundedYear from search results
+      4. If still not found after search → THEN you may return foundedYear: 0
       
-      DO NOT SEARCH IF:
-      - All identity fields are already found in page content
-      - Only minor fields like phone/email are missing (not worth a search)
+      Example search query: "ObservePoint founded year when started company history"
 
   structured_output:
     priority: critical
     usage_instructions: |
       OUTPUT FORMAT - IDENTITY & CONTACT FIELDS:
 
+      ⚠️ BEFORE OUTPUTTING foundedYear: 0, YOU MUST HAVE CALLED brave_search!
+
       IDENTITY FIELDS:
       ────────────────
       entityName:
         Extract the official company name (NOT page title, NOT tagline)
-        Sources (priority order):
-        1. JSON-LD: "@type": "Organization", "name": "..."
-        2. OpenGraph: <meta property="og:site_name">
-        3. Copyright footer: "© 2024 Acme Corporation"
-        4. About page: "Acme Corporation is a leading..."
-        5. Legal/Terms: "Acme Corporation, Inc. ('Company')"
+        Sources: JSON-LD, OpenGraph, copyright footer, About page, Legal/Terms
         NEVER use: "Home", taglines, domain names
 
       foundedYear:
         Integer year (e.g., 2015)
-        Extract from About page, company history, OR Brave search results
-        Use 0 ONLY if truly not found anywhere
+        Sources: About page, company history, Brave search results
+        ⚠️ If not in page content → SEARCH FIRST before returning 0
 
       LOCATION FIELDS:
       ────────────────
-      headquarters:
-        Full location string: "San Francisco, CA, USA"
-        Extract from Contact page, About page, footer, OR Brave search
-
-      country:
-        ISO 2-letter code (US, UK, CA, AU, DE, etc.)
-        Extract from headquarters, contact page, or legal/terms
-
-      address:
-        Street address only (e.g., "123 Main Street, Suite 100")
-
-      city:
-        City name (e.g., "San Francisco")
-
-      region:
-        State/Province (e.g., "CA" or "California")
-
-      postalCode:
-        ZIP/Postal code (e.g., "94105")
+      headquarters: Full location string: "San Francisco, CA, USA"
+      country: ISO 2-letter code (US, UK, CA, AU, DE, etc.)
+      address: Street address only
+      city: City name
+      region: State/Province
+      postalCode: ZIP/Postal code
 
       CONTACT FIELDS:
       ────────────────
-      email:
-        General contact email (prefer info@, contact@, hello@)
-        Avoid: sales@, support@, careers@
-
-      phone:
-        Primary phone number in standard format
-        Extract from Contact page, footer
+      email: General contact email (prefer info@, contact@, hello@)
+      phone: Primary phone number
 
       CONFIDENCE RULE:
       Only output fields where you have HIGH confidence.
