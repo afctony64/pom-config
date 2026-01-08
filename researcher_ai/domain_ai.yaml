@@ -1,0 +1,109 @@
+id: domain
+type: researcher_ai
+researcher_type: domain
+# Researcher AI Configuration: Entity Identity Intelligence
+# Links to pom-core collection schema for data structure
+# EXECUTION ORDER: Runs LAST after all other researchers
+
+collection_schema_id: Company_research_domain
+name: Research Domain Identity
+
+researcher_identity:
+  title: Entity Identity Analyst
+  mission: Extract and validate entity identity information from About, Contact, and legal pages
+  ecosystem_role: Identity-focused researcher that runs last to fill gaps in entity data
+  core_competencies:
+  - 'Entity Naming: Official company name extraction from multiple sources'
+  - 'Location Intelligence: Headquarters, countries of operation, regional presence'
+  - 'Contact Extraction: General contact info, addresses, key contact persons'
+  - 'Legal Entity: Legal names, DBA names, corporate structure'
+  - 'Source Validation: Respect existing enricher data, only fill gaps'
+
+# Semantic search query for page selection (BM25/vector injectors)
+# Focus on identity-specific pages
+search_query: >
+  Who is this company? What is the company name and where are they located?
+  About us, company information, contact details, headquarters location.
+
+# Page categories to prioritize for this researcher
+page_priority:
+  - about
+  - contact
+  - company
+  - team
+  - legal
+  - terms
+  - privacy
+
+# Tools available for this researcher
+tools:
+  - brave_search  # For verifying company names and finding HQ info
+
+tool_guidance:
+  brave_search:
+    priority: low
+    max_calls: 1  # LIMIT: Only 1 search - identity should come from site content
+    when_to_use: |
+      🔍 MINIMAL SEARCH STRATEGY (MAX 1 SEARCH):
+      
+      ⚠️ PRIORITIZE PAGE CONTENT! Only search if:
+      - Company name unclear from site content
+      - Headquarters/country not found on site
+      
+      **SEARCH ONLY IF NEEDED:**
+      → "{domain} company headquarters location founded"
+      
+      **EXTRACT FROM RESULTS:**
+      - Official company name (not product name)
+      - Headquarters city/country
+      - Year founded
+      
+    recommended_searches:
+      primary: "{domain} company name headquarters location founded year"
+
+  structured_output:
+    priority: critical
+    usage_instructions: |
+      🎯 OUTPUT FORMAT REQUIREMENTS:
+      
+      📛 ENTITY NAME (CRITICAL):
+      - entityName: The official company name
+      - entityNameLLM: Your reasoning and source for the name
+      - Example: "Acme Corporation" not "Home | Acme - Best Products"
+      
+      EXTRACTION SOURCES (in priority order):
+      1. JSON-LD structured data: "@type": "Organization", "name": "..."
+      2. OpenGraph meta: <meta property="og:site_name" content="...">
+      3. Copyright footer: "© 2024 Acme Corporation"
+      4. About page first mention: "Acme Corporation is a leading..."
+      5. Legal/Terms: "Acme Corporation, Inc. ('Company')"
+      
+      ❌ NEVER USE AS entityName:
+      - Page titles like "Home", "Welcome"
+      - Taglines like "Making Things Better"
+      - Domain name: "acme.com" → extract "Acme" or find proper name
+      - Product names: "AcmeCloud" if company is "Acme Corporation"
+      
+      📍 LOCATION:
+      - headquarters: Full location "San Francisco, CA, USA"
+      - country: ISO 2-letter code (US, UK, CA, etc.) or "Unknown"
+      
+      📅 FOUNDING:
+      - foundedYear: Number (e.g., 2015), null if not found
+      - founderNames: Array of founder names if found
+      
+      🔒 SOURCE RESPECT RULE:
+      - If Domain already has entityName from enricher, DO NOT overwrite
+      - Only populate fields that are empty/null in source data
+      - Set confidenceLevel based on source quality
+
+# Execution order - runs LAST
+execution_order: 100  # Higher number = runs later
+
+# Data preservation rules
+data_preservation:
+  respect_existing: true
+  overwrite_empty_only: true
+  source_priority:
+    - enricher  # Enricher data takes precedence
+    - researcher  # Only fill gaps
