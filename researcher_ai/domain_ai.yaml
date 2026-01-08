@@ -1,13 +1,9 @@
 id: domain
 type: researcher_ai
 researcher_type: domain
-# Domain Researcher: Updates Domain records with identity fields
-# SPECIAL CASE: Targets Domain collection, not Research_*
-
 collection_schema_id: Domain
 name: Domain Identity
 
-# Special flags for Domain-targeting researcher
 update_mode: true
 confidence_based_update: true
 execution_order: 100
@@ -40,19 +36,15 @@ researcher_identity:
   mission: Extract and validate entity identity from About, Contact, and legal pages
   ecosystem_role: Identity-focused researcher that runs last to backfill empty Domain fields
   core_competencies:
-  - 'Entity Naming: Official company name extraction from structured data, copyright, About pages'
-  - 'Location Intelligence: Headquarters, country of operation from Contact/About pages'
-  - 'Contact Extraction: General contact email and address'
-  - 'Historical Dating: Infer founding year from earliest documented company activity'
+  - 'Entity Naming: Official company name extraction'
+  - 'Location Intelligence: Headquarters, country from Contact/About pages'
+  - 'Founding Date: Extract from launch dates, timeline, history'
 
 search_queries:
   - "What is the official company name? About us company overview who we are"
   - "Where is the company headquarters located? Contact us address location office"
-  - "When was the company founded? Company history timeline about awards accolades"
+  - "When was the company founded or launched? Company history timeline milestones Series A"
   - "What is the company contact email and phone number? Get in touch contact us"
-
-# No external tools - rely on page facts only
-# tools: []
 
 tool_guidance:
   structured_output:
@@ -60,45 +52,33 @@ tool_guidance:
     usage_instructions: |
       OUTPUT FORMAT - IDENTITY & CONTACT FIELDS:
 
-      IDENTITY FIELDS:
-      ────────────────
       entityName:
-        Extract the official company name (NOT page title, NOT tagline)
-        Sources: JSON-LD, OpenGraph, copyright footer, About page, Legal/Terms
-        NEVER use: "Home", taglines, domain names
+        Official company name (NOT page title, NOT tagline)
+        Sources: JSON-LD, OpenGraph, copyright footer, About page
 
       foundedYear:
-        Integer year (e.g., 2015)
+        Integer year (e.g., 2022)
+        
+        LOOK FOR THESE PATTERNS:
+        - "Founded in 2022" / "Established 2022"
+        - "Launched [Company] in 2022" / "Launched 2022"
+        - "Since 2022"
+        - Timeline showing earliest year: "2022: Launched..."
+        - First funding round: "2022 Series A" (implies founded same year or earlier)
         
         EXTRACTION PRIORITY:
-        1. EXPLICIT: "Founded in 2015", "Established 2015", "Since 2015"
-        2. INFERRED: If no explicit year, use the EARLIEST documented year
-           from awards, accolades, press releases, or company history
+        1. EXPLICIT: "Founded/Established/Since [year]"
+        2. LAUNCH DATE: "Launched [Company]" = founding year
+        3. TIMELINE: Earliest milestone year
+        4. FIRST FUNDING: Series A year (company likely founded same year)
         
-        EXAMPLE:
-        - Page shows: "2016 Partner of the Year", "2018 Top 100 Companies"
-        - No explicit founding date mentioned
-        - OUTPUT: foundedYear: 2016 (earliest documented activity)
-        
-        RULES:
-        - Only use real years from actual company documentation
-        - Do NOT guess or estimate
-        - If no years documented anywhere → foundedYear: 0
+        If no years found → foundedYear: 0
 
-      LOCATION FIELDS:
-      ────────────────
-      headquarters: Full location string: "San Francisco, CA, USA"
-      country: ISO 2-letter code (US, UK, CA, AU, DE, etc.)
-      address: Street address only
+      headquarters: Full location: "San Francisco, CA, USA"
+      country: ISO 2-letter code (US, UK, DE, etc.)
+      address: Street address
       city: City name
       region: State/Province
       postalCode: ZIP/Postal code
-
-      CONTACT FIELDS:
-      ────────────────
-      email: General contact email (prefer info@, contact@, hello@)
+      email: General contact email (info@, contact@)
       phone: Primary phone number
-
-      CONFIDENCE RULE:
-      Only output fields where you have HIGH confidence.
-      Empty/null is better than guessing.
