@@ -3,7 +3,6 @@ type: researcher_ai
 researcher_type: domain
 # Domain Researcher: Updates Domain records with identity fields
 # SPECIAL CASE: Targets Domain collection, not Research_*
-# Requires pom-core issue #557 for full support
 
 collection_schema_id: Domain
 name: Domain Identity
@@ -14,7 +13,6 @@ confidence_based_update: true  # Only overwrite if new data has higher confidenc
 execution_order: 100  # Runs LAST after all other researchers
 
 # DOCUMENTATION: Fields this researcher populates on Domain
-# (Actual field restrictions come from the prompt schema)
 output_fields:
   - entityName      # Official company name
   - country         # ISO 2-letter code
@@ -57,10 +55,31 @@ search_queries:
   - "When was the company founded? Company history timeline about"
   - "What is the company contact email and phone number? Get in touch contact us"
 
-# No external tools needed - page facts contain all identity information
-# tools: []
+# Brave search for fields not found in page content
+tools:
+  - brave_search
 
 tool_guidance:
+  brave_search:
+    priority: low
+    max_calls: 1
+    when_to_use: |
+      ONLY USE BRAVE SEARCH IF PAGE CONTENT IS MISSING KEY FIELDS:
+      
+      1. FIRST: Extract all fields from the provided page facts
+      2. THEN: If foundedYear OR headquarters is STILL MISSING, do ONE search:
+      
+      Search query: "{company_name} founded year headquarters location"
+      
+      EXAMPLE FLOW:
+      - Page facts show: entityName="Acme Corp", country="US", but NO foundedYear
+      - Search: "Acme Corp founded year headquarters location"
+      - Extract: foundedYear=2015, headquarters="San Francisco, CA"
+      
+      DO NOT SEARCH IF:
+      - All identity fields are already found in page content
+      - Only minor fields like phone/email are missing (not worth a search)
+
   structured_output:
     priority: critical
     usage_instructions: |
@@ -80,14 +99,14 @@ tool_guidance:
 
       foundedYear:
         Integer year (e.g., 2015)
-        Extract from About page, company history
-        Use null if not found
+        Extract from About page, company history, OR Brave search results
+        Use 0 ONLY if truly not found anywhere
 
       LOCATION FIELDS:
       ────────────────
       headquarters:
         Full location string: "San Francisco, CA, USA"
-        Extract from Contact page, About page, footer
+        Extract from Contact page, About page, footer, OR Brave search
 
       country:
         ISO 2-letter code (US, UK, CA, AU, DE, etc.)
