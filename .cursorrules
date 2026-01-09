@@ -1,4 +1,5 @@
 # 📦 POM-CONFIG: Shared Configuration Repository Rules
+# Workspace: pom-workspace (PomAI + pom-config multi-root workspace)
 # Role: You are managing SHARED configurations used by ALL Pom ecosystem applications
 
 ---
