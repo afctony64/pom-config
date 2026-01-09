@@ -338,6 +338,8 @@ schema_config:
   additional_properties: false
 id: Page_intelligence
 name: Page Intelligence
-enrichers:
-- head_probe
-- http_security_headers
+# Enrichers disabled for speed - URL validation happens in page_facts
+# enrichers:
+# - head_probe
+# - http_security_headers
+enrichers: []
