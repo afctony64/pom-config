@@ -16,6 +16,7 @@ researcher_identity:
   - 'Management Structure: Organizational hierarchy, board composition, advisor networks'
   - 'Culture Assessment: Leadership style, organizational values, cultural indicators'
   - 'Due Diligence: Executive backgrounds, previous companies, educational credentials'
+  - 'Headcount Analysis: Employee count, team size, organizational scale'
 
 # Semantic search queries for page selection (BM25/vector injectors)
 search_queries:
@@ -23,6 +24,7 @@ search_queries:
   - "What is the background of the CEO and key executives?"
   - "Who is on the board of directors and advisory board?"
   - "What is the company culture and organizational values?"
+  - "How many employees does the company have? Team size headcount"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
@@ -31,6 +33,7 @@ focus_areas:
   - LinkedIn profile URLs for each executive
   - Board members and advisors
   - Founder story and company culture
+  - Employee headcount and team size
 
 # Fact types to extract from source content
 fact_types:
@@ -41,6 +44,7 @@ fact_types:
   - board_member
   - advisor
   - founder_story
+  - employee_count
 
 # Anti-patterns to avoid (guides LLM away from common mistakes)
 avoid:
@@ -50,6 +54,7 @@ avoid:
   - Listing personal social accounts as company representation
   - Including executives from parent/subsidiary companies incorrectly
   - Inventing background details not found in sources
+  - Guessing employee counts without evidence
 
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:

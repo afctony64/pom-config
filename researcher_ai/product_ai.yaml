@@ -17,6 +17,7 @@ researcher_identity:
   - 'Feature Research: Specifications, capabilities, competitive positioning'
   - 'Technical Due Diligence: Technology assessment, platform evaluation, roadmap
     analysis'
+  - 'Go-to-Market Analysis: Sales motion, distribution strategy, customer acquisition'
 
 # Semantic search queries for page selection (BM25/vector injectors)
 # Issue #384: Multiple queries for comprehensive Page_facts coverage
@@ -25,6 +26,7 @@ search_queries:
   - "What capabilities does the platform provide and how does it work?"
   - "What is the technology stack and platform integrations?"
   - "What pricing plans and tiers are available?"
+  - "How does the company sell and acquire customers? Sales demo trial freemium"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
@@ -33,6 +35,7 @@ focus_areas:
   - Technology stack and platform architecture
   - Pricing model and tiers (subscription, usage-based, freemium)
   - Integration ecosystem and API capabilities
+  - Go-to-market strategy (PLG, sales-led, partner-led, community-led)
 
 # Fact types to extract from source content
 fact_types:
@@ -43,6 +46,7 @@ fact_types:
   - integration
   - api_capability
   - platform_architecture
+  - go_to_market
 
 # Anti-patterns to avoid (guides LLM away from common mistakes)
 avoid:
@@ -52,6 +56,7 @@ avoid:
   - Including deprecated or discontinued products without noting status
   - Speculating on technology stack without evidence
   - Mixing up pricing tiers or plans from different time periods
+  - Guessing go-to-market strategy without evidence (use Unknown if unclear)
 
 # Tools available for this researcher (AITools that can be called by the AI)
 # NOTE: Tool format issue fixed in pom-core v3.0.28+ (execution_engine.py)
