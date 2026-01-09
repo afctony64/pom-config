@@ -205,11 +205,14 @@ properties:
   description: |
     Approximate total employee count. 
     
-    IMPORTANT: If employee count is not found in page content, USE brave_search to look up:
-    "{company_name} linkedin employees headcount company size"
+    🚨 MANDATORY TOOL USE: If employee count is NOT explicitly stated in page content:
+    1. You MUST call brave_search with query: "{company_name} linkedin employees headcount company size"
+    2. DO NOT return 0 or null without performing a web search first
+    3. Extract from: LinkedIn company page, company About pages, press releases, job postings
     
-    Extract from: LinkedIn company page, About pages, press releases, or company announcements.
-    Return 0 only if search was performed and no count found.
+    Only return 0 if:
+    - brave_search was called AND
+    - No employee count found in search results
   tags:
   - research
   - headcount

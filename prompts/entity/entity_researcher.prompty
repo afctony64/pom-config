@@ -291,6 +291,26 @@ Analyze **{{ get_display_name(record) }}** using the data sources provided above
 3. **Web Search** (if tools available) - For gaps not covered above
 4. **Training Knowledge** - For context and industry norms
 
+{% if researcher_ai and researcher_ai.tools %}
+{# FIX #579: Add explicit tool-calling instructions when researcher has tools #}
+## 🔧 IMPORTANT: USE AVAILABLE TOOLS FOR MISSING DATA
+
+You have access to the following tools: **{{ researcher_ai.tools | join(', ') }}**
+
+**⚠️ MANDATORY TOOL USE:**
+- If ANY required field data is NOT found in the page content above, you MUST call the appropriate tool
+- DO NOT return 0, null, or "Unknown" for fields that could be found via web search
+- For example: If employeeCount is not in page content, CALL brave_search with query: "{{ get_display_name(record) }} linkedin employees headcount company size"
+
+**When to call brave_search:**
+- Employee count/headcount not found in pages → Search for LinkedIn company page
+- Executive information incomplete → Search for leadership team profiles
+- Board/advisor information missing → Search for investor/board announcements
+- Any focus area data not found in page content → Search for it
+
+**DO NOT skip tool calls just because page content exists. Page content may be incomplete.**
+{% endif %}
+
 {# === FOCUS AREAS === #}
 {% if researcher_ai and researcher_ai.focus_areas %}
 ## 🔍 FOCUS AREAS
