@@ -328,6 +328,37 @@ url_patterns:
         social: 0.9
         customer: 0.65
         product: 0.5
+        
+    # B2B SaaS Blog Content (deep dive analysis addition)
+    - pattern: "/(blog|article|post)s?(/|$)"
+      default_weight: 0.45
+      researcher_weights:
+        product: 0.6
+        customer: 0.5
+        industry: 0.55
+        competitor: 0.4
+        
+    # Guides & Educational Content
+    - pattern: "/(guide|handbook|playbook|whitepaper)s?(/|$)"
+      default_weight: 0.6
+      researcher_weights:
+        product: 0.85
+        customer: 0.7
+        industry: 0.6
+        
+    # Tools & Calculators
+    - pattern: "/(tool|calculator|assessment)s?(/|$)"
+      default_weight: 0.5
+      researcher_weights:
+        product: 0.7
+        customer: 0.6
+        
+    # Resources & Downloads
+    - pattern: "/(resource|download|asset)s?(/|$)"
+      default_weight: 0.45
+      researcher_weights:
+        product: 0.6
+        customer: 0.55
 
 # ══════════════════════════════════════════════════════════════════════════════
 # ANTIPATTERNS - B2B SaaS Domain-Specific
@@ -344,3 +375,23 @@ url_antipatterns:
   - pattern: "/(app|portal|dashboard|workspace)/"
     score: 0.1
     reason: "App portals - require auth, not public content"
+    
+  # Careers pages - not research relevant
+  - pattern: "/(career|job|hiring|join-us)s?(/|$)"
+    score: 0.1
+    reason: "Careers - not research relevant"
+    
+  # Error pages
+  - pattern: "/404"
+    score: 0.05
+    reason: "Error pages"
+    
+  # Marketing landing pages
+  - pattern: "/(lp|landing)/"
+    score: 0.15
+    reason: "Marketing landing pages"
+    
+  # Subscription management
+  - pattern: "/(subscribe|unsubscribe|newsletter)/"
+    score: 0.1
+    reason: "Subscription management"
