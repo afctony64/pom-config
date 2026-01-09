@@ -24,6 +24,25 @@ search_queries:
   - "What are the main products and features offered?"
   - "What capabilities does the platform provide and how does it work?"
   - "What is the technology stack and platform integrations?"
+  - "What pricing plans and tiers are available?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Product type and category (what kind of product is this)
+  - Core features and capabilities (what does it do)
+  - Technology stack and platform architecture
+  - Pricing model and tiers (subscription, usage-based, freemium)
+  - Integration ecosystem and API capabilities
+
+# Fact types to extract from source content
+fact_types:
+  - product_name
+  - product_feature
+  - technology_stack
+  - pricing_model
+  - integration
+  - api_capability
+  - platform_architecture
 
 # Tools available for this researcher (AITools that can be called by the AI)
 # NOTE: Tool format issue fixed in pom-core v3.0.28+ (execution_engine.py)
@@ -46,5 +65,3 @@ tool_guidance:
       - Pricing (see pricing page)
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
-
-# Note: fact_types and entity_types moved to schema definition
