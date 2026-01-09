@@ -64,9 +64,8 @@ tool_guidance:
   brave_search:
     priority: high
     max_calls: 3  # LIMIT: 3 searches for leadership
-    # FIX #579: Explicitly set tool_choice to ensure LLM can call brave_search
-    # even when page content exists. Without this, execution_engine.py removes
-    # tool_choice when pages are available, preventing tool calls.
+    # Tool calling works reliably - use auto to let LLM decide based on page content
+    # See tool_guidance.when_to_use for search guidance
     tool_choice: auto
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):

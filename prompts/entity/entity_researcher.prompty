@@ -89,15 +89,12 @@ data_requirements:
       optional: true
 
 model:
-  api: responses
+  api: chat  # Changed from responses for 22.6% cost savings (no reasoning tokens needed)
   configuration:
     type: pom-llm-proxy
     model: gpt-5-nano
   parameters:
-    # Issue #59: Increased from 8000 to 16000 to accommodate reasoning tokens
-    # With reasoning_effort=medium, model uses ~8k tokens for thinking, leaving
-    # insufficient budget for the structured JSON output (19 fields)
-    max_output_tokens: 16000
+    max_output_tokens: 8000  # Reduced: no reasoning tokens with chat API
     response_format:
       type: json_schema
       json_schema:
@@ -118,7 +115,7 @@ processing_config:
     - Research_industry
   required_processing_flags:
     researcher_processing_status: null
-  max_turns: 15  # Increased to match Researcher prompt
+  max_turns: 15  # Multi-turn for tool calling conversations
   iteration_parameter: researcher_id
   iteration_values: "TENANT_GROUP_RESEARCHERS"
   # 🆕 Compression strategy for context management (optional)
@@ -292,23 +289,12 @@ Analyze **{{ get_display_name(record) }}** using the data sources provided above
 4. **Training Knowledge** - For context and industry norms
 
 {% if researcher_ai and researcher_ai.tools %}
-{# FIX #579: Add explicit tool-calling instructions when researcher has tools #}
-## 🔧 IMPORTANT: USE AVAILABLE TOOLS FOR MISSING DATA
+## 🔧 AVAILABLE TOOLS
 
-You have access to the following tools: **{{ researcher_ai.tools | join(', ') }}**
+You have access to: **{{ researcher_ai.tools | join(', ') }}**
 
-**⚠️ MANDATORY TOOL USE:**
-- If ANY required field data is NOT found in the page content above, you MUST call the appropriate tool
-- DO NOT return 0, null, or "Unknown" for fields that could be found via web search
-- For example: If employeeCount is not in page content, CALL brave_search with query: "{{ get_display_name(record) }} linkedin employees headcount company size"
-
-**When to call brave_search:**
-- Employee count/headcount not found in pages → Search for LinkedIn company page
-- Executive information incomplete → Search for leadership team profiles
-- Board/advisor information missing → Search for investor/board announcements
-- Any focus area data not found in page content → Search for it
-
-**DO NOT skip tool calls just because page content exists. Page content may be incomplete.**
+Use these tools when page content above is missing key information for your focus areas.
+The tool_guidance section above describes when each tool is most useful and provides recommended search queries.
 {% endif %}
 
 {# === FOCUS AREAS === #}
