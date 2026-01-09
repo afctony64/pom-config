@@ -95,7 +95,7 @@ model:
     type: pom-llm-proxy
     model: gpt-5-nano
   parameters:
-    max_output_tokens: 8000  # Reduced: no reasoning tokens with chat API
+    max_output_tokens: 16000  # Reduced: no reasoning tokens with chat API
     response_format:
       type: json_schema
       json_schema:
