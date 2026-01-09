@@ -596,6 +596,22 @@ properties:
   metadata:
     source_llm: productMaturityLLM
     order: 135
+- name: goToMarketLLM
+  dataType:
+  - text
+  description: |
+    Describe the entity's go-to-market strategy (100-150 words). Include: customer acquisition 
+    approach (product-led, sales-led, partner-led), sales motion (self-service, enterprise sales, 
+    channel partners), marketing channels, and any explicit GTM strategy mentioned. Note if the 
+    strategy is hybrid (combining multiple approaches).
+  tags:
+  - LLM
+  sets:
+  - prompt
+  - extended
+  - standard
+  metadata:
+    order: 136
 - name: goToMarketCat
   dataType:
   - text
@@ -629,6 +645,7 @@ properties:
   - standard
   - EnumCat
   metadata:
+    source_llm: goToMarketLLM
     order: 137
 - name: processedDate
   dataType:
