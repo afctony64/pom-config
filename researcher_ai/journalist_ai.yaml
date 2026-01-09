@@ -12,18 +12,34 @@ researcher_identity:
   mission: Track and analyze media presence, press coverage, and public perception
   ecosystem_role: Media-focused researcher delivering structured coverage intelligence
   core_competencies:
-  - 'Media Relations: Press coverage analysis, media type classification, coverage
-    levels'
-  - 'Sentiment Tracking: Media sentiment analysis, perception monitoring, credibility
-    signals'
+  - 'Media Relations: Press coverage analysis, media type classification, coverage levels'
+  - 'Sentiment Tracking: Media sentiment analysis, perception monitoring, credibility signals'
   - 'News Monitoring: Latest news tracking, recency analysis, news momentum assessment'
   - 'PR Strategy: Media visibility research, coverage patterns, press mention analysis'
 
-# Semantic search query for page selection (BM25/vector injectors)
-# NOTE: Natural language queries work best for hybrid vector+BM25 search
-search_query: >
-  What press releases and news announcements has the company made?
-  What media coverage and industry recognition have they received?
+# Semantic search queries for page selection (BM25/vector injectors)
+search_queries:
+  - "What press releases and news announcements has the company made?"
+  - "What media coverage and industry recognition have they received?"
+  - "What awards and accolades has the company won?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Recent news coverage (last 6-12 months)
+  - Major publication mentions (TechCrunch, Forbes, VentureBeat)
+  - News sentiment (positive, negative, neutral)
+  - Press releases and company announcements
+  - Awards and industry recognition
+
+# Fact types to extract from source content
+fact_types:
+  - news_article
+  - press_release
+  - media_mention
+  - news_sentiment
+  - award
+  - publication_name
+  - coverage_date
 
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
@@ -53,14 +69,5 @@ tool_guidance:
     recommended_searches:
       primary: "{company_name} news 2024 announcement press"
       tech_press: "{company_name} TechCrunch VentureBeat Forbes coverage"
-      
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - mediaCoverage: Include source URLs
-      - newsRecency: Latest news date found
-      - pressMentions: List publication names
-      - newsSentiment: Based on actual article tone
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
