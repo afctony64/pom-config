@@ -42,12 +42,12 @@ fact_types:
 
 # Anti-patterns to avoid (guides LLM away from common mistakes)
 avoid:
-  - Including inactive or abandoned social accounts
-  - Confusing personal accounts with official company accounts
-  - Listing platforms without verifying actual account presence
-  - Reporting follower counts without noting data recency
-  - Assuming account ownership without URL verification
-  - Including fan accounts or unofficial community pages as official
+  - Including clearly inactive or abandoned social accounts (no posts for years)
+  - Confusing personal founder accounts with official company accounts
+  - Fabricating follower counts or engagement metrics not in sources
+  - Including unrelated fan accounts or unofficial community pages as official
+  # NOTE: DO extract platform presence from page content (footer links, share buttons, 
+  # community mentions). If page content references github, slack, blog - include them.
 
 # 🌐 DATA INJECTION: Pre-enriched Domain fields (from enrichers)
 # The digital_presence injector provides already-discovered social/tech data
