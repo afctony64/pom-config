@@ -94,7 +94,10 @@ model:
     type: pom-llm-proxy
     model: gpt-5-nano
   parameters:
-    max_output_tokens: 8000
+    # Issue #59: Increased from 8000 to 16000 to accommodate reasoning tokens
+    # With reasoning_effort=medium, model uses ~8k tokens for thinking, leaving
+    # insufficient budget for the structured JSON output (19 fields)
+    max_output_tokens: 16000
     response_format:
       type: json_schema
       json_schema:
