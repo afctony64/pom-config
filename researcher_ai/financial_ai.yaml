@@ -73,66 +73,80 @@ tool_guidance:
     tool_choice: required  # Force brave_search even when page content exists (funding data often missing from pages)
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 4 SEARCHES):
-      
+
       ⚠️ DO NOT search every source - pick 2-4 most relevant!
-      
+
       **SEARCH #1 (REQUIRED): Funding data**
       → "{company} crunchbase pitchbook funding investors"
       (Crunchbase + PitchBook in ONE search - most comprehensive)
-      
+
       **SEARCH #2 (IF NEEDED): Revenue/metrics**
       → "{company} revenue ARR valuation"
       (Only if funding search didn't include revenue)
-      
+
       **SEARCH #3 (IF NEEDED): Recent news**
       → "{company} funding announcement 2024"
       (Only for recent developments not in Crunchbase)
-      
+
       **STOP after finding:**
       - Total funding amount
       - Key investors (2-3 names)
       - Funding stage
       - Revenue estimate (if available)
-      
+
     recommended_searches:
       # ONE combined search covers most needs:
       primary: "{company_name} crunchbase pitchbook funding investors valuation"
-      
+
       # Only if primary didn't have revenue:
       revenue: "{company_name} revenue ARR annual growth owler"
-      
+
       # Only for very recent news:
       news: "{company_name} funding announcement 2024 series"
-      
+
   edgar_company_facts:
     priority: high
     when_to_use: |
       📊 USE FOR PUBLIC COMPANIES (has stock ticker):
-      
+
       **What you get:**
       - Company CIK, name, ticker
       - SIC code (industry classification)
       - Fiscal year end
       - Filing count
-      
+
       **When to call:**
       - ONLY if record has stockSymbol or you found a ticker
       - Call ONCE per company (data is cached)
-      
+
       ⚠️ SKIP for private companies - will return error
-      
+
   edgar_filing_sections:
     priority: high
     when_to_use: |
       📊 USE FOR PUBLIC COMPANIES - FINANCIAL SECTIONS:
-      
+
       **Sections available for financial researcher:**
       - Item 7: Management's Discussion (MD&A) - revenue trends
       - Item 8: Financial Statements - actual numbers
       - Item 5: Market for Securities - stock info
-      
+
       **When to call:**
       - After confirming company is public via edgar_company_facts
       - Provides detailed 10-K financial analysis
-      
+
       ⚠️ Only works for public companies with SEC filings
+  citation_format:
+    priority: high
+    usage_instructions: |
+      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
+      ❌ "Raised $50M Series B — see https://crunchbase.com/company"
+      ✅ "Raised $50M Series B led by Sequoia Capital in 2024"
+
+      For each LLM field, put supporting URLs in the matching CIT field:
+      - fundingStageLLM → fundingStageCIT
+      - revenueSizeLLM → revenueSizeCIT
+      - growthVelocityLLM → growthVelocityCIT
+      - profitabilityProfileLLM → profitabilityProfileCIT
+
+      Put ALL source URLs in the global `citations` array field too.

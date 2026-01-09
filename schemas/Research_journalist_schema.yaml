@@ -261,9 +261,11 @@ properties:
 - name: mediaTypeLLM
   dataType:
   - text
-  description: Descriptive analysis of types of media coverage and press presence. Include media types found (press releases,
+  description: |
+    Descriptive analysis of types of media coverage and press presence. Include media types found (press releases,
     news articles, podcast interviews, trade publications), newsroom/press page presence, media kit availability, and mix
     of entity-generated vs external coverage.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in mediaTypeCIT field.
   tags:
   - LLM
   sets:
@@ -272,12 +274,29 @@ properties:
   - standard
   metadata:
     order: 132
+- name: mediaTypeCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the mediaTypeLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: mediaTypeLLM
+    order: 133
 - name: coverageLevelLLM
   dataType:
   - text
-  description: Descriptive analysis of media visibility, coverage breadth, and news momentum. Include coverage volume (article
+  description: |
+    Descriptive analysis of media visibility, coverage breadth, and news momentum. Include coverage volume (article
     count, press release count), media outlet quality (tier-1 vs niche), recency of coverage, coverage trajectory (accelerating,
     steady, declining), and credibility signals from external validation.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in coverageLevelCIT field.
   tags:
   - LLM
   sets:
@@ -286,12 +305,29 @@ properties:
   - standard
   metadata:
     order: 134
+- name: coverageLevelCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the coverageLevelLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: coverageLevelLLM
+    order: 135
 - name: mediaSentimentLLM
   dataType:
   - text
-  description: Descriptive analysis of sentiment and tone in external media coverage. Include overall sentiment (positive,
+  description: |
+    Descriptive analysis of sentiment and tone in external media coverage. Include overall sentiment (positive,
     neutral, negative, mixed), media perception (emerging leader, struggling, solid player), how the entity is portrayed externally,
     and tone consistency across different outlets.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in mediaSentimentCIT field.
   tags:
   - LLM
   - research
@@ -301,6 +337,21 @@ properties:
   - standard
   metadata:
     order: 136
+- name: mediaSentimentCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the mediaSentimentLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: mediaSentimentLLM
+    order: 137
 - name: mediaPerception
   dataType:
   - text

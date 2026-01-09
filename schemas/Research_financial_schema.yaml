@@ -255,8 +255,10 @@ properties:
 - name: growthVelocityLLM
   dataType:
   - text
-  description: Descriptive analysis of growth rate and business momentum. Include YoY growth percentages, growth acceleration/deceleration
+  description: |
+    Descriptive analysis of growth rate and business momentum. Include YoY growth percentages, growth acceleration/deceleration
     trends, expansion metrics, hiring velocity, and growth sustainability indicators.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in growthVelocityCIT field.
   tags:
   - LLM
   sets:
@@ -266,11 +268,28 @@ properties:
   - standard
   metadata:
     order: 126
+- name: growthVelocityCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the growthVelocityLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: growthVelocityLLM
+    order: 127
 - name: profitabilityProfileLLM
   dataType:
   - text
-  description: Descriptive analysis of profitability status and path to profitability. Include profit/loss status, EBITDA
+  description: |
+    Descriptive analysis of profitability status and path to profitability. Include profit/loss status, EBITDA
     mentions, cash flow indicators, burn rate if applicable, runway estimates, and profitability timeline or achievement.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in profitabilityProfileCIT field.
   tags:
   - LLM
   sets:
@@ -280,11 +299,28 @@ properties:
   - standard
   metadata:
     order: 128
+- name: profitabilityProfileCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the profitabilityProfileLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: profitabilityProfileLLM
+    order: 129
 - name: revenueSizeLLM
   dataType:
   - text
-  description: Descriptive analysis of revenue scale and financial size. Include revenue range indicators, ARR/MRR mentions
+  description: |
+    Descriptive analysis of revenue scale and financial size. Include revenue range indicators, ARR/MRR mentions
     if SaaS, revenue growth trajectory, and financial scale relative to industry peers.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in revenueSizeCIT field.
   tags:
   - LLM
   sets:
@@ -294,6 +330,21 @@ properties:
   - standard
   metadata:
     order: 122
+- name: revenueSizeCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the revenueSizeLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: revenueSizeLLM
+    order: 123
 - name: edgarCoreMetrics
   dataType:
   - text
@@ -335,9 +386,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe the entity's funding history and current stage (100-150 words). Include: funding rounds 
-    completed (Seed, Series A/B/C, etc.), total capital raised, key investors, latest valuation if 
+    Describe the entity's funding history and current stage (100-150 words). Include: funding rounds
+    completed (Seed, Series A/B/C, etc.), total capital raised, key investors, latest valuation if
     known, and funding trajectory (bootstrapped, venture-backed, PE-owned, public).
+    FACTS ONLY - no inline citations or URLs. Put source URLs in fundingStageCIT field.
   tags:
   - LLM
   sets:
@@ -347,6 +399,21 @@ properties:
   - standard
   metadata:
     order: 124
+- name: fundingStageCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the fundingStageLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: fundingStageLLM
+    order: 125
 - name: revenues
   dataType:
   - text
@@ -598,13 +665,13 @@ properties:
   - text
   description: |
     Employee headcount growth classification. Requires EXPLICIT growth evidence - do not guess.
-    
+
     CLASSIFICATION RULES (explicit evidence required):
     - Rapid-Growth: Stated >50% YoY headcount growth, explicit "rapid hiring"
     - Steady-Growth: Stated 10-50% YoY headcount growth, consistent hiring
     - Stable: Explicit stable headcount, maintenance hiring only
     - Declining: Explicit layoffs, headcount reduction announcements
-    
+
     USE Unknown WHEN:
     - No explicit headcount or growth information found
   enum:

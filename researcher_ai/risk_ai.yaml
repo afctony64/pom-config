@@ -64,49 +64,62 @@ tool_guidance:
     tool_choice: auto  # Let LLM decide - page content often has compliance info, but breaches need search
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
-      
+
       ⚠️ Companies HIDE negative news - external search essential!
-      
+
       **SEARCH #1 (IF NEEDED): Security & incidents**
       → "{company} data breach security incident lawsuit"
       (Covers breaches, incidents, and legal issues)
-      
+
       **SEARCH #2 (IF NEEDED): Compliance certs**
       → "{company} SOC2 GDPR HIPAA ISO certification"
       (Only if page content missing compliance info)
-      
+
       **STOP after finding:**
       - Known security incidents
       - Compliance certifications
       - Legal/regulatory issues
-      
+
     recommended_searches:
       incidents: "{company_name} data breach security incident lawsuit"
       compliance: "{company_name} SOC2 GDPR HIPAA ISO certification"
-      
+
   edgar_company_facts:
     priority: medium
     when_to_use: |
       📊 USE FOR PUBLIC COMPANIES - BASIC INFO:
-      
+
       **When to call:**
       - ONLY if company has stock symbol
       - Gets CIK for subsequent filing lookups
-      
+
       ⚠️ SKIP for private companies
-      
+
   edgar_filing_sections:
     priority: high
     when_to_use: |
       📊 USE FOR PUBLIC COMPANIES - RISK SECTIONS:
-      
+
       **Risk-relevant sections from 10-K:**
       - Item 1A: Risk Factors - CRITICAL for risk assessment
       - Item 3: Legal Proceedings - lawsuits, regulatory actions
       - Item 7: MD&A - business risks discussed
-      
+
       **When to call:**
       - After confirming company is public
       - Best source for official risk disclosures
-      
+
       ⚠️ SEC filings have legally-required risk disclosure!
+  citation_format:
+    priority: high
+    usage_instructions: |
+      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
+      ❌ "SOC2 Type II certified — see https://example.com/security"
+      ✅ "SOC2 Type II certified with annual penetration testing"
+
+      For each LLM field, put supporting URLs in the matching CIT field:
+      - securityPostureLLM → securityPostureCIT
+      - complianceCertificationLLM → complianceCertificationCIT
+      - regulatoryEnvironmentLLM → regulatoryEnvironmentCIT
+
+      Put ALL source URLs in the global `citations` array field too.

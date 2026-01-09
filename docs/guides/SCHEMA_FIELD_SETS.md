@@ -468,6 +468,8 @@ When adding new sets or tags:
 |-----|---------|----------------|
 | `LLM` | AI-populated | *LLM fields |
 | `Cat` | Classification | *Cat fields |
+| `CIT` | Citation field | *CIT fields |
+| `provenance` | Source tracking | citations, *CIT fields |
 | `research` | Research output | All researcher fields |
 | `identity` | Core identity | domain, url, name |
 | `web` | Web presence | siteReadable, contentType |
@@ -481,6 +483,56 @@ When adding new sets or tags:
 | `security` | Security data | Security scores |
 | `classification` | Category fields | All Cat fields |
 | `audit` | Audit trail | Source, timestamps |
+
+---
+
+## CIT (Citation) Fields
+
+The Cat/LLM/CIT triad pattern enables field-level source tracking for AI-generated content:
+
+| Field Type | Suffix | Purpose | Example |
+|------------|--------|---------|---------|
+| Cat | `*Cat` | Classification from enum/vector | `pricingModelCat` |
+| LLM | `*LLM` | AI-generated analysis text | `pricingModelLLM` |
+| CIT | `*CIT` | Source URLs for that analysis | `pricingModelCIT` |
+
+### CIT Field Pattern
+
+Each CIT field follows this structure:
+
+```yaml
+- name: {topic}CIT
+  dataType:
+    - text[]
+  description: "Source URLs supporting the {topic}LLM analysis. Cite page URLs from pageData or web_search."
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+    - CIT
+    - provenance
+  sets:
+    - prompt
+  metadata:
+    source_llm: {topic}LLM
+    order: {llm_order + 1}
+```
+
+### Usage Rules
+
+- **LLM fields**: Contain FACTS ONLY (no inline URLs)
+- **CIT fields**: Contain source URLs that support the specific LLM analysis
+- **Global `citations` field**: Contains ALL URLs used anywhere in the record
+- A URL can appear in both a CIT field AND the global `citations` array
+
+### Example
+
+```yaml
+# Input from LLM:
+pricingModelLLM: "Offers tiered enterprise pricing with custom contracts for large deployments"
+pricingModelCIT: ["https://example.com/pricing", "https://example.com/enterprise"]
+citations: ["https://example.com/pricing", "https://example.com/enterprise", "https://example.com/about"]
+```
 
 ---
 

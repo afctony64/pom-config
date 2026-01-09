@@ -347,7 +347,13 @@ Return ONLY the fields defined in the JSON schema (provided via structured outpu
 Fields marked `parallel_to` must have identical array lengths (index-aligned data).
 
 ### Citations
-Reference source page URLs when making specific claims.
+- **Global `citations` field**: ALL source URLs used anywhere in the analysis
+- **CIT fields** (suffix `*CIT`): Field-specific source URLs
+  - For each LLM field, populate its matching CIT field with URLs that support that specific analysis
+  - Example: If `pricingModelLLM` cites evidence from `/pricing` page, add that URL to `pricingModelCIT`
+  - A URL can appear in both a CIT field AND the global `citations` array
+
+**⚠️ NO INLINE CITATIONS**: Do NOT embed URLs in LLM field text. Put URLs in CIT fields only.
 
 ## 📄 OUTPUT
 

@@ -63,14 +63,27 @@ tool_guidance:
     max_calls: 1  # LIMIT: Rarely needed - use page content!
     when_to_use: |
       🔍 SEARCH ONLY IF page content lacks customer examples
-      
+
       **SEARCH (RARELY NEEDED):**
       → "{company} customer case study"
-      
+
       ⚠️ PREFER PAGE CONTENT - company sites SHOWCASE customers!
-      
+
     recommended_searches:
       primary: "{company_name} customer case study success story"
+  citation_format:
+    priority: high
+    usage_instructions: |
+      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
+      ❌ "Enterprise customers include Fortune 500 — see https://example.com/customers"
+      ✅ "Enterprise customers include Fortune 500 companies across financial services"
+
+      For each LLM field, put supporting URLs in the matching CIT field:
+      - useCaseLLM → useCaseCIT
+      - customerIndustrySegmentLLM → customerIndustrySegmentCIT
+      - keyCustomerIndustrySegmentLLM → keyCustomerIndustrySegmentCIT
+
+      Put ALL source URLs in the global `citations` array field too.
 
 # Post-execution tools for customer research
 post_execution_tools:

@@ -129,9 +129,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe the founder(s) background and profile (100-150 words). Include: founder names, 
-    previous company experience, relevant domain expertise, education, founder-led vs 
+    Describe the founder(s) background and profile (100-150 words). Include: founder names,
+    previous company experience, relevant domain expertise, education, founder-led vs
     professional management, and any notable achievements or exits.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in founderProfileCIT field.
   tags:
   - LLM
   - research
@@ -141,6 +142,21 @@ properties:
   - standard
   metadata:
     order: 122
+- name: founderProfileCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the founderProfileLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: founderProfileLLM
+    order: 123
 - name: ceoName
   dataType:
   - text
@@ -203,13 +219,13 @@ properties:
   dataType:
   - number
   description: |
-    Approximate total employee count. 
-    
+    Approximate total employee count.
+
     🚨 MANDATORY TOOL USE: If employee count is NOT explicitly stated in page content:
     1. You MUST call brave_search with query: "{company_name} linkedin employees headcount company size"
     2. DO NOT return 0 or null without performing a web search first
     3. Extract from: LinkedIn company page, company About pages, press releases, job postings
-    
+
     Only return 0 if:
     - brave_search was called AND
     - No employee count found in search results
@@ -226,7 +242,7 @@ properties:
   - text
   description: |
     Employee size band classification. Requires EXPLICIT employee count evidence - do not guess.
-    
+
     CLASSIFICATION RULES (explicit evidence required):
     - Micro: Stated 1-10 employees
     - Small: Stated 11-50 employees
@@ -234,7 +250,7 @@ properties:
     - Large: Stated 201-1000 employees
     - Enterprise: Stated 1001-5000 employees
     - Corporate: Stated 5000+ employees
-    
+
     USE Unknown WHEN:
     - No explicit employee count found
     - Only vague terms like "small team" without numbers
@@ -258,9 +274,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe the executive team's collective experience (100-150 words). Include: key executives 
-    and their roles, years of industry experience, previous companies and positions, domain 
+    Describe the executive team's collective experience (100-150 words). Include: key executives
+    and their roles, years of industry experience, previous companies and positions, domain
     expertise depth, and any patterns (e.g., former [BigCo] executives, serial entrepreneurs).
+    FACTS ONLY - no inline citations or URLs. Put source URLs in executiveExperienceCIT field.
   tags:
   - LLM
   - research
@@ -270,6 +287,21 @@ properties:
   - standard
   metadata:
     order: 124
+- name: executiveExperienceCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the executiveExperienceLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: executiveExperienceLLM
+    order: 125
 - name: keyExecutives
   dataType:
   - text[]
@@ -383,9 +415,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe the leadership and company culture style (100-150 words). Include: management 
-    approach (hands-on, distributed), decision-making style, company values emphasis, 
+    Describe the leadership and company culture style (100-150 words). Include: management
+    approach (hands-on, distributed), decision-making style, company values emphasis,
     growth philosophy (bootstrapped mindset vs hypergrowth), and any visible culture signals.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in leadershipStyleCIT field.
   tags:
   - LLM
   - research
@@ -395,6 +428,21 @@ properties:
   - standard
   metadata:
     order: 126
+- name: leadershipStyleCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the leadershipStyleLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: leadershipStyleLLM
+    order: 127
 - name: boardComposition
   dataType:
   - text

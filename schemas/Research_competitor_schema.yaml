@@ -110,9 +110,11 @@ properties:
 - name: competitorAnalysisLLM
   dataType:
   - text
-  description: Descriptive analysis of competitive landscape and positioning. Include
+  description: |
+    Descriptive analysis of competitive landscape and positioning. Include
     direct competitors identified, alternative solutions, competitive advantages claimed,
     differentiation factors, and competitive threats acknowledged.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in competitorAnalysisCIT field.
   tags:
   - LLM
   sets:
@@ -121,6 +123,21 @@ properties:
   - prompt
   metadata:
     order: 132
+- name: competitorAnalysisCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the competitorAnalysisLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: competitorAnalysisLLM
+    order: 133
 - name: marketPositionCat
   dataType:
   - text
@@ -151,9 +168,11 @@ properties:
 - name: marketPositionLLM
   dataType:
   - text
-  description: Descriptive analysis of market position and competitive standing. Include
+  description: |
+    Descriptive analysis of market position and competitive standing. Include
     market leadership claims (leader, challenger, niche player), market share indicators,
     positioning strategy (premium, value, specialist), and competitive moat strength.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in marketPositionCIT field.
   tags:
   - LLM
   - research
@@ -163,6 +182,21 @@ properties:
   - prompt
   metadata:
     order: 134
+- name: marketPositionCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the marketPositionLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: marketPositionLLM
+    order: 135
 - name: keyCompetitors
   dataType:
   - text[]

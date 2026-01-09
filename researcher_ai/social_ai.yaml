@@ -46,7 +46,7 @@ avoid:
   - Confusing personal founder accounts with official company accounts
   - Fabricating follower counts or engagement metrics not in sources
   - Including unrelated fan accounts or unofficial community pages as official
-  # NOTE: DO extract platform presence from page content (footer links, share buttons, 
+  # NOTE: DO extract platform presence from page content (footer links, share buttons,
   # community mentions). If page content references github, slack, blog - include them.
 
 # 🌐 DATA INJECTION: Pre-enriched Domain fields (from enrichers)
@@ -71,7 +71,7 @@ tool_guidance:
     max_calls: 1  # LIMIT: Only 1 search - digitalPresence has most data!
     when_to_use: |
       🔍 CHECK digitalPresence FIRST - it has enricher-discovered data!
-      
+
       **AVAILABLE FROM digitalPresence (no search needed):**
       - social_media_score: Overall presence score (0-100)
       - social_platforms: Array of detected platforms
@@ -79,14 +79,27 @@ tool_guidance:
       - has_social_auth: OAuth login capability
       - has_community_features: Forums, Slack, Discord detected
       - business_technology: Tech stack indicators
-      
+
       **SEARCH ONLY IF digitalPresence lacks:**
       - Specific platform accounts not detected
       - Community presence not found on website
       - Recent social activity or follower counts
-      
+
       **SEARCH (IF NEEDED):**
       → "{company} LinkedIn Twitter GitHub YouTube"
-      
+
     recommended_searches:
       primary: "{company_name} LinkedIn Twitter GitHub community"
+  citation_format:
+    priority: high
+    usage_instructions: |
+      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
+      ❌ "Active on LinkedIn and Twitter — see https://linkedin.com/company"
+      ✅ "Active on LinkedIn and Twitter with strong developer community engagement"
+
+      For each LLM field, put supporting URLs in the matching CIT field:
+      - platformPresenceLLM → platformPresenceCIT
+      - socialContentLLM → socialContentCIT
+      - communityEngagementLLM → communityEngagementCIT
+
+      Put ALL source URLs in the global `citations` array field too.

@@ -309,9 +309,11 @@ properties:
 - name: platformPresenceLLM
   dataType:
   - text
-  description: Descriptive analysis of social platform coverage and implementation strategy. Include which platforms they're
+  description: |
+    Descriptive analysis of social platform coverage and implementation strategy. Include which platforms they're
     active on (Twitter, LinkedIn, GitHub, Discord, etc.), social auth/sharing implementation, account discovery, engagement
     score, and how platform choices align with their business model and audience.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in platformPresenceCIT field.
   tags:
   - LLM
   - score
@@ -321,12 +323,29 @@ properties:
   - standard
   metadata:
     order: 122
+- name: platformPresenceCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the platformPresenceLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: platformPresenceLLM
+    order: 123
 - name: socialContentLLM
   dataType:
   - text
-  description: Descriptive analysis of content strategy, messaging themes, and thought leadership positioning. Include content
+  description: |
+    Descriptive analysis of content strategy, messaging themes, and thought leadership positioning. Include content
     themes (product updates, technical education, customer stories), messaging style (promotional, educational, community-focused),
     social proof indicators, and content maturity level.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in socialContentCIT field.
   tags:
   - LLM
   - research
@@ -336,20 +355,30 @@ properties:
   - standard
   metadata:
     order: 124
+- name: socialContentCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the socialContentLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: socialContentLLM
+    order: 125
 - name: communityEngagementLLM
   dataType:
   - text
-  description: 'Describe community engagement and relationship building (2 sentences, ~75 words max).
-
-
+  description: |
+    Describe community engagement and relationship building (2 sentences, ~75 words max).
     START with overall engagement approach:
-
     - How actively does the entity engage with its community?
-
-
     Then list primary channels and note interaction level (two-way vs broadcast-only).
-
-    '
+    FACTS ONLY - no inline citations or URLs. Put source URLs in communityEngagementCIT field.
   tags:
   - LLM
   sets:
@@ -358,6 +387,21 @@ properties:
   - standard
   metadata:
     order: 126
+- name: communityEngagementCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the communityEngagementLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: communityEngagementLLM
+    order: 127
 - name: socialMaturity
   dataType:
   - text

@@ -198,8 +198,10 @@ properties:
 - name: productTypeLLM
   dataType:
   - text[]
-  description: Product type description - detailed narrative explaining the product's nature, capabilities, and how it delivers
+  description: |
+    Product type description - detailed narrative explaining the product's nature, capabilities, and how it delivers
     value. Single-element array containing one comprehensive description paragraph.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in productTypeCIT field.
   tags:
   - LLM
   sets:
@@ -208,6 +210,21 @@ properties:
   - standard
   metadata:
     order: 122
+- name: productTypeCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the productTypeLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: productTypeLLM
+    order: 123
 - name: productTypeCat
   dataType:
   - text[]
@@ -296,8 +313,10 @@ properties:
 - name: technologyStackLLM
   dataType:
   - text[]
-  description: Technology Stack Description - detailed descriptions for each classified technology stack. Array supports multi-stack
-    classification (ordered by similarity score, [0] is primary)
+  description: |
+    Technology Stack Description - detailed descriptions for each classified technology stack. Array supports multi-stack
+    classification (ordered by similarity score, [0] is primary).
+    FACTS ONLY - no inline citations or URLs. Put source URLs in technologyStackCIT field.
   tags:
   - LLM
   - score
@@ -307,6 +326,21 @@ properties:
   - standard
   metadata:
     order: 125
+- name: technologyStackCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the technologyStackLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: technologyStackLLM
+    order: 126
 - name: technologyStackCat
   dataType:
   - text
@@ -335,9 +369,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe the entity's pricing and revenue model (100-150 words). Include: pricing structure 
-    (per-seat, usage-based, tiered, enterprise), target customer segments by tier, free trial or 
+    Describe the entity's pricing and revenue model (100-150 words). Include: pricing structure
+    (per-seat, usage-based, tiered, enterprise), target customer segments by tier, free trial or
     freemium availability, and any publicly stated pricing. Note if pricing requires contacting sales.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in pricingModelCIT field.
   tags:
   - LLM
   sets:
@@ -346,6 +381,21 @@ properties:
   - standard
   metadata:
     order: 132
+- name: pricingModelCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the pricingModelLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: pricingModelLLM
+    order: 133
 - name: pricingModelCat
   dataType:
   - text
@@ -390,10 +440,11 @@ properties:
   dataType:
   - text
   description: |
-    Describe the entity's integration capabilities (100-150 words). Include: API availability and 
-    documentation quality, pre-built integrations and marketplace, webhook support, authentication 
-    methods (OAuth, API keys), and developer resources. Note integration philosophy (API-first vs 
+    Describe the entity's integration capabilities (100-150 words). Include: API availability and
+    documentation quality, pre-built integrations and marketplace, webhook support, authentication
+    methods (OAuth, API keys), and developer resources. Note integration philosophy (API-first vs
     limited integrations).
+    FACTS ONLY - no inline citations or URLs. Put source URLs in integrationProfileCIT field.
   tags:
   - LLM
   sets:
@@ -402,6 +453,21 @@ properties:
   - standard
   metadata:
     order: 134
+- name: integrationProfileCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the integrationProfileLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: integrationProfileLLM
+    order: 135
 - name: integrationProfileCat
   dataType:
   - text
@@ -550,7 +616,9 @@ properties:
 - name: productMaturityLLM
   dataType:
   - text
-  description: Descriptive analysis of product maturity stage and lifecycle position
+  description: |
+    Descriptive analysis of product maturity stage and lifecycle position.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in productMaturityCIT field.
   tags:
   - LLM
   sets:
@@ -559,6 +627,21 @@ properties:
   - standard
   metadata:
     order: 136
+- name: productMaturityCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the productMaturityLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: productMaturityLLM
+    order: 137
 - name: productMaturityCat
   dataType:
   - text
@@ -599,7 +682,9 @@ properties:
 - name: goToMarketLLM
   dataType:
   - text
-  description: Go-to-market strategy analysis including sales motion and customer acquisition approach
+  description: |
+    Go-to-market strategy analysis including sales motion and customer acquisition approach.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in goToMarketCIT field.
   tags:
   - LLM
   sets:
@@ -607,13 +692,28 @@ properties:
   - extended
   - standard
   metadata:
-    order: 136
+    order: 138
+- name: goToMarketCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the goToMarketLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: goToMarketLLM
+    order: 139
 - name: goToMarketCat
   dataType:
   - text[]
   description: |
     Go-to-market strategy classifications. Select ALL that apply based on EXPLICIT evidence.
-    
+
     CLASSIFICATION OPTIONS (select all with explicit evidence):
     - Product-Led-Growth: Free trial, freemium, self-service signup, viral loops
     - Sales-Led: Enterprise sales team, "contact sales", demo requests, sales reps
@@ -622,7 +722,7 @@ properties:
     - Marketing-Led: Content marketing, inbound focus, SEO-driven acquisition
     - Developer-Led: SDK/API focus, developer experience, dev tooling emphasis
     - Marketplace: Listed on app stores, integration marketplaces, platform ecosystems
-    
+
     ONLY include categories with explicit evidence. Empty array if no GTM strategy found.
   enum:
   - Product-Led-Growth
@@ -647,7 +747,7 @@ properties:
   - text
   description: |
     Primary go-to-market strategy. Select the SINGLE most dominant GTM motion.
-    
+
     Choose the strategy that best represents how this company primarily acquires customers:
     - Product-Led-Growth: Primary acquisition through free trial, freemium, self-service
     - Sales-Led: Primary acquisition through sales team, demos, enterprise outreach
@@ -656,7 +756,7 @@ properties:
     - Marketing-Led: Primary acquisition through content, inbound, SEO
     - Developer-Led: Primary acquisition through SDK/API adoption, dev tooling
     - Marketplace: Primary acquisition through app stores, platform marketplaces
-    
+
     Use Unknown if no clear primary GTM motion can be determined.
   enum:
   - Product-Led-Growth

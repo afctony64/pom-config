@@ -127,9 +127,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe the entity's partnership ecosystem (100-150 words). Include: types of partners 
-    (technology, channel, integration, strategic), partner program structure, notable partner 
+    Describe the entity's partnership ecosystem (100-150 words). Include: types of partners
+    (technology, channel, integration, strategic), partner program structure, notable partner
     names, and partnership strategy (open ecosystem vs selective partnerships).
+    FACTS ONLY - no inline citations or URLs. Put source URLs in partnerTypeCIT field.
   tags:
   - LLM
   sets:
@@ -138,6 +139,21 @@ properties:
   - standard
   metadata:
     order: 111
+- name: partnerTypeCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the partnerTypeLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: partnerTypeLLM
+    order: 112
 - name: keyPartners
   dataType:
   - text[]
@@ -210,9 +226,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe partnership integration depth (100-150 words). Include: how partners integrate 
-    technically (APIs, native connectors, embedded), co-selling arrangements, joint solutions, 
+    Describe partnership integration depth (100-150 words). Include: how partners integrate
+    technically (APIs, native connectors, embedded), co-selling arrangements, joint solutions,
     and integration maturity (marketplace listing vs deep product integration).
+    FACTS ONLY - no inline citations or URLs. Put source URLs in integrationCIT field.
   tags:
   - LLM
   sets:
@@ -220,7 +237,22 @@ properties:
   - extended
   - standard
   metadata:
-    order: 112
+    order: 113
+- name: integrationCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the integrationLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: integrationLLM
+    order: 114
 - name: integrations
   dataType:
   - text[]
@@ -264,9 +296,10 @@ properties:
   dataType:
   - text
   description: |
-    Describe partnership revenue impact (100-150 words). Include: revenue sharing models, 
-    referral programs, channel contribution to sales, partner-sourced vs direct revenue 
+    Describe partnership revenue impact (100-150 words). Include: revenue sharing models,
+    referral programs, channel contribution to sales, partner-sourced vs direct revenue
     balance, and any stated partnership revenue metrics.
+    FACTS ONLY - no inline citations or URLs. Put source URLs in revenueImpactCIT field.
   tags:
   - LLM
   sets:
@@ -274,7 +307,22 @@ properties:
   - extended
   - standard
   metadata:
-    order: 113
+    order: 115
+- name: revenueImpactCIT
+  dataType:
+  - text[]
+  description: Source URLs supporting the revenueImpactLLM analysis. Cite page URLs from pageData or web_search.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - CIT
+  - provenance
+  sets:
+  - prompt
+  metadata:
+    source_llm: revenueImpactLLM
+    order: 116
 - name: revenueModel
   dataType:
   - text

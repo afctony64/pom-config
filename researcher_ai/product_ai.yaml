@@ -69,13 +69,29 @@ tool_guidance:
     max_calls: 1  # LIMIT: Only 1 search - product info usually on website
     when_to_use: |
       🔍 SEARCH ONLY IF page content lacks product details
-      
+
       **SEARCH (IF NEEDED): Product announcements**
       → "{company} product feature announcement"
-      
+
       **DON'T SEARCH FOR:**
       - Basic product info (on website)
       - Feature lists (check docs)
       - Pricing (see pricing page)
+  citation_format:
+    priority: high
+    usage_instructions: |
+      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
+      ❌ "Cloud-native integration platform — see https://example.com/platform"
+      ✅ "Cloud-native integration platform with 500+ pre-built connectors"
+
+      For each LLM field, put supporting URLs in the matching CIT field:
+      - productTypeLLM → productTypeCIT
+      - technologyStackLLM → technologyStackCIT
+      - pricingModelLLM → pricingModelCIT
+      - integrationProfileLLM → integrationProfileCIT
+      - productMaturityLLM → productMaturityCIT
+      - goToMarketLLM → goToMarketCIT
+
+      Put ALL source URLs in the global `citations` array field too.
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)

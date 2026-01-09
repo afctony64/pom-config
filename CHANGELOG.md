@@ -5,6 +5,39 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.98] - 2026-01-09
+
+### Added
+- **CIT Citation Fields**: 33 new `*CIT` fields across all 10 Research_* schemas for field-level source tracking
+  - Enables tracing which source URLs support which specific LLM analysis
+  - Complete Cat/LLM/CIT triad pattern for structured research output
+- **CIT Tag**: New `CIT` and `provenance` tags for filtering citation fields
+
+### Changed
+- **LLM Field Descriptions**: Updated all 33 LLM fields with "FACTS ONLY - no inline citations" guidance
+- **entity_researcher.prompty**: Enhanced Citations section with CIT field instructions
+- **researcher_ai configs**: Added `citation_format` guidance to all 10 researcher configs
+- **SCHEMA_FIELD_SETS.md**: Added CIT pattern documentation
+
+### Schema Updates by Collection
+| Collection | CIT Fields Added |
+|------------|-----------------|
+| Research_product | productTypeCIT, technologyStackCIT, pricingModelCIT, integrationProfileCIT, productMaturityCIT, goToMarketCIT |
+| Research_industry | businessModelCIT, deliveryModelCIT, industrySegmentCIT |
+| Research_customer | useCaseCIT, customerIndustrySegmentCIT, keyCustomerIndustrySegmentCIT |
+| Research_financial | fundingStageCIT, revenueSizeCIT, growthVelocityCIT, profitabilityProfileCIT |
+| Research_competitor | competitorAnalysisCIT, marketPositionCIT |
+| Research_leadership | founderProfileCIT, executiveExperienceCIT, leadershipStyleCIT |
+| Research_partner | partnerTypeCIT, integrationCIT, revenueImpactCIT |
+| Research_risk | securityPostureCIT, complianceCertificationCIT, regulatoryEnvironmentCIT |
+| Research_journalist | mediaTypeCIT, coverageLevelCIT, mediaSentimentCIT |
+| Research_social | platformPresenceCIT, socialContentCIT, communityEngagementCIT |
+
+### Migration Notes
+- No data migration needed - CIT fields will be empty for existing records
+- Weaviate schema update required after deployment
+- Backward compatible - empty CIT arrays won't break existing queries
+
 ## [1.6.82] - 2025-01-07
 
 ### Added

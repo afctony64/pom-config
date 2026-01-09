@@ -59,14 +59,27 @@ tool_guidance:
     max_calls: 1  # LIMIT: Only 1 search - partners usually on website
     when_to_use: |
       🔍 SEARCH ONLY IF page content lacks partner details
-      
+
       **SEARCH (IF NEEDED): Partnership announcements**
       → "{company} partnership integration announcement"
-      
+
       **STOP after finding:**
       - Key technology partners
       - Integration partnerships
       - Strategic alliances
-      
+
     recommended_searches:
       primary: "{company_name} partnership integration announcement strategic"
+  citation_format:
+    priority: high
+    usage_instructions: |
+      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
+      ❌ "Strategic partnership with Salesforce — see https://example.com/partners"
+      ✅ "Strategic partnership with Salesforce for CRM integrations"
+
+      For each LLM field, put supporting URLs in the matching CIT field:
+      - partnerTypeLLM → partnerTypeCIT
+      - integrationLLM → integrationCIT
+      - revenueImpactLLM → revenueImpactCIT
+
+      Put ALL source URLs in the global `citations` array field too.
