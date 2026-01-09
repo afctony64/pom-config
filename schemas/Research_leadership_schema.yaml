@@ -202,7 +202,14 @@ properties:
 - name: employeeCount
   dataType:
   - number
-  description: Approximate total employee count. Extract from About pages, LinkedIn, or company announcements.
+  description: |
+    Approximate total employee count. 
+    
+    IMPORTANT: If employee count is not found in page content, USE brave_search to look up:
+    "{company_name} linkedin employees headcount company size"
+    
+    Extract from: LinkedIn company page, About pages, press releases, or company announcements.
+    Return 0 only if search was performed and no count found.
   tags:
   - research
   - headcount
