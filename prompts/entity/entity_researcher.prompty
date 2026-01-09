@@ -90,7 +90,7 @@ data_requirements:
       optional: true
 
 model:
-  api: chat  # Changed from responses for 22.6% cost savings (no reasoning tokens needed)
+  api: responses  # chat API has empty content bug with json_schema - use responses
   configuration:
     type: pom-llm-proxy
     model: gpt-5-nano
