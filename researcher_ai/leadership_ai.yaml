@@ -9,8 +9,7 @@ name: Research Leadership
 
 researcher_identity:
   title: Executive Intelligence Analyst
-  mission: Profile leadership teams, analyze management structure, and assess organizational
-    culture
+  mission: Profile leadership teams, analyze management structure, and assess organizational culture
   ecosystem_role: Leadership-focused researcher delivering structured executive intelligence
   core_competencies:
   - 'Executive Profiling: Leadership team analysis, executive bios, experience mapping'
@@ -18,11 +17,30 @@ researcher_identity:
   - 'Culture Assessment: Leadership style, organizational values, cultural indicators'
   - 'Due Diligence: Executive backgrounds, previous companies, educational credentials'
 
-# Semantic search query for page selection (BM25/vector injectors)
-# NOTE: Natural language queries work best for hybrid vector+BM25 search
-search_query: >
-  Who are the founders and leadership team? 
-  What is the background of the CEO and key executives?
+# Semantic search queries for page selection (BM25/vector injectors)
+search_queries:
+  - "Who are the founders and leadership team?"
+  - "What is the background of the CEO and key executives?"
+  - "Who is on the board of directors and advisory board?"
+  - "What is the company culture and organizational values?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Executive names and roles (CEO, CTO, CFO, etc.)
+  - Executive backgrounds (previous companies, education, experience)
+  - LinkedIn profile URLs for each executive
+  - Board members and advisors
+  - Founder story and company culture
+
+# Fact types to extract from source content
+fact_types:
+  - executive_name
+  - executive_role
+  - executive_background
+  - linkedin_profile
+  - board_member
+  - advisor
+  - founder_story
 
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
@@ -63,36 +81,5 @@ tool_guidance:
       
       # Only if board info missing:
       board: "{company_name} board of directors investors advisors"
-      
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - keyExecutives: List actual names found (e.g., "John Smith", "Jane Doe")
-      - executiveRoles: Role/title for each executive (parallel to keyExecutives)
-      - executiveBackgrounds: Brief career history per executive (parallel to keyExecutives)
-      - executiveTenure: Time at company per executive (parallel to keyExecutives)
-      - executiveLinkedIn: LinkedIn profile URL per executive (parallel to keyExecutives)
-      - boardMembers: Include investor board seats
-      
-      🔗 LINKEDIN PROFILES (CRITICAL):
-      - Extract LinkedIn URLs from brave_search results for each executive
-      - Format: "https://www.linkedin.com/in/username/"
-      - Use "Not disclosed" if LinkedIn profile not found
-      - executiveLinkedIn MUST have same length as keyExecutives array
-      
-      📊 ALL PARALLEL ARRAYS MUST ALIGN:
-      keyExecutives:       ["John Smith", "Jane Doe"]
-      executiveRoles:      ["CEO", "CTO"]
-      executiveBackgrounds: ["15yr industry veteran", "Ex-Google engineer"]
-      executiveTenure:     ["5 years", "2 years"]
-      executiveLinkedIn:   ["https://linkedin.com/in/johnsmith/", "Not disclosed"]
-      
-      🚨 CRITICAL: NAMES ARE REQUIRED FOR PARALLEL ARRAYS
-      - ONLY include executives in keyExecutives if you have an ACTUAL NAME
-      - Do NOT add entries like "CFO (name not disclosed)" or "Head of Engineering (unknown)"
-      - If you cannot find a person's name, DO NOT add them to the array
-      - Empty arrays are VALID - better than placeholder/inferred entries
-      - ALL parallel arrays must have IDENTICAL length matching keyExecutives
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
