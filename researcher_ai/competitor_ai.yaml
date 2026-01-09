@@ -29,6 +29,24 @@ search_queries:
   - "What alternatives exist and what differentiates them?"
   - "What customer reviews and market positioning exist?"
 
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Direct competitors (2-5 companies customers actually compare to)
+  - Competitive advantages vs each competitor (what THIS company does better)
+  - Competitive gaps vs each competitor (where competitors are stronger)
+  - Market positioning (leader, challenger, niche player)
+  - Awards and accolades (G2, Capterra rankings, certifications)
+
+# Fact types to extract from source content
+fact_types:
+  - competitor_name
+  - competitive_advantage
+  - competitive_gap
+  - market_position
+  - pricing_comparison
+  - feature_comparison
+  - award_or_ranking
+
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
   - brave_search  # Web search for competitor analysis, G2/Capterra reviews
