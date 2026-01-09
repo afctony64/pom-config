@@ -610,29 +610,28 @@ properties:
     order: 136
 - name: goToMarketCat
   dataType:
-  - text
+  - text[]
   description: |
-    Go-to-market strategy classification. Requires EXPLICIT GTM evidence - do not guess.
+    Go-to-market strategy classifications. Select ALL that apply based on EXPLICIT evidence.
     
-    CLASSIFICATION RULES (explicit evidence required):
-    - Product-Led-Growth: Explicit free trial, freemium, self-service signup, viral loops
-    - Sales-Led: Explicit enterprise sales team, "contact sales", demo requests
-    - Partner-Led: Explicit channel partnerships, reseller network, marketplace focus
-    - Community-Led: Explicit open source, developer community, community-first messaging
-    - Marketing-Led: Explicit content marketing, inbound focus, marketing-driven acquisition
-    - Hybrid: Multiple explicit GTM motions described
+    CLASSIFICATION OPTIONS (select all with explicit evidence):
+    - Product-Led-Growth: Free trial, freemium, self-service signup, viral loops
+    - Sales-Led: Enterprise sales team, "contact sales", demo requests, sales reps
+    - Partner-Led: Channel partnerships, reseller network, ISV partnerships
+    - Community-Led: Open source, developer community, community-first messaging
+    - Marketing-Led: Content marketing, inbound focus, SEO-driven acquisition
+    - Developer-Led: SDK/API focus, developer experience, dev tooling emphasis
+    - Marketplace: Listed on app stores, integration marketplaces, platform ecosystems
     
-    USE Unknown WHEN:
-    - No explicit GTM strategy or sales motion described
-    - Only product information without sales/acquisition context
+    ONLY include categories with explicit evidence. Empty array if no GTM strategy found.
   enum:
   - Product-Led-Growth
   - Sales-Led
   - Partner-Led
   - Community-Led
   - Marketing-Led
-  - Hybrid
-  - Unknown
+  - Developer-Led
+  - Marketplace
   tags:
   - Cat
   - gtm
