@@ -26,6 +26,25 @@ search_queries:
   - "Who are the investors and venture capital firms that invested?"
   - "What are the latest funding announcements and press releases?"
 
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Funding rounds and amounts (Seed, Series A/B/C/D, total raised)
+  - Key investors and lead VCs (Crunchbase, PitchBook as sources)
+  - Revenue estimates and ARR/MRR (Owler, ZoomInfo, SEC filings)
+  - Valuation and funding stage (private vs public)
+  - Financial health and growth metrics
+
+# Fact types to extract from source content
+fact_types:
+  - funding_round
+  - funding_amount
+  - investor_name
+  - total_funding
+  - revenue_estimate
+  - valuation
+  - funding_stage
+  - growth_rate
+
 # Issue #394: Context retrieval options
 # Low alpha (0.3) prioritizes BM25 exact matches like "$9 million Series A"
 # over generic boilerplate that matches vectorially
@@ -108,27 +127,3 @@ tool_guidance:
       - Provides detailed 10-K financial analysis
       
       ⚠️ Only works for public companies with SEC filings
-      
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      
-      **Required fields with sources:**
-      - keyInvestors: List actual investor names (Crunchbase, PitchBook)
-      - totalFunding: Amount + currency + source URL
-      - fundingJourney: Timeline of rounds with dates (CB Insights, TechCrunch)
-      - revenueEstimate: From Owler, ZoomInfo, or SEC filings
-      - fundingStage: Seed, Series A/B/C, Growth, IPO
-      - valuation: Last known valuation with date + source
-      
-      **Source priority:**
-      1. SEC filings (edgar) - most reliable for public
-      2. Crunchbase/PitchBook - best for funding data
-      3. Owler/ZoomInfo - revenue estimates
-      4. TechCrunch/Forbes - recent announcements
-      
-      **Always include:**
-      - Source URL for each data point
-      - Date of information (funding rounds, valuations)
-      - Confidence indicator if data is estimated
