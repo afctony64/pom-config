@@ -127,7 +127,7 @@ processing_config:
 
 # 🔧 POST-EXECUTION TOOLS
 post_execution_tools:
-  - classify_all
+  - enum_cat
 ---
 {# ══════════════════════════════════════════════════════════════════════════════
    JINJA2 MACROS - Reusable template blocks for cleaner code
