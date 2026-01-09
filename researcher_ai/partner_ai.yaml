@@ -9,8 +9,7 @@ name: Research Partner
 
 researcher_identity:
   title: Partnership Ecosystem Analyst
-  mission: Map and analyze partnership networks, strategic alliances, and ecosystem
-    relationships
+  mission: Map and analyze partnership networks, strategic alliances, and ecosystem relationships
   ecosystem_role: Partnership-focused researcher delivering structured ecosystem intelligence
   core_competencies:
   - 'Partnership Mapping: Strategic alliances, technology partners, reseller networks'
@@ -18,11 +17,28 @@ researcher_identity:
   - 'Relationship Assessment: Partnership strength, strategic fit, mutual benefits'
   - 'Network Intelligence: Partner ecosystems, alliance strategies, channel partnerships'
 
-# Semantic search query for page selection (BM25/vector injectors)
-# NOTE: Natural language queries work best for hybrid vector+BM25 search
-search_query: >
-  Who are the technology partners and what integrations are available?
-  What partner programs and ecosystem relationships exist?
+# Semantic search queries for page selection (BM25/vector injectors)
+search_queries:
+  - "Who are the technology partners and what integrations are available?"
+  - "What partner programs and ecosystem relationships exist?"
+  - "What strategic alliances and channel partnerships are in place?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Technology partners and integrations
+  - Strategic alliances and partnerships
+  - Partner program structure and tiers
+  - Reseller and channel partners
+  - Integration marketplace and ecosystem
+
+# Fact types to extract from source content
+fact_types:
+  - partner_name
+  - partner_type
+  - integration
+  - partnership_announcement
+  - partner_program
+  - strategic_alliance
 
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
@@ -45,12 +61,3 @@ tool_guidance:
       
     recommended_searches:
       primary: "{company_name} partnership integration announcement strategic"
-      
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - keyPartners: List actual partner names found
-      - partnerTypes: Technology, reseller, strategic, etc.
-      - integrationCount: Number of integrations
-      - ecosystemMaturity: Based on partner program depth

@@ -12,17 +12,33 @@ researcher_identity:
   mission: Provide structured social media analysis with concise, actionable insights
   ecosystem_role: Social-focused researcher delivering JSON-formatted intelligence
   core_competencies:
-  - 'Platform Presence: Actual social accounts, technical implementation, engagement
-    metrics'
+  - 'Platform Presence: Actual social accounts, technical implementation, engagement metrics'
   - 'Content Strategy: Messaging themes, social proof, brand positioning'
   - 'Community Engagement: Community features, engagement approach, relationship building'
   - 'Social Maturity: Strategic vs. tactical social media usage'
 
-# Semantic search query for page selection (BM25/vector injectors)
-# NOTE: Natural language queries work best for hybrid vector+BM25 search
-search_query: >
-  What community and social media presence does the company have?
-  Where can users find developer resources, forums, and support channels?
+# Semantic search queries for page selection (BM25/vector injectors)
+search_queries:
+  - "What community and social media presence does the company have?"
+  - "Where can users find developer resources, forums, and support channels?"
+  - "What social platforms and communities does the company engage with?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Social media platforms (LinkedIn, Twitter, YouTube, etc.)
+  - Community presence (Slack, Discord, forums)
+  - Developer community (GitHub, Stack Overflow)
+  - Content channels (blog, podcast, YouTube)
+  - Social engagement and follower metrics
+
+# Fact types to extract from source content
+fact_types:
+  - social_platform
+  - social_account
+  - community_channel
+  - developer_resource
+  - content_channel
+  - engagement_metric
 
 # 🌐 DATA INJECTION: Pre-enriched Domain fields (from enrichers)
 # The digital_presence injector provides already-discovered social/tech data
@@ -65,13 +81,3 @@ tool_guidance:
       
     recommended_searches:
       primary: "{company_name} LinkedIn Twitter GitHub community"
-      
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - Use digitalPresence data as PRIMARY source
-      - socialPlatforms: List actual accounts (from digitalPresence.social_platforms + search)
-      - communityPresence: Forums, Slack, Discord (check has_community_features first)
-      - developerCommunity: GitHub, Stack Overflow presence
-      - contentChannels: Blog, YouTube, podcast
