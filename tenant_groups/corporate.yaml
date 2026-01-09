@@ -368,6 +368,73 @@ url_patterns:
       researcher_weights: {}  # Dynamic content
 
 # ══════════════════════════════════════════════════════════════════════════════
+# ANTIPATTERNS - Explicitly Exclude Well-Known Low-Value Paths
+# ══════════════════════════════════════════════════════════════════════════════
+# These are checked FIRST before pattern matching or structural analysis.
+# Prevents false positives from structural analysis scoring these too high.
+# Returns very low score (0.05-0.2) immediately when matched.
+
+url_antipatterns:
+  # Admin & CMS paths (never research-relevant)
+  - pattern: "/(admin|wp-admin|wp-content|wp-includes|administrator|backend|dashboard|panel|cms|wp-json)/"
+    score: 0.05
+    reason: "Admin/CMS paths - not public content"
+    
+  # Tracking & Analytics (not content)
+  - pattern: "/(tracking|analytics|pixel|beacon|gtm|ga\\.js|analytics\\.js|_ga|_gid)/"
+    score: 0.05
+    reason: "Tracking scripts - not content"
+    
+  # Social Media Embeds (not primary content)
+  - pattern: "/(embed|widget|share|social|facebook|twitter|linkedin|instagram|share-button)/"
+    score: 0.1
+    reason: "Social embeds/widgets - not primary content"
+    
+  # API Endpoints (not human-readable content)
+  - pattern: "^/api/v\\d+/|/graphql$|/rest/|/v\\d+/api/"
+    score: 0.1
+    reason: "API endpoints - structured data, not content"
+    
+  # Common CMS/Platform Static Paths
+  - pattern: "/(_next|_static|static|assets|dist|build|public|media|uploads|files|images|css|js|fonts)/"
+    score: 0.05
+    reason: "Static assets/CMS paths - not content pages"
+    
+  # Search & Filter Results (dynamic, low value)
+  - pattern: "/search\\?|/filter\\?|/query\\?|\\?q=|\\?search=|\\?query="
+    score: 0.15
+    reason: "Search results - dynamic, low research value"
+    
+  # Pagination (duplicate content)
+  - pattern: "/page/\\d+|\\?page=\\d+|/p/\\d+|/\\d+/$"
+    score: 0.2
+    reason: "Pagination - duplicate content, low value"
+    
+  # Common Low-Value Paths (explicit exclusion)
+  - pattern: "/(404|500|error|not-found|forbidden|unauthorized|access-denied)/"
+    score: 0.05
+    reason: "Error pages - not content"
+    
+  - pattern: "/(test|demo|sandbox|staging|dev|local|preview)/"
+    score: 0.1
+    reason: "Test/staging environments - not production content"
+    
+  # Authentication (require login, not public content)
+  - pattern: "/(login|signin|signup|register|auth|oauth|sso|account|profile|settings|my-account)/"
+    score: 0.1
+    reason: "Auth pages - require login, not public content"
+    
+  # Integration Callbacks (B2B SaaS)
+  - pattern: "/(webhook|callback|oauth|redirect|return|success|failure)/"
+    score: 0.05
+    reason: "Integration callbacks - not content"
+    
+  # RSS/Feeds (structured data, not content)
+  - pattern: "/(feed|rss|atom|sitemap|robots)(\\.xml|\\.txt)?$"
+    score: 0.05
+    reason: "RSS/feeds - structured data, not content pages"
+
+# ══════════════════════════════════════════════════════════════════════════════
 # CONTENT TYPE DETECTION - URL-Based (No HTTP Request)
 # ══════════════════════════════════════════════════════════════════════════════
 # Identifies content type from URL patterns for future capabilities:

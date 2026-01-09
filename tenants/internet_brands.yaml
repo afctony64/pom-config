@@ -113,3 +113,83 @@ collections:
   # ═══════════════════════════════════════════════════════════════════════════
   # LEGACY (Company_source removed - migrated to Source collection)
   # ═══════════════════════════════════════════════════════════════════════════
+
+# ══════════════════════════════════════════════════════════════════════════════
+# URL PATTERNS - Legal Services Domain-Specific
+# ══════════════════════════════════════════════════════════════════════════════
+# These ADD to corporate.yaml core patterns
+
+url_patterns:
+  high_value:
+    # Legal Services: Attorneys & Team
+    - pattern: "/(attorney|lawyer|partner|staff|team|legal.?team)s?(/|$)"
+      default_weight: 0.9
+      researcher_weights:
+        leadership: 1.0
+        product: 0.6
+        risk: 0.7
+        industry: 0.5
+        
+    # Legal Services: Practice Areas
+    - pattern: "/(practice.?area|specialization|service|expertise|focus|area.?of.?law)s?(/|$)"
+      default_weight: 0.9
+      researcher_weights:
+        product: 1.0
+        industry: 0.85
+        competitor: 0.7
+        
+    # Legal Services: Case Results
+    - pattern: "/(case.?result|verdict|settlement|outcome|success|win|award)s?(/|$)"
+      default_weight: 0.85
+      researcher_weights:
+        customer: 0.9
+        competitor: 0.7
+        product: 0.6
+        
+    # Legal Services: Bar Admissions & Credentials
+    - pattern: "/(bar.?admission|admission|credential|license|certification|bar.?member)s?(/|$)"
+      default_weight: 0.8
+      researcher_weights:
+        leadership: 0.9
+        risk: 0.7
+        industry: 0.6
+        
+    # Legal Services: Court Admissions
+    - pattern: "/(court.?admission|federal.?court|state.?court|jurisdiction)s?(/|$)"
+      default_weight: 0.75
+      researcher_weights:
+        leadership: 0.8
+        risk: 0.6
+        industry: 0.7
+
+  medium_value:
+    # Legal Services: Legal Updates & News
+    - pattern: "/(legal.?update|news|article|press|announcement|alert)s?(/|$)"
+      default_weight: 0.5
+      researcher_weights:
+        journalist: 0.9
+        industry: 0.7
+        risk: 0.6
+        
+    # Legal Services: Resources & Guides
+    - pattern: "/(resource|guide|faq|help|information|learn)s?(/|$)"
+      default_weight: 0.55
+      researcher_weights:
+        industry: 0.8
+        product: 0.6
+        customer: 0.65
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ANTIPATTERNS - Legal Services Domain-Specific
+# ══════════════════════════════════════════════════════════════════════════════
+
+url_antipatterns:
+  # Legal Services: Legal Boilerplate
+  - pattern: "/(disclaimer|terms-of-service|privacy-policy|legal-notice)/"
+    score: 0.1
+    reason: "Legal boilerplate - low research value"
+    
+  # Legal Services: Consultation Forms
+  - pattern: "/(consultation|request|contact-form|free-consultation)/"
+    score: 0.2
+    reason: "Consultation forms - low content value"

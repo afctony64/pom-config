@@ -236,3 +236,111 @@ collections:
 
   # API cache (external API responses) - on Spark
   API_intelligence: "spark"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# URL PATTERNS - B2B SaaS Domain-Specific
+# ══════════════════════════════════════════════════════════════════════════════
+# These ADD to corporate.yaml core patterns
+# Corporate core includes: about, team, customer, blog, legal, etc.
+
+url_patterns:
+  high_value:
+    # B2B SaaS Product Pages
+    - pattern: "/(product|platform|solution|feature|capability)s?(/|$)"
+      default_weight: 0.85
+      researcher_weights:
+        product: 1.0
+        customer: 0.7
+        competitor: 0.8
+        industry: 0.75
+        
+    # B2B SaaS Pricing (critical differentiator)
+    - pattern: "/(pricing|plan|package|subscription|tier|quote)s?(/|$)"
+      default_weight: 0.9
+      researcher_weights:
+        product: 0.9
+        financial: 1.0
+        customer: 0.85
+        competitor: 0.9
+        
+    # B2B SaaS Integrations (key differentiator)
+    - pattern: "/(integration|api|developer|doc|sdk|connector|marketplace)s?(/|$)"
+      default_weight: 0.9
+      researcher_weights:
+        product: 1.0
+        partner: 0.95
+        customer: 0.6
+        competitor: 0.7
+        
+    # B2B SaaS Investors & Funding
+    - pattern: "/(investor|funding|raise|series|venture|capital)s?(/|$)"
+      default_weight: 0.85
+      researcher_weights:
+        financial: 1.0
+        leadership: 0.6
+        risk: 0.7
+        
+    # B2B SaaS Partners & Ecosystem
+    - pattern: "/(partner|ecosystem|marketplace|alliance|certified)s?(/|$)"
+      default_weight: 0.8
+      researcher_weights:
+        partner: 1.0
+        product: 0.7
+        industry: 0.6
+        
+    # B2B SaaS Security & Compliance
+    - pattern: "/(security|compliance|trust|soc2|gdpr|hipaa|iso)(/|$)"
+      default_weight: 0.75
+      researcher_weights:
+        risk: 1.0
+        product: 0.7
+        customer: 0.6
+        
+    # B2B SaaS Industry/Vertical Solutions
+    - pattern: "/(industr|vertical|sector|enterprise|smb|startup)ies?(/|$)"
+      default_weight: 0.8
+      researcher_weights:
+        industry: 1.0
+        customer: 0.85
+        product: 0.6
+
+  medium_value:
+    # B2B SaaS Changelog & Updates
+    - pattern: "/(changelog|release|update|what.?s.?new|version)s?(/|$)"
+      default_weight: 0.55
+      researcher_weights:
+        product: 0.85
+        journalist: 0.6
+        competitor: 0.7
+        
+    # B2B SaaS Demo & Trial
+    - pattern: "/(demo|trial|sandbox|playground|free.?tier)s?(/|$)"
+      default_weight: 0.5
+      researcher_weights:
+        product: 0.75
+        customer: 0.6
+        competitor: 0.65
+        
+    # B2B SaaS Community & Forums
+    - pattern: "/(community|forum|discuss|slack|discord)s?(/|$)"
+      default_weight: 0.5
+      researcher_weights:
+        social: 0.9
+        customer: 0.65
+        product: 0.5
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ANTIPATTERNS - B2B SaaS Domain-Specific
+# ══════════════════════════════════════════════════════════════════════════════
+# These ADD to corporate.yaml core antipatterns
+
+url_antipatterns:
+  # B2B SaaS Integration Callbacks
+  - pattern: "/(webhook|callback|oauth|redirect|return|success|failure)/"
+    score: 0.05
+    reason: "Integration callbacks - not content"
+    
+  # B2B SaaS App/Portal Paths
+  - pattern: "/(app|portal|dashboard|workspace)/"
+    score: 0.1
+    reason: "App portals - require auth, not public content"
