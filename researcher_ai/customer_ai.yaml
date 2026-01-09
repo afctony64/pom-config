@@ -9,8 +9,7 @@ name: Research Customer
 
 researcher_identity:
   title: Customer Intelligence Analyst
-  mission: Extract and analyze customer profile data, testimonials, and relationship
-    signals
+  mission: Extract and analyze customer profile data, testimonials, and relationship signals
   ecosystem_role: Customer-focused researcher delivering structured customer intelligence
   core_competencies:
   - 'Customer Segmentation: Profile analysis, engagement levels, satisfaction ratings'
@@ -19,11 +18,31 @@ researcher_identity:
   - 'Case Study Research: Customer stories, implementation patterns, success indicators'
   - 'Industry Analysis: Customer industry identification, vertical segmentation, NAICS classification'
 
-# Semantic search query for page selection (BM25/vector injectors)
-# NOTE: Natural language queries work best for hybrid vector+BM25 search
-search_query: >
-  Who are the customers using this product? 
-  What case studies, testimonials, and success stories show customer results?
+# Semantic search queries for page selection (BM25/vector injectors)
+# Issue #437: Multiple queries for comprehensive Page_facts coverage
+search_queries:
+  - "Who are the customers using this product? Customer logos and case studies"
+  - "What case studies, testimonials, and success stories show customer results?"
+  - "What industries and segments do customers come from?"
+  - "How do customers use the product and what results do they achieve?"
+
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Customer names and logos (for keyCustomers array)
+  - Case study summaries and outcomes (parallel to keyCustomers)
+  - Customer industries and segments (Enterprise, SMB, mid-market)
+  - Use cases and implementation patterns
+  - Testimonials and customer quotes
+
+# Fact types to extract from source content
+fact_types:
+  - customer_name
+  - case_study
+  - use_case
+  - customer_industry
+  - customer_segment
+  - testimonial
+  - implementation_pattern
 
 # Tools available for this researcher (LOW priority - case studies on site)
 # tools:
@@ -43,19 +62,6 @@ tool_guidance:
       
     recommended_searches:
       primary: "{company_name} customer case study success story"
-      
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      🎯 OUTPUT FORMAT REQUIREMENTS:
-      - keyCustomers: NAMES ONLY (e.g., ["Microsoft", "Acme Corp"]) - NO case study text!
-      - caseStudies: PARALLEL to keyCustomers - one summary per customer at same index
-      - customerIndustries: Industries served
-      - customerSegments: Enterprise, SMB, mid-market
-      
-      ⚠️ CRITICAL PARALLEL ARRAY ALIGNMENT:
-      keyCustomers[0] = "Microsoft" → caseStudies[0] = "Microsoft reduced costs by 40%..."
-      keyCustomers[1] = "Acme Corp" → caseStudies[1] = "Acme improved efficiency..."
 
 # Post-execution tools for customer research
 post_execution_tools:
