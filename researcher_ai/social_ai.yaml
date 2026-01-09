@@ -52,13 +52,13 @@ avoid:
 # 🌐 DATA INJECTION: Pre-enriched Domain fields (from enrichers)
 # The digital_presence injector provides already-discovered social/tech data
 # from the Domain record, so the AI doesn't need to rediscover it via search.
-data_requirements:
-  injectors:
-    - injector_template: digital_presence
-      template_vars:
-        domain: "{{ (record.get('properties') or record).get('domain', record.get('domain', '')) }}"
-        tag: "digital"  # Fetch fields tagged with "digital" (social, tech, platform presence)
-        inject_as: "digitalPresence"
+# Uses tools_config format for pom-core merge compatibility
+tools_config:
+  digitalPresence:
+    tool_type: data_injector
+    injector: digital_presence
+    inject_as: digitalPresence
+    tag: "digital"  # Fetch fields tagged with "digital" (social, tech, platform presence)
 
 # Tools available for this researcher (AITools that can be called by the AI)
 # NOTE: With digitalPresence injection, search is rarely needed - use for gaps only
