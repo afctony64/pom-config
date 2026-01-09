@@ -63,9 +63,9 @@ tools:
 tool_guidance:
   brave_search:
     priority: high
-    max_calls: 2  # LIMIT: Only 2 searches for leadership
+    max_calls: 3  # LIMIT: 3 searches for leadership
     when_to_use: |
-      🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
+      🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):
       
       ⚠️ Company "About Us" often has basic info - only search for GAPS!
       
@@ -73,7 +73,11 @@ tool_guidance:
       → "{company} CEO founders leadership team linkedin"
       (Gets executives + backgrounds + LinkedIn profile URLs in one search)
       
-      **SEARCH #2 (IF NEEDED): Board/advisors**
+      **SEARCH #2 (IF NEEDED): Employee count / company size**
+      → "{company} linkedin employees headcount company size"
+      (Gets employee count from LinkedIn or other sources)
+      
+      **SEARCH #3 (IF NEEDED): Board/advisors**
       → "{company} board of directors investors advisors"
       (Only if page content missing board info)
       
@@ -82,16 +86,21 @@ tool_guidance:
       - LinkedIn profile URLs (format: linkedin.com/in/username)
       - Background information (previous companies, education)
       - Tenure information
+      - Employee count / headcount numbers
       
       **STOP after finding:**
       - CEO/founder names + brief background
       - Key executives (CTO, CFO, etc.)
       - LinkedIn URLs for executives (populate executiveLinkedIn array)
       - Board members (if any)
+      - Employee count (for employeeCount field)
       
     recommended_searches:
       # Combined leadership + LinkedIn search:
       primary: "{company_name} CEO founders leadership team executives linkedin profiles"
+      
+      # Employee count / company size:
+      headcount: "{company_name} linkedin employees headcount company size"
       
       # Only if board info missing:
       board: "{company_name} board of directors investors advisors"
