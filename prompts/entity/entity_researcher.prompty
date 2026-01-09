@@ -73,7 +73,7 @@ data_requirements:
     - injector_template: page_facts_vector
       template_vars:
         domain: "{{ (record.get('properties') or record).get('domain', record.get('domain', '')) }}"
-        researcher_type: "{{ record._researcher_id }}"
+          researcher_type: "{{ record._researcher_id }}"
         # search_queries read from researcher_ai config (Issue #384)
         alpha: 0.3  # Lower = more BM25 (keyword), higher = more vector. BM25 ranks funding pages better
         min_certainty: 0.15
@@ -82,9 +82,10 @@ data_requirements:
     # 📊 SEC Edgar data for public companies (optional)
     - injector_template: mcp
       template_vars:
-        tool: edgar_company_facts
+        tool: edgar_filing_sections
         params:
-          cik: "{{ record.stockSymbol }}"
+          cik: "{{ (record.get('properties') or record).get('stockSymbol', '') }}"
+          researcher_type: "{{ record._researcher_id }}"
         inject_as: edgarData
       optional: true
 
