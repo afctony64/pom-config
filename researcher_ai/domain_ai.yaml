@@ -47,40 +47,25 @@ search_queries:
   - "What is the company contact email and phone number? Get in touch contact us"
   - "About the company story our history dream founders husband wife team"
 
+# Focus areas for this researcher (guides LLM attention)
+focus_areas:
+  - Official company/entity name (NOT page title, NOT tagline - check JSON-LD, footer, About page)
+  - Founded year (look for "Founded in", "Established", "Since", "Launched", first funding round)
+  - Headquarters location (city, state/region, country - ISO 2-letter code)
+  - Contact information (email, phone, street address)
 
-tool_guidance:
-  structured_output:
-    priority: critical
-    usage_instructions: |
-      OUTPUT FORMAT - IDENTITY & CONTACT FIELDS:
+# Fact types to extract from source content
+fact_types:
+  - entity_name
+  - founded_year
+  - headquarters
+  - country
+  - email
+  - phone
+  - address
 
-      entityName:
-        Official company name (NOT page title, NOT tagline)
-        Sources: JSON-LD, OpenGraph, copyright footer, About page
-
-      foundedYear:
-        Integer year (e.g., 2022)
-        
-        LOOK FOR THESE PATTERNS:
-        - "Founded in 2022" / "Established 2022" / "Started in 2022"
-        - "Launched [Company] in 2022" / "Launched 2022"
-        - "Since 2022"
-        - Timeline showing earliest year: "2022: Launched..."
-        - First funding round: "2022 Series A" (implies founded same year or earlier)
-        
-        EXTRACTION PRIORITY:
-        1. EXPLICIT: "Founded/Established/Since [year]"
-        2. LAUNCH DATE: "Launched [Company]" = founding year
-        3. TIMELINE: Earliest milestone year
-        4. FIRST FUNDING: Series A year (company likely founded same year)
-        
-        If no years found → foundedYear: 0
-
-      headquarters: Full location: "San Francisco, CA, USA"
-      country: ISO 2-letter code (US, UK, DE, etc.)
-      address: Street address
-      city: City name
-      region: State/Province
-      postalCode: ZIP/Postal code
-      email: General contact email (info@, contact@)
-      phone: Primary phone number
+# Avoid patterns for this researcher
+avoid:
+  - Using page title as entity name (often includes taglines)
+  - Guessing founded year without evidence (use 0 if not found)
+  - Confusing regional offices with headquarters
