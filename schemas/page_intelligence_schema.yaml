@@ -158,13 +158,139 @@ properties:
 - name: research_relevance
   dataType:
   - number
-  description: Research relevance score (0.0-1.0)
+  description: Research relevance score (0.0-1.0) - DEPRECATED, use tenant_group_relevance + tenant_relevance
   indexFilterable: true
   sets:
   - standard
   tags:
   - scoring
   - metadata
+  - deprecated
+# ═══════════════════════════════════════════════════════════════════════════════
+# Issue #571 + #572: Enhanced URL Pattern Analysis & Prioritized Scraping
+# ═══════════════════════════════════════════════════════════════════════════════
+- name: tenant_group_relevance
+  dataType:
+  - number
+  description: Relevance score from tenant_group url_patterns (0.0-0.8). Applied universally across all tenants in the group.
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - scoring
+  - metadata
+- name: tenant_relevance
+  dataType:
+  - number
+  description: Relevance score from tenant-specific url_patterns (0.0-1.0). Tenant-customized scoring.
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - scoring
+  - metadata
+- name: scrape_priority
+  dataType:
+  - number
+  description: Combined priority score for scraping order (0.0-1.0). Higher = scrape sooner.
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - scoring
+  - scraping
+- name: scrape_status
+  dataType:
+  - text
+  description: Scraping status (pending, scraped, skipped, failed)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - scraping
+  - processing
+- name: scraped_at
+  dataType:
+  - int
+  description: Unix timestamp when page was scraped (null if not yet scraped)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - scraping
+  - temporal
+- name: skip_reason
+  dataType:
+  - text
+  description: Reason for skipping if scrape_status=skipped (threshold, content_type, browser_required, antipattern, error)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - metadata
+- name: detected_content_type
+  dataType:
+  - text
+  description: Detected content type (text_html, document, video, audio, image, structured_data)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - classification
+  - metadata
+- name: likely_needs_browser
+  dataType:
+  - boolean
+  description: Whether this URL likely requires browser rendering (SPA/JavaScript detection)
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - technical
+  - scraping
+- name: relevance_details
+  dataType:
+  - object
+  description: Detailed breakdown of relevance scoring
+  indexFilterable: false
+  sets:
+  - extended
+  tags:
+  - scoring
+  - metadata
+  nestedProperties:
+  - name: patterns_matched
+    dataType:
+    - text[]
+    description: URL patterns that matched
+  - name: antipatterns_matched
+    dataType:
+    - text[]
+    description: Antipatterns that matched (reduces score)
+  - name: structural_modifier
+    dataType:
+    - number
+    description: Structural score modifier (-0.15 to +0.1)
+  - name: pattern_source
+    dataType:
+    - text
+    description: Source of highest matching pattern (tenant, tenant_group, universal)
 - name: source_sitemap
   dataType:
   - text
