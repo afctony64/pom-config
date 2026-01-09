@@ -64,6 +64,10 @@ tool_guidance:
   brave_search:
     priority: high
     max_calls: 3  # LIMIT: 3 searches for leadership
+    # FIX #579: Explicitly set tool_choice to ensure LLM can call brave_search
+    # even when page content exists. Without this, execution_engine.py removes
+    # tool_choice when pages are available, preventing tool calls.
+    tool_choice: auto
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):
       
@@ -75,7 +79,7 @@ tool_guidance:
       
       **SEARCH #2 (IF NEEDED): Employee count / company size**
       → "{company} linkedin employees headcount company size"
-      (Gets employee count from LinkedIn or other sources)
+      (Only if page content is missing employee count)
       
       **SEARCH #3 (IF NEEDED): Board/advisors**
       → "{company} board of directors investors advisors"
@@ -86,20 +90,20 @@ tool_guidance:
       - LinkedIn profile URLs (format: linkedin.com/in/username)
       - Background information (previous companies, education)
       - Tenure information
-      - Employee count / headcount numbers
+      - Employee count (from LinkedIn company page or news articles)
       
       **STOP after finding:**
       - CEO/founder names + brief background
       - Key executives (CTO, CFO, etc.)
       - LinkedIn URLs for executives (populate executiveLinkedIn array)
       - Board members (if any)
-      - Employee count (for employeeCount field)
+      - Employee count (populate employeeCount field)
       
     recommended_searches:
       # Combined leadership + LinkedIn search:
       primary: "{company_name} CEO founders leadership team executives linkedin profiles"
       
-      # Employee count / company size:
+      # Employee headcount search:
       headcount: "{company_name} linkedin employees headcount company size"
       
       # Only if board info missing:
