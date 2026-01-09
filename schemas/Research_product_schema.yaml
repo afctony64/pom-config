@@ -642,6 +642,41 @@ properties:
   metadata:
     source_llm: goToMarketLLM
     order: 137
+- name: primaryGoToMarketCat
+  dataType:
+  - text
+  description: |
+    Primary go-to-market strategy. Select the SINGLE most dominant GTM motion.
+    
+    Choose the strategy that best represents how this company primarily acquires customers:
+    - Product-Led-Growth: Primary acquisition through free trial, freemium, self-service
+    - Sales-Led: Primary acquisition through sales team, demos, enterprise outreach
+    - Partner-Led: Primary acquisition through channel partners, resellers, ISVs
+    - Community-Led: Primary acquisition through open source, developer community
+    - Marketing-Led: Primary acquisition through content, inbound, SEO
+    - Developer-Led: Primary acquisition through SDK/API adoption, dev tooling
+    - Marketplace: Primary acquisition through app stores, platform marketplaces
+    
+    Use Unknown if no clear primary GTM motion can be determined.
+  enum:
+  - Product-Led-Growth
+  - Sales-Led
+  - Partner-Led
+  - Community-Led
+  - Marketing-Led
+  - Developer-Led
+  - Marketplace
+  - Unknown
+  tags:
+  - Cat
+  - gtm
+  - research
+  sets:
+  - standard
+  - EnumCat
+  metadata:
+    source_llm: goToMarketLLM
+    order: 138
 - name: processedDate
   dataType:
   - text
