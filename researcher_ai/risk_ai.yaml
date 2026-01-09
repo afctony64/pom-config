@@ -42,6 +42,15 @@ fact_types:
   - risk_factor
   - privacy_policy
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Inventing risks not supported by evidence in sources
+  - Conflating industry-wide risks with company-specific risks
+  - Reporting resolved incidents as current vulnerabilities
+  - Speculating on security posture without concrete evidence
+  - Listing certifications without verification from trusted sources
+  - Overstating minor compliance gaps as critical risks
+
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
   - brave_search          # Web search for legal/compliance news

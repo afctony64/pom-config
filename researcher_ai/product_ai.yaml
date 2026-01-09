@@ -44,6 +44,15 @@ fact_types:
   - api_capability
   - platform_architecture
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Listing competitor products (that's the competitor researcher's job)
+  - Describing features not explicitly mentioned in source content
+  - Confusing marketing claims with verified technical capabilities
+  - Including deprecated or discontinued products without noting status
+  - Speculating on technology stack without evidence
+  - Mixing up pricing tiers or plans from different time periods
+
 # Tools available for this researcher (AITools that can be called by the AI)
 # NOTE: Tool format issue fixed in pom-core v3.0.28+ (execution_engine.py)
 tools:

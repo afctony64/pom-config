@@ -44,6 +44,15 @@ fact_types:
   - testimonial
   - implementation_pattern
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Confusing technology partners with customers
+  - Assuming customer segments without evidence from sources
+  - Including outdated case studies as if they are current
+  - Listing prospects or leads as existing customers
+  - Using logos without confirming customer relationship
+  - Inventing customer outcomes not stated in testimonials
+
 # Tools available for this researcher (LOW priority - case studies on site)
 # tools:
 #   - brave_search  # Optional web search for customer news

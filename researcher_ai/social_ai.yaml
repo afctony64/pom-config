@@ -40,6 +40,15 @@ fact_types:
   - content_channel
   - engagement_metric
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Including inactive or abandoned social accounts
+  - Confusing personal accounts with official company accounts
+  - Listing platforms without verifying actual account presence
+  - Reporting follower counts without noting data recency
+  - Assuming account ownership without URL verification
+  - Including fan accounts or unofficial community pages as official
+
 # 🌐 DATA INJECTION: Pre-enriched Domain fields (from enrichers)
 # The digital_presence injector provides already-discovered social/tech data
 # from the Domain record, so the AI doesn't need to rediscover it via search.

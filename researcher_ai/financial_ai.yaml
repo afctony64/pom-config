@@ -45,6 +45,15 @@ fact_types:
   - funding_stage
   - growth_rate
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Speculating on future financial performance or projections not in sources
+  - Confusing fiscal year dates with calendar year dates
+  - Reporting funding amounts without explicit source evidence
+  - Including outdated funding rounds as if they are recent
+  - Mixing up pre-money and post-money valuations
+  - Assuming revenue figures without credible source attribution
+
 # Issue #394: Context retrieval options
 # Low alpha (0.3) prioritizes BM25 exact matches like "$9 million Series A"
 # over generic boilerplate that matches vectorially

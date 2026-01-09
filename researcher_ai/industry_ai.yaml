@@ -47,6 +47,15 @@ fact_types:
   - value_chain_position
   - target_market
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Assigning overly generic NAICS codes (prefer 6-digit specificity)
+  - Confusing parent company industry with subsidiary operations
+  - Listing multiple conflicting business models without explanation
+  - Using overly broad sector classifications (e.g., just "Technology")
+  - Speculating on delivery model without evidence from sources
+  - Misclassifying B2B companies as B2C or vice versa
+
 # Tools available for this researcher (LOW priority - mostly use page content)
 # tools:
 #   - brave_search  # Optional web search for industry context

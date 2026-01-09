@@ -47,6 +47,15 @@ fact_types:
   - feature_comparison
   - award_or_ranking
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Comparing to unrelated companies in completely different markets
+  - Speculating on competitor strategy without evidence from sources
+  - Including companies that serve different customer segments entirely
+  - Using the company's own biased comparison pages as sole source
+  - Listing more than 5 competitors (focus on most relevant)
+  - Confusing technology partners with competitors
+
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
   - brave_search  # Web search for competitor analysis, G2/Capterra reviews

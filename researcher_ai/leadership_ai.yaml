@@ -42,6 +42,15 @@ fact_types:
   - advisor
   - founder_story
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Including former executives without noting they have departed
+  - Speculating on leadership changes without evidence
+  - Confusing advisory board members with executive leadership
+  - Listing personal social accounts as company representation
+  - Including executives from parent/subsidiary companies incorrectly
+  - Inventing background details not found in sources
+
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
   - brave_search  # Web search for executive profiles, LinkedIn, news

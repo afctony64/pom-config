@@ -40,6 +40,15 @@ fact_types:
   - partner_program
   - strategic_alliance
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Confusing customers with technology partners
+  - Listing unverified or expired partnerships as current
+  - Including competitors as partners without evidence
+  - Assuming integrations automatically mean partnerships
+  - Listing vendors/suppliers as strategic partners
+  - Including one-time collaborations as ongoing partnerships
+
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
   - brave_search  # Web search for partnership announcements

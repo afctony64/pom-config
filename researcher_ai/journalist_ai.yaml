@@ -41,6 +41,15 @@ fact_types:
   - publication_name
   - coverage_date
 
+# Anti-patterns to avoid (guides LLM away from common mistakes)
+avoid:
+  - Treating promotional content or sponsored posts as legitimate news
+  - Citing outdated articles (>12 months) as current coverage
+  - Confusing company press releases with third-party journalism
+  - Including irrelevant industry news that doesn't mention the company
+  - Overstating minor blog mentions as major media coverage
+  - Inferring sentiment without evidence from article content
+
 # Tools available for this researcher (AITools that can be called by the AI)
 tools:
   - brave_search  # Web search for news coverage, press mentions
