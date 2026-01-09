@@ -134,3 +134,332 @@ entity_spawn_sources:
     collection: Research_competitor
     enabled: true
     auto_spawn: false  # If true, spawn runs automatically after research
+
+# ══════════════════════════════════════════════════════════════════════════════
+# URL PATTERN ANALYSIS - Researcher-Weighted Relevance Scoring
+# ══════════════════════════════════════════════════════════════════════════════
+# Each URL pattern has:
+# - pattern: Regex to match against URL path
+# - default_weight: Base relevance (0.0-1.0) if no researcher-specific weight
+# - researcher_weights: Per-researcher overrides (higher = more relevant for that researcher)
+#
+# Final score = weighted average across active researchers for this tenant group
+#
+# Patterns support both:
+# - B2B SaaS companies (Prismatic tenant) - product, pricing, integrations
+# - Professional services (Internet Brands) - attorneys, practice areas, case results
+
+url_patterns:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # HIGH VALUE (0.7-1.0) - Core business intelligence pages
+  # ─────────────────────────────────────────────────────────────────────────────
+  high_value:
+    # Product & Services (B2B SaaS + Professional Services)
+    - pattern: "/(product|platform|solution|service|practice.?area|capability)s?(/|$)"
+      default_weight: 0.85
+      researcher_weights:
+        product: 1.0
+        customer: 0.7
+        competitor: 0.8
+        industry: 0.75
+        
+    # Pricing & Plans (B2B SaaS) / Fee Structures (Professional Services)
+    - pattern: "/(pricing|plan|package|subscription|tier|quote|fee|rate|cost)s?(/|$)"
+      default_weight: 0.9
+      researcher_weights:
+        product: 0.9
+        financial: 1.0
+        customer: 0.85
+        competitor: 0.9
+        
+    # Integrations & API (B2B SaaS)
+    - pattern: "/(integration|api|developer|doc|sdk|connector)s?(/|$)"
+      default_weight: 0.85
+      researcher_weights:
+        product: 1.0
+        partner: 0.95
+        customer: 0.6
+        competitor: 0.7
+        
+    # Customer Evidence (Both contexts)
+    - pattern: "/(customer|case.?study|success.?stor|testimonial|review|case.?result|client)s?(/|$)"
+      default_weight: 0.9
+      researcher_weights:
+        customer: 1.0
+        industry: 0.85
+        product: 0.7
+        competitor: 0.6
+        
+    # Company Information (Both contexts)
+    - pattern: "/(about|company|who.?we.?are|our.?story|mission|value)s?(/|$)"
+      default_weight: 0.8
+      researcher_weights:
+        industry: 0.85
+        leadership: 0.9
+        risk: 0.6
+        social: 0.7
+        
+    # Leadership & Team (Both contexts)
+    - pattern: "/(team|leadership|executive|founder|management|board|advisor|attorney|lawyer|partner|staff)s?(/|$)"
+      default_weight: 0.85
+      researcher_weights:
+        leadership: 1.0
+        risk: 0.7
+        industry: 0.5
+        product: 0.6
+        
+    # Investors & Funding (B2B SaaS)
+    - pattern: "/(investor|funding|raise|series|venture|capital)s?(/|$)"
+      default_weight: 0.85
+      researcher_weights:
+        financial: 1.0
+        leadership: 0.6
+        risk: 0.7
+        
+    # Partners & Ecosystem (B2B SaaS)
+    - pattern: "/(partner|ecosystem|marketplace|alliance|certified)s?(/|$)"
+      default_weight: 0.8
+      researcher_weights:
+        partner: 1.0
+        product: 0.7
+        industry: 0.6
+        
+    # Security & Compliance (Both contexts)
+    - pattern: "/(security|compliance|trust|soc2|gdpr|hipaa|iso|malpractice|liability)s?(/|$)"
+      default_weight: 0.75
+      researcher_weights:
+        risk: 1.0
+        product: 0.7
+        customer: 0.6
+        
+    # Industry/Vertical Solutions (B2B SaaS)
+    - pattern: "/(industr|vertical|sector|enterprise|smb|startup)ies?(/|$)"
+      default_weight: 0.8
+      researcher_weights:
+        industry: 1.0
+        customer: 0.85
+        product: 0.6
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # MEDIUM VALUE (0.4-0.7) - Supporting content with research value
+  # ─────────────────────────────────────────────────────────────────────────────
+  medium_value:
+    # Blog & Content (Both contexts)
+    - pattern: "/(blog|news|article|post|insight|thought|legal.?update|newsletter)s?(/|$)"
+      default_weight: 0.5
+      researcher_weights:
+        journalist: 0.9
+        industry: 0.65
+        product: 0.5
+        social: 0.7
+        
+    # Press & Media (Both contexts)
+    - pattern: "/(press|media|newsroom|coverage|mention)s?(/|$)"
+      default_weight: 0.6
+      researcher_weights:
+        journalist: 1.0
+        industry: 0.7
+        financial: 0.6
+        social: 0.8
+        
+    # Resources & Downloads (Both contexts)
+    - pattern: "/(resource|whitepaper|ebook|guide|download|webinar|faq|help)s?(/|$)"
+      default_weight: 0.55
+      researcher_weights:
+        industry: 0.8
+        product: 0.6
+        customer: 0.65
+        
+    # Events & Conferences (Both contexts)
+    - pattern: "/(event|conference|summit|meetup|webcast|seminar|workshop)s?(/|$)"
+      default_weight: 0.45
+      researcher_weights:
+        industry: 0.7
+        partner: 0.6
+        social: 0.75
+        journalist: 0.6
+        
+    # Community & Forums (B2B SaaS)
+    - pattern: "/(community|forum|discuss|slack|discord)s?(/|$)"
+      default_weight: 0.5
+      researcher_weights:
+        social: 0.9
+        customer: 0.65
+        product: 0.5
+        
+    # Changelog & Updates (B2B SaaS)
+    - pattern: "/(changelog|release|update|what.?s.?new|version)s?(/|$)"
+      default_weight: 0.55
+      researcher_weights:
+        product: 0.85
+        journalist: 0.6
+        competitor: 0.7
+        
+    # Demo & Trial (B2B SaaS)
+    - pattern: "/(demo|trial|sandbox|playground|free.?tier)s?(/|$)"
+      default_weight: 0.5
+      researcher_weights:
+        product: 0.75
+        customer: 0.6
+        competitor: 0.65
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LOW VALUE (0.0-0.4) - Administrative or non-research pages
+  # ─────────────────────────────────────────────────────────────────────────────
+  low_value:
+    # Legal & Compliance Docs (Both contexts)
+    - pattern: "/(legal|privacy|terms|cookie|gdpr.?notice|dmca|disclaimer|disclosure)s?(/|$)"
+      default_weight: 0.15
+      researcher_weights:
+        risk: 0.5  # Some value for compliance review
+        
+    # Careers & Jobs (Both contexts)
+    - pattern: "/(career|job|hiring|opening|apply|recruit|talent|position)s?(/|$)"
+      default_weight: 0.2
+      researcher_weights:
+        leadership: 0.4  # Team growth signals
+        risk: 0.3        # Hiring velocity indicator
+        industry: 0.25   # Market expansion hints
+        
+    # Authentication Pages (Both contexts)
+    - pattern: "/(login|signin|signup|register|auth|sso|oauth|account|my.?account)(/|$)"
+      default_weight: 0.05
+      researcher_weights: {}  # Low for all
+      
+    # Support & Help (Both contexts)
+    - pattern: "/(support|help|contact|ticket|chat|call|consultation|request)s?(/|$)"
+      default_weight: 0.25
+      researcher_weights:
+        customer: 0.4   # Support model info
+        product: 0.35   # Product support structure
+        risk: 0.3       # Support quality
+        
+    # Technical Infrastructure (B2B SaaS)
+    - pattern: "/(status|uptime|incident|maintenance|system)(/|$)"
+      default_weight: 0.2
+      researcher_weights:
+        risk: 0.6       # Reliability info
+        product: 0.4    # Infrastructure quality
+        
+    # Utility Pages (Both contexts)
+    - pattern: "/(sitemap|robots|feed|rss|atom|manifest)(\\.xml|\\.txt)?$"
+      default_weight: 0.0
+      researcher_weights: {}  # Skip these completely
+      
+    # Asset Paths (Both contexts)
+    - pattern: "/(asset|static|cdn|image|img|css|js|font)s?/"
+      default_weight: 0.0
+      researcher_weights: {}  # Skip static assets
+      
+    # Pagination & Filters (Both contexts)
+    - pattern: "/page/\\d+|\\?page=|\\?sort=|\\?filter="
+      default_weight: 0.3
+      researcher_weights: {}  # Reduce duplicate content
+      
+    # Archive Pages (Both contexts)
+    - pattern: "/(archive|category|tag|author)/\\d{4}/"
+      default_weight: 0.25
+      researcher_weights:
+        journalist: 0.5  # Historical content
+        
+    # Search Results (Both contexts)
+    - pattern: "/(search|find|query|result)s?\\?"
+      default_weight: 0.1
+      researcher_weights: {}  # Dynamic content
+
+# ══════════════════════════════════════════════════════════════════════════════
+# CONTENT TYPE DETECTION - URL-Based (No HTTP Request)
+# ══════════════════════════════════════════════════════════════════════════════
+# Identifies content type from URL patterns for future capabilities:
+# - Document extraction (PDF, Office docs)
+# - Multimedia cataloging (video, audio, images)
+# - Structured data extraction (JSON, XML, CSV)
+#
+# current_action:
+#   - scrape: Normal text extraction (default for HTML)
+#   - catalog: Save URL + metadata only (for future processing)
+#   - skip: Ignore completely
+
+content_types:
+  # Documents (PDF, Office formats)
+  documents:
+    patterns:
+      - "\\.pdf$"
+      - "\\.docx?$"
+      - "\\.xlsx?$"
+      - "\\.pptx?$"
+      - "\\.odt$"
+      - "/download/.*\\.(pdf|doc|xls|ppt)"
+    future_capability: document_extraction
+    current_action: catalog
+    researcher_boost:  # These docs are valuable for specific researchers
+      industry: 0.8    # Whitepapers, reports
+      financial: 0.9   # Financial statements
+      product: 0.7     # Technical specs
+      risk: 0.8        # Compliance documents
+    
+  # Video Content
+  video:
+    patterns:
+      - "\\.mp4$|\\.mov$|\\.avi$|\\.webm$|\\.mkv$"
+      - "/video/|/watch/|/stream/"
+      - "/embed/.*video"
+      - "youtube\\.com/watch|vimeo\\.com/\\d+|wistia\\.com"
+      - "loom\\.com/share|vidyard\\.com"
+    future_capability: video_transcript_extraction
+    current_action: catalog
+    researcher_boost:
+      product: 0.7     # Demo videos
+      customer: 0.8    # Testimonial videos
+      journalist: 0.6  # Press videos
+      leadership: 0.6  # Leadership interviews
+    
+  # Audio Content
+  audio:
+    patterns:
+      - "\\.mp3$|\\.wav$|\\.ogg$|\\.m4a$"
+      - "/podcast|/audio|/listen|/episode"
+      - "spotify\\.com|anchor\\.fm|transistor\\.fm"
+    future_capability: audio_transcript_extraction
+    current_action: catalog
+    researcher_boost:
+      journalist: 0.8  # Podcast interviews
+      leadership: 0.7  # Founder podcasts
+      industry: 0.6    # Industry discussions
+    
+  # Images & Graphics
+  images:
+    patterns:
+      - "\\.png$|\\.jpg$|\\.jpeg$|\\.gif$|\\.svg$|\\.webp$"
+      - "/gallery|/photos|/images"
+      - "/infographic"
+    future_capability: image_analysis
+    current_action: skip  # Not useful for text research currently
+    
+  # Structured Data
+  structured_data:
+    patterns:
+      - "\\.json$"
+      - "\\.xml$"
+      - "\\.csv$"
+      - "\\.yaml$|\\.yml$"
+      - "/api/v\\d+/"
+      - "/graphql"
+    future_capability: structured_extraction
+    current_action: skip  # API endpoints, not content
+    
+  # Interactive Apps (require auth/JS)
+  interactive:
+    patterns:
+      - "/app/|/dashboard/|/portal/"
+      - "/account/|/settings/"
+      - "/checkout|/cart|/payment"
+      - "/admin/"
+    future_capability: none
+    current_action: skip  # Requires authentication
+    
+  # Text/HTML (Default)
+  text_html:
+    patterns: []  # Default for everything else
+    future_capability: text_extraction
+    current_action: scrape
