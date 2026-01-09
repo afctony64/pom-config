@@ -599,11 +599,7 @@ properties:
 - name: goToMarketLLM
   dataType:
   - text
-  description: |
-    Describe the entity's go-to-market strategy (100-150 words). Include: customer acquisition 
-    approach (product-led, sales-led, partner-led), sales motion (self-service, enterprise sales, 
-    channel partners), marketing channels, and any explicit GTM strategy mentioned. Note if the 
-    strategy is hybrid (combining multiple approaches).
+  description: Go-to-market strategy analysis including sales motion and customer acquisition approach
   tags:
   - LLM
   sets:
