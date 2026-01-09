@@ -65,13 +65,3 @@ tool_guidance:
       
     recommended_searches:
       primary: "{company_name} industry SaaS B2B market category"
-      
-  structured_output:
-    priority: critical
-    when_to_use: |
-      🎯 SCHEMA-DRIVEN OUTPUT:
-      - All field requirements come from the injected JSON schema
-      - Populate ALL fields defined in the schema (use null only if truly unavailable)
-      - *LLM fields require 100-150 word analytical descriptions
-      - *Cat fields are auto-classified - skip them
-      - Parallel arrays must have identical lengths
