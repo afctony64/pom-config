@@ -8,6 +8,7 @@ description: |
 
   Supports:
   - Single-value enum fields (e.g., customerSizeCat → "Enterprise")
+  - Multi-select enum fields (e.g., goToMarketCat → ["PLG", "Sales-Led"]) - select ALL that apply
   - Parallel array enum fields (e.g., keyCustomerSizeCat → ["SMB", "Enterprise"])
 
   AI Tool Type: Prompt
@@ -73,20 +74,24 @@ You are a **Classification Specialist**. Your task is to classify enum Cat field
 
 1. Read the research context carefully
 2. For **single-value fields**: select the BEST matching value from allowed options
-3. For **parallel array fields**: classify EACH item in the source array, return an array of the same length
-4. Use the field description as guidance for classification
-5. Return ONLY a flat JSON object with field names and values/arrays
-6. Use exact enum values - no modifications
-7. Use "Unknown" only if you truly cannot determine from context
+3. For **multi-select fields** (description says "Select ALL that apply"): return an ARRAY of ALL matching values
+4. For **parallel array fields**: classify EACH item in the source array, return an array of the same length
+5. Use the field description as guidance for classification
+6. Return ONLY a flat JSON object with field names and values/arrays
+7. Use exact enum values - no modifications
+8. Use "Unknown" only if you truly cannot determine from context (or empty array for multi-select)
 
 ## Output Format
 
 ```json
 {
-  "fieldNameCat": "EnumValue",
+  "singleValueCat": "EnumValue",
+  "multiSelectCat": ["Value1", "Value2"],
   "parallelFieldCat": ["Value1", "Value2", "Value3"]
 }
 ```
+
+**IMPORTANT**: If the field description says "Select ALL that apply", you MUST return an array even if only one value matches.
 
 No explanations. No markdown. Just the JSON object.
 
@@ -120,7 +125,7 @@ user:
 No research output provided.
 {% endif %}
 
-## Single-Value Enum Fields
+## Enum Fields
 
 {% if enum_fields and enum_fields is mapping %}
 {% for field_name, config in enum_fields.items() %}
@@ -128,10 +133,11 @@ No research output provided.
 {% if config and config.field_description %}**Guidance:** {{ config.field_description }}{% endif %}
 {% if config and config.enum_values %}**Valid Values:** {{ config.enum_values | join(', ') }}{% endif %}
 {% if config and config.source_field %}**Source Field:** {{ config.source_field }}{% endif %}
+{% if config and config.field_description and 'Select ALL' in config.field_description %}**⚠️ MULTI-SELECT: Return an ARRAY of all matching values**{% endif %}
 
 {% endfor %}
 {% else %}
-No single-value enum fields.
+No enum fields.
 {% endif %}
 
 ## Parallel Array Enum Fields
@@ -162,4 +168,7 @@ No parallel array enum fields.
 
 ## Your Classification
 
-Return a JSON object with your classifications. For parallel array fields, return an array with one value per source item.
+Return a JSON object with your classifications:
+- Single-value fields: return a string
+- Multi-select fields (description says "Select ALL"): return an array of ALL matching values
+- Parallel array fields: return an array with one value per source item
