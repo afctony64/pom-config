@@ -94,8 +94,10 @@ profiles:
         
     mac:
       weaviate:
-        memory_limit: 16G
-        memory_reserved: 8G
+        memory_limit: 48G        # No GPU contention - native services run separately
+        memory_reserved: 24G
+        gomemlimit: 46GiB
+        gogc: 50
       transformers_metal:
         enabled: true
         note: "Mac Metal transformers handle any embedding needs"
@@ -164,8 +166,11 @@ profiles:
         
     mac:
       weaviate:
-        memory_limit: 24G
-        memory_reserved: 16G
+        memory_limit: 48G        # Increased: No GPU contention - Ollama/Transformers run natively
+        memory_reserved: 24G
+        gomemlimit: 46GiB        # 96% of limit for GC headroom
+        gogc: 50                 # Aggressive GC for batch operations
+        note: "Mac Weaviate has full priority - native services don't compete"
       transformers_metal:
         enabled: true
         note: "CRITICAL - Native Metal transformers for Mac embeddings"
@@ -224,8 +229,10 @@ profiles:
         
     mac:
       weaviate:
-        memory_limit: 16G
-        memory_reserved: 8G
+        memory_limit: 48G        # No GPU contention - native services run separately
+        memory_reserved: 24G
+        gomemlimit: 46GiB
+        gogc: 50
       transformers_metal:
         enabled: true
         note: "Native host service - start with ./scripts/mac-transformers-metal.sh"
@@ -268,8 +275,10 @@ profiles:
         
     mac:
       weaviate:
-        memory_limit: 24G        # Maximized for search
-        memory_reserved: 16G
+        memory_limit: 48G        # No GPU contention - native services run separately
+        memory_reserved: 24G
+        gomemlimit: 46GiB
+        gogc: 50
       transformers_metal:
         enabled: true
       ollama_metal:
@@ -330,8 +339,10 @@ profiles:
         
     mac:
       weaviate:
-        memory_limit: 16G
-        memory_reserved: 8G
+        memory_limit: 48G        # No GPU contention - native services run separately
+        memory_reserved: 24G
+        gomemlimit: 46GiB
+        gogc: 50
       transformers_metal:
         enabled: true
       ollama_metal:
@@ -372,8 +383,11 @@ profiles:
         
     mac:
       weaviate:
-        memory_limit: 32G        # Maximized since Spark is offline
-        memory_reserved: 20G
+        memory_limit: 48G        # No GPU contention - native services run separately
+        memory_reserved: 24G
+        gomemlimit: 46GiB
+        gogc: 50
+        note: "Full 48GB available - native services don't compete"
       transformers_metal:
         enabled: true
         note: "CRITICAL - Only embedding service available"
@@ -399,16 +413,31 @@ profiles:
 # Design: Profiles PRIORITIZE resources, not disable services.
 #         Small dev jobs still work even when a profile is focused.
 #
+# SPARK RESOURCES:
 # Profile          | Ollama | Weaviate | Backend | Transformers | Browser Pool | HTTP Conn | Best For
 # -----------------|--------|----------|---------|--------------|--------------|-----------|------------------
-# ai               | 80 GB ★| 32 GB    | 24 GB   | 1 instance   | 10 contexts  | 750       | Researcher prompts
+# ai               | 80 GB ★| 32 GB    | 24 GB   | 3 instances  | 10 contexts  | 750       | Researcher prompts
 # data_pipeline    | 16 GB  | 80 GB ★  | 16 GB   | 5 instances  | 50 contexts ★| 1500      | Domain/Page/Facts
 # balanced         | 48 GB  | 40 GB    | 32 GB   | 3 instances  | 25 contexts  | 1000      | General dev
 # network_friendly | 48 GB  | 40 GB    | 32 GB   | 3 instances  | 5 contexts   | 500       | Shared network
 # query_only       | OFF    | 48 GB    | OFF     | 1 instance   | Disabled     | N/A       | Search/exploration
-# travel           | N/A    | 32 GB    | N/A     | Mac only     | Disabled     | N/A       | Offline work
+# travel           | N/A    | N/A      | N/A     | N/A          | Disabled     | N/A       | Offline work
+#
+# MAC RESOURCES (ALL PROFILES):
+# Service          | Limit  | Reserved | GOMEMLIMIT | GOGC | Notes
+# -----------------|--------|----------|------------|------|---------------------------
+# mac-weaviate     | 48 GB  | 24 GB    | 46 GiB     | 50   | No GPU contention - native services
+# mac-redis        | 4 GB   | 2 GB     | N/A        | N/A  | Cache
+# pom-llm-proxy    | 8 GB   | 2 GB     | N/A        | N/A  | LLM routing
 #
 # ★ = Priority allocation for this profile
+#
+# MAC WEAVIATE RATIONALE:
+#   - Mac has 128GB RAM, Docker allocated 96GB
+#   - Ollama runs NATIVELY (mac-ollama-metal) - not in Docker
+#   - Transformers run NATIVELY (mac-transformers-metal) - not in Docker
+#   - 48GB for Weaviate provides ample headroom for HNSW indexes and batch operations
+#   - GOGC=50 for aggressive garbage collection during batch writes
 #
 # data_pipeline rationale:
 #   - Browser pool is SEPARATE from backend - backend doesn't need browser memory
