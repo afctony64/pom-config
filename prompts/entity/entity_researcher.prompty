@@ -93,7 +93,7 @@ model:
   api: responses  # chat API has empty content bug with json_schema - use responses
   configuration:
     type: pom-llm-proxy
-    model: gpt-5-nano
+    model: gpt-5-mini
   parameters:
     max_output_tokens: 16000  # Reduced: no reasoning tokens with chat API
     response_format:
@@ -111,6 +111,11 @@ model:
 # PROCESSING CONFIG - ENTITY MODEL (Standard)
 # ══════════════════════════════════════════════════════════════════════════════
 processing_config:
+  # 🔧 Only process domains that have page_facts (content extracted)
+  filters:
+    - field: page_facts
+      operator: equal
+      value: true
   source_collection: Domain
   target_collections:
     - Research_industry
