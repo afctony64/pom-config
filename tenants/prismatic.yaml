@@ -211,6 +211,7 @@ collections:
   # ENTITY MODEL: Research_* collections - all on Cloud
   Research_competitor: "cloud"
   Research_customer: "cloud"
+  Research_domain: "cloud"
   Research_financial: "cloud"
   Research_industry: "cloud"
   Research_journalist: "cloud"
