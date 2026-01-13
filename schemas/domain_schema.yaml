@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 9.2
+version: 9.3
 group: url
 weaviate_instance: cloud
 description: |
@@ -19,6 +19,12 @@ description: |
   2. Enrichers discover: content, social_accounts, sitemaps, etc.
   3. TenantGroup.researchers analyze → Research_* collections
   4. Research records reference back to this Domain
+  
+  SCHEMA v9.3 CHANGES:
+  - Added typed relationship references: competitorOf, customerOf, partnerOf
+  - These enable market traversal queries (e.g., "who are X's competitors?")
+  - A domain can have multiple relationships across different companies
+  - Deprecated spawnedFromRef (Phase 2 will migrate and remove)
   
   SCHEMA v9.2 CHANGES:
   - Added 'prompt' set for LLM-extractable information fields
@@ -1186,14 +1192,38 @@ properties:
   - results
 
 # ============================================================================
-# SPAWN REFERENCES (self-referencing for entity discovery graph)
+# RELATIONSHIP REFERENCES (typed relationships for market traversal)
 # ============================================================================
+# These enable querying: "Who are X's competitors?" via reference traversal
+# A domain can have multiple relationships: competitorOf:[A,B], customerOf:[C]
 references:
+- name: competitorOf
+  target_collection: Domain
+  uuid_source_field: manual
+  auto_flatten: false
+  description: Domains where this entity is identified as a competitor (multi-ref array)
+
+- name: customerOf
+  target_collection: Domain
+  uuid_source_field: manual
+  auto_flatten: false
+  description: Domains where this entity is identified as a customer (multi-ref array)
+
+- name: partnerOf
+  target_collection: Domain
+  uuid_source_field: manual
+  auto_flatten: false
+  description: Domains where this entity is identified as a partner (multi-ref array)
+
+# ============================================================================
+# SPAWN REFERENCES (DEPRECATED - use relationship refs above)
+# ============================================================================
+# TODO(Phase 2): Remove after migration to relationship references
 - name: spawnedFromRef
   target_collection: Domain
   uuid_source_field: manual
   auto_flatten: false
-  description: Reference to the Domain that spawned this record during research
+  description: "[DEPRECATED] Reference to the Domain that spawned this record during research"
 
 # ============================================================================
 # REFERENCES TO RESEARCH COLLECTIONS
