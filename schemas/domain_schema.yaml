@@ -996,16 +996,16 @@ properties:
 - name: domain_research
   dataType:
   - boolean
-  description: Domain has been analyzed by the domain researcher (sets entityName, foundedYear, headquarters, etc.)
+  description: Domain has been analyzed by the domain researcher - ALWAYS set to true
   indexFilterable: true
   indexSearchable: false
   sets:
   - standard
   - status_update
+  - prompt
   tags:
   - pipeline
   - processing
-  - LLM
 
 - name: page_facts_count
   dataType:

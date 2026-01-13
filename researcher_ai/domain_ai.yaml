@@ -19,6 +19,7 @@ output_fields:
   - city
   - region
   - postalCode
+  - domain_research  # Set to true when domain researcher has run
 
 protected_fields:
   - domain
@@ -53,6 +54,7 @@ focus_areas:
   - Founded year (look for "Founded in", "Established", "Since", "Launched", first funding round)
   - Headquarters location (city, state/region, country - ISO 2-letter code)
   - Contact information (email, phone, street address)
+  - ALWAYS set domain_research=true to mark this entity as researched
 
 # Fact types to extract from source content
 fact_types:
