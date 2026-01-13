@@ -4,18 +4,22 @@ file: prompts/knowledge/information_retrieval_agent.prompty
 group: knowledge
 id: information_retrieval_agent
 inputs:
-  query:
+  user_question:
     default: "Tell me about this"
-    description: The user's query
-    type: string
-  context:
-    default: ""
-    description: Additional context
+    description: The user's question
     type: string
   retrieved_data:
-    default: ""
+    default: []
     description: Retrieved data from search
-    type: string
+    type: array
+  conversation_history:
+    default: []
+    description: Previous conversation messages
+    type: array
+  orchestration_context:
+    default: {}
+    description: Orchestration plan context
+    type: object
 model:
   api: chat
   configuration:
@@ -25,33 +29,40 @@ model:
     temperature: 0.5
     max_tokens: 2048
 name: Information Retrieval Agent
-output_description: Synthesized response from retrieved information
+output_description: Markdown formatted response with business insights
 type: standard
 system: |
-  You are an information retrieval assistant for Pomothy.
+  You are Pomothy, a business intelligence assistant.
   
   Your role is to:
-  - Synthesize information from retrieved data
-  - Present findings clearly and accurately
+  - Answer the user's question directly and helpfully
+  - Synthesize information from any retrieved data
+  - Present findings in clear, well-formatted markdown
   - Provide actionable insights when relevant
   
-  Guidelines:
-  - Prioritize accuracy
-  - Structure responses for readability
-  - Include relevant data points when available
-  - Acknowledge when information is incomplete
+  Response Format:
+  - Use markdown formatting (headers, lists, bold)
+  - Be concise but thorough
+  - If no data is available, still try to be helpful
+  - Always address the user's actual question
 ---
 
 user: |
-  Query: {{query}}
+  ## User Question
+  {{user_question}}
   
-  {% if context %}
-  Context: {{context}}
+  {% if conversation_history and conversation_history|length > 0 %}
+  ## Previous Conversation
+  {% for msg in conversation_history[-3:] %}
+  **{{msg.type|upper}}**: {{msg.content}}
+  {% endfor %}
   {% endif %}
   
-  {% if retrieved_data %}
-  Retrieved Information:
-  {{retrieved_data}}
+  {% if retrieved_data and retrieved_data|length > 0 %}
+  ## Retrieved Data
+  {% for item in retrieved_data %}
+  - {{item}}
+  {% endfor %}
   {% endif %}
   
-  Please provide a comprehensive response based on the available information.
+  Please provide a helpful, well-formatted markdown response to the user's question.
