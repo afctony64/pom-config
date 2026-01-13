@@ -25,7 +25,6 @@ inputs:
     description: Current tenant context
     type: string
     default: ""
-  # Injected data from RAG
   page_facts:
     description: Semantic search results from Page_facts collection
     type: array
@@ -39,59 +38,14 @@ inputs:
     type: array
     default: []
 
-data_requirements:
-  injectors:
-    # Primary RAG: Semantic search on Page_facts
-    - injector_template: data
-      template_vars:
-        data_card_id: page_facts_search
-        collection: Page_facts
-        search_strategy: hybrid
-        search_query: "{{ user_question }}"
-        hybrid_alpha: 0.6
-        inject_as: page_facts
-        field_set: standard
-        limit: 15
-        min_certainty: 0.5
-    
-    # Entity lookup if entities detected
-    - injector_template: data
-      template_vars:
-        data_card_id: domain_lookup
-        collection: Domain
-        search_strategy: bm25
-        search_query: "{{ user_question }}"
-        inject_as: entity_data
-        field_set: standard
-        limit: 5
-      optional: true
-    
-    # Research data for deeper context
-    - injector_template: data
-      template_vars:
-        data_card_id: research_search
-        collection: Research_industry
-        search_strategy: vector
-        search_query: "{{ user_question }}"
-        inject_as: research_data
-        field_set: standard
-        limit: 10
-        min_certainty: 0.6
-      optional: true
-
 model:
-  api: responses
+  api: chat
   configuration:
     type: pom-llm-proxy
     model: groq-llama3.1-8b
-    tools: [brave_search, find_records]
   parameters:
     temperature: 0.5
     max_tokens: 4096
-
-processing_config:
-  max_turns: 10
-  compression_strategy: balanced
 
 output_description: Markdown formatted response with business insights and citations
 
@@ -116,31 +70,19 @@ system: |
   
   ### When Data is Limited
   1. **Acknowledge limitations** - be transparent about what you don't know
-  2. **Use tools if available** - search the web for current information
-  3. **Provide context** - explain what data would help answer better
-  4. **Offer alternatives** - suggest related questions you can answer
+  2. **Provide context** - explain what data would help answer better
+  3. **Offer alternatives** - suggest related questions you can answer
   
   ### Citation Format
   When citing sources, use this format:
   - For page content: [Source: page_title](url)
   - For research data: [Research: researcher_type]
-  - For web search: [Web: search_result_title](url)
   
   ### Response Structure
   For substantial answers, use this structure:
   1. **Direct Answer** - Answer the question concisely first
   2. **Supporting Details** - Provide evidence and context
   3. **Sources** - List key sources used
-  
-  ## Tools Available
-  You have access to these tools if needed:
-  - `brave_search`: Search the web for current information
-  - `find_records`: Look up specific records in the database
-  
-  Use tools when:
-  - The retrieved data doesn't answer the question
-  - User asks about current events or recent news
-  - More specific data is needed
 ---
 
 user: |
@@ -149,10 +91,7 @@ user: |
   
   {% if query_classification %}
   ## Query Analysis
-  Intent: {{ query_classification.get('intent', 'unknown') }}
-  {% if query_classification.get('entities') %}
-  Entities: {% for e in query_classification.entities %}{{ e.value }}{% if not loop.last %}, {% endif %}{% endfor %}
-  {% endif %}
+  Intent: {{ query_classification.get('intent', 'unknown') if query_classification is mapping else 'unknown' }}
   {% endif %}
   
   {% if conversation_history and conversation_history|length > 0 %}
@@ -167,11 +106,10 @@ user: |
   Found {{ page_facts|length }} relevant pages:
   
   {% for page in page_facts[:10] %}
-  ### {{ loop.index }}. {{ page.get('title', 'Untitled') }}
-  **URL**: {{ page.get('url', 'N/A') }}
-  {% if page.get('similarity_score') %}**Relevance**: {{ (page.get('similarity_score', 0) * 100)|round(1) }}%{% endif %}
+  ### {{ loop.index }}. {{ page.get('title', 'Untitled') if page is mapping else 'Untitled' }}
+  **URL**: {{ page.get('url', 'N/A') if page is mapping else 'N/A' }}
   
-  {{ page.get('content', '')[:800] }}{% if page.get('content', '')|length > 800 %}...{% endif %}
+  {{ (page.get('content', '') if page is mapping else '')[:800] }}{% if (page.get('content', '') if page is mapping else '')|length > 800 %}...{% endif %}
   
   ---
   {% endfor %}
@@ -183,14 +121,14 @@ user: |
   {% if entity_data and entity_data|length > 0 %}
   ## Entity Data
   {% for entity in entity_data[:5] %}
-  - **{{ entity.get('domainName', entity.get('domain', 'Unknown')) }}**: {{ entity.get('description', 'No description')[:200] }}
+  - **{{ (entity.get('domainName', entity.get('domain', 'Unknown')) if entity is mapping else 'Unknown') }}**: {{ (entity.get('description', 'No description') if entity is mapping else 'No description')[:200] }}
   {% endfor %}
   {% endif %}
   
   {% if research_data and research_data|length > 0 %}
   ## Research Findings
   {% for research in research_data[:5] %}
-  - {{ research.get('finding', research.get('content', 'No content'))[:300] }}
+  - {{ (research.get('finding', research.get('content', 'No content')) if research is mapping else 'No content')[:300] }}
   {% endfor %}
   {% endif %}
   
