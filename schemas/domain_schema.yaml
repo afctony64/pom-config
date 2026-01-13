@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 9.1
+version: 9.2
 group: url
 weaviate_instance: cloud
 description: |
@@ -19,6 +19,12 @@ description: |
   2. Enrichers discover: content, social_accounts, sitemaps, etc.
   3. TenantGroup.researchers analyze → Research_* collections
   4. Research records reference back to this Domain
+  
+  SCHEMA v9.2 CHANGES:
+  - Marked infrastructure fields as 'system' to prevent LLM overwriting
+  - Protected: sitemaps, homepage stats, security, social, technical, processing flags
+  - Domain researcher now only updates: entityName, foundedYear, headquarters, 
+    description, email, country, domain_research
   
   SCHEMA v9.0 CHANGES:
   - Added physical presence fields (phone, email, address, etc.)
@@ -104,6 +110,7 @@ properties:
   tokenization: word
   sets:
   - standard
+  - system
   tags:
   - content
   - metadata
@@ -163,6 +170,8 @@ properties:
 
 # ============================================================================
 # PHYSICAL PRESENCE (8 fields) - NEW in v9.0
+# LLM-tagged fields: email, country (domain researcher can update)
+# System fields: phone, address, city, region, postalCode, coordinates (enricher-managed)
 # ============================================================================
 - name: phone
   dataType:
@@ -172,6 +181,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - contact
   - physical
@@ -197,6 +207,7 @@ properties:
   tokenization: word
   sets:
   - extended
+  - system
   tags:
   - location
   - physical
@@ -209,6 +220,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - location
   - physical
@@ -221,6 +233,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - location
   - physical
@@ -246,6 +259,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - location
   - physical
@@ -256,12 +270,13 @@ properties:
   description: Geographic coordinates (latitude, longitude)
   sets:
   - extended
+  - system
   tags:
   - location
   - physical
 
 # ============================================================================
-# CONTENT QUALITY (5 fields)
+# CONTENT QUALITY (5 fields) - SYSTEM FIELDS (enricher-managed)
 # ============================================================================
 - name: content
   dataType:
@@ -271,6 +286,7 @@ properties:
   tokenization: word
   sets:
   - extended
+  - system
   tags:
   - content
   - enriched
@@ -282,6 +298,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - metrics
   - quality
@@ -293,6 +310,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - accessibility
 
@@ -304,6 +322,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - seo
   - maturity
@@ -316,12 +335,13 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - crawling
   - accessibility
 
 # ============================================================================
-# SOCIAL PRESENCE (10 fields - consolidated from 15)
+# SOCIAL PRESENCE (10 fields - consolidated from 15) - SYSTEM FIELDS (enricher-managed)
 # ============================================================================
 - name: social_accounts
   dataType:
@@ -330,6 +350,7 @@ properties:
   indexSearchable: true
   sets:
   - standard
+  - system
   tags:
   - accounts
   - social
@@ -343,6 +364,7 @@ properties:
   indexSearchable: true
   sets:
   - extended
+  - system
   tags:
   - discovery
   - platforms
@@ -356,6 +378,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - accounts
   - discovery
@@ -369,6 +392,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - engagement
   - metrics
@@ -383,6 +407,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - categorical
   - social
@@ -396,6 +421,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - authentication
   - features
@@ -409,6 +435,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - features
   - sharing
@@ -422,6 +449,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - community
   - features
@@ -435,6 +463,7 @@ properties:
   indexSearchable: true
   sets:
   - standard
+  - system
   tags:
   - authentication
   - social
@@ -447,13 +476,14 @@ properties:
   indexSearchable: true
   sets:
   - standard
+  - system
   tags:
   - sharing
   - social
   - digital
 
 # ============================================================================
-# SECURITY PROFILE (8 fields)
+# SECURITY PROFILE (8 fields) - SYSTEM FIELDS (enricher-managed)
 # ============================================================================
 - name: is_secure
   dataType:
@@ -462,6 +492,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - security
 
@@ -473,6 +504,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - security
   - grade
@@ -484,6 +516,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - metrics
   - security
@@ -495,6 +528,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - security
   - headers
@@ -506,6 +540,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - security
   - headers
@@ -517,6 +552,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - security
   - headers
@@ -528,6 +564,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - security
   - headers
@@ -539,12 +576,13 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - security
   - protection
 
 # ============================================================================
-# TECHNICAL PROFILE (6 fields)
+# TECHNICAL PROFILE (6 fields) - SYSTEM FIELDS (enricher-managed)
 # ============================================================================
 - name: requires_browser
   dataType:
@@ -554,6 +592,7 @@ properties:
   sets:
   - extended
   - status_update
+  - system
   tags:
   - processing
   - browser
@@ -565,6 +604,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - processing
   - browser
@@ -576,6 +616,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - dns
   - network
@@ -587,6 +628,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - dns
   - network
@@ -599,6 +641,7 @@ properties:
   tokenization: word
   sets:
   - extended
+  - system
   tags:
   - technology
   - digital
@@ -610,12 +653,13 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - robots
   - technical
 
 # ============================================================================
-# URL DISCOVERY (kept per user requirement)
+# URL DISCOVERY (kept per user requirement) - SYSTEM FIELDS (enricher-managed)
 # ============================================================================
 - name: all_sitemap_urls
   dataType:
@@ -624,6 +668,7 @@ properties:
   indexSearchable: true
   sets:
   - url_discovery
+  - system
   tags:
   - sitemap
   - urls
@@ -635,6 +680,7 @@ properties:
   indexSearchable: true
   sets:
   - url_discovery
+  - system
   tags:
   - sitemap
   - urls
@@ -646,6 +692,7 @@ properties:
   indexFilterable: false
   sets:
   - url_discovery
+  - system
   tags:
   - sitemap
   - urls
@@ -657,6 +704,7 @@ properties:
   indexSearchable: true
   sets:
   - url_discovery
+  - system
   tags:
   - homepage
   - urls
@@ -669,6 +717,7 @@ properties:
   tokenization: field
   sets:
   - url_discovery
+  - system
   tags:
   - sitemap
   - primary
@@ -681,6 +730,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - discovery
   - method
@@ -692,12 +742,13 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - sitemap
   - count
 
 # ============================================================================
-# HOMEPAGE DISCOVERY STATS
+# HOMEPAGE DISCOVERY STATS - SYSTEM FIELDS (enricher-managed)
 # ============================================================================
 - name: homepage_total_links
   dataType:
@@ -706,6 +757,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - homepage
   - count
@@ -717,6 +769,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - homepage
   - count
@@ -729,6 +782,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - homepage
   - method
@@ -740,6 +794,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - homepage
   - structure
@@ -751,6 +806,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - homepage
   - structure
@@ -762,6 +818,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - homepage
   - structure
@@ -773,6 +830,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - homepage
   - social
@@ -784,12 +842,13 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - homepage
   - contact
 
 # ============================================================================
-# SPAWN/SEED FIELDS (3 fields) - For entity_spawn post-execution tool
+# SPAWN/SEED FIELDS (4 fields) - SYSTEM FIELDS (entity_spawn tool managed)
 # ============================================================================
 - name: seed
   dataType:
@@ -798,6 +857,7 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - spawn
   - processing
@@ -810,6 +870,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - spawn
   - provenance
@@ -822,6 +883,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - spawn
   - provenance
@@ -833,12 +895,13 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - system
   tags:
   - spawn
   - processing
 
 # ============================================================================
-# PROCESSING FLAGS (8 fields)
+# PROCESSING FLAGS - SYSTEM FIELDS (pipeline-managed, except domain_research)
 # ============================================================================
 - name: domain_enriched
   dataType:
@@ -847,6 +910,7 @@ properties:
   indexFilterable: true
   sets:
   - standard
+  - system
   tags:
   - filtering
   - processing
@@ -858,6 +922,7 @@ properties:
   indexFilterable: true
   sets:
   - standard
+  - system
   tags:
   - filtering
 
@@ -868,6 +933,7 @@ properties:
   indexFilterable: true
   sets:
   - standard
+  - system
   tags:
   - filtering
   - processing
@@ -880,6 +946,7 @@ properties:
   tokenization: word
   sets:
   - extended
+  - system
   tags:
   - filtering
 
@@ -892,6 +959,7 @@ properties:
   sets:
   - standard
   - status_update
+  - system
   tags:
   - pipeline
   - processing
@@ -904,6 +972,7 @@ properties:
   sets:
   - standard
   - status_update
+  - system
   tags:
   - pipeline
   - processing
@@ -918,9 +987,24 @@ properties:
   sets:
   - standard
   - status_update
+  - system
   tags:
   - pipeline
   - processing
+
+- name: domain_research
+  dataType:
+  - boolean
+  description: Domain has been analyzed by the domain researcher (sets entityName, foundedYear, headquarters, etc.)
+  indexFilterable: true
+  indexSearchable: false
+  sets:
+  - standard
+  - status_update
+  tags:
+  - pipeline
+  - processing
+  - LLM
 
 - name: page_facts_count
   dataType:
@@ -930,6 +1014,7 @@ properties:
   sets:
   - extended
   - status_update
+  - system
   tags:
   - pipeline
   - processing
@@ -943,6 +1028,7 @@ properties:
   sets:
   - extended
   - status_update
+  - system
   tags:
   - pipeline
   - processing
@@ -957,6 +1043,7 @@ properties:
   sets:
   - extended
   - status_update
+  - system
   tags:
   - pipeline
   - processing
@@ -982,6 +1069,7 @@ properties:
   sets:
   - extended
   - status_update
+  - system
   tags:
   - pipeline
   - processing
@@ -995,6 +1083,7 @@ properties:
   sets:
   - standard
   - status_update
+  - system
   tags:
   - pipeline
   - processing
@@ -1007,6 +1096,7 @@ properties:
   tokenization: field
   sets:
   - extended
+  - system
   tags:
   - categorical
   - processing
@@ -1022,13 +1112,15 @@ properties:
   - temporal
 
 # ============================================================================
-# ENRICHER RESULTS (audit trail)
+# ENRICHER RESULTS (audit trail) - SYSTEM FIELD (pipeline-managed)
 # ============================================================================
 - name: enricherResults
   dataType:
   - object[]
   description: Array of enricher execution results with full MCPToolResponse fields
   indexSearchable: false
+  sets:
+  - system
   nestedProperties:
   - name: tool_name
     dataType:
