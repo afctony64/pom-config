@@ -1,0 +1,200 @@
+---
+name: Chat RAG Agent
+description: >
+  RAG-enabled chat agent that retrieves relevant data from Weaviate collections
+  and synthesizes responses with citations. This is the primary chat agent for
+  data-driven conversations.
+
+id: chat_rag_agent
+group: knowledge
+type: standard
+
+inputs:
+  user_question:
+    description: The user's question
+    type: string
+  query_classification:
+    description: Classification from chat_query_router (intent, entities, etc.)
+    type: object
+    default: {}
+  conversation_history:
+    description: Previous conversation messages
+    type: array
+    default: []
+  tenant_id:
+    description: Current tenant context
+    type: string
+    default: ""
+  # Injected data from RAG
+  page_facts:
+    description: Semantic search results from Page_facts collection
+    type: array
+    default: []
+  entity_data:
+    description: Entity lookup results from Domain/Company collections
+    type: array
+    default: []
+  research_data:
+    description: Research findings from Research_* collections
+    type: array
+    default: []
+
+data_requirements:
+  injectors:
+    # Primary RAG: Semantic search on Page_facts
+    - injector_template: data
+      template_vars:
+        data_card_id: page_facts_search
+        collection: Page_facts
+        search_strategy: hybrid
+        search_query: "{{ user_question }}"
+        hybrid_alpha: 0.6
+        inject_as: page_facts
+        field_set: standard
+        limit: 15
+        min_certainty: 0.5
+    
+    # Entity lookup if entities detected
+    - injector_template: data
+      template_vars:
+        data_card_id: domain_lookup
+        collection: Domain
+        search_strategy: bm25
+        search_query: "{{ user_question }}"
+        inject_as: entity_data
+        field_set: standard
+        limit: 5
+      optional: true
+    
+    # Research data for deeper context
+    - injector_template: data
+      template_vars:
+        data_card_id: research_search
+        collection: Research_industry
+        search_strategy: vector
+        search_query: "{{ user_question }}"
+        inject_as: research_data
+        field_set: standard
+        limit: 10
+        min_certainty: 0.6
+      optional: true
+
+model:
+  api: responses
+  configuration:
+    type: pom-llm-proxy
+    model: groq-llama3.1-8b
+    tools: [brave_search, find_records]
+  parameters:
+    temperature: 0.5
+    max_tokens: 4096
+
+processing_config:
+  max_turns: 10
+  compression_strategy: balanced
+
+output_description: Markdown formatted response with business insights and citations
+
+system: |
+  You are Pomothy, an intelligent business intelligence assistant with access to 
+  a comprehensive knowledge base of company and industry data.
+  
+  ## Your Capabilities
+  - Access to website content and extracted facts (Page_facts)
+  - Company and domain entity data
+  - Industry, customer, competitor, and product research
+  - Web search for current information (via tools)
+  
+  ## Response Guidelines
+  
+  ### When Data is Available
+  1. **Ground your response in the retrieved data** - cite specific sources
+  2. **Use markdown formatting** - headers, lists, bold for key points
+  3. **Include citations** - reference URLs or sources when making claims
+  4. **Be specific** - use actual data, numbers, and quotes from sources
+  5. **Synthesize across sources** - combine information coherently
+  
+  ### When Data is Limited
+  1. **Acknowledge limitations** - be transparent about what you don't know
+  2. **Use tools if available** - search the web for current information
+  3. **Provide context** - explain what data would help answer better
+  4. **Offer alternatives** - suggest related questions you can answer
+  
+  ### Citation Format
+  When citing sources, use this format:
+  - For page content: [Source: page_title](url)
+  - For research data: [Research: researcher_type]
+  - For web search: [Web: search_result_title](url)
+  
+  ### Response Structure
+  For substantial answers, use this structure:
+  1. **Direct Answer** - Answer the question concisely first
+  2. **Supporting Details** - Provide evidence and context
+  3. **Sources** - List key sources used
+  
+  ## Tools Available
+  You have access to these tools if needed:
+  - `brave_search`: Search the web for current information
+  - `find_records`: Look up specific records in the database
+  
+  Use tools when:
+  - The retrieved data doesn't answer the question
+  - User asks about current events or recent news
+  - More specific data is needed
+---
+
+user: |
+  ## Question
+  {{ user_question }}
+  
+  {% if query_classification %}
+  ## Query Analysis
+  Intent: {{ query_classification.get('intent', 'unknown') }}
+  {% if query_classification.get('entities') %}
+  Entities: {% for e in query_classification.entities %}{{ e.value }}{% if not loop.last %}, {% endif %}{% endfor %}
+  {% endif %}
+  {% endif %}
+  
+  {% if conversation_history and conversation_history|length > 0 %}
+  ## Conversation Context
+  {% for msg in conversation_history[-5:] %}
+  **{{ msg.role|upper }}**: {{ msg.content[:300] }}{% if msg.content|length > 300 %}...{% endif %}
+  {% endfor %}
+  {% endif %}
+  
+  {% if page_facts and page_facts|length > 0 %}
+  ## Retrieved Page Content
+  Found {{ page_facts|length }} relevant pages:
+  
+  {% for page in page_facts[:10] %}
+  ### {{ loop.index }}. {{ page.get('title', 'Untitled') }}
+  **URL**: {{ page.get('url', 'N/A') }}
+  {% if page.get('similarity_score') %}**Relevance**: {{ (page.get('similarity_score', 0) * 100)|round(1) }}%{% endif %}
+  
+  {{ page.get('content', '')[:800] }}{% if page.get('content', '')|length > 800 %}...{% endif %}
+  
+  ---
+  {% endfor %}
+  {% else %}
+  ## No Page Content Retrieved
+  No relevant pages were found in the knowledge base for this query.
+  {% endif %}
+  
+  {% if entity_data and entity_data|length > 0 %}
+  ## Entity Data
+  {% for entity in entity_data[:5] %}
+  - **{{ entity.get('domainName', entity.get('domain', 'Unknown')) }}**: {{ entity.get('description', 'No description')[:200] }}
+  {% endfor %}
+  {% endif %}
+  
+  {% if research_data and research_data|length > 0 %}
+  ## Research Findings
+  {% for research in research_data[:5] %}
+  - {{ research.get('finding', research.get('content', 'No content'))[:300] }}
+  {% endfor %}
+  {% endif %}
+  
+  ---
+  
+  Please provide a comprehensive, well-formatted markdown response to the user's question.
+  Ground your answer in the retrieved data above and cite sources where appropriate.
