@@ -21,10 +21,12 @@ description: |
   4. Research records reference back to this Domain
   
   SCHEMA v9.2 CHANGES:
-  - Marked infrastructure fields as 'system' to prevent LLM overwriting
-  - Protected: sitemaps, homepage stats, security, social, technical, processing flags
-  - Domain researcher now only updates: entityName, foundedYear, headquarters, 
-    description, email, country, domain_research
+  - Added 'prompt' set for LLM-extractable information fields
+  - Added 'system' set for infrastructure/pipeline fields (protected from LLM)
+  - Prompt fields: entityName, description, foundedYear, headquarters, 
+    phone, email, address, city, region, country, postalCode, coordinates
+  - System fields: sitemaps, homepage stats, security, social, technical, 
+    processing flags, enricher results, spawn fields
   
   SCHEMA v9.0 CHANGES:
   - Added physical presence fields (phone, email, address, etc.)
@@ -124,24 +126,25 @@ properties:
   tokenization: word
   sets:
   - standard
+  - prompt
   tags:
   - identity
   - metadata
-  - research  # FIX #457: Include in research data card traversals
-  - LLM  # Issue #560: Domain Researcher can update this field
+  - research
 
 - name: description
   dataType:
   - text
-  description: Page description/meta description from URL snapshot
+  description: Entity description extracted by domain researcher
   indexSearchable: true
   tokenization: word
   sets:
   - standard
+  - prompt
   tags:
   - content
   - metadata
-  - research  # FIX #457: Include in research data card traversals
+  - research
 
 - name: foundedYear
   dataType:
@@ -150,10 +153,10 @@ properties:
   indexFilterable: true
   sets:
   - extended
+  - prompt
   tags:
   - identity
   - metadata
-  - LLM  # Issue #560: Domain Researcher can update this field
 
 - name: headquarters
   dataType:
@@ -163,15 +166,13 @@ properties:
   tokenization: word
   sets:
   - extended
+  - prompt
   tags:
   - identity
   - location
-  - LLM  # Issue #560: Domain Researcher can update this field
 
 # ============================================================================
-# PHYSICAL PRESENCE (8 fields) - NEW in v9.0
-# LLM-tagged fields: email, country (domain researcher can update)
-# System fields: phone, address, city, region, postalCode, coordinates (enricher-managed)
+# PHYSICAL PRESENCE (8 fields) - PROMPT FIELDS (domain researcher updates these)
 # ============================================================================
 - name: phone
   dataType:
@@ -181,7 +182,7 @@ properties:
   tokenization: field
   sets:
   - extended
-  - system
+  - prompt
   tags:
   - contact
   - physical
@@ -194,10 +195,10 @@ properties:
   tokenization: field
   sets:
   - extended
+  - prompt
   tags:
   - contact
   - physical
-  - LLM  # Issue #560: Domain Researcher can update this field
 
 - name: address
   dataType:
@@ -207,7 +208,7 @@ properties:
   tokenization: word
   sets:
   - extended
-  - system
+  - prompt
   tags:
   - location
   - physical
@@ -220,7 +221,7 @@ properties:
   tokenization: field
   sets:
   - extended
-  - system
+  - prompt
   tags:
   - location
   - physical
@@ -233,7 +234,7 @@ properties:
   tokenization: field
   sets:
   - extended
-  - system
+  - prompt
   tags:
   - location
   - physical
@@ -246,10 +247,10 @@ properties:
   tokenization: field
   sets:
   - extended
+  - prompt
   tags:
   - location
   - physical
-  - LLM  # Issue #560: Domain Researcher can update this field
 
 - name: postalCode
   dataType:
@@ -259,7 +260,7 @@ properties:
   tokenization: field
   sets:
   - extended
-  - system
+  - prompt
   tags:
   - location
   - physical
@@ -270,7 +271,7 @@ properties:
   description: Geographic coordinates (latitude, longitude)
   sets:
   - extended
-  - system
+  - prompt
   tags:
   - location
   - physical
