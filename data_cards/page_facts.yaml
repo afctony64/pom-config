@@ -1,17 +1,17 @@
-# Data Card: Page Facts with Extended Field Set
+# Data Card: Page Facts
 #
-# Purpose: Fetch Page_facts records with extended field set
-# Use Case: Get comprehensive page facts data for analysis
+# Purpose: Fetch Page_facts records with standard field set
+# Use Case: Get page facts data for analysis
 #
-# ✅ Native fetch executor with extended field set (no references available)
+# ✅ Native fetch executor with standard field set (no references available)
 # ⚠️  Internal card - use page_facts_search for user-facing search
 
 id: page_facts
-name: Page Facts Extended
+name: Page Facts
 type: data_card
 file: page_facts.yaml
 description: >
-  Fetches Page_facts records with extended field set including all available properties.
+  Fetches Page_facts records with standard field set including core properties.
   Uses Native fetch executor for efficient data retrieval.
   
   Internal card for filtered retrieval. Use page_facts_search for search use cases.
@@ -24,7 +24,6 @@ display: false
 tags:
   - page-facts
   - url
-  - extended-fields
   - content-analysis
 
 target_scope: page_intelligence

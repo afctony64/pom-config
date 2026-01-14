@@ -1,0 +1,83 @@
+# ===================================================================
+# 📦 POM-CONFIG PRE-COMMIT CONFIGURATION
+# ===================================================================
+# Shared configuration repository pre-commit hooks
+# Focus: YAML validation, schema consistency
+# ===================================================================
+
+repos:
+  # ═══════════════════════════════════════════════════
+  # TIER 1: BLOCKING - Critical Safety Checks
+  # ═══════════════════════════════════════════════════
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-merge-conflict
+        name: "🔍 Check Merge Conflicts [BLOCKING]"
+      - id: detect-private-key
+        name: "🔒 Detect Private Keys [BLOCKING]"
+
+  # ═══════════════════════════════════════════════════
+  # TIER 2: YAML/CONFIG VALIDATION
+  # ═══════════════════════════════════════════════════
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+        name: "📝 Fix EOF [AUTO-FIX]"
+      - id: trailing-whitespace
+        name: "🧹 Trim Trailing Whitespace [AUTO-FIX]"
+        args: [--markdown-linebreak-ext=md]
+      - id: check-yaml
+        name: "✅ YAML Validation [BLOCKING]"
+        args: [--allow-multiple-documents]
+      - id: check-json
+        name: "✅ JSON Validation"
+      - id: check-case-conflict
+        name: "🔍 Check Case Conflicts"
+
+  # ═══════════════════════════════════════════════════
+  # TIER 3: PYTHON SCRIPTS
+  # ═══════════════════════════════════════════════════
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.15
+    hooks:
+      - id: ruff
+        name: "🚀 Ruff Linting [AUTO-FIX]"
+        args: [--fix, --exit-non-zero-on-fix]
+        types_or: [python, pyi]
+      - id: ruff-format
+        name: "🎨 Ruff Formatting [AUTO-FIX]"
+        types_or: [python, pyi]
+
+# ═══════════════════════════════════════════════════
+# GLOBAL CONFIGURATION
+# ═══════════════════════════════════════════════════
+
+default_stages: [pre-commit]
+minimum_pre_commit_version: 3.0.0
+fail_fast: false
+
+exclude: |
+  (?x)^(
+    \.git/.*|
+    __pycache__/.*
+  )$
+
+ci:
+  autofix_commit_msg: "style: automated pre-commit fixes"
+  autofix_prs: true
+  autoupdate_schedule: weekly
+
+# ═══════════════════════════════════════════════════
+# USAGE
+# ═══════════════════════════════════════════════════
+#
+# Installation:
+#   pip install pre-commit
+#   pre-commit install
+#
+# ===================================================================

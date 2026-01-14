@@ -417,6 +417,7 @@ properties:
   - research
   - score
   sets:
+  - standard
   - prompt
   metadata:
     order: 303
@@ -475,6 +476,7 @@ properties:
   - research
   - score
   sets:
+  - standard
   - prompt
   metadata:
     order: 304
