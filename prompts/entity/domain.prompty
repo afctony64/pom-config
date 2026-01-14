@@ -13,7 +13,7 @@ version: 1.0.0
 
 inputs:
   record:
-    description: Entity seed with domainName (name to search for)
+    description: Entity seed with entityName (name to search for)
     type: object
 
 # === WEB SEARCH FOR URL DISCOVERY ===
@@ -25,7 +25,7 @@ data_requirements:
     template_vars:
       tool: brave_search
       params:
-        query: "{{ properties.domainName|default(properties.entityName) }}{% if properties.spawnContext %} {{ properties.spawnContext }}{% endif %} official website"
+        query: "{{ properties.entityName }}{% if properties.spawnContext %} {{ properties.spawnContext }}{% endif %} official website"
         country: us
         count: 10
       inject_as: search_data
@@ -36,7 +36,7 @@ data_requirements:
 
 outputs:
   url: string  # Discovered primary URL
-  domainName: string  # Entity name (passthrough)
+  entityName: string  # Entity name (passthrough)
   confidence_score: number
   discovery_source: string
 
@@ -82,7 +82,7 @@ Domain Context: {{ tenant_ai.domain_context }}
    - Modern TLDs (.io, .app) only if genuinely official
 
 user:
-**Entity to Research**: {{ record.properties.domainName|default(record.properties.entityName)|default('Unknown') }}
+**Entity to Research**: {{ record.properties.entityName|default('Unknown') }}
 
 {% set results = search_data.results if search_data is defined and search_data.results else [] %}
 {% if results %}
@@ -105,7 +105,7 @@ user:
 ```json
 {
   "url": "https://example.com or null",
-  "domainName": "Entity Name",
+  "entityName": "Entity Name",
   "confidence_score": 0.95,
   "discovery_source": "brave_search"
 }

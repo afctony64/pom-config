@@ -119,7 +119,7 @@ user: |
   {% if rag_results.get('entity_data') and rag_results.entity_data|length > 0 %}
   ### Entity Information
   {% for entity in rag_results.entity_data[:5] %}
-  - **{{ entity.get('domainName', entity.get('domain', 'Unknown')) }}**
+  - **{{ entity.get('entityName', entity.get('domain', 'Unknown')) }}**
     - Domain: {{ entity.get('domain', 'N/A') }}
     - Industry: {{ entity.get('industry', 'N/A') }}
     - Description: {{ entity.get('description', 'No description')[:200] }}

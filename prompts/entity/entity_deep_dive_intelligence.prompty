@@ -26,7 +26,7 @@ inputs:
     description: Domain record to analyze
     type: object
   entity_name:
-    description: Entity name to analyze (from Domain.domainName)
+    description: Entity name to analyze (from Domain.entityName)
     type: string
   domain:
     description: Entity domain URL
@@ -108,7 +108,7 @@ sample:
 
 {% macro get_entity_name(record) -%}
 {% set props = record.get('properties') or record if record else {} %}
-{{ props.get('domainName') or props.get('domain') or entity_name or 'the entity' }}
+{{ props.get('entityName') or props.get('domain') or entity_name or 'the entity' }}
 {%- endmacro %}
 
 system:

@@ -85,7 +85,7 @@ Your task: Generate ONLY the missing LLM fields listed in the user message.
 user:
 {% set props = record.properties if record.properties else record %}
 
-## ENTITY: {{ props.domain | default(props.domainName) | default('Unknown') }}
+## ENTITY: {{ props.domain | default(props.entityName) | default('Unknown') }}
 
 ## MISSING FIELDS TO GENERATE:
 {% for field in researcher.properties %}

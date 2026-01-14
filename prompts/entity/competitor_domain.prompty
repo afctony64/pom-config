@@ -25,7 +25,7 @@ data_requirements:
     template_vars:
       tool: brave_search
       params:
-        query: "{{ properties.domainName|default(properties.entityName) }} company name who makes"
+        query: "{{ properties.entityName }} company name who makes"
         country: us
         count: 10
       inject_as: company_search
@@ -34,7 +34,7 @@ data_requirements:
     template_vars:
       tool: brave_search
       params:
-        query: "{{ properties.domainName|default(properties.entityName) }} official website"
+        query: "{{ properties.entityName }} official website"
         country: us
         count: 10
       inject_as: domain_search
@@ -46,7 +46,7 @@ data_requirements:
 outputs:
   url: string  # Discovered primary URL
   companyName: string  # Extracted company name
-  domainName: string  # Original competitor name (passthrough)
+  entityName: string  # Original competitor name (passthrough)
   confidence_score: number
   discovery_source: string
 
@@ -120,7 +120,7 @@ Competitor names are often PRODUCT or SERVICE names (e.g., "Siemens MindSphere",
    - Google products → google.com or product-specific domain
 
 user:
-**Competitor Name to Research**: {{ record.properties.domainName|default(record.properties.entityName)|default('Unknown') }}
+**Competitor Name to Research**: {{ record.properties.entityName|default('Unknown') }}
 
 {% set company_results = company_search.results if company_search is defined and company_search.results else [] %}
 {% set domain_results = domain_search.results if domain_search is defined and domain_search.results else [] %}
@@ -161,7 +161,7 @@ user:
 {
   "url": "https://example.com or null",
   "companyName": "Extracted Company Name",
-  "domainName": "Original Competitor Name",
+  "entityName": "Original Competitor Name",
   "confidence_score": 0.95,
   "discovery_source": "brave_search"
 }

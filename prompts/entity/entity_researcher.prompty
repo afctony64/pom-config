@@ -143,7 +143,7 @@ post_execution_tools:
 
 {# Macro: Get display name for entity #}
 {% macro get_display_name(record) -%}
-{% if record %}{% set props = record.get('properties') or record %}{{ props.get('domainName') or props.get('domain') or 'the entity' }}{% else %}the entity{% endif %}
+{% if record %}{% set props = record.get('properties') or record %}{{ props.get('entityName') or props.get('domain') or 'the entity' }}{% else %}the entity{% endif %}
 {%- endmacro %}
 
 {# Macro: Get attribute safely (works for both Pydantic models and dicts) #}
@@ -207,7 +207,7 @@ system:
 {% if record %}
 {% set props = record.get('properties') or record %}
 **Entity Information:**
-- **Name**: {{ props.get('domainName') or props.get('domain') or 'Unknown' }}
+- **Name**: {{ props.get('entityName') or props.get('domain') or 'Unknown' }}
 - **Domain**: {{ props.get('domain') or props.get('url') or 'Not provided' }}
 - **Entity Type**: {{ props.get('entityType', 'unknown') }}
 {% if props.get('description') %}- **Description**: {{ props.get('description') }}{% endif %}

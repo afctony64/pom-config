@@ -121,7 +121,7 @@ user: |
   {% if entity_data and entity_data|length > 0 %}
   ## Entity Data
   {% for entity in entity_data[:5] %}
-  - **{{ (entity.get('domainName', entity.get('domain', 'Unknown')) if entity is mapping else 'Unknown') }}**: {{ (entity.get('description', 'No description') if entity is mapping else 'No description')[:200] }}
+  - **{{ (entity.get('entityName', entity.get('domain', 'Unknown')) if entity is mapping else 'Unknown') }}**: {{ (entity.get('description', 'No description') if entity is mapping else 'No description')[:200] }}
   {% endfor %}
   {% endif %}
   
