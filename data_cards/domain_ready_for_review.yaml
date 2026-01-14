@@ -1,0 +1,314 @@
+# Data Card: Domains Ready for Review
+#
+# Purpose: Fetch Domain records that have sufficient research for frontend review
+# Use Case: Frontend filtering of domains that are ready for human review
+#
+# Ready criteria:
+#   - domain_research = true (domain researcher completed)
+#   - researcher_count >= 3 (at least 3 researcher analyses completed)
+#
+# ✅ Native fetch executor with ready_for_review filter
+
+id: domain_ready_for_review
+name: Domains Ready for Review
+type: data_card
+file: domain_ready_for_review.yaml
+description: >
+  Fetches Domain records that have completed sufficient research for frontend review.
+  Uses ready_for_review=true filter which requires domain_research=true AND
+  researcher_count >= 3 (minimum researchers).
+
+# Tagging system
+tags:
+  - domain
+  - ready-for-review
+  - frontend
+  - research-complete
+
+target_scope: domain_intelligence
+
+# ✅ STANDARD: Use 'fetch' for all data cards
+executor: fetch
+
+# Enable relationship traversal for cross-references
+relationship_support: true
+
+# Access control
+personas:
+  - "*"
+
+# Query parameters
+parameters:
+  type: fetch  # Must match executor
+
+  # Root collection
+  collection: Domain
+
+  # ✅ Filter for ready domains only
+  filters:
+    - field: ready_for_review
+      operator: equal
+      value: true
+
+  # Relationship traversal configuration
+  relationship_traversal: true
+  dynamic_templates: true
+
+  # Traversal configuration to prevent circular references
+  traversal:
+    max_depth: 1
+    policies:
+      competitor: skip
+      competitors: skip
+
+  # Reference fields to include
+  references:
+    - company  # Reference to Company_source
+
+  # Field tags for reference collections
+  field_tags: []
+
+  # Limits
+  limit: 50
+  limit_default: 50
+
+  # Field set configuration
+  field_set: ready_review
+  field_set_default: ready_review
+  field_set_options:
+    - ready_review
+    - extended
+
+# Field definitions for each field set
+field_sets:
+  ready_review:
+    description: "Domain fields optimized for review workflow"
+    fields:
+      # Domain core fields
+      - name: domain
+        type: text
+        source: property
+        description: Domain name
+
+      - name: url
+        type: text
+        source: property
+        description: Primary URL
+
+      - name: title
+        type: text
+        source: property
+        description: Page title
+
+      - name: description
+        type: text
+        source: property
+        description: Page description
+
+      # Ready status fields
+      - name: ready_for_review
+        type: boolean
+        source: property
+        description: Domain is ready for frontend review
+
+      - name: ready_for_review_at
+        type: date
+        source: property
+        description: When domain became ready for review
+
+      - name: researcher_count
+        type: number
+        source: property
+        description: Number of completed researcher analyses (0-10)
+
+      - name: domain_research
+        type: boolean
+        source: property
+        description: Domain researcher analysis completed
+
+      # Processing status
+      - name: page_processing_status
+        type: text
+        source: property
+        description: Processing status
+
+      - name: processed_at
+        type: date
+        source: property
+        description: Last processing timestamp
+
+      # Company reference fields (flattened)
+      - name: company_accountName
+        type: text
+        source: reference
+        description: Company name from Company_source
+
+      - name: company_industry
+        type: text
+        source: reference
+        description: Company industry
+
+  extended:
+    description: "Full domain profile with research status and all fields"
+    fields:
+      # All ready_review fields plus additional
+      - name: domain
+        type: text
+        source: property
+        description: Domain name
+
+      - name: url
+        type: text
+        source: property
+        description: Primary URL
+
+      - name: title
+        type: text
+        source: property
+        description: Page title
+
+      - name: description
+        type: text
+        source: property
+        description: Page description
+
+      - name: content
+        type: text
+        source: property
+        description: Page content
+
+      # Ready status fields
+      - name: ready_for_review
+        type: boolean
+        source: property
+        description: Domain is ready for frontend review
+
+      - name: ready_for_review_at
+        type: date
+        source: property
+        description: When domain became ready for review
+
+      - name: researcher_count
+        type: number
+        source: property
+        description: Number of completed researcher analyses
+
+      - name: domain_research
+        type: boolean
+        source: property
+        description: Domain researcher analysis completed
+
+      # Processing status
+      - name: page_intelligence
+        type: boolean
+        source: property
+        description: Page intelligence completed
+
+      - name: page_facts
+        type: boolean
+        source: property
+        description: Page facts extracted
+
+      - name: knowledge_base
+        type: boolean
+        source: property
+        description: Knowledge base populated
+
+      - name: page_processing_status
+        type: text
+        source: property
+        description: Processing status
+
+      - name: processed_at
+        type: date
+        source: property
+        description: Last processing timestamp
+
+      - name: page_facts_count
+        type: number
+        source: property
+        description: Number of page facts
+
+      - name: chunk_count
+        type: number
+        source: property
+        description: Total content chunks
+
+      # Company reference fields (extended)
+      - name: company_accountName
+        type: text
+        source: reference
+        description: Company name
+
+      - name: company_industry
+        type: text
+        source: reference
+        description: Company industry
+
+      - name: company_employees
+        type: number
+        source: reference
+        description: Employee count
+
+      - name: company_annualRevenue
+        type: number
+        source: reference
+        description: Annual revenue
+
+      - name: company_description
+        type: text
+        source: reference
+        description: Company description
+
+# Collection configuration for references
+collections:
+  - collection: Domain
+    field_set: ready_review
+    required: true
+    references:
+      company:
+        target_collection: Company_source
+        field_set: standard
+
+# Query behavior
+supports_relationships: true
+supports_aggregation: false
+supports_grouping: true
+requires_query_text: false
+
+# Sorting - most recently ready first
+default_sort:
+  field: ready_for_review_at
+  direction: desc
+
+# Performance settings
+default_limit: 50
+max_limit: 1000
+timeout_seconds: 30
+
+# Examples for documentation
+examples:
+  - description: Fetch domains ready for review
+    code: |
+      result = await execute_data_card(
+          data_card_id="domain_ready_for_review",
+          limit=20
+      )
+
+  - description: Fetch with extended fields
+    code: |
+      result = await execute_data_card(
+          data_card_id="domain_ready_for_review",
+          field_set="extended",
+          limit=20
+      )
+
+  - description: Filter by minimum researcher count
+    code: |
+      result = await execute_data_card(
+          data_card_id="domain_ready_for_review",
+          filters=[
+              {"field": "researcher_count", "operator": "gte", "value": 5}
+          ],
+          limit=20
+      )

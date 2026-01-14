@@ -1026,6 +1026,51 @@ properties:
   - pipeline
   - processing
 
+# ============================================================================
+# READY FOR REVIEW STATUS (Frontend Filtering)
+# ============================================================================
+- name: researcher_count
+  dataType:
+  - int
+  description: Count of completed researcher analyses (0-10). Updated after each researcher completes. Used to determine ready_for_review status.
+  indexFilterable: true
+  sets:
+  - standard
+  - status_update
+  - system
+  tags:
+  - pipeline
+  - processing
+  - count
+
+- name: ready_for_review
+  dataType:
+  - boolean
+  description: Domain is ready for frontend review. Set to true when domain_research=true AND researcher_count >= 3.
+  indexFilterable: true
+  indexSearchable: false
+  sets:
+  - standard
+  - status_update
+  - frontend
+  tags:
+  - pipeline
+  - status
+  - frontend
+
+- name: ready_for_review_at
+  dataType:
+  - date
+  description: Timestamp when domain became ready for review (ready_for_review set to true)
+  indexFilterable: true
+  sets:
+  - standard
+  - status_update
+  - system
+  tags:
+  - temporal
+  - processing
+
 - name: processed_at
   dataType:
   - date
