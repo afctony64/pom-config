@@ -645,18 +645,6 @@ properties:
   - system
   metadata:
     order: 915
-- name: updatedAt
-  dataType:
-  - date
-  description: Last modification timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 916
 - name: updated_at
   description: Record update timestamp
   dataType:

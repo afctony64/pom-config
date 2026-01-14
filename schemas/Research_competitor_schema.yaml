@@ -762,17 +762,6 @@ properties:
   - score
   metadata:
     order: 913
-- name: updatedAt
-  dataType:
-  - date
-  description: Last modification timestamp
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 914
 - name: updated_at
   description: Record update timestamp
   dataType:

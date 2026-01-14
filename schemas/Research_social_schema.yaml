@@ -612,18 +612,6 @@ properties:
       skip: true
   metadata:
     order: 903
-- name: updatedAt
-  dataType:
-  - date
-  description: Last modification timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 913
 references:
 - name: sourceEntity
   target_collection: Domain
