@@ -83,3 +83,18 @@ tool_guidance:
       - revenueImpactLLM → revenueImpactCIT
 
       Put ALL source URLs in the global `citations` array field too.
+
+# Entity spawn configuration
+# Spawn fields are auto-detected from schema via sets: [spawn] (pom-core#295)
+# - Source field: text[] with spawn set and no parallel_to (keyPartners)
+# - Domain field: text[] with spawn set and parallel_to, name contains "domain" (partnerDomain)
+entity_spawn:
+  enabled: true  # Schema defines fields via sets: [spawn]
+
+# Post-execution tools: Run automatically after partner researcher completes
+# Priority-ordered: lower number runs first
+post_execution_tools:
+  - parallel_array_enricher  # Priority 10: Fill post fields (keyPartnerEvidence, partnerDomain)
+  - entity_spawn             # Priority 20: Create Domain records for partners
+  - enum_cat                 # Priority 30: Classify EnumCat fields (partnerTypeCat, etc.)
+  # References are now generated automatically by schema_coercer on upsert

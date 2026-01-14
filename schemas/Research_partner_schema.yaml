@@ -157,7 +157,10 @@ properties:
 - name: keyPartners
   dataType:
   - text[]
-  description: Array of key strategic partners and alliances with relationship details, partnership value, and strategic significance
+  description: 'Array of 2-5 key strategic partner COMPANY NAMES only. Use CLEAN OFFICIAL
+    NAMES without qualifiers, product variants, or parenthetical notes. Examples:
+    "Salesforce" (not "Salesforce Platform"), "Microsoft" (not "Microsoft Azure Partner").
+    These names are used for domain lookups - spurious data breaks entity spawn.'
   tags:
   - beacon
   - partner
@@ -166,6 +169,7 @@ properties:
   - standard
   - array
   - prompt
+  - spawn
   metadata:
     order: 201
 - name: keyPartnersIds
@@ -222,6 +226,26 @@ properties:
   - prompt
   metadata:
     order: 204
+- name: partnerDomain
+  dataType:
+  - text[]
+  description: 'Primary domain for each partner (parallel to keyPartners array).
+    ENRICHMENT SEARCH: "{partner_name} official website domain company". Format:
+    "partner.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST
+    align with keyPartners. Used for spawning Domain records.'
+  parallel_to: keyPartners
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - partner
+  - research
+  sets:
+  - array
+  - spawn
+  - post
+  metadata:
+    order: 205
 - name: integrationLLM
   dataType:
   - text
