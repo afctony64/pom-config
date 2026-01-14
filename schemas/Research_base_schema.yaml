@@ -31,12 +31,19 @@ description: |
 base_properties:
 
   # --- ENTITY IDENTITY (who/what is being researched) ---
-  - name: entityId
+  - name: domain
     dataType: [text]
-    description: "Unique identifier for the entity"
+    description: "Domain of the entity being researched (for filtering/querying)"
     indexFilterable: true
     tokenization: field
-    tags: [identity, system]
+    tags: [identity, web]
+
+  - name: entityId
+    dataType: [text]
+    description: "External identifier from source system (e.g., Salesforce accountId, CRM ID)"
+    indexFilterable: true
+    tokenization: field
+    tags: [identity, system, external]
 
   - name: entityType
     dataType: [text]
@@ -75,17 +82,23 @@ base_properties:
     tags: [metadata]
 
   # --- QUALITY METADATA ---
-  - name: processedAt
+  - name: processed_at
     dataType: [date]
     description: "Analysis completion timestamp"
     indexFilterable: true
-    tags: [temporal]
+    tags: [temporal, processing]
 
-  - name: updatedAt
+  - name: updated_at
     dataType: [date]
     description: "Last update timestamp"
     indexFilterable: true
     tags: [temporal]
+
+  - name: source_quality
+    dataType: [number]
+    description: "Data quality score (0.0-1.0) indicating confidence in extracted data"
+    indexFilterable: true
+    tags: [quality, metrics]
 
   # --- AI PROVENANCE ---
   - name: citations

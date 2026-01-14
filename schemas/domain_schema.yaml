@@ -110,6 +110,19 @@ properties:
   - categorical
   - research  # FIX #457: Include in research data card traversals
 
+- name: entityId
+  dataType:
+  - text
+  description: External identifier from source system (e.g., Salesforce accountId, CRM ID). Enables tracking tenant-specific entity IDs.
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  - system
+  tags:
+  - identity
+  - external
+
 - name: title
   dataType:
   - text
@@ -1012,6 +1025,31 @@ properties:
   tags:
   - pipeline
   - processing
+
+- name: processed_at
+  dataType:
+  - date
+  description: Timestamp when this domain was last processed by any researcher
+  indexFilterable: true
+  sets:
+  - standard
+  - status_update
+  - system
+  tags:
+  - temporal
+  - processing
+
+- name: source_quality
+  dataType:
+  - number
+  description: Data quality score (0.0-1.0) indicating confidence in extracted data
+  indexFilterable: true
+  sets:
+  - extended
+  - system
+  tags:
+  - quality
+  - metrics
 
 - name: page_facts_count
   dataType:
