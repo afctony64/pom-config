@@ -31,7 +31,7 @@ cost:
 performance:
   avg_latency_ms: 1500
   tokens_per_second: 100
-  context_window: 128000
+  context_window: 200000  # GPT-5.2 flagship - 200K context (updated Jan 2026)
 metadata:
   description: OpenAI GPT 5.2 - latest flagship
   category: reasoning

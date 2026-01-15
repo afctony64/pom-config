@@ -28,6 +28,9 @@ cost:
   currency: USD
   notes: Free local inference on DGX Spark
 performance:
+  avg_latency_ms: 350
+  tokens_per_second: 70
+  context_window: 128000  # Mistral Nemo 12B supports 128K context
   backends:
     mac_metal:
       optimal_parallelism: 1

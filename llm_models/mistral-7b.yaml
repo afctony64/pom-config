@@ -30,6 +30,9 @@ cost:
   currency: USD
   notes: Free local inference
 performance:
+  avg_latency_ms: 200
+  tokens_per_second: 80
+  context_window: 32768  # Mistral 7B supports 32K context
   backends:
     mac_metal:
       optimal_parallelism: 1
