@@ -28,7 +28,7 @@ cost:
 performance:
   avg_latency_ms: 800
   tokens_per_second: 150
-  context_window: 128000
+  context_window: 200000  # GPT-5 mini - 200K context (matches o4-mini)
 metadata:
   description: OpenAI GPT 5 Mini - fast and cost-efficient
   category: general

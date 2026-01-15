@@ -30,7 +30,7 @@ cost:
 performance:
   avg_latency_ms: 400
   tokens_per_second: 200
-  context_window: 400000
+  context_window: 128000  # GPT-5 nano - 128K context (smaller/faster model)
 metadata:
   description: OpenAI GPT 5 Nano - fastest, most cost-efficient with reasoning
   category: general
