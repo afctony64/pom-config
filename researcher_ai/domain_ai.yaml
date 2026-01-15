@@ -96,12 +96,31 @@ tool_guidance:
 
 search_query: "company name headquarters founded contact about"
 
+# Search queries - optimized for vector search (pre-computed embeddings)
+# Each query targets a specific content pattern found on company websites
 search_queries:
+  # Entity name extraction
   - "What is the official company name? About us company overview who we are"
+
+  # Headquarters/Location - multiple patterns
   - "Where is the company headquarters located? Contact us address location office"
-  - "When was the company founded, started, or launched? Company history timeline milestones Series A bootstrapped"
-  - "What is the company contact email and phone number? Get in touch contact us"
-  - "About the company story our history dream founders husband wife team"
+  - "Contact us mailing address street city state zip postal code"
+  - "Privacy notice how to contact us mail attention legal"
+
+  # Founded/History
+  - "When was the company founded started launched? Year established since"
+  - "Company history timeline milestones growth journey"
+
+  # Contact info
+  - "Contact email phone number get in touch support"
+
+# BM25 keyword queries - for specific keyword patterns vector search misses
+# These run in ADDITION to vector queries for better recall
+# Keep these short and keyword-focused (BM25 matches terms, not semantics)
+keyword_queries:
+  - "headquarters"
+  - "founded"
+  - "address"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
