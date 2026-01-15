@@ -131,6 +131,22 @@ keyword_queries:
   - "contact"
   - "about"
 
+# URL boost patterns - prioritize chunks from these page types
+# Customer stories match keywords but contain OTHER companies' info
+# About/contact pages have the target company's actual HQ/contact info
+url_boost_patterns:
+  - "/about"
+  - "/company"
+  - "/contact"
+  - "/legal"
+  - "/privacy"
+  - "/terms"
+  - "/who-we-are"
+  - "/our-story"
+  - "/leadership"
+  - "/team"
+  - "/locations"
+
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
   - "entityName: CRITICAL - Check EXISTING value FIRST. If it looks like a clean company name (e.g., 'Stripe', 'Acme Corp'), PRESERVE IT and output the same value. Only extract a NEW name if: (1) empty/null, (2) looks like web title with |, -, ::, (3) is just 'Home', 'Welcome', or error text, (4) matches the domain exactly (e.g., 'example.com')"
