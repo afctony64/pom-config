@@ -33,11 +33,11 @@ description: 'LOCAL PROCESSING FACTORY - Page facts with embeddings generated lo
   ✅ Can run semantic search/classification locally
 
 
-  VECTORIZER: text2vec-transformers (local all-mpnet-base-v2)
+  VECTORIZER: text2vec-transformers (Snowflake Arctic Embed L)
 
   - Service: http://transformers-lb:80 (load-balanced across GPU instances)
 
-  - Model: sentence-transformers/all-mpnet-base-v2 (768 dimensions)
+  - Model: Snowflake/snowflake-arctic-embed-l (1024 dimensions)
 
   - Production-ready local embeddings with high quality
 
