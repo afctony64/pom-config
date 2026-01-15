@@ -16,7 +16,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai_responses
+    type: openai_chat
     model: gpt-4o
   parameters:
     temperature: 0.3

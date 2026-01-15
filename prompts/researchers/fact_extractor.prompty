@@ -36,7 +36,7 @@ data_requirements:
 model:
   api: chat
   configuration:
-    type: openai_responses
+    type: openai_chat
     model: qwen3:8b
   parameters:
     temperature: 0.1

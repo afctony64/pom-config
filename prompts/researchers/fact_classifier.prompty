@@ -38,7 +38,7 @@ data_requirements:
 model:
   api: chat
   configuration:
-    type: openai_responses
+    type: openai_chat
     model: mistral:7b-instruct  # Mistral for classification expertise
   parameters:
     temperature: 0.1

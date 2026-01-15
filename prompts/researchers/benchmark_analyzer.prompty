@@ -19,7 +19,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai_responses
+    type: openai_chat
     model: qwen3:8b
   parameters:
     temperature: 0.3  # Low-medium for analytical but somewhat creative insights

@@ -56,7 +56,7 @@ model:
   configuration:
     connection: openai_conn
     model: gpt-5-mini
-    type: openai_responses
+    type: openai_chat
   parameters:
     response_format:
       type: json_object

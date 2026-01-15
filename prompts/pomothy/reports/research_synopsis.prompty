@@ -72,7 +72,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai_responses
+    type: openai_chat
     model: gpt-5-nano
     mode: urgent  # Routes to Groq for faster inference (vs batch/Ollama)
   parameters:

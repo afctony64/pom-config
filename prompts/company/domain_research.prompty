@@ -68,7 +68,7 @@ processing_config:
 model:
   api: chat
   configuration:
-    type: openai_responses
+    type: openai_chat
     model: qwen3:14b
   parameters:
     temperature: 0.3
