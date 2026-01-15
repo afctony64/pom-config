@@ -90,9 +90,9 @@ data_requirements:
       optional: true
 
 model:
-  api: chat  # Using Chat API (cheaper, bug now fixed)
+  api: chat  # chat = /v1/chat/completions (cheaper), responses = /v1/responses
   configuration:
-    type: openai_chat
+    type: openai
     model: gpt-5-mini
   parameters:
     max_output_tokens: 16000  # Reduced: no reasoning tokens with chat API
