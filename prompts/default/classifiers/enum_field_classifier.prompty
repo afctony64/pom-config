@@ -35,7 +35,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai_chat
+    type: openai
     model: gpt-5-nano
   parameters:
     temperature: 0.1

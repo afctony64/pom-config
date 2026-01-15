@@ -83,7 +83,7 @@ model:
   configuration:
     connection: openai_conn
     model: gpt-5-mini
-    type: openai_chat
+    type: openai
   parameters:
     # Responses API parameters (no max_completion_tokens - not supported)
     response_format:

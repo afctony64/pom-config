@@ -23,7 +23,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai_chat
+    type: openai
     model: qwen3:8b
   parameters:
     temperature: 0.1

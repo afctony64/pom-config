@@ -27,7 +27,7 @@ inputs:
 model:
   provider: pom-llm-proxy
   configuration:
-    type: openai_chat
+    type: openai
     model: llama3.2:3b-instruct-q4_K_M
   parameters:
     temperature: 0.7

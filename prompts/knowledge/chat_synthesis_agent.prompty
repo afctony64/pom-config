@@ -33,7 +33,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai_chat
+    type: openai
     model: groq-llama3.1-8b
   parameters:
     temperature: 0.6

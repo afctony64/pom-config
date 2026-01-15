@@ -51,7 +51,7 @@ data_requirements:
 model:
   api: responses
   configuration:
-    type: openai_chat
+    type: openai
     model: gpt-5-mini
     # tools: [brave_search]
   parameters:
