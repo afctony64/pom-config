@@ -117,10 +117,19 @@ search_queries:
 # BM25 keyword queries - for specific keyword patterns vector search misses
 # These run in ADDITION to vector queries for better recall
 # Keep these short and keyword-focused (BM25 matches terms, not semantics)
+# BM25 is very fast (inverted index lookup) so we can have more queries
 keyword_queries:
+  # Location patterns
   - "headquarters"
-  - "founded"
+  - "located"
+  - "office"
   - "address"
+  # History patterns
+  - "founded"
+  - "established"
+  # Contact patterns
+  - "contact"
+  - "about"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
