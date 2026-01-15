@@ -86,6 +86,16 @@ researcher_identity:
   - 'Location Intelligence: Headquarters, country from Contact/About pages'
   - 'Founding Date: Extract from launch dates, timeline, history'
 
+# Tool guidance for this researcher
+tool_guidance:
+  brave_search:
+    priority: low  # Domain researcher focuses on existing page content
+    max_calls: 0   # No external search - use page_facts only
+    when_to_use: |
+      ⚠️ DO NOT USE - Domain researcher uses page content only
+
+search_query: "company name headquarters founded contact about"
+
 search_queries:
   - "What is the official company name? About us company overview who we are"
   - "Where is the company headquarters located? Contact us address location office"
@@ -113,10 +123,10 @@ fact_types:
 
 # Avoid patterns for this researcher
 avoid:
-  - "OVERWRITING CLEAN entityName: If existing entityName looks like a proper company name (no pipes |, no dashes with spaces ' - ', not 'Home'), KEEP IT and output the existing value"
-  - Using page title as entity name (often includes taglines, separators like | or -)
-  - Extracting names that contain | (pipe), :: (double colon), or ' - ' (spaced dash) - these are web title patterns
-  - Outputting entityName as just the domain (e.g., 'example.com') - find the actual company name
-  - Guessing founded year without evidence (use 0 if not found)
-  - Confusing regional offices with headquarters
-  - Extracting marketing taglines as company names
+  - "OVERWRITING CLEAN entityName: If existing entityName looks like a proper company name (no pipes, no dashes with spaces, not 'Home'), KEEP IT and output the existing value"
+  - "Using page title as entity name (often includes taglines, separators)"
+  - "Extracting names that contain pipe, double colon, or spaced dash - these are web title patterns"
+  - "Outputting entityName as just the domain (e.g., 'example.com') - find the actual company name"
+  - "Guessing founded year without evidence (use 0 if not found)"
+  - "Confusing regional offices with headquarters"
+  - "Extracting marketing taglines as company names"

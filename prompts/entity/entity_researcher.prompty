@@ -216,18 +216,20 @@ system:
 
 {# === ENTITYNAME PROTECTION LOGIC (for domain researcher) === #}
 {% if researcher_ai and researcher_ai.conditional_update_fields and researcher_ai.conditional_update_fields.entityName %}
-{% set existing_name = props.get('entityName', '') if props is defined else '' %}
-{% set domain_value = props.get('domain', '') if props is defined else '' %}
-{# Check if existing name looks dirty (web title patterns) #}
-{% set dirty_patterns = [' | ', ' - ', ' :: ', ' – ', ' — '] %}
-{% set is_dirty = false %}
+{# Re-extract props since it may not be in scope from the previous block #}
+{% set props = (record.get('properties') or record) if record else {} %}
+{% set existing_name = props.get('entityName', '') %}
+{% set domain_value = props.get('domain', '') %}
+{# Check conditions directly - avoid Jinja scoping issues with loops #}
 {% set is_empty = not existing_name or existing_name == '' %}
 {% set is_domain_only = existing_name and domain_value and existing_name.lower() == domain_value.lower() %}
 {% set is_generic = existing_name in ['Home', 'Welcome', 'home', 'welcome', 'not disclosed'] %}
-{% for pattern in dirty_patterns %}
-{% if existing_name and pattern in existing_name %}{% set is_dirty = true %}{% endif %}
-{% endfor %}
-{% if existing_name and ('|' in existing_name or '::' in existing_name) %}{% set is_dirty = true %}{% endif %}
+{# Direct pattern check - no loops to avoid Jinja scoping issues #}
+{% set has_pipe = ' | ' in existing_name or '|' in existing_name %}
+{% set has_dash = ' - ' in existing_name %}
+{% set has_colon = ' :: ' in existing_name or '::' in existing_name %}
+{% set has_endash = ' – ' in existing_name or ' — ' in existing_name %}
+{% set is_dirty = has_pipe or has_dash or has_colon or has_endash %}
 
 ## 🛡️ ENTITYNAME PROTECTION RULES
 
@@ -240,11 +242,27 @@ system:
 - DO NOT use page titles with | or - separators
 - DO NOT just use the domain name
 {% elif is_dirty %}
-⚠️ **entityName looks like a WEB TITLE** (contains separators like | or -)
-- Current value: `{{ existing_name }}`
-- This appears to be a page title, NOT a company name
-- You MUST extract the REAL company name from the website content
-- Look for: footer copyright (e.g., "© 2024 Acme Corp"), About page heading, JSON-LD
+🚨🚨🚨 **CRITICAL: THE EXISTING entityName IS INVALID - YOU MUST FIX IT!** 🚨🚨🚨
+
+**INVALID VALUE (DO NOT USE)**: `{{ existing_name }}`
+
+This is a web page title, NOT a company name. It contains separators like "|" or "-".
+
+**YOUR TASK**: Extract the REAL company name. The answer is usually the FIRST WORD(S) before any separator:
+{% if ' | ' in existing_name %}
+→ **EXTRACT**: `{{ existing_name.split(' | ')[0] }}` (the part before " | ")
+{% elif ' - ' in existing_name %}
+→ **EXTRACT**: `{{ existing_name.split(' - ')[0] }}` (the part before " - ")
+{% elif ' :: ' in existing_name %}
+→ **EXTRACT**: `{{ existing_name.split(' :: ')[0] }}` (the part before " :: ")
+{% endif %}
+
+**VALIDATION RULES FOR entityName OUTPUT**:
+1. ❌ NEVER output the full invalid value above
+2. ❌ NEVER include "|", "—", "::", or " - " in entityName
+3. ❌ NEVER include taglines, slogans, or marketing text
+4. ✅ Output ONLY the short company name (1-4 words typically)
+5. ✅ Verify against footer copyright or About page if unsure
 {% elif is_domain_only %}
 ⚠️ **entityName is just the domain** - You MUST find the actual company name
 - Current value: `{{ existing_name }}`
