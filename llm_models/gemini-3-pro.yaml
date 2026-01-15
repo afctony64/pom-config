@@ -31,6 +31,13 @@ performance:
   avg_latency_ms: 1000
   tokens_per_second: 120
   context_window: 2000000
+
+# Context variants for strategy-aware context management (Google - 2M context flagship)
+context_variants:
+  throughput: {context_window: 65536}   # Fast for pro model
+  balanced: {context_window: 200000}    # Good balance
+  quality: {context_window: 1000000}    # Extended for complex analysis
+  extended: {context_window: 2000000}   # Full 2M context
 metadata:
   description: Google Gemini 3 Pro - 2M context flagship
   category: reasoning

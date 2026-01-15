@@ -31,6 +31,14 @@ performance:
   avg_latency_ms: 350
   tokens_per_second: 70
   context_window: 128000  # Mistral Nemo 12B supports 128K context
+
+# Context variants for strategy-aware context management
+context_variants:
+  throughput: {context_window: 8192}   # Fast processing
+  balanced: {context_window: 32768}    # Good balance for 12B model
+  quality: {context_window: 65536}     # Extended for better quality
+  extended: {context_window: 128000}   # Full 128K context
+
   backends:
     mac_metal:
       optimal_parallelism: 1

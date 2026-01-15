@@ -31,6 +31,13 @@ performance:
   avg_latency_ms: 500
   tokens_per_second: 150
   context_window: 200000
+
+# Context variants for strategy-aware context management (cloud - fast Anthropic)
+context_variants:
+  throughput: {context_window: 16384}   # Ultra-fast, cost-efficient
+  balanced: {context_window: 50000}     # Good balance
+  quality: {context_window: 100000}     # Extended for complex tasks
+  extended: {context_window: 200000}    # Full 200K context
 metadata:
   description: Anthropic Claude 4.5 Haiku - fast and affordable
   category: general

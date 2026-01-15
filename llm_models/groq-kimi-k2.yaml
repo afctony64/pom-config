@@ -41,6 +41,13 @@ performance:
   tokens_per_second: 450
   context_window: 131072
 
+# Context variants for strategy-aware context management (Groq - fast reasoning model)
+context_variants:
+  throughput: {context_window: 16384}   # Fast processing
+  balanced: {context_window: 32768}     # Good balance
+  quality: {context_window: 65536}      # Extended for complex tasks
+  extended: {context_window: 131072}    # Full 131K context
+
 metadata:
   description: "Kimi K2 by Moonshot AI - strong reasoning and coding"
   category: reasoning

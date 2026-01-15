@@ -31,6 +31,13 @@ performance:
   avg_latency_ms: 400
   tokens_per_second: 200
   context_window: 1000000
+
+# Context variants for strategy-aware context management (Google - massive context)
+context_variants:
+  throughput: {context_window: 32768}   # Fast processing
+  balanced: {context_window: 100000}    # Good balance
+  quality: {context_window: 500000}     # Extended for complex tasks
+  extended: {context_window: 1000000}   # Full 1M context
 metadata:
   description: Google Gemini 3 Flash - fast and affordable
   category: general

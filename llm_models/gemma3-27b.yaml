@@ -31,6 +31,12 @@ performance:
   avg_latency_ms: 2800
   tokens_per_second: 25
   context_window: 24576
+
+# Context variants for strategy-aware context management
+context_variants:
+  throughput: {context_window: 8192}   # Fast processing
+  balanced: {context_window: 16384}    # Good balance for 27B model
+  quality: {context_window: 24576}     # Full context for best quality
 backends:
   mac_metal:
     optimal_parallelism: 1

@@ -31,6 +31,12 @@ performance:
   avg_latency_ms: 63887
   tokens_per_second: 21
   context_window: 24576
+
+# Context variants for strategy-aware context management
+context_variants:
+  throughput: {context_window: 8192}   # Fast for reasoning model
+  balanced: {context_window: 16384}    # Good balance
+  quality: {context_window: 24576}     # Full context for complex reasoning
 metadata:
   description: 'Alibaba Qwen 3 14B. Best for reasoning and coding. Note: No Groq equivalent
     available - uses local Ollama only.'

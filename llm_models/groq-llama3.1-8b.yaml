@@ -33,6 +33,13 @@ performance:
   avg_latency_ms: 150
   tokens_per_second: 840
   context_window: 131072
+
+# Context variants for strategy-aware context management (Groq - ultra-fast small model)
+context_variants:
+  throughput: {context_window: 8192}    # Ultra-fast, minimal cost
+  balanced: {context_window: 16384}     # Good balance for 8B
+  quality: {context_window: 32768}      # Extended
+  extended: {context_window: 131072}    # Full 131K context
 metadata:
   description: Llama 3.1 8B on Groq - ultra cheap and fast
   category: general

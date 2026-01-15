@@ -13,9 +13,9 @@ inputs:
     type: array
     default: []
   context_strategy:
-    description: Context management strategy being used
+    description: Context strategy (throughput, balanced, quality, page_by_page, all_chunks)
     type: string
-    default: "all_chunks"
+    default: "balanced"
 
 # 🔧 Data injection - fetch semantic chunks from Page_facts for domain
 # NOTE: skip_if prevents re-fetch when context manager has pre-injected data

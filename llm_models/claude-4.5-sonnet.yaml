@@ -36,6 +36,13 @@ performance:
   avg_latency_ms: 1500
   tokens_per_second: 80
   context_window: 200000
+
+# Context variants for strategy-aware context management (cloud - balanced Anthropic)
+context_variants:
+  throughput: {context_window: 32768}   # Fast processing
+  balanced: {context_window: 65536}     # Good balance
+  quality: {context_window: 150000}     # Extended for complex tasks
+  extended: {context_window: 200000}    # Full 200K context
 metadata:
   description: Anthropic Claude 4.5 Sonnet - balanced performance
   category: reasoning

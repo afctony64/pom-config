@@ -29,6 +29,13 @@ performance:
   avg_latency_ms: 800
   tokens_per_second: 150
   context_window: 200000  # GPT-5 mini - 200K context (matches o4-mini)
+
+# Context variants for strategy-aware context management (cloud - can use large context)
+context_variants:
+  throughput: {context_window: 16384}   # Fast, cost-efficient
+  balanced: {context_window: 50000}     # Good balance for OpenAI
+  quality: {context_window: 100000}     # Extended for complex tasks
+  extended: {context_window: 200000}    # Full 200K context
 metadata:
   description: OpenAI GPT 5 Mini - fast and cost-efficient
   category: general

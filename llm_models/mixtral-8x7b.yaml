@@ -30,6 +30,12 @@ performance:
   avg_latency_ms: 4122.6
   tokens_per_second: 17
   context_window: 32768
+
+# Context variants for strategy-aware context management (local MoE - slower)
+context_variants:
+  throughput: {context_window: 8192}   # Fast for MoE model
+  balanced: {context_window: 16384}    # Good balance
+  quality: {context_window: 32768}     # Full context for best quality
 metadata:
   description: Mixtral 8x7B Instruct via Ollama (quantized q4_K_M)
   category: general

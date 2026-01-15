@@ -13,9 +13,9 @@ inputs:
     type: array
     default: []
   context_strategy:
-    description: Context management strategy being used
+    description: Context strategy (throughput, balanced, quality) - set by benchmark caller
     type: string
-    default: "benchmark"
+    default: "balanced"
 
 # 🚫 NO data_requirements - chunks must be injected by caller
 # This allows benchmarking different chunk selection strategies

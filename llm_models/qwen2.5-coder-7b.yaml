@@ -8,6 +8,12 @@ parameters: {temperature: 0.7, max_tokens: 2000, top_p: 0.9}
 capabilities: {structured_output: true, reasoning: true, tool_calling: true, streaming: true, vision: false, function_calling: true, multimodal: false}
 cost: {per_1m_input_tokens: 0.0, per_1m_output_tokens: 0.0, currency: USD, notes: "Free local inference"}
 performance: {avg_latency_ms: 800, tokens_per_second: 60, context_window: 32768}
+
+# Context variants for strategy-aware context management
+context_variants:
+  throughput: {context_window: 8192}   # Fast for code completion
+  balanced: {context_window: 16384}    # Good for typical coding tasks
+  quality: {context_window: 32768}     # Full context for large codebases
 metadata:
   description: "Alibaba Qwen 2.5 Coder 7B - Specialized for code generation"
   category: code

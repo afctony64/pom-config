@@ -33,6 +33,13 @@ performance:
   avg_latency_ms: 120
   tokens_per_second: 1000
   context_window: 131072
+
+# Context variants for strategy-aware context management (Groq - fastest 20B model)
+context_variants:
+  throughput: {context_window: 16384}   # Ultra-fast processing
+  balanced: {context_window: 32768}     # Good balance
+  quality: {context_window: 65536}      # Extended
+  extended: {context_window: 131072}    # Full 131K context
 metadata:
   description: GPT-OSS 20B on Groq - 1000 tok/s, best throughput
   category: general

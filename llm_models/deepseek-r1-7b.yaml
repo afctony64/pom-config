@@ -30,6 +30,12 @@ performance:
   avg_latency_ms: 3302.8
   tokens_per_second: 0
   context_window: 16384
+
+# Context variants for strategy-aware context management
+context_variants:
+  throughput: {context_window: 4096}   # Fast for reasoning model
+  balanced: {context_window: 8192}     # Good balance
+  quality: {context_window: 16384}     # Full context for complex reasoning
 metadata:
   description: DeepSeek R1 7B with Qwen distillation - Reasoning-focused
   category: reasoning

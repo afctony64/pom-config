@@ -42,6 +42,13 @@ performance:
   tokens_per_second: 562
   context_window: 131072
 
+# Context variants for strategy-aware context management (Groq - very fast)
+context_variants:
+  throughput: {context_window: 16384}   # Fast processing on Groq LPU
+  balanced: {context_window: 32768}     # Good balance
+  quality: {context_window: 65536}      # Extended for complex reasoning
+  extended: {context_window: 131072}    # Full 131K context
+
 metadata:
   description: "Llama 4 Maverick - larger expert count, higher quality"
   category: general

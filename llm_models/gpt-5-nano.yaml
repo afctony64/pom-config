@@ -31,6 +31,13 @@ performance:
   avg_latency_ms: 400
   tokens_per_second: 200
   context_window: 128000  # GPT-5 nano - 128K context (smaller/faster model)
+
+# Context variants for strategy-aware context management (cloud - fast/cheap model)
+context_variants:
+  throughput: {context_window: 8192}    # Ultra-fast, minimal cost
+  balanced: {context_window: 32768}     # Good balance for nano
+  quality: {context_window: 65536}      # Extended for better quality
+  extended: {context_window: 128000}    # Full 128K context
 metadata:
   description: OpenAI GPT 5 Nano - fastest, most cost-efficient with reasoning
   category: general

@@ -38,6 +38,12 @@ performance:
       optimal_parallelism: 1
     spark_cuda:
       optimal_parallelism: 6
+
+# Context variants for strategy-aware context management
+context_variants:
+  throughput: {context_window: 8192}   # Fast processing
+  balanced: {context_window: 16384}    # Good balance
+  quality: {context_window: 32768}     # Full 32K context
 resource_class:
   class: B
   vram_gb: 4.0

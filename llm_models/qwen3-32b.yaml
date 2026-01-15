@@ -31,6 +31,13 @@ performance:
   avg_latency_ms: 500
   tokens_per_second: 662
   context_window: 131072
+
+# Context variants for strategy-aware context management (Groq cloud - fast, can use large context)
+context_variants:
+  throughput: {context_window: 16384}   # Fast processing on Groq LPU
+  balanced: {context_window: 32768}     # Good balance - Groq is fast
+  quality: {context_window: 65536}      # Extended for complex tasks
+  extended: {context_window: 131072}    # Full 131K context
 metadata:
   description: Alibaba Qwen 3 32B on Groq LPU - Best reasoning with ultra-fast inference
   category: reasoning

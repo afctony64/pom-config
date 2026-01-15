@@ -36,6 +36,13 @@ performance:
   avg_latency_ms: 2000
   tokens_per_second: 60
   context_window: 200000
+
+# Context variants for strategy-aware context management (cloud - premium Anthropic)
+context_variants:
+  throughput: {context_window: 32768}   # Fast for premium model
+  balanced: {context_window: 65536}     # Good balance
+  quality: {context_window: 150000}     # Extended for complex reasoning
+  extended: {context_window: 200000}    # Full 200K context
 metadata:
   description: Anthropic Claude 4.5 Opus - most powerful model
   category: reasoning

@@ -33,6 +33,13 @@ performance:
   avg_latency_ms: 300
   tokens_per_second: 300
   context_window: 131072
+
+# Context variants for strategy-aware context management (Groq - reasoning model)
+context_variants:
+  throughput: {context_window: 16384}   # Fast for reasoning model
+  balanced: {context_window: 32768}     # Good balance
+  quality: {context_window: 65536}      # Extended for deep reasoning
+  extended: {context_window: 131072}    # Full 131K context
 metadata:
   description: GPT-OSS 120B reasoning model on Groq LPU - uses reasoning field for
     output

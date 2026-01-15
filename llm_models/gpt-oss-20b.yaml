@@ -51,6 +51,12 @@ performance:
   tokens_per_second: 30
   context_window: 24576  # Default 24K for 12B+ models - ratchet adjusts dynamically
 
+# Context variants for strategy-aware context management (local Ollama)
+context_variants:
+  throughput: {context_window: 8192}   # Fast processing
+  balanced: {context_window: 16384}    # Good balance
+  quality: {context_window: 24576}     # Full context for best quality
+
 # === METADATA ===
 metadata:
   description: "GPT-OSS 20B - Balanced 20.9B parameter open source model. Good quality with reasonable throughput."

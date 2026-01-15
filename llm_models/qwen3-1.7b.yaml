@@ -8,6 +8,12 @@ parameters: {temperature: 0.7, max_tokens: 500, top_p: 0.9}
 capabilities: {structured_output: true, reasoning: true, tool_calling: true, streaming: true, vision: false, function_calling: true, multimodal: false}
 cost: {per_1m_input_tokens: 0.0, per_1m_output_tokens: 0.0, currency: USD, notes: "Free local"}
 performance: {avg_latency_ms: 200, tokens_per_second: 150, context_window: 4096}  # Practical for small model
+
+# Context variants for strategy-aware context management
+context_variants:
+  throughput: {context_window: 2048}   # Ultra-fast, minimal memory
+  balanced: {context_window: 4096}     # Default for this model
+  quality: {context_window: 8192}      # Max practical for tiny model
 metadata:
   description: "Alibaba Qwen 3 1.7B - Ultra-fast tiny model for simple tasks"
   category: reasoning

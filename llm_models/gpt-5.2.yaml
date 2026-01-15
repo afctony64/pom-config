@@ -32,6 +32,13 @@ performance:
   avg_latency_ms: 1500
   tokens_per_second: 100
   context_window: 200000  # GPT-5.2 flagship - 200K context (updated Jan 2026)
+
+# Context variants for strategy-aware context management (cloud - premium model)
+context_variants:
+  throughput: {context_window: 32768}   # Fast for flagship
+  balanced: {context_window: 65536}     # Good balance
+  quality: {context_window: 150000}     # Extended for complex reasoning
+  extended: {context_window: 200000}    # Full 200K context
 metadata:
   description: OpenAI GPT 5.2 - latest flagship
   category: reasoning
