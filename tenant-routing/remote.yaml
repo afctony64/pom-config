@@ -1,0 +1,68 @@
+# =============================================================================
+# REMOTE MODE TENANT ROUTING
+# =============================================================================
+# Mode: Remote development via Cloudflare tunnel to Spark
+# Use case: Working remotely with Spark GPU access via tunnel
+# =============================================================================
+
+mode: remote
+version: "1.0"
+description: "REMOTE mode - Spark GPU via Cloudflare tunnel, Mac for embeddings"
+
+defaults:
+  weaviate_target: mac
+  cloud_enabled: true
+  spark_enabled: true
+
+tunnel_config:
+  spark_ssh_tunnel:
+    local_port: 11436
+    remote_port: 11434
+    description: "SSH tunnel for Ollama access"
+  
+  cloudflare_optional:
+    name: "${CLOUDFLARE_TUNNEL_MAC}"
+    hostname: "${LLM_PROXY_EXTERNAL_URL}"
+    note: "Optional - only for external access"
+
+weaviate_instances:
+  cloud:
+    url: "${WEAVIATE_CLOUD_URL}"
+    api_key_env: WEAVIATE_CLOUD_KEY
+    description: "Cloud Weaviate - Production data"
+  
+  mac:
+    url: "http://mac-weaviate:8080"
+    description: "Mac Weaviate - Local development/testing"
+
+tenants:
+  prismatic:
+    weaviate_target: cloud
+    description: "Production tenant - routes to Cloud Weaviate"
+    collections:
+      Company_research_*: cloud
+      Company_opportunity: cloud
+      # Remote mode uses Mac for all local processing
+      Company_source: mac
+      Domain: mac
+      Page_facts: mac
+      Page_intelligence: cloud
+  
+  test_db:
+    weaviate_target: mac
+    description: "Test tenant - always routes to local mac-weaviate"
+  
+  demo:
+    weaviate_target: mac
+    description: "Demo tenant - local only"
+
+architecture:
+  ollama_access: "Apps → localhost:11436 → SSH tunnel → Spark:11434 (Ollama GPU)"
+  transformers_access: "Apps → Mac:8093 (local Metal - tunneling has too much latency)"
+  weaviate_access: "Apps → Mac Weaviate (local) or Cloud Weaviate"
+
+notes:
+  performance: "Ollama via tunnel has good latency, embeddings stay local for speed"
+  requirements:
+    - "SSH tunnel must be established: ssh -L 11436:localhost:11434 ${SPARK_USER}@${SPARK_HOST}"
+    - "Mac native transformers must be running: ./scripts/mac-transformers-metal.sh start"

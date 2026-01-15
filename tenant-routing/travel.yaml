@@ -1,0 +1,68 @@
+# =============================================================================
+# TRAVEL MODE TENANT ROUTING
+# =============================================================================
+# Mode: Mac only (Spark offline)
+# Use case: Traveling, remote work without Spark access
+# =============================================================================
+
+mode: travel
+version: "1.0"
+description: "TRAVEL mode - Mac-only routing (Spark offline)"
+
+defaults:
+  weaviate_target: mac
+  cloud_enabled: true
+  spark_enabled: false
+
+weaviate_instances:
+  cloud:
+    url: "${WEAVIATE_CLOUD_URL}"
+    api_key_env: WEAVIATE_CLOUD_KEY
+    description: "Cloud Weaviate - Production data (if internet available)"
+  
+  mac:
+    url: "http://mac-weaviate:8080"
+    description: "Mac Weaviate - Local development/testing"
+
+tenants:
+  prismatic:
+    weaviate_target: cloud
+    description: "Production tenant - routes to Cloud Weaviate when available"
+    collections:
+      Company_research_*: cloud
+      Company_opportunity: cloud
+      # Spark collections redirect to Mac in travel mode
+      Company_source: mac
+      Domain: mac
+      Page_facts: mac
+      Page_intelligence: cloud
+  
+  test_db:
+    weaviate_target: mac
+    description: "Test tenant - always routes to local mac-weaviate"
+  
+  demo:
+    weaviate_target: mac
+    description: "Demo tenant - local only"
+
+collection_routing:
+  # All Spark collections redirect to Mac
+  Company_source: mac
+  Domain: mac
+  Page_facts: mac
+  # Cloud collections remain on cloud
+  Company_research_industry: cloud
+  Company_research_leadership: cloud
+  Company_research_product: cloud
+  Company_research_financial: cloud
+  Company_research_customer: cloud
+  Company_research_competitor: cloud
+  Company_research_partner: cloud
+  Company_research_risk: cloud
+  Company_research_social: cloud
+  Company_research_journalist: cloud
+  Company_opportunity: cloud
+
+notes:
+  warning: "Spark is offline in travel mode - some data may be stale"
+  sync_required: "Run sync when returning to HOME mode"
