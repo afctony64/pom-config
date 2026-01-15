@@ -185,6 +185,16 @@ pom-config/
 ├── researcher_ai/     ← Researcher AI definitions
 ├── collections/       ← Collection configurations
 ├── ux_configs/        ← UX configuration
+├── profiles/          ← Mode environment profiles
+│   ├── home.env       ← HOME mode (Mac + Spark)
+│   ├── travel.env     ← TRAVEL mode (Mac only)
+│   ├── ooo.env        ← OOO mode (unattended Spark)
+│   └── remote.env     ← REMOTE mode (Cloudflare tunnel)
+├── tenant-routing/    ← Per-mode tenant routing configs
+│   ├── home.yaml      ← HOME: Cloud + Spark + Mac routing
+│   ├── travel.yaml    ← TRAVEL: Mac-only routing
+│   ├── ooo.yaml       ← OOO: Tunnel-based routing
+│   └── remote.yaml    ← REMOTE: SSH tunnel routing
 ├── VERSION            ← Current version number
 └── CHANGELOG.md       ← Version history
 ```
@@ -279,6 +289,44 @@ pom-config/
 - Specify focus areas and behaviors
 - Used by research pipelines
 
+### Mode Profiles (profiles/*.env)
+Mode-specific environment variables for PomSpark mode switching:
+- `home.env` - HOME mode: Mac + Spark server
+- `travel.env` - TRAVEL mode: Mac only (Spark offline)
+- `ooo.env` - OOO mode: Unattended Spark with Cloudflare tunnels
+- `remote.env` - REMOTE mode: Remote access via SSH/Cloudflare tunnel
+
+**Usage:** PomSpark's `dev.sh` script applies profiles from here.
+
+### Tenant Routing (tenant-routing/*.yaml)
+Mode-specific tenant and collection routing to different Weaviate instances:
+- `home.yaml` - Full routing: Cloud + Spark + Mac
+- `travel.yaml` - Mac-only routing (Spark offline)
+- `ooo.yaml` - Cloudflare tunnel-based routing
+- `remote.yaml` - SSH tunnel-based routing
+
+**Structure:**
+```yaml
+mode: home
+defaults:
+  weaviate_target: cloud
+weaviate_instances:
+  cloud: { url: "${WEAVIATE_CLOUD_URL}" }
+  spark: { url: "http://spark-65d6.local:8080" }
+  mac: { url: "http://mac-weaviate:8080" }
+tenants:
+  prismatic:
+    weaviate_target: cloud
+    collections:
+      Company_research_*: cloud
+      Domain: spark
+collection_routing:
+  Domain: spark
+  Page_facts: spark
+```
+
+**Usage:** pom-core loads tenant routing based on `POMSPARK_MODE` environment variable.
+
 ### 🔴 shared-config.env (CRITICAL - ENVIRONMENT VARIABLES)
 
 **This is the SINGLE SOURCE OF TRUTH for non-secret environment variables.**
@@ -290,7 +338,6 @@ When you add a variable here, ALL apps get it automatically.
 
 | Variable | Purpose | Example |
 |----------|---------|---------|
-| `LOG_BASE_DIR` | pom-core file logging | `/app/logs` |
 | `LOG_LEVEL` | Default log level | `INFO` |
 | `WEAVIATE_URL` | Primary Weaviate | `http://spark-weaviate:8080` |
 | `REDIS_URL` | Redis connection | `redis://mac-redis:6379` |
@@ -300,6 +347,11 @@ When you add a variable here, ALL apps get it automatically.
 | `POM_CONFIG_ROOT` | pom-config mount | `/app/shared_config` |
 | `POMSPARK_MODE` | Current mode | `home` |
 | `DEFAULT_WORKLOAD_PROFILE` | Workload profile | `data_pipeline` |
+| `SPARK_HOST` | Spark server hostname | `spark-65d6.local` |
+| `SPARK_IP` | Spark server IP | `192.168.0.219` |
+| `SPARK_USER` | Spark SSH username | `afctony64` |
+| `LLM_PROXY_EXTERNAL_URL` | External LLM proxy (OOO) | `https://llm.pomothy.io` |
+| `SPARK_OLLAMA_TUNNEL_URL` | Spark Ollama via tunnel | `https://spark-ollama.pomothy.io` |
 
 **Adding new environment variables:**
 
