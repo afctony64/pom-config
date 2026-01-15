@@ -32,12 +32,57 @@ protected_fields:
   - enrichmentError
   - lastEnrichedAt
 
+# ============================================================================
+# CONDITIONAL FIELD UPDATES - entityName Protection Rules
+# ============================================================================
+# entityName requires special handling:
+# - PRESERVE if existing value looks like a clean company name
+# - EXTRACT CLEAN if existing value is missing, empty, or looks like a web title
+#
+# This prevents overwriting good Source data while still allowing discovery
+# ============================================================================
+conditional_update_fields:
+  entityName:
+    # Only update entityName if current value matches these "dirty" patterns
+    update_only_if_dirty: true
+    dirty_patterns:
+      # Web title separators (e.g., "Company | Tagline", "Home - Company")
+      - " | "
+      - " - "
+      - " :: "
+      - " – "
+      - " — "
+      # Generic web page titles
+      - "^Home$"
+      - "^Welcome"
+      - "^Official"
+      - "^Please"
+      # Error pages
+      - "Upgrade Browser"
+      - "404"
+      - "Not Found"
+      - "Error"
+      - "Coming Soon"
+      - "Under Construction"
+      # Marketing claims in titles
+      - "#1 "
+      - "^Best "
+      - "^Top "
+      - "™$"
+      - "®$"
+    # Also update if value is just the domain (e.g., "example.com")
+    update_if_matches_domain: true
+    # Also update if value is empty or null
+    update_if_empty: true
+    # Preserve threshold - if existing name is 3-50 chars and clean, preserve it
+    preserve_if_clean: true
+
 researcher_identity:
   title: Entity Identity Analyst
   mission: Extract and validate entity identity from About, Contact, and legal pages
   ecosystem_role: Identity-focused researcher that runs last to backfill empty Domain fields
   core_competencies:
-  - 'Entity Naming: Official company name extraction'
+  - 'Entity Naming: Official company name extraction (PROTECT existing clean names)'
   - 'Location Intelligence: Headquarters, country from Contact/About pages'
   - 'Founding Date: Extract from launch dates, timeline, history'
 
@@ -50,7 +95,7 @@ search_queries:
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
-  - Official company/entity name (NOT page title, NOT tagline - check JSON-LD, footer, About page)
+  - "entityName: CRITICAL - Check EXISTING value FIRST. If it looks like a clean company name (e.g., 'Stripe', 'Acme Corp'), PRESERVE IT and output the same value. Only extract a NEW name if: (1) empty/null, (2) looks like web title with |, -, ::, (3) is just 'Home', 'Welcome', or error text, (4) matches the domain exactly (e.g., 'example.com')"
   - Founded year (look for "Founded in", "Established", "Since", "Launched", first funding round)
   - Headquarters location (city, state/region, country - ISO 2-letter code)
   - Contact information (email, phone, street address)
@@ -68,6 +113,10 @@ fact_types:
 
 # Avoid patterns for this researcher
 avoid:
-  - Using page title as entity name (often includes taglines)
+  - "OVERWRITING CLEAN entityName: If existing entityName looks like a proper company name (no pipes |, no dashes with spaces ' - ', not 'Home'), KEEP IT and output the existing value"
+  - Using page title as entity name (often includes taglines, separators like | or -)
+  - Extracting names that contain | (pipe), :: (double colon), or ' - ' (spaced dash) - these are web title patterns
+  - Outputting entityName as just the domain (e.g., 'example.com') - find the actual company name
   - Guessing founded year without evidence (use 0 if not found)
   - Confusing regional offices with headquarters
+  - Extracting marketing taglines as company names

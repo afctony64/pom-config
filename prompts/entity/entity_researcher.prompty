@@ -214,6 +214,54 @@ system:
 {% if props.get('industry') %}- **Industry**: {{ props.get('industry') }}{% endif %}
 {% endif %}
 
+{# === ENTITYNAME PROTECTION LOGIC (for domain researcher) === #}
+{% if researcher_ai and researcher_ai.conditional_update_fields and researcher_ai.conditional_update_fields.entityName %}
+{% set existing_name = props.get('entityName', '') if props is defined else '' %}
+{% set domain_value = props.get('domain', '') if props is defined else '' %}
+{# Check if existing name looks dirty (web title patterns) #}
+{% set dirty_patterns = [' | ', ' - ', ' :: ', ' – ', ' — '] %}
+{% set is_dirty = false %}
+{% set is_empty = not existing_name or existing_name == '' %}
+{% set is_domain_only = existing_name and domain_value and existing_name.lower() == domain_value.lower() %}
+{% set is_generic = existing_name in ['Home', 'Welcome', 'home', 'welcome', 'not disclosed'] %}
+{% for pattern in dirty_patterns %}
+{% if existing_name and pattern in existing_name %}{% set is_dirty = true %}{% endif %}
+{% endfor %}
+{% if existing_name and ('|' in existing_name or '::' in existing_name) %}{% set is_dirty = true %}{% endif %}
+
+## 🛡️ ENTITYNAME PROTECTION RULES
+
+**Existing entityName**: `{{ existing_name or '(empty)' }}`
+**Domain**: `{{ domain_value }}`
+
+{% if is_empty %}
+⚠️ **entityName is EMPTY** - You MUST extract a clean company name from the website.
+- Look for: About page, footer copyright, JSON-LD structured data, Contact page header
+- DO NOT use page titles with | or - separators
+- DO NOT just use the domain name
+{% elif is_dirty %}
+⚠️ **entityName looks like a WEB TITLE** (contains separators like | or -)
+- Current value: `{{ existing_name }}`
+- This appears to be a page title, NOT a company name
+- You MUST extract the REAL company name from the website content
+- Look for: footer copyright (e.g., "© 2024 Acme Corp"), About page heading, JSON-LD
+{% elif is_domain_only %}
+⚠️ **entityName is just the domain** - You MUST find the actual company name
+- Current value: `{{ existing_name }}`
+- Search for the official company/entity name on About or Contact pages
+{% elif is_generic %}
+⚠️ **entityName is generic** - You MUST find the actual company name
+- Current value: `{{ existing_name }}`
+- This is not a valid company name
+{% else %}
+✅ **entityName looks CLEAN** - PRESERVE this value in your output!
+- Current value: `{{ existing_name }}`
+- This appears to be a valid company name (no web title patterns)
+- **OUTPUT THIS EXACT VALUE for entityName** - do not change it
+- Only update entityName if you find clear evidence it's incorrect
+{% endif %}
+{% endif %}
+
 {# === PAGE CONTENT (with configurable truncation) === #}
 {% if pageData and pageData|length > 0 %}
 ## 📄 PRIMARY SOURCE: PAGE CONTENT
