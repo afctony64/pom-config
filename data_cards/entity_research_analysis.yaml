@@ -34,6 +34,12 @@ parameters:
   # Root collection - Domain IS the entity in entity model
   collection: Domain
 
+  # ✅ FRONTEND REQUIREMENT: Only show entities ready for review
+  filters:
+    - field: ready_for_review
+      operator: equal
+      value: true
+
   # Use reverse traversal to fetch Research_* collections
   relationship_traversal: true
   dynamic_templates: true

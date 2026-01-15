@@ -39,6 +39,12 @@ parameters:
   # Root collection
   collection: Domain
 
+  # ✅ FRONTEND REQUIREMENT: Only show entities ready for review
+  filters:
+    - field: ready_for_review
+      operator: equal
+      value: true
+
   # Relationship traversal configuration
   relationship_traversal: true
   dynamic_templates: true

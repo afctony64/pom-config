@@ -72,24 +72,94 @@ field_tags:
 collections:
   - collection: Research_industry
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_financial
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_product
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_customer
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_leadership
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_competitor
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_partner
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_risk
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_journalist
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
   - collection: Research_social
     field_set: [standard, extended, array]
+    references:
+      domainBeacon:
+        target_collection: Domain
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
 
 # Chat intelligence integration
 chat_integration:

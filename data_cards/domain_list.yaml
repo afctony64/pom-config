@@ -32,6 +32,12 @@ parameters:
   
   # Root collection - Domain IS the entity in entity model
   collection: Domain
+
+  # ✅ FRONTEND REQUIREMENT: Only show entities ready for review
+  filters:
+    - field: ready_for_review
+      operator: equal
+      value: true
   
   # No traversal needed - simple Domain listing
   relationship_traversal: false

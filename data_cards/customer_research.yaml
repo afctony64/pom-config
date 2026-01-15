@@ -58,6 +58,11 @@ collections:
       domainBeacon:
         target_collection: Domain
         field_set: [standard]
+        # ✅ FRONTEND REQUIREMENT: Only show entities ready for review
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
       keyCustomerRefs:
         target_collection: Domain
         field_set: [standard]

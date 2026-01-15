@@ -61,6 +61,14 @@ collections:
   - collection: Research_product  # Default fallback - DataFactory will override based on researcher_id
     field_set: [standard, extended, array]  # Include arrays for complete data
     required: true
+    references:
+      domainBeacon:
+        target_collection: Domain
+        # ✅ FRONTEND REQUIREMENT: Only show entities ready for review
+        filters:
+          - field: ready_for_review
+            operator: equal
+            value: true
 
 # Chat intelligence integration
 chat_integration:
