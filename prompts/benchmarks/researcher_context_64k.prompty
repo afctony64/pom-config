@@ -58,7 +58,7 @@ data_requirements:
 model:
   api: responses
   configuration:
-    type: pom-llm-proxy
+    type: openai_responses
     model: gpt-5-mini
     # tools: [brave_search]
   parameters:

@@ -68,7 +68,7 @@ data_requirements:
 model:
   api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_responses
     model: mistral:7b-instruct
   parameters:
     temperature: 0.7

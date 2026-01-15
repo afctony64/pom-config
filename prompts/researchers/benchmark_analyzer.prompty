@@ -19,7 +19,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_responses
     model: qwen3:8b
   parameters:
     temperature: 0.3  # Low-medium for analytical but somewhat creative insights

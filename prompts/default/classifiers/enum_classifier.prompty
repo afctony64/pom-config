@@ -45,7 +45,7 @@ model:
   api: chat
   configuration:
     # Use OpenAI as primary (Ollama fallback requires local server)
-    type: pom-llm-proxy
+    type: openai_responses
     model: gpt-5-nano
   parameters:
     temperature: 0.1

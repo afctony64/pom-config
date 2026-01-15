@@ -68,7 +68,7 @@ processing_config:
 model:
   api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_responses
     model: qwen3:14b
   parameters:
     temperature: 0.3

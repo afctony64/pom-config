@@ -61,7 +61,7 @@ model:
   configuration:
     connection: openai_conn
     model: gpt-5-mini
-    type: pom-llm-proxy
+    type: openai_responses
     tools: [web_search]  # Enable GPT-5 web search for source verification
   parameters:
     api_version: '2025-01-01'

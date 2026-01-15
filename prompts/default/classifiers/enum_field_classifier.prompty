@@ -35,7 +35,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_responses
     model: gpt-5-nano
   parameters:
     temperature: 0.1

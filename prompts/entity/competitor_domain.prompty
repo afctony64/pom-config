@@ -56,7 +56,7 @@ model:
   configuration:
     connection: openai_conn
     model: gpt-5-mini
-    type: pom-llm-proxy
+    type: openai_responses
   parameters:
     response_format:
       type: json_object
