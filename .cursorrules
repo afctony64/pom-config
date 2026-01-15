@@ -1,508 +1,73 @@
-# 📦 POM-CONFIG: Shared Configuration Repository Rules
-# Workspace: pom-workspace (PomAI + pom-config multi-root workspace)
-# Role: You are managing SHARED configurations used by ALL Pom ecosystem applications
+# 📦 POM-CONFIG: Shared Configuration Repository
+# ROLE: Manage shared configs used by ALL Pom apps. Changes affect everyone.
 
----
+## IDENTITY
+You manage: Schemas, data cards, LLM models, prompts, profiles, tenant routing
+Apps use you: PomAI, Pomothy, PomSpark, pom-core
 
-## 🛑 CRITICAL TRIGGERS - CHECK BEFORE EVERY RESPONSE
+## CRITICAL RULES
+1. **You ARE the source of truth** - All shared config lives here
+2. **Changes affect all apps** - Test before committing
+3. **Use existing patterns** - Copy existing configs, don't create from scratch
+4. **Version and tag releases** - Update VERSION, create GitHub release
 
-| Trigger Word/Phrase | STOP AND DO THIS |
-|---------------------|------------------|
-| "add schema", "new collection" | Check if schema exists, follow Weaviate 4.11 patterns |
-| "add data card", "new data card" | Use existing data cards as templates |
-| "add model", "new llm model" | Follow llm_models/*.yaml patterns |
-| "release", "tag", "version" | Run release workflow (see below) |
-| "breaking change" | Notify ALL app teams via GitHub issues |
-| **"new env var", "add config", "environment variable"** | **Add to shared-config.env - NOT scattered files!** |
-| **"LOG_", "URL", "PATH"** | **Check if it belongs in shared-config.env first!** |
-
-⚠️ **PATTERN TO BREAK:** When adding new configs, my DEFAULT is to create from scratch. THIS IS WRONG. Copy an existing config and modify it.
-
-⚠️ **PATTERN TO BREAK:** When adding environment variables, my DEFAULT is to hardcode in docker-compose. THIS IS WRONG. Add to shared-config.env!
-
----
-
-## 🌐 POM ECOSYSTEM OVERVIEW
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        POM ECOSYSTEM                             │
-├─────────────────────────────────────────────────────────────────┤
-│  APPLICATIONS (consume pom-config)                               │
-│    ├── Pomothy     - Web application                            │
-│    ├── PomAI       - CLI/Batch processing                       │
-│    └── PomSpark    - Infrastructure (also uses configs)         │
-├─────────────────────────────────────────────────────────────────┤
-│  SHARED RESOURCES                                                │
-│    ├── pom-core    - Python library                             │
-│    ├── pom-config  - Shared YAML configs (YOU ARE HERE)         │
-│    └── pom-docs    - Architecture documentation                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-**Your Role:** You manage SHARED configurations that ALL apps depend on.
-
----
-
-## 📚 SHARED DOCUMENTATION (pom-docs)
-
-**Single source of truth for architecture:** `~/Projects/pom-docs/`
-
-| Topic | Document |
-|-------|----------|
-| pom-config Strategy | `docs/architecture/POM_CONFIG_STRATEGY.md` |
-| Shared Config Guide | `docs/infrastructure/SHARED_CONFIG_GUIDE.md` |
-| Dev Environment | `docs/infrastructure/DEVELOPER_ENVIRONMENT_GUIDE.md` |
-| Cursor Rules Standard | `docs/architecture/CURSORRULES_STANDARDIZATION.md` |
-
----
-
-## 🚨 CRITICAL: UNDERSTAND YOUR IMPACT
-
-**pom-config is SHARED. When you break pom-config, you break ALL APPS.**
-
-```
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│   PomAI     │  │  Pomothy    │  │  PomSpark   │
-│  (depends)  │  │  (depends)  │  │  (depends)  │
-└──────┬──────┘  └──────┬──────┘  └──────┬──────┘
-       │                │                │
-       └────────────────┼────────────────┘
-                        │
-                ┌───────▼───────┐
-                │  pom-config   │  ← YOU ARE HERE
-                │ (SHARED YAML) │
-                └───────────────┘
-```
-
-**Consumers:**
-- **PomAI** - Uses schemas, data_cards, llm_models, prompts, researcher_ai
-- **Pomothy** - Uses schemas, data_cards, llm_models, prompts
-- **PomSpark** - Uses schemas for validation
-
----
-
-## 🔴 CRITICAL: CoreModelService Relationship
-
-**pom-config is the ONLY source for CoreModelService. There are NO fallbacks.**
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    CONFIGURATION ARCHITECTURE                    │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │              CoreModelService (pom-core)                  │   │
-│  │                                                           │   │
-│  │  • ONLY loads from pom-config                            │   │
-│  │  • NO fallbacks - fails if pom-config missing            │   │
-│  │  • NO app-level config loading                           │   │
-│  │  • NO bundled configs in pom-core                        │   │
-│  │                                                           │   │
-│  └──────────────────────┬───────────────────────────────────┘   │
-│                         │                                        │
-│                         │ LOADS FROM                             │
-│                         ▼                                        │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │              pom-config (YOU ARE HERE)                    │   │
-│  │                                                           │   │
-│  │  schemas/ data_cards/ llm_models/ tools/ tenant_groups/  │   │
-│  │  tenants/ prompts/ researcher_ai/ collections/           │   │
-│  │                                                           │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### What CoreModelService Loads from pom-config
-
-| Config Type | Directory | Used For |
-|-------------|-----------|----------|
-| **schemas** | `schemas/` | Weaviate collection definitions |
-| **data_cards** | `data_cards/` | DataFactory fetch configurations |
-| **llm_models** | `llm_models/` | LLM model cards (gpt-5-mini, etc.) |
-| **tools** | `tools/` | AI tool definitions |
-| **tenant_groups** | `tenant_groups/` | Tenant grouping configs |
-| **tenants** | `tenants/` | Individual tenant configs |
-| **collections** | `collections/` | Collection configurations |
-| **prompts** | `prompts/` | Core prompt templates (prompty files) |
-
-### What pom-config Does NOT Provide
-
-- **App-specific configs** → Stay in app repos (core/config/, config/)
-- **App-specific prompts** → Apps can override in their own directories
-- **Runtime settings** → Environment variables, not YAML
-
-### Critical Rules
-
-1. **CoreModelService updates MUST be done here in pom-config**
-   - Don't update schemas in app directories - they won't be loaded!
-   - Don't expect pom-core to have fallback configs
-
-2. **Apps MUST mount pom-config**
-   - Set `POM_CONFIG_ROOT` environment variable
-   - Mount `.pom_config_pkg/` in Docker containers
-
-3. **NO FALLBACKS - CoreModelService raises RuntimeError if pom-config missing**
-   - This is by design - configs are critical infrastructure
-   - Apps cannot work without pom-config
-
-### AppModelService Pattern (for Apps)
-
-Apps should use AppModelService that wraps CoreModelService:
-
-```python
-# In app code (PomAI, Pomothy)
-class AppModelService:
-    def __init__(self, app_config_root: Path):
-        self._core = get_core_model_service()  # From pom-config ONLY
-        self._app_root = app_config_root        # App-specific configs
-
-    def get_core_schema(self, name: str):
-        return self._core.get_object('schema', name)  # From pom-config
-
-    def get_app_config(self, name: str):
-        return self._load_app_config(name)  # From app directory
-```
-
----
-
-## 📁 REPOSITORY STRUCTURE
+## REPOSITORY STRUCTURE
 
 ```
 pom-config/
-├── schemas/           ← Weaviate collection schemas
-├── data_cards/        ← Data card definitions for DataFactory
-├── llm_models/        ← LLM model cards (gpt-5-mini, etc.)
-├── tools/             ← AI tool definitions
-├── tenant_groups/     ← Tenant group configurations
-├── tenants/           ← Individual tenant configs
-├── prompts/           ← Shared prompt templates
-│   ├── researchers/   ← Core researcher templates
-│   ├── entity/        ← Entity-agnostic research
-│   ├── company/       ← Company intelligence
-│   └── benchmarks/    ← Benchmark variants
-├── researcher_ai/     ← Researcher AI definitions
-├── collections/       ← Collection configurations
-├── ux_configs/        ← UX configuration
-├── profiles/          ← Mode environment profiles
-│   ├── home.env       ← HOME mode (Mac + Spark)
-│   ├── travel.env     ← TRAVEL mode (Mac only)
-│   ├── ooo.env        ← OOO mode (unattended Spark)
-│   └── remote.env     ← REMOTE mode (Cloudflare tunnel)
-├── tenant-routing/    ← Per-mode tenant routing configs
-│   ├── home.yaml      ← HOME: Cloud + Spark + Mac routing
-│   ├── travel.yaml    ← TRAVEL: Mac-only routing
-│   ├── ooo.yaml       ← OOO: Tunnel-based routing
-│   └── remote.yaml    ← REMOTE: SSH tunnel routing
-├── VERSION            ← Current version number
-└── CHANGELOG.md       ← Version history
+├── profiles/           # Mode environment files
+│   ├── home.env       # Mac + Spark (default)
+│   ├── travel.env     # Mac only
+│   ├── ooo.env        # Remote via tunnels
+│   └── remote.env     # Full remote
+├── tenant-routing/     # Weaviate routing per mode
+│   ├── home.yaml      # cloud/spark/mac
+│   ├── travel.yaml    # mac only
+│   ├── ooo.yaml       # via tunnels
+│   └── remote.yaml    # remote
+├── schemas/            # Weaviate collection schemas
+├── data_cards/         # DataFactory configurations
+├── llm_models/         # LLM model cards
+├── prompts/            # Shared prompt templates
+├── shared-config.env   # Non-secret env vars
+└── VERSION             # Current version
 ```
 
----
-
-## 🔄 RELEASE WORKFLOW (MANDATORY)
-
-### Before ANY Release
-
-1. **Update VERSION file:**
-   ```bash
-   echo "1.6.15" > VERSION
-   ```
-
-2. **Update CHANGELOG.md:**
-   ```markdown
-   ## [1.6.15] - 2024-12-28
-   
-   ### Added
-   - Description of new configs
-   
-   ### Changed
-   - Description of changes
-   ```
-
-3. **Commit and tag:**
-   ```bash
-   git add -A
-   git commit -m "chore: Release v1.6.15"
-   git tag v1.6.15
-   git push origin main --tags
-   ```
-
-4. **Create GitHub release:**
-   ```bash
-   gh release create v1.6.15 --title "v1.6.15 - Description" --notes "See CHANGELOG.md"
-   ```
-
-5. **Notify app teams:**
-   ```bash
-   # Post to each app repo
-   gh issue create --repo afctony64/PomAI --title "pom-config v1.6.15 available" --body "..."
-   gh issue create --repo afctony64/Pomothy --title "pom-config v1.6.15 available" --body "..."
-   ```
-
----
-
-## ✅ YOUR RESPONSIBILITIES
-
-**DO:**
-- Follow existing patterns when adding configs
-- Update VERSION and CHANGELOG for every release
-- Create GitHub releases (not just tags)
-- Notify app teams of breaking changes
-- Test configs locally before releasing
-- Use semantic versioning (MAJOR.MINOR.PATCH)
-
-**DO NOT:**
-- Make breaking changes without coordination
-- Delete configs without notifying apps
-- Skip the release workflow
-- Use git tag without gh release create
-- Modify configs that are actively used without testing
-
----
-
-## 📋 CONFIG TYPE GUIDELINES
-
-### Schemas (schemas/*.yaml)
-- Define Weaviate collection structures
-- Must be compatible with Weaviate 4.11
-- Include all required fields and types
-
-### Data Cards (data_cards/*.yaml)
-- Define how DataFactory fetches data
-- Specify fields, filters, sorting
-- Reference schemas by collection name
-
-### LLM Models (llm_models/*.yaml)
-- Define model aliases (gpt-5-mini, etc.)
-- Include provider, cost, capabilities
-- Shared across all apps
-
-### Prompts (prompts/*.prompty)
-- Shared prompt templates
-- Apps can override with local prompts
-- Follow prompty format
-
-### Researcher AI (researcher_ai/*.yaml)
-- Define researcher identities
-- Specify focus areas and behaviors
-- Used by research pipelines
-
-### Mode Profiles (profiles/*.env)
-Mode-specific environment variables for PomSpark mode switching:
-- `home.env` - HOME mode: Mac + Spark server
-- `travel.env` - TRAVEL mode: Mac only (Spark offline)
-- `ooo.env` - OOO mode: Unattended Spark with Cloudflare tunnels
-- `remote.env` - REMOTE mode: Remote access via SSH/Cloudflare tunnel
-
-**Usage:** PomSpark's `dev.sh` script applies profiles from here.
-
-### Tenant Routing (tenant-routing/*.yaml)
-Mode-specific tenant and collection routing to different Weaviate instances:
-- `home.yaml` - Full routing: Cloud + Spark + Mac
-- `travel.yaml` - Mac-only routing (Spark offline)
-- `ooo.yaml` - Cloudflare tunnel-based routing
-- `remote.yaml` - SSH tunnel-based routing
-
-**Structure:**
-```yaml
-mode: home
-defaults:
-  weaviate_target: cloud
-weaviate_instances:
-  cloud: { url: "${WEAVIATE_CLOUD_URL}" }
-  spark: { url: "http://spark-65d6.local:8080" }
-  mac: { url: "http://mac-weaviate:8080" }
-tenants:
-  prismatic:
-    weaviate_target: cloud
-    collections:
-      Company_research_*: cloud
-      Domain: spark
-collection_routing:
-  Domain: spark
-  Page_facts: spark
-```
-
-**Usage:** pom-core loads tenant routing based on `POMSPARK_MODE` environment variable.
-
-### 🔴 shared-config.env (CRITICAL - ENVIRONMENT VARIABLES)
-
-**This is the SINGLE SOURCE OF TRUTH for non-secret environment variables.**
-
-All Docker containers in the Pom ecosystem load this file via `env_file`.
-When you add a variable here, ALL apps get it automatically.
-
-**Current contents:**
-
-| Variable | Purpose | Example |
-|----------|---------|---------|
-| `LOG_LEVEL` | Default log level | `INFO` |
-| `WEAVIATE_URL` | Primary Weaviate | `http://spark-weaviate:8080` |
-| `REDIS_URL` | Redis connection | `redis://mac-redis:6379` |
-| `OLLAMA_BASE_URL` | Ollama LLM service | `http://host.docker.internal:11430` |
-| `LLM_PROXY_URL` | LLM proxy service | `http://pom-llm-proxy:8000` |
-| `SHARED_REPORTS_PATH` | Centralized reports | `/shared-reports` |
-| `POM_CONFIG_ROOT` | pom-config mount | `/app/shared_config` |
-| `POMSPARK_MODE` | Current mode | `home` |
-| `DEFAULT_WORKLOAD_PROFILE` | Workload profile | `data_pipeline` |
-| `SPARK_HOST` | Spark server hostname | `spark-65d6.local` |
-| `SPARK_IP` | Spark server IP | `192.168.0.219` |
-| `SPARK_USER` | Spark SSH username | `afctony64` |
-| `LLM_PROXY_EXTERNAL_URL` | External LLM proxy (OOO) | `https://llm.pomothy.io` |
-| `SPARK_OLLAMA_TUNNEL_URL` | Spark Ollama via tunnel | `https://spark-ollama.pomothy.io` |
-
-**Adding new environment variables:**
+## RELEASE WORKFLOW
 
 ```bash
-# 1. Edit shared-config.env
-cd ~/Projects/pom-config
-vim shared-config.env
+# 1. Make changes
+# 2. Update VERSION
+echo "1.6.16" > VERSION
 
-# 2. Add your variable in the appropriate section
-# MY_NEW_CONFIG=value
+# 3. Commit and tag
+git add -A && git commit -m "feat: description"
+git tag v1.6.16 && git push origin main --tags
 
-# 3. Commit and push
-git add shared-config.env
-git commit -m "feat: Add MY_NEW_CONFIG for XYZ"
-git push origin main
-
-# 4. Containers pick it up on recreate (no compose changes needed!)
+# 4. Create release
+gh release create v1.6.16 --title "v1.6.16" --notes "See CHANGELOG"
 ```
 
-**✅ DO add to shared-config.env:**
-- URLs (service endpoints, databases)
-- Paths (log directories, config roots)
-- Modes (profiles, environments)
-- Timeouts and limits
-- Feature flags (non-secret)
+## SHARED-CONFIG.ENV (Key Variables)
 
-**❌ DO NOT add to shared-config.env:**
-- API keys → `secrets.env`
-- Passwords → `secrets.env`
-- Tokens → `secrets.env`
-- Docker-specific runtime → `deployment.env`
+| Variable | Purpose |
+|----------|---------|
+| `SPARK_HOST` | Spark hostname |
+| `SPARK_IP` | Spark IP fallback |
+| `POMSPARK_MODE` | Current mode |
+| `DEFAULT_WORKLOAD_PROFILE` | Default profile |
 
-**⚠️ NEVER create new .env files! Use the existing 3-file structure.**
+## CROSS-REPO ACCESS
 
----
+| Repo | Access |
+|------|--------|
+| pom-config | ✅ Full - this is home |
+| pom-docs | ✅ Full - documentation |
+| All others | ⚠️ Read only |
 
-## 🔗 CROSS-REPO ACCESS RULES
-
-| Repository | Access | What You Can Do |
-|------------|--------|-----------------|
-| **pom-config** | ✅ Full | Everything - this is your home repo |
-| **pom-docs** | ✅ Full Write | Update documentation |
-| **pom-core** | ⚠️ Read Only | Read for context, file issues |
-| **PomAI** | ⚠️ Read Only | Read for context |
-| **Pomothy** | ⚠️ Read Only | Read for context |
-| **PomSpark** | ⚠️ Read Only | Read for context |
-
----
-
-## 📝 COMMIT CONVENTIONS
-
-| Prefix | Use For | Example |
-|--------|---------|---------|
-| `feat:` | New configs | `feat: Add customer_ai researcher` |
-| `fix:` | Config fixes | `fix: Correct schema field type` |
-| `chore:` | Maintenance | `chore: Release v1.6.15` |
-| `docs:` | Documentation | `docs: Update DEVELOPER_GUIDE` |
-
----
-
-## 🚨 BREAKING CHANGES
-
-If your change could break existing apps:
-
-1. **Coordinate BEFORE making the change:**
-   ```bash
-   gh issue create --repo afctony64/PomAI --title "BREAKING: Proposed change to X"
-   gh issue create --repo afctony64/Pomothy --title "BREAKING: Proposed change to X"
-   ```
-
-2. **Wait for acknowledgment from app teams**
-
-3. **Make the change with major version bump**
-
-4. **Provide migration instructions in release notes**
-
----
-
-## REMEMBER
-
-- pom-config is SHARED infrastructure
-- Changes affect ALL apps
-- Always create GitHub releases, not just tags
-- Notify apps of new releases
-- Follow existing patterns
-
----
-
-## 🔴 CRITICAL: RUNTIME CONFIGURATION OWNERSHIP
-
-**pom-config is the SINGLE SOURCE OF TRUTH for runtime configuration.**
-
-### Files pom-config Owns
-
-| File | Purpose | Consumers |
-|------|---------|-----------|
-| `runtime.yaml` | Mode/profile definitions, validation rules | All apps |
-| `services.yaml` | Service definitions, ports | All apps |
-| `shared-config.env` | Environment variable defaults | All containers |
-
-### Runtime Defaults (NEVER CHANGE WITHOUT DISCUSSION)
-
-| Setting | Value | Rationale |
-|---------|-------|-----------|
-| `DEFAULT_MODE` | `home` | Most development is at home/office |
-| `DEFAULT_WORKLOAD_PROFILE` | `data_pipeline` | Data processing is most common |
-| `VALIDATE_ON_SWITCH` | `true` | Catch misconfigurations early |
-| `AUTO_RECOVERY_TO_HOME` | `true` | Exceptional modes shouldn't persist |
-
-### Exceptional Modes (travel/ooo)
-
-**These are NOT for regular development:**
-
-```yaml
-# In runtime.yaml
-exceptional_modes:
-  - travel
-  - ooo
-
-auto_recovery_to_home: true
-```
-
-### Adding New Runtime Configuration
-
+## BREAKING CHANGES
+Coordinate with app teams BEFORE making breaking changes:
 ```bash
-# 1. Define in runtime.yaml (if structured)
-# 2. Add default to shared-config.env
-# 3. Document in docs/RUNTIME_CONFIGURATION.md
-# 4. Update all .cursorrules files
-# 5. Commit and push
+gh issue create --repo afctony64/PomAI --title "BREAKING: ..."
+gh issue create --repo afctony64/Pomothy --title "BREAKING: ..."
 ```
-
-### 🚨 POLICING - Runtime Configuration Changes
-
-**MANDATORY REVIEW for any changes to:**
-
-1. ✅ `runtime.yaml` - Mode/profile definitions
-2. ✅ `services.yaml` - Service/port definitions
-3. ✅ `shared-config.env` - DEFAULT_MODE, DEFAULT_WORKLOAD_PROFILE
-4. ❌ **NEVER change defaults without ecosystem-wide review**
-5. ❌ **NEVER add exceptional modes without strong justification**
-6. ❌ **NEVER remove validation requirements**
-
-### Cross-Repo Impact
-
-| Change | Affects |
-|--------|---------|
-| DEFAULT_MODE | PomSpark, PomAI, Pomothy startup behavior |
-| DEFAULT_WORKLOAD_PROFILE | Spark resource allocation |
-| New mode | All apps, all cursorrules, all docs |
-| New profile | PomSpark workload.sh, Spark compose overrides |
-
-**Changes here affect THE ENTIRE ECOSYSTEM. Be careful.**
-
