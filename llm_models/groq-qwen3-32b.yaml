@@ -34,6 +34,14 @@ performance:
   avg_latency_ms: 500
   tokens_per_second: 662
   context_window: 131072
+
+# Context variants for strategy-aware context management (cloud - can use large context)
+context_variants:
+  throughput: {context_window: 16384}   # Fast, cost-efficient
+  balanced: {context_window: 32768}     # Good balance
+  quality: {context_window: 65536}      # Extended for complex tasks
+  extended: {context_window: 131072}    # Full 128K context
+
 metadata:
   description: Qwen3 32B on Groq LPU - ultra-fast inference (~662 tok/s)
   category: reasoning
