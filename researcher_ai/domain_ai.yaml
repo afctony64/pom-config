@@ -135,7 +135,7 @@ keyword_queries:
 focus_areas:
   - "entityName: CRITICAL - Check EXISTING value FIRST. If it looks like a clean company name (e.g., 'Stripe', 'Acme Corp'), PRESERVE IT and output the same value. Only extract a NEW name if: (1) empty/null, (2) looks like web title with |, -, ::, (3) is just 'Home', 'Welcome', or error text, (4) matches the domain exactly (e.g., 'example.com')"
   - Founded year (look for "Founded in", "Established", "Since", "Launched", first funding round)
-  - Headquarters location (city, state/region, country - ISO 2-letter code)
+  - "Headquarters location: ONLY extract if explicitly about THIS company. Customer stories and partner pages mention OTHER companies' HQs - IGNORE those. Look for About page, Contact page, Privacy Policy footer. Format: City, State/Region, Country"
   - Contact information (email, phone, street address)
   - ALWAYS set domain_research=true to mark this entity as researched
 
@@ -158,3 +158,4 @@ avoid:
   - "Guessing founded year without evidence (use 0 if not found)"
   - "Confusing regional offices with headquarters"
   - "Extracting marketing taglines as company names"
+  - "CRITICAL: Extracting OTHER companies' locations as headquarters. Customer stories, partner pages, and case studies mention OTHER companies' locations - ignore these. Only extract locations explicitly about THIS company (the domain owner)."
