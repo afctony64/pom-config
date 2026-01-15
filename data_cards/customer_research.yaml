@@ -30,12 +30,14 @@ parameters:
   limit: 10000
   limit_default: 10000
   field_set: [standard, extended, array]
-  preserve_reference_arrays: true  # Keep keyCustomerRefs as array for iterate_over
+  # NOTE: keyCustomerRefs reference does NOT exist in Research_customer schema
+  # Only domainBeacon reference is available
+  # TODO: Add keyCustomerRefs to Research_customer schema if customer entity traversal is needed
 
-  # Traversal depth for keyCustomerRefs → Domain → Research_*
+  # Traversal depth for domainBeacon → Domain
   traversal:
-    max_depth: 2                   # Research_customer → Domain (1) → properties resolved (2)
-    max_complexity: 200
+    max_depth: 1                   # Research_customer → Domain → STOP
+    max_complexity: 100
     policies:
       domainBeacon: skip           # Skip circular Domain refs from researchers
 
@@ -58,26 +60,9 @@ collections:
       domainBeacon:
         target_collection: Domain
         field_set: [standard]
-        # ✅ FRONTEND REQUIREMENT: Only show entities ready for review
-        filters:
-          - field: ready_for_review
-            operator: equal
-            value: true
-      keyCustomerRefs:
-        target_collection: Domain
-        field_set: [standard]
-        # This traversal gives us customer Domain records with their references
-        references:
-          # From customer Domain → their researchers
-          industry:
-            target_collection: Research_industry
-            field_set: [standard]
-          financial:
-            target_collection: Research_financial
-            field_set: [standard]
-          product:
-            target_collection: Research_product
-            field_set: [standard]
+      # NOTE: keyCustomerRefs does NOT exist in Research_customer schema
+      # Unlike Research_competitor which HAS keyCompetitorRefs
+      # Customer entity traversal not available until schema is updated
 
   # ==========================================================================
   # Source entity's Domain
@@ -85,14 +70,6 @@ collections:
   - collection: Domain
     field_set: [standard]
     via_reference: domainBeacon
-
-  # ==========================================================================
-  # Customer Domains (with research data)
-  # ==========================================================================
-  - collection: Domain
-    alias: CustomerDomain
-    field_set: [standard]
-    via_reference: keyCustomerRefs
 
 chat_integration:
   best_for:
@@ -102,9 +79,9 @@ chat_integration:
 
   usage_patterns:
     - "Starts from Research_customer (source entity)"
-    - "Traverses to customer Domain[] via keyCustomerRefs"
-    - "From each customer Domain → their research data"
-    - "Returns customer profile for source AND key customers"
+    - "Traverses to source Domain via domainBeacon"
+    - "NOTE: keyCustomerRefs traversal NOT available (reference not in schema)"
+    - "Returns customer research for source entity only"
 
   parameter_examples:
     - name: "Full customer intelligence"
@@ -117,24 +94,20 @@ response_structure:
   expected_collections:
     - Research_customer        # Source entity's customer analysis
     - Domain                   # Source entity's Domain
-    - CustomerDomain           # Each customer's Domain
-    - Research_industry        # Each customer's industry research
-    - Research_financial       # Each customer's financial research
-    - Research_product         # Each customer's product research
+    # NOTE: CustomerDomain traversal NOT available (keyCustomerRefs not in schema)
 
 documentation:
   overview: |
-    Customer intelligence data card with key customer traversal.
+    Customer intelligence data card.
+    
+    CURRENT STATE (Schema Limitation):
+    Research_customer only has 'domainBeacon' reference (no keyCustomerRefs).
+    Unlike Research_competitor which HAS keyCompetitorRefs for competitor entity traversal.
     
     TRAVERSAL PATHS:
-    1. Research_customer → Domain (source entity info)
-    2. Research_customer → Domain[] (via keyCustomerRefs = customer entities)
-    3. CustomerDomain → Research_industry (customer's industry)
-    4. CustomerDomain → Research_financial (customer's size/revenue)
-    5. CustomerDomain → Research_product (customer's products)
+    1. Research_customer → Domain (source entity info via domainBeacon)
     
-    RESULT: For each customer in keyCustomers, you get:
-    - Domain metadata (title, description, url)
-    - Industry classification
-    - Financial profile (size, revenue)
-    - Product intelligence
+    RESULT: Customer research for source entity only.
+    
+    TODO: Add keyCustomerRefs reference to Research_customer schema to enable
+    customer entity traversal similar to competitor_research data card.

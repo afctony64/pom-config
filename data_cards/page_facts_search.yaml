@@ -31,8 +31,8 @@ tags:
 target_scope: knowledge_base
 
 # 🎨 Frontend Display Control
-# Show in frontend dropdowns for user-facing search
-display: true
+# Hidden from frontend dropdowns (internal search tool for Knowledge Base prompts)
+display: false
 
 # ✅ STANDARD: Use 'fetch' for all data cards
 executor: fetch

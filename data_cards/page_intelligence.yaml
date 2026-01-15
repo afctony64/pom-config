@@ -27,6 +27,10 @@ target_scope: page_intelligence
 # ✅ STANDARD: Use 'fetch' for all data cards
 executor: fetch
 
+# 🎨 Frontend Display Control
+# Hidden from frontend dropdowns (internal data, not user-facing)
+display: false
+
 # Disable relationship traversal - cross-cluster references not supported
 relationship_support: false
 
