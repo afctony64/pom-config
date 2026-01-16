@@ -86,13 +86,35 @@ researcher_identity:
   - 'Location Intelligence: Headquarters, country from Contact/About pages'
   - 'Founding Date: Extract from launch dates, timeline, history'
 
+# Tools available for this researcher
+tools:
+  - brave_search  # Web search for location data when not found in page_facts
+
 # Tool guidance for this researcher
 tool_guidance:
   brave_search:
-    priority: low  # Domain researcher focuses on existing page content
-    max_calls: 0   # No external search - use page_facts only
+    priority: medium
+    max_calls: 2
     when_to_use: |
-      ⚠️ DO NOT USE - Domain researcher uses page content only
+      🔍 USE BRAVE SEARCH FOR LOCATION DATA (MAX 2 SEARCHES):
+
+      **WHEN TO SEARCH:**
+      - Page content has NO headquarters/location information
+      - Only entityName was found, location fields are empty
+      - No About/Contact pages in the page_facts
+
+      **SEARCH #1 (LOCATION): Headquarters address**
+      → "{entityName} headquarters address location"
+      Example: "Stripe headquarters address location"
+      → Returns: "San Francisco, CA" or full address
+
+      **SEARCH #2 (IF NEEDED): Contact info**
+      → "{entityName} company contact phone email"
+      Only if first search didn't include contact details
+
+      **DO NOT SEARCH IF:**
+      - Page content already has clear headquarters info
+      - You found location in About/Contact page chunks
 
 search_query: "company name headquarters founded contact about"
 
@@ -151,8 +173,8 @@ url_boost_patterns:
 focus_areas:
   - "entityName: CRITICAL - Check EXISTING value FIRST. If it looks like a clean company name (e.g., 'Stripe', 'Acme Corp'), PRESERVE IT and output the same value. Only extract a NEW name if: (1) empty/null, (2) looks like web title with |, -, ::, (3) is just 'Home', 'Welcome', or error text, (4) matches the domain exactly (e.g., 'example.com')"
   - Founded year (look for "Founded in", "Established", "Since", "Launched", first funding round)
-  - "Headquarters location: ONLY extract if explicitly about THIS company. Customer stories and partner pages mention OTHER companies' HQs - IGNORE those. Look for About page, Contact page, Privacy Policy footer. Format: City, State/Region, Country"
-  - Contact information (email, phone, street address)
+  - "Headquarters location: FIRST check page_facts for About/Contact pages. If NOT FOUND in page content, USE brave_search to find '{entityName} headquarters address location'. Format: City, State/Region, Country"
+  - "Contact information: Extract email, phone, street address from Contact pages. If not found, use brave_search as fallback."
   - ALWAYS set domain_research=true to mark this entity as researched
 
 # Fact types to extract from source content
