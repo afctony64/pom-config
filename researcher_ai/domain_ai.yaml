@@ -173,7 +173,12 @@ url_boost_patterns:
 focus_areas:
   - "entityName: CRITICAL - Check EXISTING value FIRST. If it looks like a clean company name (e.g., 'Stripe', 'Acme Corp'), PRESERVE IT and output the same value. Only extract a NEW name if: (1) empty/null, (2) looks like web title with |, -, ::, (3) is just 'Home', 'Welcome', or error text, (4) matches the domain exactly (e.g., 'example.com')"
   - Founded year (look for "Founded in", "Established", "Since", "Launched", first funding round)
-  - "Headquarters location: FIRST check page_facts for About/Contact pages. If NOT FOUND in page content, USE brave_search to find '{entityName} headquarters address location'. Format: City, State/Region, Country"
+  - |
+    Headquarters location: POPULATE ALL THREE FIELDS:
+    1. headquarters: Full formatted string like "San Francisco, CA, USA" or "London, UK"  
+    2. city: Just the city name (e.g., "San Francisco")
+    3. country: ISO country code (e.g., "US", "UK", "IL")
+    FIRST check page_facts for About/Contact pages. If NOT FOUND, USE brave_search to find '{entityName} headquarters address location'.
   - "Contact information: Extract email, phone, street address from Contact pages. If not found, use brave_search as fallback."
   - ALWAYS set domain_research=true to mark this entity as researched
 
