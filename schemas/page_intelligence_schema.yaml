@@ -202,7 +202,19 @@ properties:
 - name: scrape_status
   dataType:
   - text
-  description: Scraping status (pending, scraped, skipped, failed)
+  description: |
+    Scraping status enum (Issue #667). Values from pom_core.models.ScrapeStatus:
+    - success: Page scraped successfully
+    - partial: Some content retrieved, incomplete
+    - pending: Not yet attempted
+    - queued: In processing queue
+    - retry_scheduled: Will retry later
+    - failed: Generic failure
+    - skipped: Intentionally skipped
+    - blocked: Access blocked (WAF, bot protection)
+    - error: Processing error
+    - permanent_failure: Unrecoverable (404, 410)
+    - excluded: Excluded from processing
   indexFilterable: true
   tokenization: field
   indexSearchable: false
@@ -227,7 +239,7 @@ properties:
 - name: skip_reason
   dataType:
   - text
-  description: Reason for skipping if scrape_status=skipped (threshold, content_type, browser_required, antipattern, error)
+  description: Legacy skip reason (deprecated, use error_category). Values - threshold, content_type, browser_required, antipattern, error
   indexFilterable: true
   tokenization: field
   indexSearchable: false
@@ -239,6 +251,83 @@ properties:
   tags:
   - scraping
   - metadata
+  - deprecated
+# ═══════════════════════════════════════════════════════════════════════════════
+# Issue #667: Enhanced Error Categorization for Intelligent Routing
+# ═══════════════════════════════════════════════════════════════════════════════
+- name: error_category
+  dataType:
+  - text
+  description: |
+    Detailed error categorization (Issue #667). Values from pom_core.models.ErrorCategory:
+    Connection: connection_refused, connection_reset, connection_timeout, dns_failure, ssl_handshake_failed
+    VPN/Network: vpn_blocked, proxy_error, network_unreachable
+    HTTP 4xx: http_400_bad_request, http_401_unauthorized, http_403_forbidden, http_404_not_found, http_429_rate_limited
+    HTTP 5xx: http_500_server_error, http_502_bad_gateway, http_503_service_unavailable, http_504_gateway_timeout
+    Bot Protection: bot_protection_cloudflare, bot_protection_akamai, bot_protection_generic, captcha_required
+    Content: empty_response, content_too_short, non_html_content
+    Timeout: read_timeout, total_timeout, playwright_timeout
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - scraping
+  - error
+  - routing
+- name: routing_recommendation
+  dataType:
+  - text
+  description: |
+    Recommended routing strategy (Issue #667). Values from pom_core.models.RoutingRecommendation:
+    - standard: Use standard HTTP fetch
+    - playwright: Use Playwright browser rendering
+    - residential_proxy: Route through residential proxy
+    - different_vpn: Try different VPN exit node
+    - direct_connection: Bypass VPN, use direct connection
+    - delay_and_retry: Wait and retry (rate limiting)
+    - skip_domain: Skip this domain entirely
+    - manual_review: Requires manual investigation
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - routing
+- name: last_error
+  dataType:
+  - text
+  description: Last error message or code encountered during scraping
+  indexFilterable: false
+  indexSearchable: false
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - error
+- name: error_count
+  dataType:
+  - int
+  description: Number of consecutive errors for this URL (resets on success)
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - error
 - name: detected_content_type
   dataType:
   - text
