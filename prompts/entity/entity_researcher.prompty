@@ -218,8 +218,8 @@ system:
 {% if researcher_ai and researcher_ai.conditional_update_fields and researcher_ai.conditional_update_fields.entityName %}
 {# Re-extract props since it may not be in scope from the previous block #}
 {% set props = (record.get('properties') or record) if record else {} %}
-{% set existing_name = props.get('entityName', '') %}
-{% set domain_value = props.get('domain', '') %}
+{% set existing_name = props.get('entityName', '') or '' %}
+{% set domain_value = props.get('domain', '') or '' %}
 {# Check conditions directly - avoid Jinja scoping issues with loops #}
 {% set is_empty = not existing_name or existing_name == '' %}
 {% set is_domain_only = existing_name and domain_value and existing_name.lower() == domain_value.lower() %}
