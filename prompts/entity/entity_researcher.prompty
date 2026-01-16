@@ -214,8 +214,9 @@ system:
 {% if props.get('industry') %}- **Industry**: {{ props.get('industry') }}{% endif %}
 {% endif %}
 
-{# === ENTITYNAME PROTECTION LOGIC (for domain researcher) === #}
-{% if researcher_ai and researcher_ai.conditional_update_fields and researcher_ai.conditional_update_fields.entityName %}
+{# === ENTITYNAME PROTECTION LOGIC (for domain researcher only) === #}
+{# Only applies to domain researcher which has conditional_update_fields defined #}
+{% if researcher_id == 'domain' and researcher_ai %}
 {# Re-extract props since it may not be in scope from the previous block #}
 {% set props = (record.get('properties') or record) if record else {} %}
 {% set existing_name = props.get('entityName', '') or '' %}
