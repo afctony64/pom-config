@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 9.4
+version: 9.3
 group: url
 weaviate_instance: cloud
 description: |
@@ -19,12 +19,6 @@ description: |
   2. Enrichers discover: content, social_accounts, sitemaps, etc.
   3. TenantGroup.researchers analyze → Research_* collections
   4. Research records reference back to this Domain
-  
-  SCHEMA v9.4 CHANGES:
-  - Added is_unreachable, unreachable_attempts, unreachable_reason fields
-  - Simple three-state filtering: enriched, blacklisted, or unreachable
-  - Failed/timed out domains are marked unreachable with reason tracked
-  - Use --refresh to retry unreachable domains
   
   SCHEMA v9.3 CHANGES:
   - Added typed relationship references: competitorOf, customerOf, partnerOf
@@ -948,42 +942,6 @@ properties:
   indexFilterable: true
   sets:
   - standard
-  - system
-  tags:
-  - filtering
-
-- name: is_unreachable
-  dataType:
-  - boolean
-  description: Whether the domain is unreachable (failed/timed out during enrichment). Use --refresh to retry unreachable domains.
-  indexFilterable: true
-  sets:
-  - standard
-  - system
-  tags:
-  - filtering
-  - processing
-
-- name: unreachable_attempts
-  dataType:
-  - int
-  description: Number of times enrichment failed for this domain
-  indexFilterable: true
-  sets:
-  - standard
-  - system
-  tags:
-  - filtering
-  - processing
-
-- name: unreachable_reason
-  dataType:
-  - text
-  description: Reason why domain is unreachable (timeout, connection error, etc.)
-  indexFilterable: true
-  tokenization: word
-  sets:
-  - extended
   - system
   tags:
   - filtering
