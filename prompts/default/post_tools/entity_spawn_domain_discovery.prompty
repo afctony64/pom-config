@@ -1,0 +1,108 @@
+---
+name: Entity Spawn Domain Discovery
+id: entity_spawn_domain_discovery
+description: "Discovers the primary domain for a spawned entity using web search with full context."
+
+# Post-tool metadata
+stage: post_execution
+reusable: true
+category: spawn
+
+classification:
+  task_type: reasoning
+  complexity: low
+  context_size: small
+  priority: speed
+version: 1.0.0
+authors:
+  - AI Assistant
+
+sample:
+  entity_name: Boomi
+  spawn_field: keyCompetitors
+  source_company:
+    name: Prismatic
+    domain: prismatic.io
+    industry: Integration Platform
+    description: B2B integration platform for SaaS companies
+
+inputs:
+  entity_name:
+    description: "The entity name to discover domain for"
+    type: string
+  spawn_field:
+    description: "The spawn field (e.g., keyCompetitors, keyPartners)"
+    type: string
+  source_company:
+    description: "Context about the source company"
+    type: object
+
+data_requirements:
+  include_enrichment_data: true
+  injectors:
+    - injector_template: mcp
+      template_vars:
+        tool: brave_search
+        params:
+          query: "{{ entity_name }} {{ source_company.industry|default('') }} software company official website"
+          country: us
+          count: 5
+        inject_as: search_data
+  error_handling:
+    missing_data: "continue"
+    empty_results: "continue"
+    api_failures: "continue"
+
+outputs:
+  domain:
+    type: string
+    description: "Primary domain (e.g., boomi.com) or null"
+  confidence:
+    type: number
+    description: "Confidence 0.0-1.0"
+
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-nano
+    type: pom-llm-proxy
+  parameters:
+    response_format:
+      type: json_object
+    reasoning_effort: low
+    max_retries: 2
+
+---
+
+system:
+You discover the primary corporate domain for a software company.
+
+**CONTEXT:**
+You're finding the domain for a **{{spawn_field|replace('key', '')|replace('Refs', '')|lower}}** of **{{source_company.name|default('a company')}}**.
+{% if source_company.industry %}Industry: {{source_company.industry}}{% endif %}
+{% if source_company.description %}About: {{source_company.description}}{% endif %}
+
+**RULES:**
+1. Find the **software company** that matches this name in the **{{source_company.industry|default('software')}}** space
+2. Return ONLY the domain (e.g., "boomi.com"), not a URL
+3. Prefer .com, tech companies may use .io
+4. EXCLUDE: LinkedIn, Wikipedia, Crunchbase, news sites
+5. Return null if unknown
+
+**OUTPUT:** `{"domain": "boomi.com", "confidence": 0.95}`
+
+user:
+Find the domain for: **{{entity_name}}**
+This is a {{spawn_field|replace('key', '')|replace('Refs', '')|lower}} of {{source_company.name|default('the source company')}} ({{source_company.domain|default('')}}).
+
+{% if brave_search_response is defined and brave_search_response and brave_search_response.success and brave_search_response.results %}
+**Search Results:**
+{% for result in brave_search_response.results[:5] %}
+- {{result.title|default('No title')}}: {{result.url|default('')}}
+{% endfor %}
+{% else %}
+No search results. Infer domain from name.
+{% endif %}
+
+Return JSON: {"domain": "...", "confidence": 0.0-1.0}
