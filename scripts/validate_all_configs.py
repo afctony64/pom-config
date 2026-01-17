@@ -9,6 +9,7 @@ import yaml
 # Add pom-core to path for model imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "pom-core"))
 
+from pom_core.models.ai_config_models import ResearcherAIConfig
 from pom_core.models.config_models import LLMModelCard, ToolCard
 from pom_core.models.data_model import DataCardConfig
 from pom_core.models.tenant_group_models import TenantGroupConfig
@@ -23,6 +24,7 @@ YAML_VALIDATORS = [
     ("llm_models", LLMModelCard, "llm_model"),
     ("tools", ToolCard, "tool"),
     ("tenant_groups", TenantGroupConfig, None),
+    ("researcher_ai", ResearcherAIConfig, "researcher_ai"),
 ]
 
 
