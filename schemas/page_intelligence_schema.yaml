@@ -236,6 +236,86 @@ properties:
   tags:
   - scraping
   - temporal
+- name: status_code
+  dataType:
+  - int
+  description: HTTP status code from scrape attempt
+  indexFilterable: true
+  sets:
+  - standard
+  tags:
+  - technical
+  - scraping
+- name: fetch_method
+  dataType:
+  - text
+  description: Fetch method used for scraping (http, playwright, playwright_background)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - technical
+  - scraping
+- name: error_category
+  dataType:
+  - text
+  description: Categorized error type (e.g., vpn_blocked, http_400_bad_request)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - processing
+- name: routing_recommendation
+  dataType:
+  - text
+  description: Recommended next action based on error category (retry_http, try_playwright, skip_domain)
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - processing
+- name: last_error
+  dataType:
+  - text
+  description: Last error message or code from scrape attempt
+  indexFilterable: true
+  tokenization: field
+  indexSearchable: false
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - metadata
+- name: error_count
+  dataType:
+  - int
+  description: Consecutive error count for this URL
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - scraping
+  - processing
 - name: skip_reason
   dataType:
   - text

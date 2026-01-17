@@ -5,6 +5,14 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-01-16
+
+### Added
+- Page_intelligence scrape diagnostics: `status_code`, `fetch_method`, `error_category`, `routing_recommendation`, `last_error`, `error_count`
+
+### Changed
+- `scrape_status` now documents the full set of scrape states (pending, success, partial, failed, skipped, error)
+
 ## [1.6.98] - 2026-01-09
 
 ### Added

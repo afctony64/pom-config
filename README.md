@@ -102,6 +102,19 @@ Apps mount pom-config via a versioned package directory:
 ./scripts/pom_config.sh update v1.2.0
 ```
 
+## Versioning and Releases
+
+pom-config uses SemVer and tracks releases with `VERSION` and `CHANGELOG.md`.
+
+Release checklist:
+- Update `VERSION` (e.g., `v1.7.0`)
+- Add release notes to `CHANGELOG.md`
+- Commit with a `feat:`/`fix:`/`update:` prefix
+- Tag and publish the release:
+  - `git tag vX.Y.Z`
+  - `git push origin main --tags`
+  - `gh release create vX.Y.Z --title "vX.Y.Z" --notes "See CHANGELOG"`
+
 ### Environment Variable
 
 Set `POM_CONFIG_ROOT` to point to pom-config:
