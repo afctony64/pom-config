@@ -1,0 +1,38 @@
+---
+name: Web Search Citations Test
+description: Prompt crafted to elicit citations via native web_search annotations
+version: 1.0.0
+
+inputs:
+  topic:
+    description: Time-sensitive topic to force web search
+    type: string
+    default: "NVDA closing price yesterday site:nasdaq.com OR site:finance.yahoo.com OR site:investors.nvidia.com"
+
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-mini
+    type: pom-llm-proxy
+    tools: [web_search]
+  parameters:
+    max_tokens: 250
+    include:
+      - "web_search_call.results"
+
+processing_config:
+  source_collection: Domain
+
+---
+
+system:
+You are a web search testing assistant. Your ONLY job is to use the native web_search tool for the given query and answer briefly based on what you find.
+
+Requirements:
+- ALWAYS use web_search first
+- Keep the answer short (one or two sentences)
+- You may include URLs inline if helpful (not required)
+
+user:
+Find the answer to: "{{ topic }}" and respond briefly.

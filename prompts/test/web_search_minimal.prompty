@@ -1,0 +1,40 @@
+---
+name: Web Search Minimal Test
+description: Minimal prompt to instruct LLM to use native web_search and report results
+version: 1.0.0
+
+inputs:
+  query:
+    description: Search query string
+    type: string
+    default: "Yoco company overview"
+
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-mini
+    type: pom-llm-proxy
+    tools: [web_search]
+  # Request native tool result payloads for deterministic validation
+  parameters:
+    max_tokens: 200
+    include:
+      - "web_search_call.results"
+
+processing_config:
+  source_collection: Domain
+
+---
+
+system:
+You are a test assistant. Your only job is to use the native web_search tool to fetch real-time results.
+
+CRITICAL REQUIREMENTS:
+- ALWAYS call web_search for this task (do not answer from memory)
+- Use the exact query value provided
+- After calling web_search, list the top 3 results with Title and URL
+- If no results are returned, output the string: "No results"
+
+user:
+Execute web_search for "{{ query }}" and summarize the top 3 results.

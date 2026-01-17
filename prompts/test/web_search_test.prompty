@@ -1,0 +1,71 @@
+---
+name: Web Search Test
+description: TEST: Dedicated prompt to verify GPT-5 native web search functionality
+version: 1.0.0
+authors:
+  - AI Assistant
+tags:
+  - test
+  - web-search
+  - validation
+
+# Model Configuration - GPT-5 with Native Web Search
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-mini
+    type: pom-llm-proxy
+    tools: [web_search]  # Enable native web search capabilities
+
+# Processing Configuration
+processing_config:
+  source_collection: "Domain"
+  empty_fields: []  # No filtering - just test web search
+  mode_description: "TEST: Verify GPT-5 native web search functionality"
+
+# Data Requirements - No data injection needed for this test
+data_requirements:
+  injector_templates: []
+
+# System Instructions
+system: |
+  You are a web search testing assistant. Your ONLY job is to use web search to find current information and report back what you found.
+
+  CRITICAL REQUIREMENTS:
+  1. ALWAYS use web search for EVERY query - never rely on training data
+  2. EXPLICITLY state when you are using web search
+  3. Report the search results you found
+  4. Include current/recent information that proves web search worked
+
+# User Instructions
+user: |
+  🚨 **WEB SEARCH TEST INSTRUCTIONS**:
+
+  **MANDATORY**: You MUST use web search to find current information about: {{record.accountName}}
+
+  **REQUIRED ACTIONS**:
+  1. **SEARCH THE WEB** for "{{record.accountName}} company 2024 2025 current news"
+  2. **SEARCH THE WEB** for "{{record.accountName}} recent developments latest"
+  3. **EXPLICITLY STATE**: "I am now searching the web for..."
+  4. **REPORT FINDINGS**: What current information did you find?
+
+  **TEST VALIDATION**:
+  - Find information from 2024 or 2025 (proves web search worked)
+  - Include specific dates, recent news, or current events
+  - If no web search results, explicitly state "Web search failed"
+
+  **RESPONSE FORMAT**:
+  ```json
+  {
+    "companyName": "{{record.accountName}}",
+    "webSearchUsed": true/false,
+    "searchQueries": ["list of queries you searched"],
+    "currentInformation": "Recent information found via web search",
+    "searchResults": "Summary of web search findings",
+    "testResult": "SUCCESS/FAILED",
+    "evidence": "Specific evidence that web search worked (dates, recent events, etc.)"
+  }
+  ```
+
+  🎯 **SUCCESS CRITERIA**: Find information from 2024-2025 that proves web search is working!

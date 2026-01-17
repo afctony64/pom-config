@@ -1,0 +1,57 @@
+---
+name: Google Search Minimal Test
+description: Minimal prompt to call internal google_search via function tool
+version: 1.0.0
+
+inputs:
+  query:
+    description: Search query string
+    type: string
+    default: "Yoco company overview payments South Africa"
+
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-mini
+    type: pom-llm-proxy
+    tools:
+      - type: function
+        function:
+          name: google_search
+          description: Execute Google search
+          parameters:
+            type: object
+            properties:
+              query:
+                type: string
+              num_results:
+                type: integer
+                default: 5
+              language:
+                type: string
+                default: "en"
+              country:
+                type: string
+                default: "za"
+            required: ["query"]
+  parameters:
+    max_tokens: 200
+
+processing_config:
+  source_collection: Domain
+
+---
+
+system:
+Call google_search exactly once with:
+- query: "{{ query }}"
+- num_results: 5
+- language: "en"
+- country: "za"
+
+Then list the top 3 result titles and URLs on separate lines.
+If no results, say "No results".
+
+user:
+Call google_search and show top 3 results.

@@ -1,0 +1,65 @@
+---
+name: Google Search Function Test
+description: Minimal prompt to exercise internal google_search function tool with capture/report
+version: 1.0.0
+
+inputs:
+  record:
+    description: Optional source record
+    type: object
+    default: {}
+
+model:
+  api: responses
+  configuration:
+    connection: openai_conn
+    model: gpt-5-mini
+    type: pom-llm-proxy
+    tools:
+      - type: function
+        function:
+          name: google_search
+          description: Execute Google search via MCP tool for testing
+          parameters:
+            type: object
+            properties:
+              query:
+                type: string
+                description: Search query
+              num_results:
+                type: integer
+                description: Number of results
+                default: 5
+              language:
+                type: string
+                description: Language code
+                default: "en"
+              country:
+                type: string
+                description: Country/region code
+                default: "za"
+            required: ["query"]
+
+processing_config:
+  source_collection: Domain
+  mode_description: Test prompt to validate google_search function tool path
+
+---
+
+system:
+You are a tool-calling test assistant.
+
+Your task is to call the function tool google_search with an appropriate query:
+
+Query to use: "Yoco company overview payments South Africa"
+num_results: 5
+language: "en"
+country: "za"
+
+After the tool call returns, summarize the top 3 result titles and URLs in one short paragraph.
+
+Output policy:
+- If no results are returned, state "unknown" for titles/URLs rather than leaving fields empty.
+
+user:
+Run the google_search function tool as instructed and then provide a brief confirmation.
