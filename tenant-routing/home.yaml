@@ -28,39 +28,3 @@ weaviate_instances:
     url: "http://mac-weaviate:8080"
     description: "Mac Weaviate - Local development/testing"
 
-tenants:
-  prismatic:
-    weaviate_target: cloud
-    description: "Production tenant - routes to Cloud Weaviate"
-    collections:
-      Company_research_*: cloud
-      Company_opportunity: cloud
-      Company_source: spark
-      Domain: spark
-      Page_facts: spark
-      Page_intelligence: cloud
-  
-  test_db:
-    weaviate_target: mac
-    description: "Test tenant - always routes to local mac-weaviate"
-  
-  demo:
-    weaviate_target: mac
-    description: "Demo tenant - local only"
-
-collection_routing:
-  # Override routing for specific collections regardless of tenant
-  Company_source: spark
-  Domain: spark
-  Page_facts: spark
-  Company_research_industry: cloud
-  Company_research_leadership: cloud
-  Company_research_product: cloud
-  Company_research_financial: cloud
-  Company_research_customer: cloud
-  Company_research_competitor: cloud
-  Company_research_partner: cloud
-  Company_research_risk: cloud
-  Company_research_social: cloud
-  Company_research_journalist: cloud
-  Company_opportunity: cloud

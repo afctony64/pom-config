@@ -4,7 +4,7 @@ Shared YAML configuration files for the Pom ecosystem.
 
 ## Overview
 
-This repository contains shared configuration files used across PomAI, Pomothy, and PomSpark. 
+This repository contains shared configuration files used across PomAI, Pomothy, and PomSpark.
 Configuration validation is performed using Pydantic models from `pom-core`.
 
 ## Documentation
