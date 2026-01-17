@@ -1,5 +1,5 @@
 ---
-$schema: ./openai-responses-schema.yaml
+$schema: ../openai-responses-schema.yaml
 description: Comprehensive sales-focused company intelligence briefing combining all
   available data sources for sales professionals
 file: core/config/prompts/company/company_sales_brief_intelligence.prompty

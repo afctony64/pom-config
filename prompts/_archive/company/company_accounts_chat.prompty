@@ -6,7 +6,7 @@ deprecated: true
 deprecated_date: "2024-12"
 deprecated_canonical: "Pomothy/core/config/prompts/company/company_accounts_chat.prompty"
 
-$schema: ./openai-responses-schema.yaml
+$schema: ../openai-responses-schema.yaml
 description: "[DEPRECATED] Specialized AI assistant for answering questions about company account
   data - SHOULD MOVE TO POMOTHY"
 

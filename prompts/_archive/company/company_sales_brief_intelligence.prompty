@@ -6,7 +6,7 @@ deprecated: true
 deprecated_date: "2024-12"
 deprecated_canonical: "PomAI/core/config/prompts/company/company_sales_brief_intelligence.prompty"
 
-$schema: ./openai-responses-schema.yaml
+$schema: ../openai-responses-schema.yaml
 description: "[DEPRECATED] Comprehensive sales-focused company intelligence briefing combining all
   available data sources for sales professionals - USE PomAI VERSION"
 

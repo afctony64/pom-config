@@ -1,5 +1,5 @@
 ---
-$schema: ./openai-responses-schema.yaml
+$schema: ../../openai-responses-schema.yaml
 description: Specialized AI assistant for answering questions about company account
   data
 file: core/config/prompts/company/company_accounts_chat.prompty

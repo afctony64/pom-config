@@ -1,0 +1,8 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: OpenAI Responses Prompty Frontmatter
+description: >
+  Minimal schema for prompty frontmatter metadata. This is intentionally
+  permissive to avoid blocking existing prompt files while enabling schema
+  resolution for tooling.
+type: object
+additionalProperties: true
