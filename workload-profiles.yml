@@ -86,10 +86,15 @@ profiles:
         memory_limit: 24G        # FUNCTIONAL - can still run small jobs
         memory_reserved: 12G
         playwright_max_parallel: 20  # Maximum browser parallelism
+        http_connection_limit: 750   # Reduced - AI profile focuses on LLM
+        http_limit_per_host: 10      # Max per-domain connections
+        http_keepalive_timeout: 5    # Standard cleanup interval
+        crawl_max_concurrent: 50     # Reduced - AI profile focuses on LLM
       browser_pool:
         enabled: true
         pool_size: 10            # Reduced but functional for dev
         memory_limit: 8G
+        cpus: 4
         note: "Reduced but functional for small dev jobs"
         
     mac:
@@ -156,6 +161,10 @@ profiles:
         memory_reserved: 8G      # Reduced from 40G - still 2x base allocation
         playwright_max_parallel: 20  # Maximum browser parallelism
         pids: 4096               # High PID limit for concurrent workers
+        http_connection_limit: 2500  # 250 domains × 10 connections (Jan 2026)
+        http_limit_per_host: 10      # Max per-domain connections
+        http_keepalive_timeout: 5    # Standard cleanup interval
+        crawl_max_concurrent: 200    # 200 domains concurrently
         note: "Browser pool is separate - backend only needs memory for workers, not browsers"
       browser_pool:
         enabled: true
@@ -220,6 +229,10 @@ profiles:
         memory_limit: 32G
         memory_reserved: 16G
         playwright_max_parallel: 20
+        http_connection_limit: 1000  # 100 domains × 5 connections + headroom
+        http_limit_per_host: 10      # Max per-domain connections
+        http_keepalive_timeout: 5    # Standard cleanup interval
+        crawl_max_concurrent: 100    # 100 domains concurrently (balanced)
       browser_pool:
         enabled: true
         pool_size: 25            # Full capacity available (priority service)
@@ -239,6 +252,71 @@ profiles:
       ollama_metal:
         enabled: false
         note: "Not needed - uses Spark Ollama"
+      redis:
+        memory_limit: 4G
+        maxmemory: 2G
+      pom_llm_proxy:
+        memory_limit: 8G
+        memory_reserved: 2G
+      browser_pool:
+        enabled: true
+        pool_size: 3
+        memory_limit: 4G
+
+  # ===========================================================================
+  # WEB_SCRAPING - Maximum browser pool for high-throughput scraping
+  # ===========================================================================
+  # Use this when running:
+  #   - High-throughput web scraping (page_facts/page_intelligence)
+  #   - Large batch ingestion into Weaviate
+  #
+  # Design: Browser pool is the priority service; backend is coordination-only.
+  # ===========================================================================
+  web_scraping:
+    description: "Maximum browser pool for high-throughput scraping"
+    use_case: "Bulk scraping and batch Weaviate updates"
+    warning: "⚠️ LLM minimal (12GB) - 7B models only, optimized for scraping"
+    
+    spark:
+      ollama:
+        enabled: true
+        memory_limit: 12G
+        memory_reserved: 6G
+        num_parallel: 2
+        max_loaded_models: 1
+        keep_alive: 5m
+      transformers:
+        instances: 5
+        enabled: [1, 2, 3, 4, 5]
+      weaviate:
+        memory_limit: 72G
+        memory_reserved: 48G
+        async_indexing: true
+      backend:
+        memory_limit: 12G
+        memory_reserved: 6G
+        playwright_max_parallel: 100
+        http_connection_limit: 3000
+        http_limit_per_host: 15
+        http_keepalive_timeout: 5
+        crawl_max_concurrent: 300
+      browser_pool:
+        enabled: true
+        pool_size: 100
+        memory_limit: 80G
+        cpus: 18
+        note: "Maximum capacity browser pool for scraping"
+        
+    mac:
+      weaviate:
+        memory_limit: 48G
+        memory_reserved: 24G
+        gomemlimit: 46GiB
+        gogc: 50
+      transformers_metal:
+        enabled: true
+      ollama_metal:
+        enabled: false
       redis:
         memory_limit: 4G
         maxmemory: 2G
@@ -329,13 +407,19 @@ profiles:
         memory_reserved: 16G
         playwright_max_parallel: 5   # ⚠️ KEY: Reduced from 20 to 5
         request_delay_ms: 500        # Add delay between requests
+        scrape_delay_ms: 500         # Delay between requests (gateway protection)
+        max_concurrent_pages: 3      # Limit concurrent page processing
+        http_connection_limit: 5000  # Testing: 5K to find network capacity
+        http_limit_per_host: 3       # Reduced per-host connections
+        http_keepalive_timeout: 3    # Faster cleanup to free NAT entries
+        crawl_max_concurrent: 30     # Reduced from 200 to 30 domains
         note: "Reduced parallelism to prevent connection exhaustion"
       browser_pool:
         enabled: true
-        pool_size: 5                 # ⚠️ KEY: Reduced from 25 to 5 contexts
+        pool_size: 3                 # ⚠️ Reduced from 25 to 3 contexts
         memory_limit: 4G             # Reduced memory for fewer contexts
         cpus: 2                      # Reduced CPU allocation
-        note: "5 contexts = ~5 concurrent page loads, prevents NAT exhaustion"
+        note: "3 contexts = ~3 concurrent page loads, prevents NAT exhaustion"
         
     mac:
       weaviate:
