@@ -1,0 +1,68 @@
+---
+name: Fact Extractor - Generic Researcher
+description: >
+  Extract facts from web page content using Llama/Ollama for any researcher type.
+  Generic prompt that works for industry, customer, competitor, financial, leadership, partner researchers.
+  
+  Used by: llama_extractor.py for non-product researcher types
+
+inputs:
+  researcher_type:
+    description: Researcher type (industry, customer, competitor, financial, leadership, partner, etc.)
+    type: string
+    required: true
+  combined_text:
+    description: Combined text from Page_facts chunks to extract facts from
+    type: string
+    required: true
+
+model:
+  api: ollama
+  configuration:
+    type: direct
+    model: llama3.1:70b-instruct-q4_K_M
+  parameters:
+    temperature: 0.0
+    top_p: 0.95
+
+outputs:
+  facts:
+    type: array
+    description: Array of extracted facts
+    items:
+      type: object
+      properties:
+        fact:
+          type: string
+          description: Specific fact statement
+        category:
+          type: string
+          description: Fact category
+        confidence:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+          description: Confidence score (1.0 for stated, 0.5 for implied)
+
+---
+
+system:
+Extract {{ researcher_type }} facts from the text below.
+
+EXTRACT:
+- Key facts relevant to {{ researcher_type }} analysis
+- Specific details, metrics, and statements
+- Concrete information only (no speculation)
+
+FORMAT: JSON array with objects containing:
+- "fact": Specific fact statement
+- "category": Fact category
+- "confidence": 1.0 for stated, 0.5 for implied
+
+EXAMPLE: [{"fact": "Founded in 2020", "category": "Company", "confidence": 1.0}]
+
+user:
+TEXT:
+{{ combined_text }}
+
+FACTS (JSON array):
