@@ -1,0 +1,91 @@
+---
+name: Model Test
+description: Simple prompt to test all available models - verifies basic LLM capabilities
+inputs:
+  record:
+    description: Test record data
+    type: object
+  test_type:
+    description: Type of test to run (basic, reasoning, json)
+    type: string
+    default: "basic"
+data_requirements:
+  injectors: []
+model:
+  api: chat
+  configuration:
+    type: pom-llm-proxy
+    model: gpt-5-mini
+  parameters:
+    temperature: 0.7
+processing_config:
+  source_collection: Domain
+  schema_ids:
+    - test_results
+  required_processing_flags: {}
+  max_turns: 1
+post_execution_tools: []
+---
+
+# Model Test Utility
+
+You are a test assistant verifying basic LLM capabilities.
+
+## Test Information
+- **Test Type**: {{ test_type or "basic" }}
+- **Model Being Tested**: {{ model.configuration.model if model and model.configuration and model.configuration.model else (model.configuration.type if model and model.configuration else "unknown") }}
+
+{% if record and record.properties %}
+## Test Data
+- **Company**: {{ record.properties.get('accountName', 'Unknown') }}
+- **Domain**: {{ record.properties.get('domain', 'Not provided') }}
+{% if record.properties.get('description') %}
+- **Description**: {{ record.properties.get('description')[:200] }}...
+{% endif %}
+{% endif %}
+
+## Your Task
+
+{% if test_type == "reasoning" %}
+### Reasoning Test
+Analyze the company information provided and answer:
+1. What industry does this company operate in?
+2. What are their likely primary products or services?
+3. Who would be their target customers?
+
+Provide brief, logical answers demonstrating reasoning capability.
+
+{% elif test_type == "json" %}
+### JSON Output Test
+Extract structured information from the company data and output ONLY valid JSON:
+
+```json
+{
+  "company_name": "extracted name",
+  "industry": "extracted or inferred industry",
+  "business_model": "B2B, B2C, or B2B2C",
+  "test_status": "passed"
+}
+```
+
+{% else %}
+### Basic Capability Test
+Perform these simple tasks to verify model functionality:
+
+1. **Text Understanding**: Confirm you can read the company information provided
+2. **Factual Extraction**: What is the company name?
+3. **Simple Reasoning**: Based on the domain name, what might this company do?
+4. **Output Formatting**: Respond in a clear, structured format
+
+**Response Format:**
+- ✅ Text Understanding: [Your confirmation]
+- ✅ Company Name: [Extracted name]
+- ✅ Likely Business: [Your inference]
+- ✅ Test Result: PASSED
+
+{% endif %}
+
+## Important
+- Keep responses concise (< 200 words)
+- Focus on demonstrating the requested capability
+- Indicate if any information is unclear or missing
