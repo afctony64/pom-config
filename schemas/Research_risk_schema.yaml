@@ -127,20 +127,6 @@ properties:
   - web
   metadata:
     order: 905
-- name: seed
-  dataType:
-  - boolean
-  description: Seed data flag (true = seed/training data, false = production data)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - metadata
-  - seed
-  sets:
-  - system
-  metadata:
-    order: 911
 - name: securityPostureLLM
   dataType:
   - text
@@ -189,7 +175,10 @@ properties:
 - name: securityCertifications
   dataType:
   - text[]
-  description: Array of visible security certifications (SOC2, ISO 27001, etc.)
+  description: |
+    Array of security certification NAMES only. Examples: "SOC2 Type II", "ISO 27001", 
+    "HITRUST", "FedRAMP". Return EMPTY ARRAY [] if no certifications visible on website. 
+    DO NOT put explanations or "no certifications found" in this array.
   tags:
   - certifications
   - research
@@ -273,7 +262,10 @@ properties:
 - name: complianceBadges
   dataType:
   - text[]
-  description: Array of compliance badges displayed (GDPR, HIPAA, PCI-DSS, CCPA, etc.)
+  description: |
+    Array of compliance badge/framework NAMES only. Examples: "GDPR", "HIPAA", "PCI-DSS", 
+    "CCPA", "SOX". Return EMPTY ARRAY [] if no compliance badges visible on website. 
+    DO NOT put explanations or "no compliance found" in this array.
   tags:
   - certifications
   - compliance
@@ -421,14 +413,6 @@ properties:
   - prompt
   metadata:
     order: 111
-- name: dataSource
-  dataType:
-  - text
-  description: Source of classification data
-  sets:
-  - system
-  metadata:
-    order: 904
 - name: securityPostureCat
   dataType:
   - text
@@ -530,17 +514,6 @@ properties:
   - system
   metadata:
     order: 902
-- name: reasoning
-  dataType:
-  - text[]
-  description: AI reasoning steps and thought process for analysis
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  metadata:
-    order: 908
 - name: researcher_model_id
   dataType:
   - text
@@ -569,26 +542,6 @@ properties:
       skip: true
   metadata:
     order: 914
-- name: references
-  description: Cached reference UUIDs
-  dataType:
-  - object
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  nestedProperties:
-  - name: domain
-    dataType:
-    - uuid[]
-    description: Domain source UUIDs
-  - name: sourceEntity
-    dataType:
-    - uuid[]
-    description: Source entity UUIDs
-  metadata:
-    order: 909
 - name: createdAt
   dataType:
   - date

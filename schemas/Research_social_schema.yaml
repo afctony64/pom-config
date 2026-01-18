@@ -157,17 +157,6 @@ properties:
   - summary
   metadata:
     order: 101
-- name: uuid
-  dataType:
-  - text
-  description: Unique identifier for classification record
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  metadata:
-    order: 915
 - name: entityName
   dataType:
   - text
@@ -193,20 +182,6 @@ properties:
   - web
   metadata:
     order: 905
-- name: seed
-  dataType:
-  - boolean
-  description: Seed data flag (true = seed/training data, false = production data)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - metadata
-  - seed
-  sets:
-  - system
-  metadata:
-    order: 911
 - name: socialAccountsFound
   dataType:
   - int
@@ -221,7 +196,10 @@ properties:
 - name: socialPlatforms
   dataType:
   - text[]
-  description: Social platforms detected (twitter, linkedin, facebook, instagram, youtube, github)
+  description: |
+    Array of social platform NAMES ONLY (lowercase). Valid values: twitter, linkedin, facebook, 
+    instagram, youtube, github, tiktok, discord, slack. Return EMPTY ARRAY [] if no platforms found.
+    DO NOT put explanations, sentences, or "data unavailable" messages in this array.
   tags:
   - research
   sets:
@@ -287,7 +265,10 @@ properties:
 - name: contentThemes
   dataType:
   - text[]
-  description: Main content themes found in social/blog pages
+  description: |
+    Array of 2-5 SHORT content theme labels (2-4 words each). Examples: "Product Updates", 
+    "Customer Success Stories", "Technical Tutorials", "Industry News". Return EMPTY ARRAY [] 
+    if no themes identifiable. DO NOT put full sentences or explanations in this array.
   tags:
   - research
   sets:
@@ -417,14 +398,6 @@ properties:
   - prompt
   metadata:
     order: 111
-- name: dataSource
-  dataType:
-  - text
-  description: Source of classification data
-  sets:
-  - system
-  metadata:
-    order: 904
 - name: platformPresenceCat
   dataType:
   - text
@@ -541,17 +514,6 @@ properties:
   - system
   metadata:
     order: 902
-- name: reasoning
-  dataType:
-  - text[]
-  description: AI reasoning steps and thought process for analysis
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  metadata:
-    order: 908
 - name: researcher_model_id
   dataType:
   - text
@@ -580,26 +542,6 @@ properties:
       skip: true
   metadata:
     order: 914
-- name: references
-  description: Cached reference UUIDs
-  dataType:
-  - object
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  nestedProperties:
-  - name: domain
-    dataType:
-    - uuid[]
-    description: Domain source UUIDs
-  - name: sourceEntity
-    dataType:
-    - uuid[]
-    description: Source entity UUIDs
-  metadata:
-    order: 909
 - name: createdAt
   dataType:
   - date

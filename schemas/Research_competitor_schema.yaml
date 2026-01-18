@@ -200,11 +200,12 @@ properties:
 - name: keyCompetitors
   dataType:
   - text[]
-  description: 'Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN OFFICIAL
-    NAMES without qualifiers, product variants, or parenthetical notes. Examples:
-    "Workato" (not "Workato Embedded"), "Boomi" (not "Boomi iPaaS"), "Zapier" (not
-    "Zapier for Enterprise"). These names are used for domain lookups - spurious
-    data breaks entity spawn.'
+  description: |
+    Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN OFFICIAL NAMES without 
+    qualifiers, product variants, or parenthetical notes. Examples: "Workato" (not 
+    "Workato Embedded"), "Boomi" (not "Boomi iPaaS"), "Zapier" (not "Zapier for Enterprise"). 
+    Return EMPTY ARRAY [] if no competitors identified. DO NOT put explanations or 
+    "no competitors found" messages in this array. Used for domain lookups - spurious data breaks spawn.
   tags:
   - research
   sets:
@@ -602,14 +603,6 @@ properties:
       skip: true
   metadata:
     order: 903
-- name: dataSource
-  dataType:
-  - text
-  description: Source of research data
-  sets:
-  - system
-  metadata:
-    order: 904
 - name: domain
   dataType:
   - text
@@ -656,18 +649,6 @@ properties:
   - system
   metadata:
     order: 908
-- name: reasoning
-  dataType:
-  - text[]
-  description: AI reasoning steps and thought process for analysis
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - array
-  - system
-  metadata:
-    order: 909
 - name: researcher_model_id
   dataType:
   - text
@@ -685,22 +666,6 @@ properties:
   - versioning
   metadata:
     order: 918
-- name: references
-  description: Cached reference UUIDs
-  dataType:
-  - object
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  nestedProperties:
-  - name: domain
-    dataType:
-    - uuid[]
-    description: Domain source UUIDs
-  metadata:
-    order: 910
 - name: reviewFlag
   dataType:
   - text
@@ -726,18 +691,6 @@ properties:
   - prompt
   metadata:
     order: 911
-- name: seed
-  dataType:
-  - boolean
-  description: Indicates if this record originated from seed data (true) or was generated
-    by research process (false)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  metadata:
-    order: 912
 - name: sourceQuality
   dataType:
   - text

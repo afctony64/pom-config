@@ -530,14 +530,6 @@ properties:
       skip: true
   metadata:
     order: 903
-- name: dataSource
-  dataType:
-  - text
-  description: Source of research data
-  sets:
-  - system
-  metadata:
-    order: 905
 - name: matchedSeeds
   description: Matched seed names
   dataType:
@@ -557,17 +549,6 @@ properties:
   - system
   metadata:
     order: 909
-- name: reasoning
-  dataType:
-  - text[]
-  description: AI reasoning steps and thought process for analysis
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  metadata:
-    order: 910
 - name: researcher_model_id
   dataType:
   - text
@@ -585,22 +566,6 @@ properties:
   - versioning
   metadata:
     order: 918
-- name: references
-  description: Cached reference UUIDs
-  dataType:
-  - object
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  nestedProperties:
-  - name: domain
-    dataType:
-    - uuid[]
-    description: Domain source UUIDs
-  metadata:
-    order: 911
 - name: reviewFlag
   dataType:
   - text
@@ -610,20 +575,6 @@ properties:
   - prompt
   metadata:
     order: 912
-- name: seed
-  dataType:
-  - boolean
-  description: Seed data flag (true = seed/training data, false = production data)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - metadata
-  - seed
-  sets:
-  - system
-  metadata:
-    order: 913
 - name: segmentSimilarities
   description: Segment similarity scores
   dataType:
