@@ -293,7 +293,10 @@ properties:
 - name: keyExecutives
   dataType:
   - text[]
-  description: Key executive information
+  description: |
+    Array of key executive NAMES ONLY (format: "First Last"). Examples: "Satya Nadella",
+    "Jensen Huang", "Marc Benioff". Return EMPTY ARRAY [] if no executives publicly disclosed.
+    DO NOT put titles, explanations, or "not disclosed" messages in this array. Titles go in executiveRoles.
   tags:
   - executive
   - leadership
@@ -447,7 +450,10 @@ properties:
 - name: advisors
   dataType:
   - text[]
-  description: Advisors for classification
+  description: |
+    Array of advisor/board member NAMES ONLY. Examples: "John Doerr", "Reid Hoffman".
+    Return EMPTY ARRAY [] if no advisors publicly disclosed. DO NOT put explanations,
+    titles, or "no advisors found" messages in this array.
   tags:
   - advisory
   - leadership

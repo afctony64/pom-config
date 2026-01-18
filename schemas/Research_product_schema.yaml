@@ -502,7 +502,10 @@ properties:
 - name: products
   dataType:
   - text[]
-  description: Array of product names (primary key for parallel product arrays)
+  description: |
+    Array of product NAMES ONLY (primary key for parallel product arrays). Examples: "Slack",
+    "Salesforce CRM", "GitHub Enterprise". Return EMPTY ARRAY [] if no products can be identified.
+    DO NOT put explanations or "no products found" messages in this array.
   moduleConfig:
     text2vec-weaviate:
       skip: true
