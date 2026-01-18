@@ -115,10 +115,9 @@ properties:
 - name: keyCustomers
   dataType:
   - text[]
-  description: |
-    Array of key customer COMPANY NAMES ONLY. Examples: "Salesforce", "Microsoft", "Acme Corp".
-    Return EMPTY ARRAY [] if no customers publicly disclosed. DO NOT put explanations like 
-    "Not disclosed" or "No customers found" in this array. Used for entity spawn.
+  description: "Array of key customer COMPANY NAMES ONLY. Examples: \"Salesforce\", \"Microsoft\", \"Acme Corp\".\nReturn\
+    \ EMPTY ARRAY [] if no customers publicly disclosed. DO NOT put explanations like \n\"Not disclosed\" or \"No customers\
+    \ found\" in this array. Used for entity spawn.\n"
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -134,12 +133,11 @@ properties:
 - name: customerDomain
   dataType:
   - text[]
-  description: >
-    Primary domain for each key customer (parallel to keyCustomers array).
-    ENRICHMENT SEARCH: "{customer_name} official website domain company".
-    Format: "customer.com" (no https://, no www, just the domain).
-    Use "Not disclosed" if cannot find. MUST align with keyCustomers array.
-    Used for spawning Domain records.
+  description: 'Primary domain for each key customer (parallel to keyCustomers array). ENRICHMENT SEARCH: "{customer_name}
+    official website domain company". Format: "customer.com" (no https://, no www, just the domain). Use "Not disclosed" if
+    cannot find. MUST align with keyCustomers array. Used for spawning Domain records.
+
+    '
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -156,11 +154,11 @@ properties:
 - name: keyCustomerSizeCat
   dataType:
   - text[]
-  description: >
-    Customer size segment for each keyCustomer (parallel to keyCustomers array).
-    ENRICHMENT SEARCH: "{customer_name} company employees size revenue".
-    Classify as Enterprise (1000+ employees), Mid-Market (100-999), SMB (10-99), Startup (<10).
-    Use "Not disclosed" if segment unknown. MUST have same length as keyCustomers array.
+  description: 'Customer size segment for each keyCustomer (parallel to keyCustomers array). ENRICHMENT SEARCH: "{customer_name}
+    company employees size revenue". Classify as Enterprise (1000+ employees), Mid-Market (100-999), SMB (10-99), Startup
+    (<10). Use "Not disclosed" if segment unknown. MUST have same length as keyCustomers array.
+
+    '
   parallel_to: keyCustomers
   enum:
   - Enterprise
@@ -217,7 +215,8 @@ properties:
 - name: keyCustomerEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyCustomer from page facts and web search (parallel to keyCustomers array). Summarize factual basis for classifications and extracted values.
+  description: Evidence/context found for each keyCustomer from page facts and web search (parallel to keyCustomers array).
+    Summarize factual basis for classifications and extracted values.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -233,10 +232,13 @@ properties:
 - name: useCaseLLM
   dataType:
   - text[]
-  description: |
-    Use Case Description - detailed descriptions for each classified use case. Array supports multi-use-case classification
+  description: 'Use Case Description - detailed descriptions for each classified use case. Array supports multi-use-case classification
+
     (ordered by similarity score, [0] is primary).
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in useCaseCIT field.
+
+    '
   tags:
   - LLM
   - score
@@ -300,7 +302,9 @@ properties:
 - name: caseStudies
   dataType:
   - text[]
-  description: Case study summary for each keyCustomer (parallel to keyCustomers array) - one concise line per customer success story with quantifiable results. Use "Not disclosed" if no case study available for a customer. MUST have same length as keyCustomers array.
+  description: Case study summary for each keyCustomer (parallel to keyCustomers array) - one concise line per customer success
+    story with quantifiable results. Use "Not disclosed" if no case study available for a customer. MUST have same length
+    as keyCustomers array.
   parallel_to: keyCustomers
   tags:
   - research
@@ -551,11 +555,15 @@ properties:
 - name: customerIndustrySegmentLLM
   dataType:
   - text
-  description: |
-    Primary industry segment description for entity's customer base (entity-level summary) - rich semantic description
+  description: 'Primary industry segment description for entity''s customer base (entity-level summary) - rich semantic description
+
     (50-150 words) of the primary customer segment. Represents the most common or strategically important segment. Source
+
     for classification to customerIndustrySegmentCat.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in customerIndustrySegmentCIT field.
+
+    '
   tags:
   - LLM
   - industry
@@ -732,11 +740,15 @@ properties:
 - name: keyCustomerIndustrySegmentLLM
   dataType:
   - text[]
-  description: |
-    Specific industry segment/vertical for each keyCustomer (parallel to keyCustomers array) - detailed categorization
+  description: 'Specific industry segment/vertical for each keyCustomer (parallel to keyCustomers array) - detailed categorization
+
     within the broader industry for each customer. Array index aligns with keyCustomers array. Source for classification to
+
     keyCustomerIndustrySegmentCat.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in keyCustomerIndustrySegmentCIT field.
+
+    '
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -790,32 +802,6 @@ properties:
     classifier_vector: industrySegmentVector
     source_llm: keyCustomerIndustrySegmentLLM
     order: 207
-- name: sourceQuality
-  dataType:
-  - text
-  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
-
-    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
-
-    - "medium": Some pageData available but limited relevance or coverage
-
-    - "low": Minimal pageData, relying on source overview text only
-
-    - "minimal": No pageData, only basic entity metadata available
-
-    '
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - extended
-  - metadata
-  - system
-  tags:
-  - metadata
-  - score
-  metadata:
-    order: 912
 - name: analysisConfidence
   dataType:
   - text
@@ -910,7 +896,8 @@ properties:
 - name: researcher_model_id
   dataType:
   - text
-  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models.
+  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different
+    models.
   indexFilterable: true
   indexSearchable: false
   moduleConfig:
@@ -979,18 +966,6 @@ properties:
       skip: true
   metadata:
     order: 917
-- name: createdAt
-  dataType:
-  - date
-  description: Record creation timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 903
 references:
 - name: domainBeacon
   target_collection: Domain

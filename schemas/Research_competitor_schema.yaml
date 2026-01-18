@@ -2,33 +2,24 @@ type: research
 class: Research_competitor
 id: Research_competitor
 name: Research Competitor
-description: "\U0001F4DA RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Lookalike\
-  \ Entity Discovery)\n  \n  RESEARCHER: Competitive Intelligence Analyst (identity\
-  \ defined in seed data for researcher identity)\n  \n  KNOWLEDGE TYPE: Ecosystem\
-  \ of DIRECT COMPETITORS as lookalike prospects for the tenant's sales team\n  \n\
-  \  PURPOSE: Build a seed list of entities with similar offerings in similar markets:\n\
-  \  - Identify entities that COMPETE WITH this entity (not against the tenant)\n\
-  \  - Map the competitive ecosystem to find lookalike prospects\n  - Generate high-quality\
-  \ prospect lists based on similarity\n  - Enable efficient \"land and expand\" prospecting\
-  \ strategies\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents one entity's\
-  \ complete competitor intelligence\n  - Tenant Isolation: Complete data separation\
-  \ per entity\n  - Tenant Activation: Automatic tenant creation and activation\n\
-  \  - Scalability: Supports unlimited tenants with efficient partitioning\n  \n \
-  \ REPOSITORY CONTENTS:\n  - Competitive Ecosystem Map: Named competitors with similar\
-  \ offerings/markets\n  - Similarity Analysis: What makes these entities comparable\n\
-  \  - Categorical Classifications: Machine-assigned categories for competitor attributes\n\
-  \  - Quality Metadata: Processing dates, source quality, review flags, confidence\
-  \ levels\n  - Evidence Links: References to supporting data and source materials\n\
-  \  \n  DATA SOURCES:\n  - AI-analyzed entity websites and competitor-specific content\n\
-  \  - Industry reports and research publications\n  - Public entity information and\
-  \ disclosures\n  - Validated against authoritative sources when available\n  \n\
-  \  QUALITY STANDARDS:\n  - Confidence Scoring: High, Medium, Low, Inferred, Web-verified\n\
-  \  - Evidence-Based Assessment: Classifications backed by concrete evidence\n  -\
-  \ Source Tracking: Links to originating Domain records\n  - Conservative Calibration:\
-  \ Prefer 'unknown' over incorrect data\n  \n  INTEGRATION: Seeds prospect lists\
-  \ by identifying lookalike entities in the same competitive ecosystem\n  \n  VECTOR\
-  \ SEARCH CAPABILITIES: Named vectors for similarity search across key competitor\
-  \ dimensions for lookalike discovery"
+description: "\U0001F4DA RESEARCH REPOSITORY: Competitive Ecosystem Intelligence (Lookalike Entity Discovery)\n  \n  RESEARCHER:\
+  \ Competitive Intelligence Analyst (identity defined in seed data for researcher identity)\n  \n  KNOWLEDGE TYPE: Ecosystem\
+  \ of DIRECT COMPETITORS as lookalike prospects for the tenant's sales team\n  \n  PURPOSE: Build a seed list of entities\
+  \ with similar offerings in similar markets:\n  - Identify entities that COMPETE WITH this entity (not against the tenant)\n\
+  \  - Map the competitive ecosystem to find lookalike prospects\n  - Generate high-quality prospect lists based on similarity\n\
+  \  - Enable efficient \"land and expand\" prospecting strategies\n  \n  MULTI-TENANT ARCHITECTURE: Each tenant represents\
+  \ one entity's complete competitor intelligence\n  - Tenant Isolation: Complete data separation per entity\n  - Tenant Activation:\
+  \ Automatic tenant creation and activation\n  - Scalability: Supports unlimited tenants with efficient partitioning\n  \n\
+  \  REPOSITORY CONTENTS:\n  - Competitive Ecosystem Map: Named competitors with similar offerings/markets\n  - Similarity\
+  \ Analysis: What makes these entities comparable\n  - Categorical Classifications: Machine-assigned categories for competitor\
+  \ attributes\n  - Quality Metadata: Processing dates, source quality, review flags, confidence levels\n  - Evidence Links:\
+  \ References to supporting data and source materials\n  \n  DATA SOURCES:\n  - AI-analyzed entity websites and competitor-specific\
+  \ content\n  - Industry reports and research publications\n  - Public entity information and disclosures\n  - Validated\
+  \ against authoritative sources when available\n  \n  QUALITY STANDARDS:\n  - Confidence Scoring: High, Medium, Low, Inferred,\
+  \ Web-verified\n  - Evidence-Based Assessment: Classifications backed by concrete evidence\n  - Source Tracking: Links to\
+  \ originating Domain records\n  - Conservative Calibration: Prefer 'unknown' over incorrect data\n  \n  INTEGRATION: Seeds\
+  \ prospect lists by identifying lookalike entities in the same competitive ecosystem\n  \n  VECTOR SEARCH CAPABILITIES:\
+  \ Named vectors for similarity search across key competitor dimensions for lookalike discovery"
 invertedIndexConfig:
   bm25:
     b: 0.75
@@ -84,9 +75,8 @@ properties:
 - name: competitorAnalysisCat
   dataType:
   - text
-  description: Competitive analysis classification - assess based on market position,
-    growth trajectory, and competitive threat level. Consider market share indicators,
-    growth momentum, innovation capabilities, and competitive positioning claims.
+  description: Competitive analysis classification - assess based on market position, growth trajectory, and competitive threat
+    level. Consider market share indicators, growth momentum, innovation capabilities, and competitive positioning claims.
   enum:
   - Market-Leader
   - Strong-Challenger
@@ -110,11 +100,15 @@ properties:
 - name: competitorAnalysisLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of competitive landscape and positioning. Include
+  description: 'Descriptive analysis of competitive landscape and positioning. Include
+
     direct competitors identified, alternative solutions, competitive advantages claimed,
+
     differentiation factors, and competitive threats acknowledged.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in competitorAnalysisCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -141,9 +135,8 @@ properties:
 - name: marketPositionCat
   dataType:
   - text
-  description: Market positioning strategy - classify based on competitive positioning,
-    market segment focus, and differentiation approach. Consider leadership claims,
-    pricing strategy, target market, and unique positioning angles.
+  description: Market positioning strategy - classify based on competitive positioning, market segment focus, and differentiation
+    approach. Consider leadership claims, pricing strategy, target market, and unique positioning angles.
   enum:
   - Market-Dominant
   - Premium-Leader
@@ -168,11 +161,15 @@ properties:
 - name: marketPositionLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of market position and competitive standing. Include
+  description: 'Descriptive analysis of market position and competitive standing. Include
+
     market leadership claims (leader, challenger, niche player), market share indicators,
+
     positioning strategy (premium, value, specialist), and competitive moat strength.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in marketPositionCIT field.
+
+    '
   tags:
   - LLM
   - research
@@ -200,12 +197,10 @@ properties:
 - name: keyCompetitors
   dataType:
   - text[]
-  description: |
-    Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN OFFICIAL NAMES without 
-    qualifiers, product variants, or parenthetical notes. Examples: "Workato" (not 
-    "Workato Embedded"), "Boomi" (not "Boomi iPaaS"), "Zapier" (not "Zapier for Enterprise"). 
-    Return EMPTY ARRAY [] if no competitors identified. DO NOT put explanations or 
-    "no competitors found" messages in this array. Used for domain lookups - spurious data breaks spawn.
+  description: "Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN OFFICIAL NAMES without \nqualifiers, product\
+    \ variants, or parenthetical notes. Examples: \"Workato\" (not \n\"Workato Embedded\"), \"Boomi\" (not \"Boomi iPaaS\"\
+    ), \"Zapier\" (not \"Zapier for Enterprise\"). \nReturn EMPTY ARRAY [] if no competitors identified. DO NOT put explanations\
+    \ or \n\"no competitors found\" messages in this array. Used for domain lookups - spurious data breaks spawn.\n"
   tags:
   - research
   sets:
@@ -219,9 +214,8 @@ properties:
 - name: competitorAdvantagesVs
   dataType:
   - text[]
-  description: What THIS entity has that this competitor doesn't (parallel to keyCompetitors
-    array) - e.g., "Better technology, simpler setup", "Stronger customer support,
-    faster delivery", "More flexible pricing, easier onboarding". Use "Not disclosed"
+  description: What THIS entity has that this competitor doesn't (parallel to keyCompetitors array) - e.g., "Better technology,
+    simpler setup", "Stronger customer support, faster delivery", "More flexible pricing, easier onboarding". Use "Not disclosed"
     if advantages unknown. MUST have same length as keyCompetitors array.
   parallel_to: keyCompetitors
   tags:
@@ -236,10 +230,9 @@ properties:
 - name: competitorDomain
   dataType:
   - text[]
-  description: 'Primary domain for each competitor (parallel to keyCompetitors array).
-    ENRICHMENT SEARCH: "{competitor_name} official website domain company". Format:
-    "competitor.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST
-    align with keyCompetitors.
+  description: 'Primary domain for each competitor (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
+    official website domain company". Format: "competitor.com" (no https://, no www). Use "Not disclosed" if cannot find.
+    MUST align with keyCompetitors.
 
     '
   parallel_to: keyCompetitors
@@ -256,10 +249,9 @@ properties:
 - name: competitorGapsVs
   dataType:
   - text[]
-  description: What this competitor has that THIS entity doesn't (parallel to keyCompetitors
-    array) - e.g., "More advanced features, larger market presence", "Established
-    brand recognition, broader product line", "Better infrastructure, more resources".
-    Use "Not disclosed" if gaps unknown. MUST have same length as keyCompetitors array.
+  description: What this competitor has that THIS entity doesn't (parallel to keyCompetitors array) - e.g., "More advanced
+    features, larger market presence", "Established brand recognition, broader product line", "Better infrastructure, more
+    resources". Use "Not disclosed" if gaps unknown. MUST have same length as keyCompetitors array.
   parallel_to: keyCompetitors
   tags:
   - research
@@ -273,10 +265,9 @@ properties:
 - name: competitorPositioning
   dataType:
   - text[]
-  description: 'Market positioning for each competitor (parallel to keyCompetitors
-    array). ENRICHMENT SEARCH: "{competitor_name} market position leader challenger
-    G2 Gartner". Examples: "Market Leader", "Strong Challenger", "Niche Specialist",
-    "Emerging Player". Use "Not disclosed" if unknown. MUST align with keyCompetitors.
+  description: 'Market positioning for each competitor (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
+    market position leader challenger G2 Gartner". Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging
+    Player". Use "Not disclosed" if unknown. MUST align with keyCompetitors.
 
     '
   parallel_to: keyCompetitors
@@ -292,11 +283,9 @@ properties:
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: 'Price comparison vs THIS entity (parallel to keyCompetitors array).
-    ENRICHMENT SEARCH: "{competitor_name} pricing cost vs {entity_name} comparison".
-    Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative", "Similar
-    tier". Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS
-    ONLY.
+  description: 'Price comparison vs THIS entity (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
+    pricing cost vs {entity_name} comparison". Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
+    "Similar tier". Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS ONLY.
 
     '
   parallel_to: keyCompetitors
@@ -312,9 +301,8 @@ properties:
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: 'Target market for each competitor (parallel to keyCompetitors array).
-    ENRICHMENT SEARCH: "{competitor_name} target market customers enterprise SMB".
-    Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
+  description: 'Target market for each competitor (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
+    target market customers enterprise SMB". Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
     Use "Not disclosed" if unknown. MUST align with keyCompetitors.
 
     '
@@ -345,9 +333,8 @@ properties:
 - name: keyCompetitorEvidence
   dataType:
   - text[]
-  description: 'Evidence/context found for each keyCompetitor from page facts and
-    web search (parallel to keyCompetitors). Auto-populated during enrichment. Contains
-    source text snippets about competitive positioning, pricing, features mentioned
+  description: 'Evidence/context found for each keyCompetitor from page facts and web search (parallel to keyCompetitors).
+    Auto-populated during enrichment. Contains source text snippets about competitive positioning, pricing, features mentioned
     for this competitor. MUST align with keyCompetitors.
 
     '
@@ -395,8 +382,8 @@ properties:
 - name: competitiveAdvantages
   dataType:
   - text[]
-  description: THIS entity's specific competitive advantages across the board. CLEAN
-    FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
+  description: THIS entity's specific competitive advantages across the board. CLEAN FACTS ONLY - no inline citations or URLs.
+    Put source URLs in citations field.
   tags:
   - research
   sets:
@@ -431,8 +418,8 @@ properties:
 - name: competitiveThreats
   dataType:
   - text[]
-  description: Identified competitive threats and challenges facing THIS entity. CLEAN
-    FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
+  description: Identified competitive threats and challenges facing THIS entity. CLEAN FACTS ONLY - no inline citations or
+    URLs. Put source URLs in citations field.
   tags:
   - research
   sets:
@@ -444,8 +431,8 @@ properties:
 - name: differentiationFactors
   dataType:
   - text[]
-  description: Key factors that differentiate THIS entity from ALL competitors. CLEAN
-    FACTS ONLY - no inline citations or URLs. Put source URLs in citations field.
+  description: Key factors that differentiate THIS entity from ALL competitors. CLEAN FACTS ONLY - no inline citations or
+    URLs. Put source URLs in citations field.
   tags:
   - research
   sets:
@@ -458,8 +445,7 @@ properties:
 - name: dossierSummary
   dataType:
   - text
-  description: Dossier section summary for this researcher - strategic analysis generated
-    from research data tables
+  description: Dossier section summary for this researcher - strategic analysis generated from research data tables
   indexSearchable: true
   tokenization: word
   indexFilterable: false
@@ -536,8 +522,8 @@ properties:
 - name: marketTrends
   dataType:
   - text[]
-  description: Key market trends affecting competitive landscape. CLEAN FACTS ONLY
-    - no inline citations or URLs. Put source URLs in citations field.
+  description: Key market trends affecting competitive landscape. CLEAN FACTS ONLY - no inline citations or URLs. Put source
+    URLs in citations field.
   tags:
   - research
   sets:
@@ -550,11 +536,9 @@ properties:
 - name: analysisConfidence
   dataType:
   - text
-  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium,
-    low, inferred]:
+  description: 'Analysis confidence level [high, web_verified, llm_knowledge, medium, low, inferred]:
 
-    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE
-    - authoritative)
+    - "high": Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
 
     - "web_verified": Confirmed through web_search with multiple external sources
 
@@ -567,9 +551,8 @@ properties:
     - "inferred": No direct evidence, purely analytical inference
 
 
-    Use "high" when pageData is available and relevant, "web_verified" when web_search
-    confirms facts, or "llm_knowledge" when you have strong training knowledge about
-    well-known entities.
+    Use "high" when pageData is available and relevant, "web_verified" when web_search confirms facts, or "llm_knowledge"
+    when you have strong training knowledge about well-known entities.
 
     '
   moduleConfig:
@@ -592,17 +575,6 @@ properties:
   - system
   metadata:
     order: 902
-- name: createdAt
-  dataType:
-  - date
-  description: Record creation timestamp
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 903
 - name: domain
   dataType:
   - text
@@ -652,7 +624,8 @@ properties:
 - name: researcher_model_id
   dataType:
   - text
-  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models.
+  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different
+    models.
   indexFilterable: true
   indexSearchable: false
   moduleConfig:
@@ -671,16 +644,14 @@ properties:
   - text
   description: 'Review requirement [none, for_review, needs_verification]:
 
-    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge
-    - no review needed
+    - "none": Confidence supported by pageData, web_search, OR strong LLM knowledge - no review needed
 
     - "for_review": Medium confidence with some gaps, human validation helpful
 
     - "needs_verification": Low confidence or pure inference, human review required
 
 
-    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none"
-    - these sources are reliable.
+    If analysisConfidence is "high", "web_verified", OR "llm_knowledge", use "none" - these sources are reliable.
 
     '
   moduleConfig:
@@ -691,30 +662,6 @@ properties:
   - prompt
   metadata:
     order: 911
-- name: sourceQuality
-  dataType:
-  - text
-  description: 'Quality rating of external tool content provided for analysis [high,
-    medium, low, minimal]:
-
-    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
-
-    - "medium": Some pageData available but limited relevance or coverage
-
-    - "low": Minimal pageData, relying on source overview text only
-
-    - "minimal": No pageData, only basic entity metadata available
-
-    '
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  tags:
-  - score
-  metadata:
-    order: 913
 - name: updated_at
   description: Record update timestamp
   dataType:
@@ -734,8 +681,7 @@ references:
 - name: keyCompetitorRefs
   uuid_source_field: competitorDomain
   target_collection: Domain
-  description: References to competitor Domain records (UUID3 from competitorDomain
-    array)
+  description: References to competitor Domain records (UUID3 from competitorDomain array)
 group: research
 weaviate_instance: cloud
 collection_name: Research_competitor

@@ -74,13 +74,6 @@ base_properties:
     tokenization: field
     tags: [context]
 
-  # --- SOURCE TRACKING ---
-  - name: seed
-    dataType: [boolean]
-    description: "Seed/training data flag"
-    indexFilterable: true
-    tags: [metadata]
-
   # --- QUALITY METADATA ---
   - name: processed_at
     dataType: [date]
@@ -93,12 +86,6 @@ base_properties:
     description: "Last update timestamp"
     indexFilterable: true
     tags: [temporal]
-
-  - name: source_quality
-    dataType: [number]
-    description: "Data quality score (0.0-1.0) indicating confidence in extracted data"
-    indexFilterable: true
-    tags: [quality, metrics]
 
   # --- AI PROVENANCE ---
   - name: citations

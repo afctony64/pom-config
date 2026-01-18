@@ -510,37 +510,6 @@ properties:
   - system
   metadata:
     order: 902
-- name: classificationThreshold
-  description: Classification threshold
-  dataType:
-  - number
-  sets:
-  - system
-  metadata:
-    order: 904
-- name: createdAt
-  dataType:
-  - date
-  description: Record creation timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 903
-- name: matchedSeeds
-  description: Matched seed names
-  dataType:
-  - text[]
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 908
 - name: processedDate
   dataType:
   - text
@@ -575,27 +544,6 @@ properties:
   - prompt
   metadata:
     order: 912
-- name: segmentSimilarities
-  description: Segment similarity scores
-  dataType:
-  - number[]
-  sets:
-  - system
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - score
-  metadata:
-    order: 914
-- name: sourceQuality
-  dataType:
-  - text
-  description: Quality assessment of source data (high/medium/low/minimal)
-  sets:
-  - system
-  metadata:
-    order: 915
 - name: updated_at
   description: Record update timestamp
   dataType:

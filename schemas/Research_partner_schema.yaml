@@ -114,11 +114,15 @@ properties:
 - name: partnerTypeLLM
   dataType:
   - text
-  description: |
-    Describe the entity's partnership ecosystem (100-150 words). Include: types of partners
+  description: 'Describe the entity''s partnership ecosystem (100-150 words). Include: types of partners
+
     (technology, channel, integration, strategic), partner program structure, notable partner
+
     names, and partnership strategy (open ecosystem vs selective partnerships).
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in partnerTypeCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -145,10 +149,9 @@ properties:
 - name: keyPartners
   dataType:
   - text[]
-  description: 'Array of 2-5 key strategic partner COMPANY NAMES only. Use CLEAN OFFICIAL
-    NAMES without qualifiers, product variants, or parenthetical notes. Examples:
-    "Salesforce" (not "Salesforce Platform"), "Microsoft" (not "Microsoft Azure Partner").
-    These names are used for domain lookups - spurious data breaks entity spawn.'
+  description: 'Array of 2-5 key strategic partner COMPANY NAMES only. Use CLEAN OFFICIAL NAMES without qualifiers, product
+    variants, or parenthetical notes. Examples: "Salesforce" (not "Salesforce Platform"), "Microsoft" (not "Microsoft Azure
+    Partner"). These names are used for domain lookups - spurious data breaks entity spawn.'
   tags:
   - beacon
   - partner
@@ -217,10 +220,9 @@ properties:
 - name: partnerDomain
   dataType:
   - text[]
-  description: 'Primary domain for each partner (parallel to keyPartners array).
-    ENRICHMENT SEARCH: "{partner_name} official website domain company". Format:
-    "partner.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST
-    align with keyPartners. Used for spawning Domain records.'
+  description: 'Primary domain for each partner (parallel to keyPartners array). ENRICHMENT SEARCH: "{partner_name} official
+    website domain company". Format: "partner.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST align with
+    keyPartners. Used for spawning Domain records.'
   parallel_to: keyPartners
   moduleConfig:
     text2vec-weaviate:
@@ -237,11 +239,15 @@ properties:
 - name: integrationLLM
   dataType:
   - text
-  description: |
-    Describe partnership integration depth (100-150 words). Include: how partners integrate
+  description: 'Describe partnership integration depth (100-150 words). Include: how partners integrate
+
     technically (APIs, native connectors, embedded), co-selling arrangements, joint solutions,
+
     and integration maturity (marketplace listing vs deep product integration).
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in integrationCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -307,11 +313,15 @@ properties:
 - name: revenueImpactLLM
   dataType:
   - text
-  description: |
-    Describe partnership revenue impact (100-150 words). Include: revenue sharing models,
+  description: 'Describe partnership revenue impact (100-150 words). Include: revenue sharing models,
+
     referral programs, channel contribution to sales, partner-sourced vs direct revenue
+
     balance, and any stated partnership revenue metrics.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in revenueImpactCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -430,30 +440,6 @@ properties:
   - system
   metadata:
     order: 907
-- name: sourceQuality
-  dataType:
-  - text
-  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
-
-    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
-
-    - "medium": Some pageData available but limited relevance or coverage
-
-    - "low": Minimal pageData, relying on source overview text only
-
-    - "minimal": No pageData, only basic entity metadata available
-
-    '
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  - prompt
-  tags:
-  - score
-  metadata:
-    order: 912
 - name: reviewFlag
   dataType:
   - text
@@ -520,7 +506,8 @@ properties:
 - name: researcher_model_id
   dataType:
   - text
-  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models.
+  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different
+    models.
   indexFilterable: true
   indexSearchable: false
   moduleConfig:
@@ -545,18 +532,6 @@ properties:
       skip: true
   metadata:
     order: 914
-- name: createdAt
-  dataType:
-  - date
-  description: Record creation timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 903
 references:
 - name: sourceEntity
   target_collection: Domain

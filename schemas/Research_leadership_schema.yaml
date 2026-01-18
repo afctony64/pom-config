@@ -116,11 +116,15 @@ properties:
 - name: founderProfileLLM
   dataType:
   - text
-  description: |
-    Describe the founder(s) background and profile (100-150 words). Include: founder names,
+  description: 'Describe the founder(s) background and profile (100-150 words). Include: founder names,
+
     previous company experience, relevant domain expertise, education, founder-led vs
+
     professional management, and any notable achievements or exits.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in founderProfileCIT field.
+
+    '
   tags:
   - LLM
   - research
@@ -206,17 +210,25 @@ properties:
 - name: employeeCount
   dataType:
   - number
-  description: |
-    Approximate total employee count.
+  description: 'Approximate total employee count.
+
 
     🚨 MANDATORY TOOL USE: If employee count is NOT explicitly stated in page content:
+
     1. You MUST call brave_search with query: "{company_name} linkedin employees headcount company size"
+
     2. DO NOT return 0 or null without performing a web search first
+
     3. Extract from: LinkedIn company page, company About pages, press releases, job postings
 
+
     Only return 0 if:
+
     - brave_search was called AND
+
     - No employee count found in search results
+
+    '
   tags:
   - research
   - headcount
@@ -228,20 +240,31 @@ properties:
 - name: employeeSizeCat
   dataType:
   - text
-  description: |
-    Employee size band classification. Requires EXPLICIT employee count evidence - do not guess.
+  description: 'Employee size band classification. Requires EXPLICIT employee count evidence - do not guess.
+
 
     CLASSIFICATION RULES (explicit evidence required):
+
     - Micro: Stated 1-10 employees
+
     - Small: Stated 11-50 employees
+
     - Medium: Stated 51-200 employees
+
     - Large: Stated 201-1000 employees
+
     - Enterprise: Stated 1001-5000 employees
+
     - Corporate: Stated 5000+ employees
 
+
     USE Unknown WHEN:
+
     - No explicit employee count found
+
     - Only vague terms like "small team" without numbers
+
+    '
   enum:
   - Micro
   - Small
@@ -261,11 +284,15 @@ properties:
 - name: executiveExperienceLLM
   dataType:
   - text
-  description: |
-    Describe the executive team's collective experience (100-150 words). Include: key executives
+  description: 'Describe the executive team''s collective experience (100-150 words). Include: key executives
+
     and their roles, years of industry experience, previous companies and positions, domain
+
     expertise depth, and any patterns (e.g., former [BigCo] executives, serial entrepreneurs).
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in executiveExperienceCIT field.
+
+    '
   tags:
   - LLM
   - research
@@ -293,10 +320,13 @@ properties:
 - name: keyExecutives
   dataType:
   - text[]
-  description: |
-    Array of key executive NAMES ONLY (format: "First Last"). Examples: "Satya Nadella",
+  description: 'Array of key executive NAMES ONLY (format: "First Last"). Examples: "Satya Nadella",
+
     "Jensen Huang", "Marc Benioff". Return EMPTY ARRAY [] if no executives publicly disclosed.
+
     DO NOT put titles, explanations, or "not disclosed" messages in this array. Titles go in executiveRoles.
+
+    '
   tags:
   - executive
   - leadership
@@ -334,11 +364,11 @@ properties:
 - name: executiveBackgrounds
   dataType:
   - text[]
-  description: >
-    Executive background and experience (parallel to keyExecutives array).
-    ENRICHMENT SEARCH: "{executive_name} {role} career background education experience".
-    Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups", "McKinsey alum, serial entrepreneur".
-    Use "Not disclosed" if unknown. MUST align with keyExecutives.
+  description: 'Executive background and experience (parallel to keyExecutives array). ENRICHMENT SEARCH: "{executive_name}
+    {role} career background education experience". Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups",
+    "McKinsey alum, serial entrepreneur". Use "Not disclosed" if unknown. MUST align with keyExecutives.
+
+    '
   parallel_to: keyExecutives
   tags:
   - executive
@@ -369,11 +399,11 @@ properties:
 - name: executiveTenure
   dataType:
   - text[]
-  description: >
-    Tenure/time at entity for each executive (parallel to keyExecutives array).
-    ENRICHMENT SEARCH: "{executive_name} joined {company} tenure years".
-    Examples: "5 years", "Since founding (2019)", "2 years", "6 months".
-    Use "Not disclosed" if unknown. MUST align with keyExecutives.
+  description: 'Tenure/time at entity for each executive (parallel to keyExecutives array). ENRICHMENT SEARCH: "{executive_name}
+    joined {company} tenure years". Examples: "5 years", "Since founding (2019)", "2 years", "6 months". Use "Not disclosed"
+    if unknown. MUST align with keyExecutives.
+
+    '
   parallel_to: keyExecutives
   tags:
   - executive
@@ -388,11 +418,11 @@ properties:
 - name: executiveLinkedIn
   dataType:
   - text[]
-  description: >
-    LinkedIn profile URL for each executive (parallel to keyExecutives array).
-    ENRICHMENT SEARCH: "{executive_name} {role} {company} linkedin profile".
-    Format: https://www.linkedin.com/in/username/
-    Use "Not disclosed" if LinkedIn profile unknown. MUST align with keyExecutives.
+  description: 'LinkedIn profile URL for each executive (parallel to keyExecutives array). ENRICHMENT SEARCH: "{executive_name}
+    {role} {company} linkedin profile". Format: https://www.linkedin.com/in/username/ Use "Not disclosed" if LinkedIn profile
+    unknown. MUST align with keyExecutives.
+
+    '
   parallel_to: keyExecutives
   tags:
   - research
@@ -405,11 +435,15 @@ properties:
 - name: leadershipStyleLLM
   dataType:
   - text
-  description: |
-    Describe the leadership and company culture style (100-150 words). Include: management
+  description: 'Describe the leadership and company culture style (100-150 words). Include: management
+
     approach (hands-on, distributed), decision-making style, company values emphasis,
+
     growth philosophy (bootstrapped mindset vs hypergrowth), and any visible culture signals.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in leadershipStyleCIT field.
+
+    '
   tags:
   - LLM
   - research
@@ -450,10 +484,13 @@ properties:
 - name: advisors
   dataType:
   - text[]
-  description: |
-    Array of advisor/board member NAMES ONLY. Examples: "John Doerr", "Reid Hoffman".
+  description: 'Array of advisor/board member NAMES ONLY. Examples: "John Doerr", "Reid Hoffman".
+
     Return EMPTY ARRAY [] if no advisors publicly disclosed. DO NOT put explanations,
+
     titles, or "no advisors found" messages in this array.
+
+    '
   tags:
   - advisory
   - leadership
@@ -545,29 +582,6 @@ properties:
   - system
   metadata:
     order: 907
-- name: sourceQuality
-  dataType:
-  - text
-  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
-
-    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
-
-    - "medium": Some pageData available but limited relevance or coverage
-
-    - "low": Minimal pageData, relying on source overview text only
-
-    - "minimal": No pageData, only basic entity metadata available
-
-    '
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  tags:
-  - score
-  metadata:
-    order: 912
 - name: analysisConfidence
   dataType:
   - text
@@ -635,7 +649,8 @@ properties:
 - name: researcher_model_id
   dataType:
   - text
-  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models.
+  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different
+    models.
   indexFilterable: true
   indexSearchable: false
   moduleConfig:
@@ -714,18 +729,6 @@ properties:
   - score
   metadata:
     order: 402
-- name: createdAt
-  dataType:
-  - date
-  description: Record creation timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 903
 references:
 - name: sourceEntity
   target_collection: Domain

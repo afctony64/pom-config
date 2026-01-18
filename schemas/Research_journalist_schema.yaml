@@ -135,10 +135,9 @@ properties:
 - name: mediaOutlets
   dataType:
   - text[]
-  description: |
-    Array of media outlet/publication NAMES ONLY. Examples: "TechCrunch", "Forbes", "VentureBeat", 
-    "Wall Street Journal". Return EMPTY ARRAY [] if no media coverage found. DO NOT put sentences, 
-    explanations, or "no coverage found" messages in this array.
+  description: "Array of media outlet/publication NAMES ONLY. Examples: \"TechCrunch\", \"Forbes\", \"VentureBeat\", \n\"\
+    Wall Street Journal\". Return EMPTY ARRAY [] if no media coverage found. DO NOT put sentences, \nexplanations, or \"no\
+    \ coverage found\" messages in this array.\n"
   tags:
   - media
   - press
@@ -252,11 +251,15 @@ properties:
 - name: mediaTypeLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of types of media coverage and press presence. Include media types found (press releases,
+  description: 'Descriptive analysis of types of media coverage and press presence. Include media types found (press releases,
+
     news articles, podcast interviews, trade publications), newsroom/press page presence, media kit availability, and mix
+
     of entity-generated vs external coverage.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in mediaTypeCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -283,11 +286,15 @@ properties:
 - name: coverageLevelLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of media visibility, coverage breadth, and news momentum. Include coverage volume (article
+  description: 'Descriptive analysis of media visibility, coverage breadth, and news momentum. Include coverage volume (article
+
     count, press release count), media outlet quality (tier-1 vs niche), recency of coverage, coverage trajectory (accelerating,
+
     steady, declining), and credibility signals from external validation.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in coverageLevelCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -314,11 +321,15 @@ properties:
 - name: mediaSentimentLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of sentiment and tone in external media coverage. Include overall sentiment (positive,
+  description: 'Descriptive analysis of sentiment and tone in external media coverage. Include overall sentiment (positive,
+
     neutral, negative, mixed), media perception (emerging leader, struggling, solid player), how the entity is portrayed externally,
+
     and tone consistency across different outlets.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in mediaSentimentCIT field.
+
+    '
   tags:
   - LLM
   - research
@@ -476,30 +487,6 @@ properties:
   - system
   metadata:
     order: 907
-- name: sourceQuality
-  dataType:
-  - text
-  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
-
-    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
-
-    - "medium": Some pageData available but limited relevance or coverage
-
-    - "low": Minimal pageData, relying on source overview text only
-
-    - "minimal": No pageData, only basic entity metadata available
-
-    '
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  - prompt
-  tags:
-  - score
-  metadata:
-    order: 912
 - name: reviewFlag
   dataType:
   - text
@@ -566,7 +553,8 @@ properties:
 - name: researcher_model_id
   dataType:
   - text
-  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models.
+  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different
+    models.
   indexFilterable: true
   indexSearchable: false
   moduleConfig:
@@ -591,18 +579,6 @@ properties:
       skip: true
   metadata:
     order: 914
-- name: createdAt
-  dataType:
-  - date
-  description: Record creation timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 903
 references:
 - name: sourceEntity
   target_collection: Domain

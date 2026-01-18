@@ -165,10 +165,9 @@ properties:
 - name: fundingRounds
   dataType:
   - text[]
-  description: |
-    Array of funding event NAMES only. Examples: "Seed", "Series A", "Series B", "Series C". 
-    Return EMPTY ARRAY [] if no funding rounds found or entity is bootstrapped. 
-    DO NOT put explanations like "no funding disclosed" in this array.
+  description: "Array of funding event NAMES only. Examples: \"Seed\", \"Series A\", \"Series B\", \"Series C\". \nReturn\
+    \ EMPTY ARRAY [] if no funding rounds found or entity is bootstrapped. \nDO NOT put explanations like \"no funding disclosed\"\
+    \ in this array.\n"
   tags:
   - financial
   - funding
@@ -243,10 +242,13 @@ properties:
 - name: growthVelocityLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of growth rate and business momentum. Include YoY growth percentages, growth acceleration/deceleration
+  description: 'Descriptive analysis of growth rate and business momentum. Include YoY growth percentages, growth acceleration/deceleration
+
     trends, expansion metrics, hiring velocity, and growth sustainability indicators.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in growthVelocityCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -274,10 +276,13 @@ properties:
 - name: profitabilityProfileLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of profitability status and path to profitability. Include profit/loss status, EBITDA
+  description: 'Descriptive analysis of profitability status and path to profitability. Include profit/loss status, EBITDA
+
     mentions, cash flow indicators, burn rate if applicable, runway estimates, and profitability timeline or achievement.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in profitabilityProfileCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -305,10 +310,13 @@ properties:
 - name: revenueSizeLLM
   dataType:
   - text
-  description: |
-    Descriptive analysis of revenue scale and financial size. Include revenue range indicators, ARR/MRR mentions
+  description: 'Descriptive analysis of revenue scale and financial size. Include revenue range indicators, ARR/MRR mentions
+
     if SaaS, revenue growth trajectory, and financial scale relative to industry peers.
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in revenueSizeCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -373,11 +381,15 @@ properties:
 - name: fundingStageLLM
   dataType:
   - text
-  description: |
-    Describe the entity's funding history and current stage (100-150 words). Include: funding rounds
+  description: 'Describe the entity''s funding history and current stage (100-150 words). Include: funding rounds
+
     completed (Seed, Series A/B/C, etc.), total capital raised, key investors, latest valuation if
+
     known, and funding trajectory (bootstrapped, venture-backed, PE-owned, public).
+
     FACTS ONLY - no inline citations or URLs. Put source URLs in fundingStageCIT field.
+
+    '
   tags:
   - LLM
   sets:
@@ -643,17 +655,25 @@ properties:
 - name: headcountGrowthCat
   dataType:
   - text
-  description: |
-    Employee headcount growth classification. Requires EXPLICIT growth evidence - do not guess.
+  description: 'Employee headcount growth classification. Requires EXPLICIT growth evidence - do not guess.
+
 
     CLASSIFICATION RULES (explicit evidence required):
+
     - Rapid-Growth: Stated >50% YoY headcount growth, explicit "rapid hiring"
+
     - Steady-Growth: Stated 10-50% YoY headcount growth, consistent hiring
+
     - Stable: Explicit stable headcount, maintenance hiring only
+
     - Declining: Explicit layoffs, headcount reduction announcements
 
+
     USE Unknown WHEN:
+
     - No explicit headcount or growth information found
+
+    '
   enum:
   - Rapid-Growth
   - Steady-Growth
@@ -677,30 +697,6 @@ properties:
   - system
   metadata:
     order: 907
-- name: sourceQuality
-  dataType:
-  - text
-  description: 'Quality rating of external tool content provided for analysis [high, medium, low, minimal]:
-
-    - "high": Multiple relevant pages (pageData) with high researcher_score (>0.7)
-
-    - "medium": Some pageData available but limited relevance or coverage
-
-    - "low": Minimal pageData, relying on source overview text only
-
-    - "minimal": No pageData, only basic entity metadata available
-
-    '
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  sets:
-  - system
-  tags:
-  - metadata
-  - score
-  metadata:
-    order: 912
 - name: analysisConfidence
   dataType:
   - text
@@ -774,7 +770,8 @@ properties:
 - name: researcher_model_id
   dataType:
   - text
-  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different models.
+  description: LLM model ID used for this research (e.g., gpt-5-mini, qwen3:8b). Enables parallel research with different
+    models.
   indexFilterable: true
   indexSearchable: false
   moduleConfig:
@@ -799,18 +796,6 @@ properties:
       skip: true
   metadata:
     order: 914
-- name: createdAt
-  dataType:
-  - date
-  description: Record creation timestamp
-  sets:
-  - system
-  - audit
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  metadata:
-    order: 903
 references:
 - name: sourceEntity
   target_collection: Domain
