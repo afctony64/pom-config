@@ -18,10 +18,13 @@ researcher_identity:
   - 'PR Strategy: Media visibility research, coverage patterns, press mention analysis'
 
 # Semantic search queries for page selection (BM25/vector injectors)
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns in legal/boilerplate content
+# Answer descriptions match actual news/press content
 search_queries:
-  - "What press releases and news announcements has the company made?"
-  - "What media coverage and industry recognition have they received?"
-  - "What awards and accolades has the company won?"
+  - "press release announcement news TechCrunch Forbes"
+  - "award winner recognized named leader Gartner Forrester"
+  - "coverage featured mentioned article publication"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:

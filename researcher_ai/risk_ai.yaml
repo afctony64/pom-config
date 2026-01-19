@@ -19,10 +19,13 @@ researcher_identity:
   - 'Regulatory Intelligence: Identifying applicable regulations based on industry and markets'
 
 # Semantic search queries for page selection (BM25/vector injectors)
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns in legal/boilerplate content
+# Answer descriptions match actual security/compliance content
 search_queries:
-  - "What security certifications and compliance standards are met?"
-  - "How is data protected and what privacy measures are in place?"
-  - "What SOC2, GDPR, HIPAA, or ISO certifications does the company have?"
+  - "SOC2 SOC 2 ISO 27001 GDPR HIPAA PCI-DSS certified"
+  - "security compliance data protection encryption"
+  - "trust center security page privacy data handling"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:

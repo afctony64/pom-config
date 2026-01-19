@@ -24,10 +24,13 @@ researcher_identity:
 
 # Semantic search queries for page selection (BM25/vector injectors)
 # Issue #384: Multiple queries for comprehensive Page_facts coverage
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns in legal/boilerplate content
+# Answer descriptions match actual competitor content
 search_queries:
-  - "How does this product compare to competitors?"
-  - "What alternatives exist and what differentiates them?"
-  - "What customer reviews and market positioning exist?"
+  - "competitor alternative vs comparison better than unlike"
+  - "G2 Capterra ranking review leader challenger market position"
+  - "pricing feature advantage differentiator unique selling"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:

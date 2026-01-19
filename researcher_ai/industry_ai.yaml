@@ -23,11 +23,14 @@ researcher_identity:
 
 # Semantic search queries for page selection (BM25/vector injectors)
 # Issue #437: Multiple queries for comprehensive Page_facts coverage
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns (privacy policy "How we use...")
+# Answer descriptions match actual company content
 search_queries:
-  - "What does this company do and what industry do they operate in?"
-  - "What is their business model and how do they make money?"
-  - "How do they deliver their product or service to customers?"
-  - "What technology stack or platform do they use?"
+  - "company founded business model SaaS B2B enterprise platform"
+  - "industry vertical market software technology services revenue"
+  - "product platform cloud solution delivery API service"
+  - "about us mission vision team headquarters
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:

@@ -19,12 +19,14 @@ researcher_identity:
   - 'Headcount Analysis: Employee count, team size, organizational scale'
 
 # Semantic search queries for page selection (BM25/vector injectors)
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns in legal/boilerplate content
+# Answer descriptions match actual leadership content
 search_queries:
-  - "Who are the founders and leadership team?"
-  - "What is the background of the CEO and key executives?"
-  - "Who is on the board of directors and advisory board?"
-  - "What is the company culture and organizational values?"
-  - "How many employees does the company have? Team size headcount"
+  - "CEO founder CTO CFO COO executive leadership team"
+  - "board of directors advisor investor venture capital"
+  - "about us our team our story founded established"
+  - "employees headcount team size company culture values"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:

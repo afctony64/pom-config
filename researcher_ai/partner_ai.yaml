@@ -18,10 +18,13 @@ researcher_identity:
   - 'Network Intelligence: Partner ecosystems, alliance strategies, channel partnerships'
 
 # Semantic search queries for page selection (BM25/vector injectors)
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns (privacy policy "How we use...")
+# Answer descriptions match actual partnership content
 search_queries:
-  - "Who are the technology partners and what integrations are available?"
-  - "What partner programs and ecosystem relationships exist?"
-  - "What strategic alliances and channel partnerships are in place?"
+  - "partner integration technology ecosystem Salesforce HubSpot Zapier"
+  - "partnership program alliance reseller channel marketplace"
+  - "integrates with connects to works with API connector"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:

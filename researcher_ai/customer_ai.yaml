@@ -20,11 +20,14 @@ researcher_identity:
 
 # Semantic search queries for page selection (BM25/vector injectors)
 # Issue #437: Multiple queries for comprehensive Page_facts coverage
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns (privacy policy "How we use...")
+# Answer descriptions match actual customer content
 search_queries:
-  - "Who are the customers using this product? Customer logos and case studies"
-  - "What case studies, testimonials, and success stories show customer results?"
-  - "What industries and segments do customers come from?"
-  - "How do customers use the product and what results do they achieve?"
+  - "customer logo case study testimonial success story"
+  - "enterprise SMB mid-market Fortune 500 customers"
+  - "results achieved ROI implementation outcome"
+  - "trusted by used by customers include"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:

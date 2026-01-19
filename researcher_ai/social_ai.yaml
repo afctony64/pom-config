@@ -18,10 +18,13 @@ researcher_identity:
   - 'Social Maturity: Strategic vs. tactical social media usage'
 
 # Semantic search queries for page selection (BM25/vector injectors)
+# NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
+# Questions match question-like patterns in legal/boilerplate content
+# Answer descriptions match actual social/community content
 search_queries:
-  - "What community and social media presence does the company have?"
-  - "Where can users find developer resources, forums, and support channels?"
-  - "What social platforms and communities does the company engage with?"
+  - "LinkedIn Twitter GitHub YouTube Instagram TikTok"
+  - "community Slack Discord forum developer resources"
+  - "follow us connect social media blog podcast"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
