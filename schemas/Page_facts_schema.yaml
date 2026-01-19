@@ -127,6 +127,121 @@ properties:
   - standard
   tags:
   - content
+- name: enrichment_status
+  dataType:
+  - text
+  description: Enrichment status from PageSnapshot (success/partial/failed/etc.)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - quality
+- name: title_source
+  dataType:
+  - text
+  description: Source used to assemble title (og_title, html_title, etc.)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - metadata
+- name: title_confidence
+  dataType:
+  - number
+  description: Confidence score for assembled title (0-100)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - quality
+- name: description_source
+  dataType:
+  - text
+  description: Source used to assemble description (og_description, meta_description, etc.)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - metadata
+- name: description_confidence
+  dataType:
+  - number
+  description: Confidence score for assembled description (0-100)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - quality
+- name: content_source
+  dataType:
+  - text
+  description: Source used to assemble content (main_content, full_text, etc.)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - metadata
+- name: content_confidence
+  dataType:
+  - number
+  description: Confidence score for assembled content (0-100)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - quality
+- name: keywords
+  dataType:
+  - text[]
+  description: Extracted page keywords (from meta/OG keywords)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - content
+  - metadata
+- name: primary_image
+  dataType:
+  - text
+  description: Primary page image (from og_image/twitter_image)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - metadata
 - name: url_with_fragment
   dataType:
   - text
