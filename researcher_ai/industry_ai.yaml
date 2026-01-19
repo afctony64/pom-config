@@ -30,7 +30,20 @@ search_queries:
   - "company founded business model SaaS B2B enterprise platform"
   - "industry vertical market software technology services revenue"
   - "product platform cloud solution delivery API service"
-  - "about us mission vision team headquarters"
+  - "about us our story founded started bootstrapped self-funded"
+  - "profitable revenue customers worldwide serve million"
+
+# URL boost patterns - prioritize chunks from these page types
+# About/company pages have core business model info, blog posts are noise
+url_boost_patterns:
+  - "/about"
+  - "/company"
+  - "/our-story"
+  - "/who-we-are"
+  - "/pricing"
+  - "/platform"
+  - "/product"
+  - "/solutions"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
