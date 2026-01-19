@@ -300,6 +300,37 @@ url_patterns:
 #   - catalog: Save URL + metadata only (for future processing)
 #   - skip: Ignore completely
 
+# ════════════════════════════════════════════════════════════════════════════════
+# URL ANTIPATTERNS - Pages to EXCLUDE from context (low business value)
+# ════════════════════════════════════════════════════════════════════════════════
+# These pages dominate content volume but rarely contain core business information.
+# Excluding them ensures researchers focus on high-value pages like /about, /pricing.
+url_antipatterns:
+  # Blog content - high volume, low company-specific info
+  - pattern: "/blog(/|$)"
+    score: 0.1
+    reason: "Blog posts rarely contain core business model or company information"
+    
+  # News and announcements
+  - pattern: "/(news|press|media|announcement)s?(/|$)"
+    score: 0.15
+    reason: "News/press pages focus on events, not company fundamentals"
+    
+  # Product updates and changelogs
+  - pattern: "/(product.?update|changelog|release.?note|what.?new)s?(/|$)"
+    score: 0.1
+    reason: "Feature updates don't describe core business model"
+    
+  # Resource libraries and templates
+  - pattern: "/(resource|template|guide|ebook|whitepaper|webinar)s?(/|$)"
+    score: 0.2
+    reason: "Educational content, not company-specific"
+    
+  # Help and support documentation
+  - pattern: "/(help|support|faq|knowledge.?base|doc)s?(/|$)"
+    score: 0.15
+    reason: "Support docs describe product usage, not business model"
+
 content_types:
   # Documents (PDF, Office formats)
   documents:
