@@ -79,21 +79,6 @@ entity:
   research_schema_prefix: ""  # Results in Research_industry, Research_financial, etc.
   domain_schema: Domain
 
-  # Page research configuration
-  # Researchers query Page_facts directly via search_query
-  page_research:
-    page_intelligence_schema: Page_intelligence
-    page_facts_schema: Page_facts
-    # Priority paths for legal services domain
-    priority_paths:
-      - /about
-      - /attorneys
-      - /team
-      - /practice-areas
-      - /case-results
-      - /testimonials
-      - /contact
-
 # Schema pattern for research output (generates Research_{researcher})
 schema_pattern: "Research_{researcher}"
 
@@ -137,6 +122,9 @@ entity_spawn_sources:
 
 # ══════════════════════════════════════════════════════════════════════════════
 # URL PATTERN ANALYSIS - Researcher-Weighted Relevance Scoring
+# NOTE: These url_patterns are NOT used by the page_facts_vector injector.
+# They are used by URL scoring utilities (pom_core/utils/url_scoring.py) and
+# downstream page_intelligence/page scoring logic.
 # ══════════════════════════════════════════════════════════════════════════════
 # Each URL pattern has:
 # - pattern: Regex to match against URL path
@@ -162,7 +150,7 @@ url_patterns:
         customer: 0.7
         competitor: 0.8
         industry: 0.75
-        
+
     # Pricing & Plans (B2B SaaS) / Fee Structures (Professional Services)
     - pattern: "/(pricing|plan|package|subscription|tier|quote|fee|rate|cost)s?(/|$)"
       default_weight: 0.9
@@ -171,7 +159,7 @@ url_patterns:
         financial: 1.0
         customer: 0.85
         competitor: 0.9
-        
+
     # Integrations & API (B2B SaaS)
     - pattern: "/(integration|api|developer|doc|sdk|connector)s?(/|$)"
       default_weight: 0.85
@@ -180,7 +168,7 @@ url_patterns:
         partner: 0.95
         customer: 0.6
         competitor: 0.7
-        
+
     # Customer Evidence (Both contexts)
     - pattern: "/(customer|case.?study|success.?stor|testimonial|review|case.?result|client)s?(/|$)"
       default_weight: 0.9
@@ -189,7 +177,7 @@ url_patterns:
         industry: 0.85
         product: 0.7
         competitor: 0.6
-        
+
     # Company Information (Both contexts)
     - pattern: "/(about|company|who.?we.?are|our.?story|mission|value)s?(/|$)"
       default_weight: 0.8
@@ -198,7 +186,7 @@ url_patterns:
         leadership: 0.9
         risk: 0.6
         social: 0.7
-        
+
     # Leadership & Team (Both contexts)
     - pattern: "/(team|leadership|executive|founder|management|board|advisor|attorney|lawyer|partner|staff)s?(/|$)"
       default_weight: 0.85
@@ -207,7 +195,7 @@ url_patterns:
         risk: 0.7
         industry: 0.5
         product: 0.6
-        
+
     # Investors & Funding (B2B SaaS)
     - pattern: "/(investor|funding|raise|series|venture|capital)s?(/|$)"
       default_weight: 0.85
@@ -215,7 +203,7 @@ url_patterns:
         financial: 1.0
         leadership: 0.6
         risk: 0.7
-        
+
     # Partners & Ecosystem (B2B SaaS)
     - pattern: "/(partner|ecosystem|marketplace|alliance|certified)s?(/|$)"
       default_weight: 0.8
@@ -223,7 +211,7 @@ url_patterns:
         partner: 1.0
         product: 0.7
         industry: 0.6
-        
+
     # Security & Compliance (Both contexts)
     - pattern: "/(security|compliance|trust|soc2|gdpr|hipaa|iso|malpractice|liability)s?(/|$)"
       default_weight: 0.75
@@ -231,7 +219,7 @@ url_patterns:
         risk: 1.0
         product: 0.7
         customer: 0.6
-        
+
     # Industry/Vertical Solutions (B2B SaaS)
     - pattern: "/(industr|vertical|sector|enterprise|smb|startup)ies?(/|$)"
       default_weight: 0.8
@@ -252,7 +240,7 @@ url_patterns:
         industry: 0.65
         product: 0.5
         social: 0.7
-        
+
     # Press & Media (Both contexts)
     - pattern: "/(press|media|newsroom|coverage|mention)s?(/|$)"
       default_weight: 0.6
@@ -261,7 +249,7 @@ url_patterns:
         industry: 0.7
         financial: 0.6
         social: 0.8
-        
+
     # Resources & Downloads (Both contexts)
     - pattern: "/(resource|whitepaper|ebook|guide|download|webinar|faq|help)s?(/|$)"
       default_weight: 0.55
@@ -269,7 +257,7 @@ url_patterns:
         industry: 0.8
         product: 0.6
         customer: 0.65
-        
+
     # Events & Conferences (Both contexts)
     - pattern: "/(event|conference|summit|meetup|webcast|seminar|workshop)s?(/|$)"
       default_weight: 0.45
@@ -278,7 +266,7 @@ url_patterns:
         partner: 0.6
         social: 0.75
         journalist: 0.6
-        
+
     # Community & Forums (B2B SaaS)
     - pattern: "/(community|forum|discuss|slack|discord)s?(/|$)"
       default_weight: 0.5
@@ -286,7 +274,7 @@ url_patterns:
         social: 0.9
         customer: 0.65
         product: 0.5
-        
+
     # Changelog & Updates (B2B SaaS)
     - pattern: "/(changelog|release|update|what.?s.?new|version)s?(/|$)"
       default_weight: 0.55
@@ -294,7 +282,7 @@ url_patterns:
         product: 0.85
         journalist: 0.6
         competitor: 0.7
-        
+
     # Demo & Trial (B2B SaaS)
     - pattern: "/(demo|trial|sandbox|playground|free.?tier)s?(/|$)"
       default_weight: 0.5
@@ -312,7 +300,7 @@ url_patterns:
       default_weight: 0.15
       researcher_weights:
         risk: 0.5  # Some value for compliance review
-        
+
     # Careers & Jobs (Both contexts)
     - pattern: "/(career|job|hiring|opening|apply|recruit|talent|position)s?(/|$)"
       default_weight: 0.2
@@ -320,12 +308,12 @@ url_patterns:
         leadership: 0.4  # Team growth signals
         risk: 0.3        # Hiring velocity indicator
         industry: 0.25   # Market expansion hints
-        
+
     # Authentication Pages (Both contexts)
     - pattern: "/(login|signin|signup|register|auth|sso|oauth|account|my.?account)(/|$)"
       default_weight: 0.05
       researcher_weights: {}  # Low for all
-      
+
     # Support & Help (Both contexts)
     - pattern: "/(support|help|contact|ticket|chat|call|consultation|request)s?(/|$)"
       default_weight: 0.25
@@ -333,35 +321,35 @@ url_patterns:
         customer: 0.4   # Support model info
         product: 0.35   # Product support structure
         risk: 0.3       # Support quality
-        
+
     # Technical Infrastructure (B2B SaaS)
     - pattern: "/(status|uptime|incident|maintenance|system)(/|$)"
       default_weight: 0.2
       researcher_weights:
         risk: 0.6       # Reliability info
         product: 0.4    # Infrastructure quality
-        
+
     # Utility Pages (Both contexts)
     - pattern: "/(sitemap|robots|feed|rss|atom|manifest)(\\.xml|\\.txt)?$"
       default_weight: 0.0
       researcher_weights: {}  # Skip these completely
-      
+
     # Asset Paths (Both contexts)
     - pattern: "/(asset|static|cdn|image|img|css|js|font)s?/"
       default_weight: 0.0
       researcher_weights: {}  # Skip static assets
-      
+
     # Pagination & Filters (Both contexts)
     - pattern: "/page/\\d+|\\?page=|\\?sort=|\\?filter="
       default_weight: 0.3
       researcher_weights: {}  # Reduce duplicate content
-      
+
     # Archive Pages (Both contexts)
     - pattern: "/(archive|category|tag|author)/\\d{4}/"
       default_weight: 0.25
       researcher_weights:
         journalist: 0.5  # Historical content
-        
+
     # Search Results (Both contexts)
     - pattern: "/(search|find|query|result)s?\\?"
       default_weight: 0.1
@@ -379,56 +367,56 @@ url_antipatterns:
   - pattern: "/(admin|wp-admin|wp-content|wp-includes|administrator|backend|dashboard|panel|cms|wp-json)/"
     score: 0.05
     reason: "Admin/CMS paths - not public content"
-    
+
   # Tracking & Analytics (not content)
   - pattern: "/(tracking|analytics|pixel|beacon|gtm|ga\\.js|analytics\\.js|_ga|_gid)/"
     score: 0.05
     reason: "Tracking scripts - not content"
-    
+
   # Social Media Embeds (not primary content)
   - pattern: "/(embed|widget|share|social|facebook|twitter|linkedin|instagram|share-button)/"
     score: 0.1
     reason: "Social embeds/widgets - not primary content"
-    
+
   # API Endpoints (not human-readable content)
   - pattern: "^/api/v\\d+/|/graphql$|/rest/|/v\\d+/api/"
     score: 0.1
     reason: "API endpoints - structured data, not content"
-    
+
   # Common CMS/Platform Static Paths
   - pattern: "/(_next|_static|static|assets|dist|build|public|media|uploads|files|images|css|js|fonts)/"
     score: 0.05
     reason: "Static assets/CMS paths - not content pages"
-    
+
   # Search & Filter Results (dynamic, low value)
   - pattern: "/search\\?|/filter\\?|/query\\?|\\?q=|\\?search=|\\?query="
     score: 0.15
     reason: "Search results - dynamic, low research value"
-    
+
   # Pagination (duplicate content)
   - pattern: "/page/\\d+|\\?page=\\d+|/p/\\d+|/\\d+/$"
     score: 0.2
     reason: "Pagination - duplicate content, low value"
-    
+
   # Common Low-Value Paths (explicit exclusion)
   - pattern: "/(404|500|error|not-found|forbidden|unauthorized|access-denied)/"
     score: 0.05
     reason: "Error pages - not content"
-    
+
   - pattern: "/(test|demo|sandbox|staging|dev|local|preview)/"
     score: 0.1
     reason: "Test/staging environments - not production content"
-    
+
   # Authentication (require login, not public content)
   - pattern: "/(login|signin|signup|register|auth|oauth|sso|account|profile|settings|my-account)/"
     score: 0.1
     reason: "Auth pages - require login, not public content"
-    
+
   # Integration Callbacks (B2B SaaS)
   - pattern: "/(webhook|callback|oauth|redirect|return|success|failure)/"
     score: 0.05
     reason: "Integration callbacks - not content"
-    
+
   # RSS/Feeds (structured data, not content)
   - pattern: "/(feed|rss|atom|sitemap|robots)(\\.xml|\\.txt)?$"
     score: 0.05
@@ -438,7 +426,7 @@ url_antipatterns:
   # CONTENT TYPE ANTIPATTERNS - Researcher-specific scoring
   # Blog/news/updates are valuable for some researchers, noise for others
   # ─────────────────────────────────────────────────────────────────────────────
-  
+
   # Blog content - valuable for journalist/financial, noise for industry
   - pattern: "/blog(/|$)"
     researcher_scores:
@@ -453,7 +441,7 @@ url_antipatterns:
       journalist: 0.8   # Press releases, coverage
       competitor: 0.2   # Comparison posts rare
     reason: "Blog relevance varies by researcher type"
-    
+
   # News and press - highly valuable for journalist/financial
   - pattern: "/(news|press|media|announcement)s?(/|$)"
     researcher_scores:
@@ -468,7 +456,7 @@ url_antipatterns:
       journalist: 0.9   # Primary source for press coverage
       competitor: 0.3   # Competitor mentions rare
     reason: "News pages valuable for journalist/financial researchers"
-    
+
   # Product updates - valuable for product researcher
   - pattern: "/(product.?update|changelog|release.?note|what.?new)s?(/|$)"
     researcher_scores:
@@ -483,7 +471,7 @@ url_antipatterns:
       journalist: 0.4   # Newsworthy features
       competitor: 0.5   # Feature comparison data
     reason: "Product updates valuable for product researcher"
-    
+
   # Resource libraries - educational content
   - pattern: "/(resource|template|guide|ebook|whitepaper|webinar)s?(/|$)"
     researcher_scores:
@@ -498,7 +486,7 @@ url_antipatterns:
       journalist: 0.3   # Thought leadership
       competitor: 0.3   # Positioning content
     reason: "Educational content, moderately useful"
-    
+
   # Help and support - product usage, not business info
   - pattern: "/(help|support|faq|knowledge.?base)(/|$)"
     researcher_scores:
@@ -544,7 +532,7 @@ content_types:
       financial: 0.9   # Financial statements
       product: 0.7     # Technical specs
       risk: 0.8        # Compliance documents
-    
+
   # Video Content
   video:
     patterns:
@@ -560,7 +548,7 @@ content_types:
       customer: 0.8    # Testimonial videos
       journalist: 0.6  # Press videos
       leadership: 0.6  # Leadership interviews
-    
+
   # Audio Content
   audio:
     patterns:
@@ -573,7 +561,7 @@ content_types:
       journalist: 0.8  # Podcast interviews
       leadership: 0.7  # Founder podcasts
       industry: 0.6    # Industry discussions
-    
+
   # Images & Graphics
   images:
     patterns:
@@ -582,7 +570,7 @@ content_types:
       - "/infographic"
     future_capability: image_analysis
     current_action: skip  # Not useful for text research currently
-    
+
   # Structured Data
   structured_data:
     patterns:
@@ -594,7 +582,7 @@ content_types:
       - "/graphql"
     future_capability: structured_extraction
     current_action: skip  # API endpoints, not content
-    
+
   # Interactive Apps (require auth/JS)
   interactive:
     patterns:
@@ -604,7 +592,7 @@ content_types:
       - "/admin/"
     future_capability: none
     current_action: skip  # Requires authentication
-    
+
   # Text/HTML (Default)
   text_html:
     patterns: []  # Default for everything else

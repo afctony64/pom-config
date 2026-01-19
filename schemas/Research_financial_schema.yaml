@@ -765,6 +765,7 @@ properties:
       skip: true
   sets:
   - system
+  - prompt
   metadata:
     order: 902
 - name: researcher_model_id

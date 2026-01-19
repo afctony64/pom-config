@@ -116,9 +116,12 @@ tool_guidance:
       - Page content already has clear headquarters info
       - You found location in About/Contact page chunks
 
+# search_query/search_queries/keyword_queries/url_boost_patterns are used by the
+# page_facts_vector injector to retrieve and prioritize chunks.
 search_query: "company name headquarters founded contact about"
 
 # Search queries - optimized for vector search (pre-computed embeddings)
+# Used by page_facts_vector injector.
 # Each query targets a specific content pattern found on company websites
 search_queries:
   # Entity name extraction
@@ -137,6 +140,7 @@ search_queries:
   - "Contact email phone number get in touch support"
 
 # BM25 keyword queries - for specific keyword patterns vector search misses
+# Used by page_facts_vector injector (BM25 supplements).
 # These run in ADDITION to vector queries for better recall
 # Keep these short and keyword-focused (BM25 matches terms, not semantics)
 # BM25 is very fast (inverted index lookup) so we can have more queries
@@ -154,6 +158,7 @@ keyword_queries:
   - "about"
 
 # URL boost patterns - prioritize chunks from these page types
+# Used by page_facts_vector injector.
 # Customer stories match keywords but contain OTHER companies' info
 # About/contact pages have the target company's actual HQ/contact info
 url_boost_patterns:

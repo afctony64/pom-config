@@ -18,7 +18,7 @@ researcher_identity:
   - 'Gap Analysis: Comparing actual posture to industry expectations'
   - 'Regulatory Intelligence: Identifying applicable regulations based on industry and markets'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns in legal/boilerplate content
 # Answer descriptions match actual security/compliance content
@@ -27,7 +27,24 @@ search_queries:
   - "security compliance data protection encryption"
   - "trust center security page privacy data handling"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "soc 2"
+  - "iso 27001"
+  - "gdpr"
+  - "hipaa"
+  - "pci"
+  - "data breach"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/security"
+  - "/trust"
+  - "/compliance"
+  - "/privacy"
+  - "/legal"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Security certifications (SOC2, ISO 27001, etc.)
   - Compliance standards (GDPR, HIPAA, CCPA, PCI-DSS)
@@ -36,6 +53,7 @@ focus_areas:
   - Risk factors from SEC filings (public companies)
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - security_certification
   - compliance_standard

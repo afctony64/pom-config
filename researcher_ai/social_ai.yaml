@@ -17,7 +17,7 @@ researcher_identity:
   - 'Community Engagement: Community features, engagement approach, relationship building'
   - 'Social Maturity: Strategic vs. tactical social media usage'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns in legal/boilerplate content
 # Answer descriptions match actual social/community content
@@ -26,7 +26,23 @@ search_queries:
   - "community Slack Discord forum developer resources"
   - "follow us connect social media blog podcast"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "linkedin"
+  - "github"
+  - "youtube"
+  - "discord"
+  - "slack"
+  - "community"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/community"
+  - "/developers"
+  - "/blog"
+  - "/podcast"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Social media platforms (LinkedIn, Twitter, YouTube, etc.)
   - Community presence (Slack, Discord, forums)
@@ -35,6 +51,7 @@ focus_areas:
   - Social engagement and follower metrics
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - social_platform
   - social_account
@@ -53,6 +70,7 @@ avoid:
   # community mentions). If page content references github, slack, blog - include them.
 
 # 🌐 DATA INJECTION: Pre-enriched Domain fields (from enrichers)
+# NOTE: This is a separate data injector (digital_presence), not page_facts_vector.
 # The digital_presence injector provides already-discovered social/tech data
 # from the Domain record, so the AI doesn't need to rediscover it via search.
 # Uses tools_config format for pom-core merge compatibility

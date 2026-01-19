@@ -490,6 +490,7 @@ properties:
       skip: true
   sets:
   - system
+  - prompt
   metadata:
     order: 901
 - name: citations
@@ -501,6 +502,7 @@ properties:
       skip: true
   sets:
   - system
+  - prompt
   metadata:
     order: 902
 - name: researcher_model_id

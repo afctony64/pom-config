@@ -573,6 +573,7 @@ properties:
   sets:
   - array
   - system
+  - prompt
   metadata:
     order: 902
 - name: domain

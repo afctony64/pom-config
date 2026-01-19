@@ -17,7 +17,7 @@ researcher_identity:
   - 'News Monitoring: Latest news tracking, recency analysis, news momentum assessment'
   - 'PR Strategy: Media visibility research, coverage patterns, press mention analysis'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns in legal/boilerplate content
 # Answer descriptions match actual news/press content
@@ -26,7 +26,21 @@ search_queries:
   - "award winner recognized named leader Gartner Forrester"
   - "coverage featured mentioned article publication"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "press release"
+  - "announcement"
+  - "award"
+  - "recognition"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/press"
+  - "/news"
+  - "/media"
+  - "/announcements"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Recent news coverage (last 6-12 months)
   - Major publication mentions (TechCrunch, Forbes, VentureBeat)
@@ -35,6 +49,7 @@ focus_areas:
   - Awards and industry recognition
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - news_article
   - press_release

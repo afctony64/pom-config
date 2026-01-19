@@ -18,7 +18,7 @@ researcher_identity:
   - 'Case Study Research: Customer stories, implementation patterns, success indicators'
   - 'Industry Analysis: Customer industry identification, vertical segmentation, NAICS classification'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # Issue #437: Multiple queries for comprehensive Page_facts coverage
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns (privacy policy "How we use...")
@@ -29,7 +29,24 @@ search_queries:
   - "results achieved ROI implementation outcome"
   - "trusted by used by customers include"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "case study"
+  - "case studies"
+  - "testimonial"
+  - "success story"
+  - "trusted by"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/customers"
+  - "/customer"
+  - "/case-study"
+  - "/case-studies"
+  - "/success-stories"
+  - "/testimonials"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Customer names and logos (for keyCustomers array)
   - Case study summaries and outcomes (parallel to keyCustomers)
@@ -38,6 +55,7 @@ focus_areas:
   - Testimonials and customer quotes
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - customer_name
   - case_study

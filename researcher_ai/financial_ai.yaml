@@ -17,7 +17,7 @@ researcher_identity:
   - 'Growth Metrics: ARR/MRR analysis, customer acquisition costs, lifetime value'
   - 'Financial Health: Profitability analysis, burn rate, runway assessment'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # Issue #384/#394: Funding-focused queries for better Page_facts coverage
 # Each query runs separately, results are merged and deduplicated
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
@@ -29,7 +29,26 @@ search_queries:
   - "revenue ARR MRR growth valuation profitable"
   - "funding announcement press release investment"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "series a"
+  - "series b"
+  - "seed funding"
+  - "total funding"
+  - "valuation"
+  - "arr"
+  - "mrr"
+  - "investors"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/investor"
+  - "/investors"
+  - "/funding"
+  - "/press"
+  - "/news"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Funding rounds and amounts (Seed, Series A/B/C/D, total raised)
   - Key investors and lead VCs (Crunchbase, PitchBook as sources)
@@ -38,6 +57,7 @@ focus_areas:
   - Financial health and growth metrics
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - funding_round
   - funding_amount
@@ -58,6 +78,8 @@ avoid:
   - Assuming revenue figures without credible source attribution
 
 # Issue #394: Context retrieval options
+# NOTE: page_facts_vector reads hybrid_alpha but uses vector search; alpha is
+# informational for page facts (it applies to hybrid paths in other injectors).
 # Low alpha (0.3) prioritizes BM25 exact matches like "$9 million Series A"
 # over generic boilerplate that matches vectorially
 context_options:

@@ -22,7 +22,7 @@ researcher_identity:
   - 'Awards & Accolades Analysis: Professional rankings, certifications as competitive
     differentiators'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # Issue #384: Multiple queries for comprehensive Page_facts coverage
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns in legal/boilerplate content
@@ -32,7 +32,25 @@ search_queries:
   - "G2 Capterra ranking review leader challenger market position"
   - "pricing feature advantage differentiator unique selling"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "alternatives"
+  - "competitors"
+  - "comparison"
+  - "g2"
+  - "capterra"
+  - "gartner"
+  - "forrester"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/compare"
+  - "/comparison"
+  - "/vs"
+  - "/alternatives"
+  - "/competitors"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Direct competitors (2-5 companies customers actually compare to)
   - Competitive advantages vs each competitor (what THIS company does better)
@@ -41,6 +59,7 @@ focus_areas:
   - Awards and accolades (G2, Capterra rankings, certifications)
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - competitor_name
   - competitive_advantage
@@ -70,36 +89,36 @@ tool_guidance:
     tool_choice: required  # Competitor data from G2/Capterra is essential (company pages are biased)
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
-      
+
       ⚠️ Company comparison pages are BIASED - search third-party!
-      
+
       **SEARCH #1 (REQUIRED): Review platforms**
       → "{company} G2 capterra alternatives competitors"
       (G2/Capterra have the best competitor data)
-      
+
       **SEARCH #2 (IF NEEDED): Market position**
       → "{company} vs competitors market comparison"
       (Only if G2 search didn't identify competitors)
-      
+
       **STOP after finding:**
       - 3-5 key competitors
       - Positioning (leader/challenger/niche)
       - Key differentiators
-      
+
     recommended_searches:
       # Combined review platform search:
       primary: "{company_name} G2 capterra alternatives competitors reviews"
-      
+
       # Only if primary didn't find competitors:
       comparison: "{company_name} vs competitors comparison market"
-      
+
   citation_format:
     priority: high
     usage_instructions: |
       📝 CLEAN FACTS ONLY - no inline URLs:
       ❌ "Purpose-built for iPaaS — see https://example.com"
       ✅ "Purpose-built for embedded iPaaS serving B2B SaaS"
-      
+
       Put ALL source URLs in the `citations` array field.
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)

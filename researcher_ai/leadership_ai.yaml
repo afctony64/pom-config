@@ -18,7 +18,7 @@ researcher_identity:
   - 'Due Diligence: Executive backgrounds, previous companies, educational credentials'
   - 'Headcount Analysis: Employee count, team size, organizational scale'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns in legal/boilerplate content
 # Answer descriptions match actual leadership content
@@ -28,7 +28,26 @@ search_queries:
   - "about us our team our story founded established"
   - "employees headcount team size company culture values"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "leadership"
+  - "team"
+  - "board"
+  - "founder"
+  - "ceo"
+  - "cto"
+  - "cfo"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/team"
+  - "/leadership"
+  - "/executives"
+  - "/board"
+  - "/about"
+  - "/company"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Executive names and roles (CEO, CTO, CFO, etc.)
   - Executive backgrounds (previous companies, education, experience)
@@ -38,6 +57,7 @@ focus_areas:
   - Employee headcount and team size
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - executive_name
   - executive_role

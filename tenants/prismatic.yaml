@@ -46,6 +46,9 @@ user:
   email: michael@prismatic.io
 
 # Analysis configuration - OPTIMIZED for token efficiency
+# NOTE: Not used by page_facts_vector injector. Used by context management tools
+# (pom_core/services/ai_tool_modules/context_management/context_manager_tool.py)
+# and prompt reporting utilities.
 analysis_config:
   # ONE mission statement (not 3!)
   mission: "Find B2B SaaS with APIs, 100+ customers asking for integrations, dev teams of 5-50"
@@ -66,6 +69,8 @@ analysis_config:
 
 # ══════════════════════════════════════════════════════════════════════════════
 # RESEARCHER EXAMPLES: Domain-specific output examples per researcher
+# NOTE: Not used by page_facts_vector injector. Used by classification tools
+# (enum_classifier/vec_classifier) and prompt rendering.
 # ══════════════════════════════════════════════════════════════════════════════
 # Full schema examples showing expected LLM + Cat field values.
 # Used by:

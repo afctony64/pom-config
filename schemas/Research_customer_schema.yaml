@@ -891,6 +891,7 @@ properties:
   - system
   - metadata
   - extended
+  - prompt
   metadata:
     order: 902
 - name: researcher_model_id

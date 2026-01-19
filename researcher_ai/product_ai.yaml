@@ -19,7 +19,7 @@ researcher_identity:
     analysis'
   - 'Go-to-Market Analysis: Sales motion, distribution strategy, customer acquisition'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # Issue #384: Multiple queries for comprehensive Page_facts coverage
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns in legal/boilerplate content
@@ -30,7 +30,28 @@ search_queries:
   - "technology stack cloud native architecture scalable"
   - "demo trial free sign up get started request"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "integrations"
+  - "api"
+  - "documentation"
+  - "pricing"
+  - "free trial"
+  - "demo"
+  - "sdk"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/product"
+  - "/platform"
+  - "/features"
+  - "/pricing"
+  - "/docs"
+  - "/api"
+  - "/integrations"
+  - "/solutions"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Product type and category (what kind of product is this)
   - Core features and capabilities (what does it do)
@@ -40,6 +61,7 @@ focus_areas:
   - Go-to-market strategy (PLG, sales-led, partner-led, community-led)
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - product_name
   - product_feature

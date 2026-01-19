@@ -17,7 +17,7 @@ researcher_identity:
   - 'Relationship Assessment: Partnership strength, strategic fit, mutual benefits'
   - 'Network Intelligence: Partner ecosystems, alliance strategies, channel partnerships'
 
-# Semantic search queries for page selection (BM25/vector injectors)
+# Semantic search queries for page selection (page_facts_vector injector)
 # NOTE: Queries phrased as ANSWER DESCRIPTIONS, not questions
 # Questions match question-like patterns (privacy policy "How we use...")
 # Answer descriptions match actual partnership content
@@ -26,7 +26,26 @@ search_queries:
   - "partnership program alliance reseller channel marketplace"
   - "integrates with connects to works with API connector"
 
-# Focus areas for this researcher (guides LLM attention)
+# BM25 keyword queries - used by page_facts_vector injector (supplements vector)
+keyword_queries:
+  - "partners"
+  - "partnership"
+  - "ecosystem"
+  - "marketplace"
+  - "reseller"
+  - "channel"
+  - "technology partner"
+
+# URL boost patterns - used by page_facts_vector injector
+url_boost_patterns:
+  - "/partners"
+  - "/partner"
+  - "/integrations"
+  - "/marketplace"
+  - "/ecosystem"
+  - "/alliances"
+
+# Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Technology partners and integrations
   - Strategic alliances and partnerships
@@ -35,6 +54,7 @@ focus_areas:
   - Integration marketplace and ecosystem
 
 # Fact types to extract from source content
+# Used by ContextExecutor for fact-type prioritization when preparing context.
 fact_types:
   - partner_name
   - partner_type

@@ -508,6 +508,7 @@ properties:
       skip: true
   sets:
   - system
+  - prompt
   metadata:
     order: 902
 - name: processedDate
