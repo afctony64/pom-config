@@ -434,6 +434,86 @@ url_antipatterns:
     score: 0.05
     reason: "RSS/feeds - structured data, not content pages"
 
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONTENT TYPE ANTIPATTERNS - Researcher-specific scoring
+  # Blog/news/updates are valuable for some researchers, noise for others
+  # ─────────────────────────────────────────────────────────────────────────────
+  
+  # Blog content - valuable for journalist/financial, noise for industry
+  - pattern: "/blog(/|$)"
+    researcher_scores:
+      industry: 0.15    # Rarely has business model info
+      financial: 0.7    # Funding announcements often in blog
+      product: 0.5      # Feature launches
+      customer: 0.5     # Case studies sometimes in blog
+      leadership: 0.2   # Team info on /about, not blogs
+      risk: 0.3         # Security announcements occasionally
+      partner: 0.3      # Occasional integration announcements
+      social: 0.4       # Community updates
+      journalist: 0.8   # Press releases, coverage
+      competitor: 0.2   # Comparison posts rare
+    reason: "Blog relevance varies by researcher type"
+    
+  # News and press - highly valuable for journalist/financial
+  - pattern: "/(news|press|media|announcement)s?(/|$)"
+    researcher_scores:
+      industry: 0.3     # Events, not fundamentals
+      financial: 0.8    # Funding/acquisition news
+      product: 0.4      # Product announcements
+      customer: 0.3     # Customer wins sometimes here
+      leadership: 0.6   # Executive announcements
+      risk: 0.4         # Security incident news
+      partner: 0.5      # Partnership announcements
+      social: 0.4       # PR/brand mentions
+      journalist: 0.9   # Primary source for press coverage
+      competitor: 0.3   # Competitor mentions rare
+    reason: "News pages valuable for journalist/financial researchers"
+    
+  # Product updates - valuable for product researcher
+  - pattern: "/(product.?update|changelog|release.?note|what.?new)s?(/|$)"
+    researcher_scores:
+      industry: 0.2     # Not business model
+      financial: 0.3    # Growth signals
+      product: 0.8      # Feature roadmap, capabilities
+      customer: 0.3     # Feature adoption stories
+      leadership: 0.2   # Not leadership info
+      risk: 0.4         # Security patches, fixes
+      partner: 0.4      # Integration updates
+      social: 0.3       # Community features
+      journalist: 0.4   # Newsworthy features
+      competitor: 0.5   # Feature comparison data
+    reason: "Product updates valuable for product researcher"
+    
+  # Resource libraries - educational content
+  - pattern: "/(resource|template|guide|ebook|whitepaper|webinar)s?(/|$)"
+    researcher_scores:
+      industry: 0.3     # Industry insights sometimes
+      financial: 0.2    # Not financial info
+      product: 0.5      # Shows product capabilities
+      customer: 0.4     # Shows use cases
+      leadership: 0.2   # Not leadership info
+      risk: 0.3         # Compliance guides
+      partner: 0.3      # Integration guides
+      social: 0.2       # Not social info
+      journalist: 0.3   # Thought leadership
+      competitor: 0.3   # Positioning content
+    reason: "Educational content, moderately useful"
+    
+  # Help and support - product usage, not business info
+  - pattern: "/(help|support|faq|knowledge.?base)(/|$)"
+    researcher_scores:
+      industry: 0.15    # Not business model
+      financial: 0.15   # Not financial info
+      product: 0.5      # Feature documentation
+      customer: 0.3     # Use case examples
+      leadership: 0.1   # Not leadership info
+      risk: 0.6         # Security/compliance docs often here
+      partner: 0.3      # Integration troubleshooting
+      social: 0.2       # Community support
+      journalist: 0.15  # Not newsworthy
+      competitor: 0.2   # Feature details
+    reason: "Support docs useful for product/risk"
+
 # ══════════════════════════════════════════════════════════════════════════════
 # CONTENT TYPE DETECTION - URL-Based (No HTTP Request)
 # ══════════════════════════════════════════════════════════════════════════════
