@@ -80,8 +80,8 @@ profiles:
         enabled: [1, 2, 3]
         note: "3 instances provide good embedding throughput without impacting Ollama"
       weaviate:
-        memory_limit: 32G        # FUNCTIONAL - can still do queries + small writes
-        memory_reserved: 20G
+        memory_limit: 72G        # MINIMUM 72GB - prevents memory-induced CPU spin loops
+        memory_reserved: 48G
       backend:
         memory_limit: 24G        # FUNCTIONAL - can still run small jobs
         memory_reserved: 12G
@@ -223,8 +223,8 @@ profiles:
         instances: 3             # Balanced between LLM and embeddings
         enabled: [1, 2, 3]
       weaviate:
-        memory_limit: 40G
-        memory_reserved: 24G
+        memory_limit: 72G        # MINIMUM 72GB - prevents memory-induced CPU spin loops
+        memory_reserved: 48G
       backend:
         memory_limit: 32G
         memory_reserved: 16G
@@ -343,8 +343,8 @@ profiles:
         instances: 1             # Minimal for Weaviate queries
         enabled: [1]
       weaviate:
-        memory_limit: 48G        # Maximized for search performance
-        memory_reserved: 32G
+        memory_limit: 72G        # MINIMUM 72GB - prevents memory-induced CPU spin loops
+        memory_reserved: 48G
       backend:
         enabled: false           # Not needed for queries
       browser_pool:
@@ -400,8 +400,8 @@ profiles:
         instances: 3
         enabled: [1, 2, 3]
       weaviate:
-        memory_limit: 40G
-        memory_reserved: 24G
+        memory_limit: 72G        # MINIMUM 72GB - prevents memory-induced CPU spin loops
+        memory_reserved: 48G
       backend:
         memory_limit: 32G
         memory_reserved: 16G
@@ -497,14 +497,15 @@ profiles:
 # Design: Profiles PRIORITIZE resources, not disable services.
 #         Small dev jobs still work even when a profile is focused.
 #
-# SPARK RESOURCES:
+# SPARK RESOURCES (Weaviate minimum 72GB - prevents memory spin loops):
 # Profile          | Ollama | Weaviate | Backend | Transformers | Browser Pool | HTTP Conn | Best For
 # -----------------|--------|----------|---------|--------------|--------------|-----------|------------------
-# ai               | 80 GB ★| 32 GB    | 24 GB   | 3 instances  | 10 contexts  | 750       | Researcher prompts
+# ai               | 80 GB ★| 72 GB    | 24 GB   | 3 instances  | 10 contexts  | 750       | Researcher prompts
 # data_pipeline    | 16 GB  | 80 GB ★  | 16 GB   | 5 instances  | 50 contexts ★| 1500      | Domain/Page/Facts
-# balanced         | 48 GB  | 40 GB    | 32 GB   | 3 instances  | 25 contexts  | 1000      | General dev
-# network_friendly | 48 GB  | 40 GB    | 32 GB   | 3 instances  | 5 contexts   | 500       | Shared network
-# query_only       | OFF    | 48 GB    | OFF     | 1 instance   | Disabled     | N/A       | Search/exploration
+# balanced         | 48 GB  | 72 GB    | 32 GB   | 3 instances  | 25 contexts  | 1000      | General dev
+# web_scraping     | 12 GB  | 72 GB    | 12 GB   | 5 instances  | 100 contexts★| 3000      | Bulk scraping
+# network_friendly | 48 GB  | 72 GB    | 32 GB   | 3 instances  | 5 contexts   | 500       | Shared network
+# query_only       | OFF    | 72 GB    | OFF     | 1 instance   | Disabled     | N/A       | Search/exploration
 # travel           | N/A    | N/A      | N/A     | N/A          | Disabled     | N/A       | Offline work
 #
 # MAC RESOURCES (ALL PROFILES):
