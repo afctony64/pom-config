@@ -306,30 +306,56 @@ url_patterns:
 # These pages dominate content volume but rarely contain core business information.
 # Excluding them ensures researchers focus on high-value pages like /about, /pricing.
 url_antipatterns:
-  # Blog content - high volume, low company-specific info
+  # Blog content - valuable for some researchers, noise for others
   - pattern: "/blog(/|$)"
-    score: 0.1
-    reason: "Blog posts rarely contain core business model or company information"
+    default_score: 0.3
+    researcher_scores:
+      financial: 0.7    # Funding announcements often in blog
+      journalist: 0.8   # Press releases, coverage
+      product: 0.5      # Feature launches
+      customer: 0.5     # Case studies sometimes in blog
+      industry: 0.15    # Rarely has business model info
+      leadership: 0.2   # Team info on /about, not blogs
+      partner: 0.3      # Occasional integration announcements
+      competitor: 0.2   # Comparison posts rare
+      social: 0.4       # Community updates
+      risk: 0.3         # Security announcements
+    reason: "Blog relevance varies by researcher type"
     
-  # News and announcements
+  # News and press - highly valuable for journalist/financial
   - pattern: "/(news|press|media|announcement)s?(/|$)"
-    score: 0.15
-    reason: "News/press pages focus on events, not company fundamentals"
+    default_score: 0.4
+    researcher_scores:
+      journalist: 0.9   # Primary source for press coverage
+      financial: 0.8    # Funding/acquisition news
+      industry: 0.3     # Events, not fundamentals
+      leadership: 0.5   # Executive announcements
+    reason: "News pages valuable for journalist/financial researchers"
     
-  # Product updates and changelogs
+  # Product updates - valuable for product researcher
   - pattern: "/(product.?update|changelog|release.?note|what.?new)s?(/|$)"
-    score: 0.1
-    reason: "Feature updates don't describe core business model"
+    default_score: 0.3
+    researcher_scores:
+      product: 0.8      # Feature roadmap, capabilities
+      competitor: 0.4   # Feature comparison data
+      industry: 0.2     # Not business model
+    reason: "Product updates valuable for product researcher"
     
-  # Resource libraries and templates
+  # Resource libraries - educational content
   - pattern: "/(resource|template|guide|ebook|whitepaper|webinar)s?(/|$)"
-    score: 0.2
-    reason: "Educational content, not company-specific"
+    default_score: 0.25
+    researcher_scores:
+      product: 0.5      # Shows product capabilities
+      customer: 0.4     # Shows use cases
+    reason: "Educational content, moderately useful"
     
-  # Help and support documentation
-  - pattern: "/(help|support|faq|knowledge.?base|doc)s?(/|$)"
-    score: 0.15
-    reason: "Support docs describe product usage, not business model"
+  # Help and support - product usage, not business info
+  - pattern: "/(help|support|faq|knowledge.?base)(/|$)"
+    default_score: 0.2
+    researcher_scores:
+      product: 0.4      # Feature documentation
+      risk: 0.5         # Security/compliance docs often here
+    reason: "Support docs useful for product/risk only"
 
 content_types:
   # Documents (PDF, Office formats)
