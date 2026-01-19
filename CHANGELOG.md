@@ -5,6 +5,26 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.5] - 2026-01-19
+
+### Added
+- **sourceQuality field**: Added `sourceQuality` to all 10 Research_* schemas with `prompt` set
+  - Defines explicit criteria: high (5+ pages), medium (2-4 pages), low (1-2 pages), minimal (no relevant pages)
+  - Previously the LLM was outputting this field without schema definition or guidance
+  - Now properly defined with clear assessment criteria
+
+### Changed
+- **entity_researcher.prompty**: Added "QUALITY METADATA FIELDS" section with explicit guidance for:
+  - `sourceQuality`: Page availability and content relevance assessment
+  - `analysisConfidence`: Evidence quality-based confidence levels
+  - `reviewFlag`: Human review signaling criteria
+
+### Schema Updates
+All 10 Research schemas updated:
+- Research_competitor, Research_customer, Research_financial, Research_industry
+- Research_journalist, Research_leadership, Research_partner, Research_product
+- Research_risk, Research_social
+
 ## [1.7.0] - 2026-01-16
 
 ### Added

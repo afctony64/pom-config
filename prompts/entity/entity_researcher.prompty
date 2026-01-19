@@ -270,6 +270,34 @@ Always cite the source of information. If a claim cannot be supported by provide
 - Provide context that helps interpret the findings
 - Include both positive and negative observations when relevant
 
+## QUALITY METADATA FIELDS
+
+You MUST set these quality assessment fields based on your analysis:
+
+### sourceQuality
+Assess the PAGE AVAILABILITY and CONTENT RELEVANCE for YOUR specific research domain:
+- **"high"**: 5+ relevant pages with rich, detailed content directly addressing your focus areas
+- **"medium"**: 2-4 relevant pages with adequate content for most fields
+- **"low"**: 1-2 pages with limited relevant content, significant gaps in coverage
+- **"minimal"**: No relevant pages found, or pages lack content for your focus areas
+
+Note: A domain may have "high" sourceQuality for one researcher (e.g., product) but "minimal" for another (e.g., financial).
+
+### analysisConfidence
+Assess YOUR confidence in the analysis based on evidence quality:
+- **"high"**: Extracted from pageData that is AVAILABLE and RELEVANT (PRIMARY SOURCE - authoritative)
+- **"web_verified"**: Confirmed through web_search with multiple external sources
+- **"llm_knowledge"**: Strong LLM training knowledge about well-known entities
+- **"medium"**: Based on indirect evidence or partial information
+- **"low"**: Limited information, educated guesses
+- **"inferred"**: No direct evidence, purely analytical inference
+
+### reviewFlag
+Signal when human review is needed:
+- **"none"**: Confident in analysis, no review needed
+- **"for_review"**: Some uncertainty or conflicting information
+- **"needs_verification"**: Critical claims lack strong evidence
+
 ## COMMON ANALYSIS PATTERNS
 
 When researching entities, look for these standard information sources:

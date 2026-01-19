@@ -509,6 +509,32 @@ properties:
   - prompt
   metadata:
     order: 901
+- name: sourceQuality
+  dataType:
+  - text
+  description: 'Source data quality assessment [high, medium, low, minimal]:
+
+    - "high": 5+ relevant pages with rich, detailed content directly addressing this researcher''s focus areas
+
+    - "medium": 2-4 relevant pages with adequate content for most fields
+
+    - "low": 1-2 pages with limited relevant content, significant gaps in coverage
+
+    - "minimal": No relevant pages found, or pages lack content for this researcher''s focus areas
+
+
+    Assess based on PAGE AVAILABILITY and CONTENT RELEVANCE to YOUR specific research domain.
+    A domain may have "high" for one researcher (e.g., product) but "minimal" for another (e.g., financial).
+
+    '
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - prompt
+  metadata:
+    order: 902
 - name: citations
   dataType:
   - text[]
