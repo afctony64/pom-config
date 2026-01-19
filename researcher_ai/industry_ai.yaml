@@ -30,7 +30,7 @@ search_queries:
   - "company founded business model SaaS B2B enterprise platform"
   - "industry vertical market software technology services revenue"
   - "product platform cloud solution delivery API service"
-  - "about us mission vision team headquarters
+  - "about us mission vision team headquarters"
 
 # Focus areas for this researcher (guides LLM attention)
 focus_areas:
