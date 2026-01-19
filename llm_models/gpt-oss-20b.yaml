@@ -31,7 +31,7 @@ parameters:
 # === CAPABILITIES ===
 capabilities:
   structured_output: true
-  reasoning: true
+  reasoning: false
   tool_calling: false
   streaming: true
   vision: false

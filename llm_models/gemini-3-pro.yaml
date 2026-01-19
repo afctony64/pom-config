@@ -17,7 +17,7 @@ parameters:
   top_p: 0.9
 capabilities:
   structured_output: true
-  reasoning: true
+  reasoning: false
   tool_calling: true
   streaming: true
   vision: true

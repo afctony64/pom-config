@@ -61,7 +61,6 @@ model:
     type: pom-llm-proxy
     model: gpt-5-nano
   parameters:
-    temperature: 0.7
     max_tokens: 1000
 ---
 # Executive Summary - {{ company_name }} [TEST PROMPT]

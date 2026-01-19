@@ -8,7 +8,6 @@ model:
   configuration:
     type: openai
     model: gpt-5-mini
-    temperature: 0.1
 sample:
   rendered_prompt: "You are an AI assistant..."
   schema_fields: ["field1", "field2"]

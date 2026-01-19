@@ -22,7 +22,7 @@ parameters:
 
 capabilities:
   structured_output: true
-  reasoning: true
+  reasoning: false
   tool_calling: true
   streaming: true
   vision: false

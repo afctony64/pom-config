@@ -38,7 +38,6 @@ model:
     model: gpt-5-nano
     mode: urgent
   parameters:
-    temperature: 0.7
     max_tokens: 5000
 ---
 # Opportunity Metrics Analysis
