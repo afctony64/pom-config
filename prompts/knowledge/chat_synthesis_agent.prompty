@@ -29,6 +29,10 @@ inputs:
     description: Previous conversation messages
     type: array
     default: []
+  market_context:
+    description: Pre-loaded market fact base (entity + competitors/customers/partners)
+    type: string
+    default: ""
 
 model:
   api: chat
@@ -37,7 +41,7 @@ model:
     model: gpt-5-nano
   parameters:
     temperature: 0.6
-    max_tokens: 4096
+    max_completion_tokens: 4096
 
 output_description: Final synthesized markdown response with citations
 
@@ -89,6 +93,14 @@ system: |
 user: |
   ## Original Question
   {{ user_question }}
+  
+  {% if market_context %}
+  ## Pre-loaded Market Knowledge Base
+  The following facts have been pre-loaded for this entity and its market relationships.
+  Use this as your PRIMARY source of information.
+  
+  {{ market_context }}
+  {% endif %}
   
   {% if query_classification %}
   ## Query Understanding
