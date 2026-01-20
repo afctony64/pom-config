@@ -41,8 +41,8 @@ inputs:
 model:
   api: chat
   configuration:
-    type: groq
-    model: llama-3.1-8b-instant
+    type: openai_chat
+    model: gpt-5-nano
   parameters:
     temperature: 0.5
     max_tokens: 4096
