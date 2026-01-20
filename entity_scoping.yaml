@@ -1,0 +1,142 @@
+id: entity_scope_registry
+version: 1
+description: >
+  Schema-driven entity scoping for chat RAG. Defines how to resolve entities
+  and map them to collection filters. Supports composite scoping (e.g. segment + category)
+  and relationship expansion for next-turn performance.
+
+entity_types:
+  domain_entity:
+    label: Domain Entity
+    primary_collection: Domain
+
+    lookup:
+      collection: Domain
+      limit: 5
+      query_properties:
+        - entityName
+        - domain
+        - url
+        - title
+        - description
+      return_properties:
+        - entityName
+        - domain
+        - url
+        - entityId
+        - description
+      filters:
+        - field: ready_for_review
+          operator: equal
+          value: true
+
+    scope:
+      collections:
+        Domain:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+            - field: entityId
+              operator: equal
+              from_entity: entity_id
+            - field: entityName
+              operator: equal
+              from_entity: entity_name
+        Page_facts:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+        Knowledge_base:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+        Research_*:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+            - field: entityId
+              operator: equal
+              from_entity: entity_id
+
+    relationships:
+      fields:
+        - competitorOf
+        - customerOf
+        - partnerOf
+      max_first_hop: 50
+      max_second_hop: 200
+
+  market_segment:
+    label: Market Segment
+    primary_collection: Research_industry
+
+    lookup:
+      collection: Research_industry
+      limit: 8
+      query_properties:
+        - industrySegmentCat
+        - industrySegmentLLM
+        - industryCat
+        - sector
+        - businessModelCat
+        - businessModelLLM
+        - naicsDescription
+      return_properties:
+        - industrySegmentCat
+        - industryCat
+        - sector
+        - businessModelCat
+        - domain
+        - entityName
+
+    scope:
+      collections:
+        Research_industry:
+          combine: and
+          filters:
+            - field: industrySegmentCat
+              operator: contains_any
+              from_entity: industry_segment
+            - field: industryCat
+              operator: contains_any
+              from_entity: industry_category
+            - field: businessModelCat
+              operator: contains_any
+              from_entity: business_model
+        Research_*:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+        Domain:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+        Page_facts:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+        Knowledge_base:
+          combine: or
+          filters:
+            - field: domain
+              operator: contains_any
+              from_entity: domain_scope
+
+    domain_sampling:
+      from_collection: Research_industry
+      domain_field: domain
+      max_domains: 75

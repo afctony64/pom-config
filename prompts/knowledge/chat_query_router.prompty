@@ -24,6 +24,14 @@ inputs:
     description: Recent conversation messages for context
     type: array
     default: []
+  resolved_entity:
+    description: Pre-resolved entity scope (if available)
+    type: object
+    default: {}
+  entity_candidates:
+    description: Candidate entities from lookup for disambiguation
+    type: array
+    default: []
 
 model:
   api: chat
@@ -39,7 +47,7 @@ output_description: JSON object with intent classification, entities, collection
 system: |
   You are a query classification system. You MUST respond with ONLY a valid JSON object.
   Do NOT include any explanation or text before or after the JSON.
-  
+
   Analyze the user's question and return a JSON object with:
   - intent: One of [entity_lookup, comparison, analysis, exploration, report_request, general]
   - confidence: A number from 0.0 to 1.0
@@ -49,17 +57,24 @@ system: |
   - search_queries: Array of search queries to run
   - tools_needed: Which tools are needed (brave_search for current news/prices, find_records for database lookup)
   - reasoning: Brief explanation
-  
+
+  ## Entity guidance
+  - If resolved_entity is provided, prefer it over extracted entities.
+  - If entity_candidates is provided, use it to choose the best match.
+  - Do NOT invent new entities when resolved_entity or candidates are present.
+
   ## When to use tools
   - brave_search: Use for current events, news, stock prices, recent announcements
-  - find_records: Use when looking up specific companies in the database
-  
+  - find_records: Use when looking up specific entities in the database
+
   ## Example output
   {"intent":"entity_lookup","confidence":0.9,"entities":[{"type":"company","value":"Apple","normalized":"apple"}],"collections":["Domain","Page_facts"],"search_strategy":"hybrid","search_queries":["Apple company information"],"tools_needed":[],"reasoning":"Looking up company information"}
 ---
 
 user: |
   Classify this query and respond with ONLY a JSON object (no markdown, no explanation):
-  
+
   Question: {{ user_question }}
   {% if tenant_id %}Tenant: {{ tenant_id }}{% endif %}
+  {% if resolved_entity %}Resolved entity: {{ resolved_entity }}{% endif %}
+  {% if entity_candidates %}Entity candidates: {{ entity_candidates }}{% endif %}
