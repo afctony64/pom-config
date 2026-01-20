@@ -53,7 +53,6 @@ researchers:
   - risk          # 8 - Compliance, malpractice, regulatory
   - journalist    # 9 - News coverage, press mentions, media sentiment
   - social        # 10 - Social media presence, community engagement
-  - domain        # 11 - Entity identity backfill (runs last, update_mode)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DISPLAY NAMES - Used in report titles and UI
