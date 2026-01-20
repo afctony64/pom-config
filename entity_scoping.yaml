@@ -85,33 +85,35 @@ entity_types:
       query_properties:
         - industrySegmentCat
         - industrySegmentLLM
-        - industryCat
         - sector
+        - industry
         - businessModelCat
         - businessModelLLM
         - naicsDescription
       return_properties:
         - industrySegmentCat
-        - industryCat
+        - industrySegmentLLM
         - sector
+        - industry
         - businessModelCat
-        - domain
         - entityName
+        - entityDescription
 
     scope:
       collections:
         Research_industry:
-          combine: and
+          combine: or
           filters:
             - field: industrySegmentCat
               operator: contains_any
               from_entity: industry_segment
-            - field: industryCat
+            - field: industry
               operator: contains_any
               from_entity: industry_category
             - field: businessModelCat
               operator: contains_any
               from_entity: business_model
+        # Other Research collections have domain field for scoping
         Research_*:
           combine: or
           filters:
@@ -137,7 +139,5 @@ entity_types:
               operator: contains_any
               from_entity: domain_scope
 
-    domain_sampling:
-      from_collection: Research_industry
-      domain_field: domain
-      max_domains: 75
+    # Note: Research_industry doesn't have domain field
+    # domain_sampling must use a different approach for market segments
