@@ -24,10 +24,7 @@ entity_types:
         - description
         - url
         - page_type
-      filters:
-        - field: is_primary_chunk
-          operator: equal
-          value: true
+      # No filter - let hybrid search find best matches
 
     scope:
       collections:
@@ -77,10 +74,7 @@ entity_types:
         - description
         - keywords
         - page_type
-      filters:
-        - field: is_primary_chunk
-          operator: equal
-          value: true
+      # No filter - let hybrid search find best matches
 
     scope:
       collections:
