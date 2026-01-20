@@ -81,6 +81,7 @@ entity_types:
     lookup:
       collection: Research_industry
       limit: 8
+      target_vector: industrySegmentVector  # Multi-vector collection requires target vector
       query_properties:
         - industrySegmentCat
         - industrySegmentLLM
