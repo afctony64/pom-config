@@ -23,7 +23,8 @@ inputs:
 model:
   api: chat
   configuration:
-    model_card_id: groq-llama3.1-8b
+    type: groq
+    model: llama-3.1-8b-instant
   parameters:
     temperature: 0.5
     max_tokens: 2048
