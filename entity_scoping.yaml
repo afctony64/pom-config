@@ -8,63 +8,48 @@ description: >
 entity_types:
   domain_entity:
     label: Domain Entity
-    primary_collection: Domain
+    primary_collection: Page_facts  # Use Page_facts which has all the data
 
     lookup:
-      collection: Domain
+      collection: Page_facts
       limit: 5
       query_properties:
-        - entityName
         - domain
-        - url
         - title
         - description
+        - content
       return_properties:
-        - entityName
         - domain
-        - url
-        - entityId
+        - title
         - description
+        - url
+        - page_type
       filters:
-        - field: ready_for_review
+        - field: is_primary_chunk
           operator: equal
           value: true
 
     scope:
       collections:
-        Domain:
-          combine: or
-          filters:
-            - field: domain
-              operator: contains_any
-              from_entity: domain_scope
-            - field: entityId
-              operator: equal
-              from_entity: entity_id
-            - field: entityName
-              operator: equal
-              from_entity: entity_name
         Page_facts:
           combine: or
           filters:
             - field: domain
-              operator: contains_any
-              from_entity: domain_scope
+              operator: equal
+              from_entity: domain
         Knowledge_base:
           combine: or
           filters:
             - field: domain
               operator: contains_any
               from_entity: domain_scope
+        # Research collections may have domain field for scoping
         Research_*:
           combine: or
           filters:
             - field: domain
               operator: contains_any
               from_entity: domain_scope
-            - field: entityId
-              operator: equal
-              from_entity: entity_id
 
     relationships:
       fields:
@@ -76,59 +61,35 @@ entity_types:
 
   market_segment:
     label: Market Segment
-    primary_collection: Research_industry
+    primary_collection: Page_facts  # Use Page_facts which has all data in prismatic
 
     lookup:
-      collection: Research_industry
+      collection: Page_facts
       limit: 8
-      target_vector: industrySegmentVector  # Multi-vector collection requires target vector
       query_properties:
-        - industrySegmentCat
-        - industrySegmentLLM
-        - sector
-        - industry
-        - businessModelCat
-        - businessModelLLM
-        - naicsDescription
+        - title
+        - description
+        - content
+        - keywords
       return_properties:
-        - industrySegmentCat
-        - industrySegmentLLM
-        - sector
-        - industry
-        - businessModelCat
-        - entityName
-        - entityDescription
+        - domain
+        - title
+        - description
+        - keywords
+        - page_type
+      filters:
+        - field: is_primary_chunk
+          operator: equal
+          value: true
 
     scope:
       collections:
-        Research_industry:
-          combine: or
-          filters:
-            - field: industrySegmentCat
-              operator: contains_any
-              from_entity: industry_segment
-            - field: industry
-              operator: contains_any
-              from_entity: industry_category
-            - field: businessModelCat
-              operator: contains_any
-              from_entity: business_model
-        # Other Research collections have domain field for scoping
-        Research_*:
-          combine: or
-          filters:
-            - field: domain
-              operator: contains_any
-              from_entity: domain_scope
-        Domain:
-          combine: or
-          filters:
-            - field: domain
-              operator: contains_any
-              from_entity: domain_scope
         Page_facts:
           combine: or
           filters:
+            - field: keywords
+              operator: contains_any
+              from_entity: market_keywords
             - field: domain
               operator: contains_any
               from_entity: domain_scope
@@ -138,6 +99,3 @@ entity_types:
             - field: domain
               operator: contains_any
               from_entity: domain_scope
-
-    # Note: Research_industry doesn't have domain field
-    # domain_sampling must use a different approach for market segments
