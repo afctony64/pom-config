@@ -37,7 +37,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-nano
+    model: gpt-4o-mini  # Fast chat model for low-latency classification
   parameters:
     max_tokens: 1024
 

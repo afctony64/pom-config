@@ -50,7 +50,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-nano
+    model: gpt-4o-mini  # Fast chat model for low-latency synthesis
     # Issue #723: Knowledge base search tools for on-demand context
     tools: [page_facts_search, research_search]
   parameters:
