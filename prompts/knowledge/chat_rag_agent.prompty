@@ -41,7 +41,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai  # Responses API for reasoning_effort support
+    type: openai_responses  # Responses API for reasoning_effort support
     model: gpt-5-nano
   parameters:
     temperature: 0.5
