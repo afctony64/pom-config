@@ -113,7 +113,7 @@ system: 'You are a business intelligence assistant specializing in company accou
   '
 schema_ids:
 - Company_source
-type: standard
+type: chat
 ---
 
 user: |

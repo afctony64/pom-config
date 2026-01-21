@@ -1,0 +1,129 @@
+# Issue #723: Knowledge Base Search Tools for Chat
+# On-demand vector search of Research_* collections
+id: research_search
+name: Search Research Data
+type: tool_card
+version: "1.0.0"
+
+execution:
+  type: weaviate_search
+  collection_pattern: "Research_{research_type}"
+  search_type: hybrid
+
+model_support:
+  gpt-5-nano: true
+  gpt-5-mini: true
+  gpt-5.1: true
+  all: true
+
+timing:
+  injection: false
+  function_calling: true
+  post_processing: false
+
+function_schema:
+  name: research_search
+  description: "Vector search across Research analysis collections for a company domain. Returns AI-generated research insights."
+  parameters:
+    type: object
+    properties:
+      query:
+        type: string
+        description: "Search query describing what research insight you're looking for"
+      domain:
+        type: string
+        description: "Company domain to filter results (e.g., 'prismatic.io')"
+      research_type:
+        type: string
+        description: "Type of research to search"
+        enum:
+          - competitor
+          - customer
+          - financial
+          - industry
+          - leadership
+          - partner
+          - product
+          - risk
+          - social
+      limit:
+        type: integer
+        description: "Maximum number of results to return (default: 3, max: 5)"
+        default: 3
+    required:
+      - query
+      - domain
+      - research_type
+
+llm_guidance:
+  priority: high
+  value_proposition: "Search AI-generated research analysis on demand"
+  usage_instructions: |
+    Use this tool to find research insights about a company.
+    - Specify the research_type to search the appropriate collection
+    - Research data is AI-analyzed content, not raw page content
+    - Good for strategic insights, analysis, and summaries
+    Research types:
+    - competitor: Competitive landscape analysis
+    - customer: Customer segments and use cases
+    - financial: Financial performance and metrics
+    - industry: Industry positioning and trends
+    - leadership: Executive team and leadership info
+    - partner: Partnership ecosystem
+    - product: Product features and capabilities
+    - risk: Business risks and challenges
+    - social: Social media presence and sentiment
+  use_when:
+    - "Need analyzed/summarized insights rather than raw content"
+    - "Looking for strategic information"
+    - "Answering questions about competitors, customers, financials, etc."
+  avoid_when:
+    - "Need raw page content (use page_facts_search instead)"
+    - "Information already in context"
+    - "General questions not about the company"
+
+cost:
+  per_call: 0.0
+  currency: USD
+
+performance:
+  avg_latency_ms: 150
+  timeout_ms: 3000
+
+validation:
+  required_params:
+    - query
+    - domain
+    - research_type
+  param_rules:
+    query:
+      min_length: 2
+      max_length: 200
+    domain:
+      min_length: 3
+      max_length: 100
+    research_type:
+      enum:
+        - competitor
+        - customer
+        - financial
+        - industry
+        - leadership
+        - partner
+        - product
+        - risk
+        - social
+    limit:
+      min: 1
+      max: 5
+
+metadata:
+  description: "On-demand vector search of Research_* collections for chat (Issue #723)"
+  category: database
+  status: stable
+  tags:
+    - weaviate
+    - vector_search
+    - knowledge_base
+    - research
+    - chat

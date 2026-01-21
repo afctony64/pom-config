@@ -1,0 +1,93 @@
+# Issue #723: Knowledge Base Search Tools for Chat
+# On-demand vector search of Page_facts collection
+id: page_facts_search
+name: Search Page Facts
+type: tool_card
+version: "1.0.0"
+
+execution:
+  type: weaviate_search
+  collection: Page_facts
+  search_type: hybrid
+
+model_support:
+  gpt-5-nano: true
+  gpt-5-mini: true
+  gpt-5.1: true
+  all: true
+
+timing:
+  injection: false
+  function_calling: true
+  post_processing: false
+
+function_schema:
+  name: page_facts_search
+  description: "Vector search page content and facts for a specific company domain. Returns relevant page chunks from the knowledge base."
+  parameters:
+    type: object
+    properties:
+      query:
+        type: string
+        description: "Search query describing what information you're looking for (e.g., 'competitors', 'pricing', 'product features')"
+      domain:
+        type: string
+        description: "Company domain to filter results (e.g., 'prismatic.io'). Required for scoping search to a specific company."
+      limit:
+        type: integer
+        description: "Maximum number of results to return (default: 3, max: 5)"
+        default: 3
+    required:
+      - query
+      - domain
+
+llm_guidance:
+  priority: high
+  value_proposition: "Search domain-specific page content on demand with minimal context overhead"
+  usage_instructions: |
+    Use this tool to find specific information about a company from their website content.
+    - Provide a focused, descriptive query about what you need
+    - Results include page title, content snippet, and source URL
+    - Each result is limited to ~500 chars for context efficiency
+    - Call multiple times with different queries if needed
+  use_when:
+    - "Answering questions about a specific company"
+    - "Need factual information from company website"
+    - "Looking for specific details like pricing, features, team info"
+  avoid_when:
+    - "Information already provided in context"
+    - "General knowledge questions not about the company"
+    - "Already have sufficient information to answer"
+
+cost:
+  per_call: 0.0
+  currency: USD
+
+performance:
+  avg_latency_ms: 150
+  timeout_ms: 3000
+
+validation:
+  required_params:
+    - query
+    - domain
+  param_rules:
+    query:
+      min_length: 2
+      max_length: 200
+    domain:
+      min_length: 3
+      max_length: 100
+    limit:
+      min: 1
+      max: 5
+
+metadata:
+  description: "On-demand vector search of Page_facts collection for chat (Issue #723)"
+  category: database
+  status: stable
+  tags:
+    - weaviate
+    - vector_search
+    - knowledge_base
+    - chat

@@ -7,7 +7,7 @@ description: >
 
 id: chat_rag_agent
 group: knowledge
-type: standard
+type: chat
 
 inputs:
   user_question:
