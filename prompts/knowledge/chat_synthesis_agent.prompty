@@ -161,7 +161,7 @@ user: |
   {% if conversation_history and conversation_history|length > 0 %}
   ## Conversation Context
   {% for msg in conversation_history[-3:] %}
-  **{{ msg.role|upper }}**: {{ msg.content[:200] }}{% if msg.content|length > 200 %}...{% endif %}
+  **{{ msg.get('role', 'unknown')|upper }}**: {{ msg.get('content', '')[:200] }}{% if msg.get('content', '')|length > 200 %}...{% endif %}
   {% endfor %}
   {% endif %}
   
