@@ -41,12 +41,11 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai_responses  # Responses API for reasoning_effort support
+    type: openai_chat
     model: gpt-5-nano
   parameters:
     temperature: 0.5
-    max_output_tokens: 4096
-    reasoning_effort: low  # Faster responses
+    max_tokens: 4096
 
 output_description: Markdown formatted response with business insights and citations
 
