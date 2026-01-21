@@ -148,7 +148,7 @@ user: |
   - **Intent**: {{ query_classification.get('intent', 'unknown') }}
   - **Confidence**: {{ query_classification.get('confidence', 0) }}
   {% if query_classification.get('entities') %}
-  - **Entities**: {% for e in query_classification.entities %}{{ e.value }} ({{ e.type }}){% if not loop.last %}, {% endif %}{% endfor %}
+  - **Entities**: {% for e in query_classification.entities %}{{ e.get('value', e.get('name', 'unknown')) }} ({{ e.get('type', 'entity') }}){% if not loop.last %}, {% endif %}{% endfor %}
   {% endif %}
   {% if query_classification.get('reasoning') %}
   - **Analysis**: {{ query_classification.reasoning }}
