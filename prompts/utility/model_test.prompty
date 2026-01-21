@@ -14,7 +14,7 @@ data_requirements:
 model:
   api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_chat
     model: gpt-5-mini
   parameters: {}
 processing_config:

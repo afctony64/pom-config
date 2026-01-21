@@ -19,7 +19,6 @@ model:
     type: openai
     model: gpt-4o
   parameters:
-    temperature: 0.3
     max_tokens: 2000
 ---
 system:

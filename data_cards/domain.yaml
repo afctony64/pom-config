@@ -1,17 +1,20 @@
 # Data Card: Domain with References
 #
-# Purpose: Fetch Domain records with Company_source reference with native methods
-# Use Case: Get domain information with associated company data
+# Purpose: Fetch Domain records with native reference traversal
+# Use Case: Get domain information with associated Research_* data
 #
-# ✅ Native fetch executor with reference traversal to Company_source
+# ✅ Native fetch executor with reference traversal to Research_* collections
 
 id: domain
 name: Domain with Company Reference
 type: data_card
 file: domain.yaml
 description: >
-  Fetches Domain records with extended field set and includes referenced Company_source data.
+  Fetches Domain records with extended field set and includes referenced Research_* data.
   Uses Native fetch executor for efficient reference traversal.
+
+# Primary collection (required by integration tests)
+collection: Domain
 
 # Tagging system
 tags:
@@ -44,15 +47,14 @@ parameters:
   dynamic_templates: true
 
   # FIX #433: Traversal configuration to prevent circular references
-  # Domain → Company_source is safe, but Domain.competitor could be circular
+  # Domain → Research_* can be circular via competitor relationships
   traversal:
-    max_depth: 1                    # Domain → Company_source → STOP
+    max_depth: 1                    # Domain → Research_* → STOP
     policies:
       competitor: skip              # Skip Domain.competitor (circular to Research_competitor)
       competitors: skip             # Skip plural form too
 
-  # Reference fields - NONE (Company_source removed from Domain schema v9.0)
-  # Domain now uses Research_* references via dynamic_templates
+  # Reference fields - NONE (Domain uses Research_* references via dynamic_templates)
   references: []
 
   # Field tags for reference collections
@@ -105,9 +107,7 @@ field_sets:
         source: property
         description: Blacklist status
 
-      # Company reference fields (flattened with underscore notation)
-      # NOTE: Company_source reference removed from Domain schema v9.0
-      # Domain now has direct Research_* references
+  # Research reference fields (flattened with underscore notation)
 
   extended:
     description: "Full domain profile with all fields and company reference"
@@ -178,16 +178,14 @@ field_sets:
         source: property
         description: Enricher results array
 
-      # Company reference fields (extended, flattened with underscore notation)
-      # NOTE: Company_source reference removed from Domain schema v9.0
-      # Domain now has direct Research_* references
+  # Research reference fields (extended, flattened with underscore notation)
 
 # Collection configuration
 collections:
   - collection: Domain
     field_set: standard
     required: true
-    # NOTE: Company_source reference removed from Domain schema v9.0
+    # NOTE: Domain uses Research_* references via dynamic_templates
 
 # Query behavior
 supports_relationships: true

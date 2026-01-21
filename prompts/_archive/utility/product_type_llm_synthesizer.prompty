@@ -29,7 +29,6 @@ model:
     type: openai
     model: gpt-5-mini
   parameters:
-    temperature: 0.3
     max_tokens: 5000
     response_format:
       type: json_schema

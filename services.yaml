@@ -93,32 +93,6 @@ backends:
     description: Development container for pom-core library
 
 # =============================================================================
-# LLM PROXY
-# =============================================================================
-llm_proxy:
-
-  mac_llm_proxy:
-    name: LLM Proxy (Mac)
-    container: pom-llm-proxy
-    port: 4001                    # External port (avoid 4000 - Cursor MCP)
-    internal_port: 8000           # FastAPI internal port
-    type: fastapi
-    healthcheck: /health
-    auto_start: true
-    description: OpenAI-compatible LLM routing proxy on Mac
-
-  spark_llm_proxy:
-    name: LLM Proxy (Spark)
-    container: spark-pom-llm-proxy
-    port: 4001                    # External port on Spark
-    internal_port: 8000
-    type: fastapi
-    healthcheck: /health
-    auto_start: true
-    location: spark
-    description: OpenAI-compatible LLM routing proxy on Spark
-
-# =============================================================================
 # DATABASES
 # =============================================================================
 databases:

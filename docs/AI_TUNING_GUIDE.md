@@ -66,8 +66,9 @@ data_requirements:            # Data injection configuration
         alpha: 0.3            # BM25/vector balance
 
 model:                        # LLM configuration
+  api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_chat         # Direct adapter: openai_chat, ollama, anthropic, google
     model: gpt-5-mini
   parameters:
     max_output_tokens: 8000

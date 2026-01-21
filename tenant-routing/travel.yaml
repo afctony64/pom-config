@@ -29,10 +29,9 @@ tenants:
     weaviate_target: cloud
     description: "Production tenant - routes to Cloud Weaviate when available"
     collections:
-      Company_research_*: cloud
-      Company_opportunity: cloud
       # Spark collections redirect to Mac in travel mode
-      Company_source: mac
+      Research_*: cloud
+      Opportunity: cloud
       Domain: mac
       Page_facts: mac
       Page_intelligence: cloud
@@ -47,21 +46,20 @@ tenants:
 
 collection_routing:
   # All Spark collections redirect to Mac
-  Company_source: mac
   Domain: mac
   Page_facts: mac
   # Cloud collections remain on cloud
-  Company_research_industry: cloud
-  Company_research_leadership: cloud
-  Company_research_product: cloud
-  Company_research_financial: cloud
-  Company_research_customer: cloud
-  Company_research_competitor: cloud
-  Company_research_partner: cloud
-  Company_research_risk: cloud
-  Company_research_social: cloud
-  Company_research_journalist: cloud
-  Company_opportunity: cloud
+  Research_industry: cloud
+  Research_leadership: cloud
+  Research_product: cloud
+  Research_financial: cloud
+  Research_customer: cloud
+  Research_competitor: cloud
+  Research_partner: cloud
+  Research_risk: cloud
+  Research_social: cloud
+  Research_journalist: cloud
+  Opportunity: cloud
 
 notes:
   warning: "Spark is offline in travel mode - some data may be stale"

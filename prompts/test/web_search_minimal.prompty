@@ -14,7 +14,7 @@ model:
   configuration:
     connection: openai_conn
     model: gpt-5-mini
-    type: pom-llm-proxy
+    type: openai_chat
     tools: [web_search]
   # Request native tool result payloads for deterministic validation
   parameters:

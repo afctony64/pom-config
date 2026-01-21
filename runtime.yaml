@@ -62,7 +62,6 @@ modes:
         - pomai-frontend
         - ollama-lb
         - mac-report-server
-        - pom-llm-proxy
       spark:
         - spark-weaviate
         - spark-ollama
@@ -104,7 +103,6 @@ modes:
         - pomothy-frontend
         - pomai-frontend
         - mac-report-server
-        - pom-llm-proxy
       # Mac-only profile
       native:
         - mac-ollama-metal
@@ -133,7 +131,6 @@ modes:
       mac:
         - mac-weaviate
         - mac-redis
-        - pom-llm-proxy
     
     required_env:
       POMSPARK_MODE: ooo
@@ -307,7 +304,6 @@ validation:
   # Container patterns to check for consistency
   containers_to_validate:
     - pomothy-backend
-    - pom-llm-proxy
     - pom-core-dev
     - pomai-backend-spark  # If Spark reachable
 

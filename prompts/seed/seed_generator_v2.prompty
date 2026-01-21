@@ -11,9 +11,9 @@ inputs:
     description: Record data (optional)
     default: {}
 model:
-  provider: pom-llm-proxy
+  api: chat
   configuration:
-    type: pom-llm-proxy
+    type: ollama
     model: qwen3:4b
   parameters:
     temperature: 0.7

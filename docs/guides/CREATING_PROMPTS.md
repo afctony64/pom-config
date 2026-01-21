@@ -195,9 +195,9 @@ data_requirements:
 
 ```yaml
 model:
-  api: responses  # or 'chat'
+  api: chat  # or 'responses' for reasoning models
   configuration:
-    type: pom-llm-proxy
+    type: openai_chat  # Direct adapter: openai_chat, ollama, anthropic, google
     model: gpt-5-mini
   parameters:
     max_output_tokens: 8000
@@ -368,9 +368,9 @@ data_requirements:
         inject_as: pageData
 
 model:
-  api: responses
+  api: chat  # or 'responses' for reasoning models
   configuration:
-    type: pom-llm-proxy
+    type: openai_chat  # Direct adapter: openai_chat, ollama, anthropic, google
     model: gpt-5-mini
   parameters:
     max_output_tokens: 8000

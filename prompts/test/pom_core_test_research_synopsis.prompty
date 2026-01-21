@@ -58,7 +58,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_chat
     model: gpt-5-nano
   parameters:
     max_tokens: 1000

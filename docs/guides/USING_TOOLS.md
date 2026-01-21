@@ -47,7 +47,7 @@ description: Research company products
 model:
   api: chat
   configuration:
-    type: pom_llm_proxy
+    type: openai_chat  # Direct adapter: openai_chat, ollama, anthropic, google
 tools:
   - brave_search        # Available for function calling
   - page_researcher     # Injection tool
@@ -58,7 +58,7 @@ inputs:
 ---
 ```
 
-> **Note:** All apps use `pom-llm-proxy` for model routing. The proxy handles backend selection, failover, and priority routing automatically.
+> **Note:** Apps use direct LLM adapters (`openai_chat`, `ollama`, `anthropic`, `google`) for model routing.
 >
 > **Available Models:** See [llm_models/](../../llm_models/) for the full list of models and their capabilities.
 
@@ -182,7 +182,7 @@ description: Research company products and services
 model:
   api: chat
   configuration:
-    type: pom_llm_proxy
+    type: openai_chat
     model: gpt-5-mini
 tools:
   - page_researcher       # Injects website pages

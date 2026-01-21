@@ -20,7 +20,6 @@
 | Pomothy Backend | **8001** | `pomothy-backend` | ✅ Yes | `/health/ready` |
 | PomAI Backend (Mac) | - | `pomai-backend-mac` | Travel only | - |
 | PomAI Backend (Spark) | - | `pomai-backend-spark` | ✅ Yes | - |
-| LLM Proxy (Mac) | **4001** | `pom-llm-proxy` | ✅ Yes | `/health` |
 | pom-core Dev | - | `pom-core-dev` | ✅ Yes | - |
 
 ### Databases

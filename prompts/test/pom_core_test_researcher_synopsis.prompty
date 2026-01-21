@@ -18,7 +18,7 @@ model:
   configuration:
     connection: openai_conn
     model: gpt-5-nano
-    type: pom-llm-proxy
+    type: openai_chat
   fallback_to_web: false
   parameters:
     max_output_tokens: 600

@@ -97,7 +97,7 @@ All 10 Research schemas updated:
   - Weaviate URLs (MAC_WEAVIATE_URL, SPARK_WEAVIATE_URL, WEAVIATE_GRPC_URL)
   - Ollama URLs (OLLAMA_URL, MAC_OLLAMA_URL, SPARK_OLLAMA_URL)
   - Transformers URLs (MAC_TRANSFORMERS_URL, SPARK_TRANSFORMERS_URL)
-  - Other services (LLM_PROXY_URL, REDIS_URL)
+  - Other services (REDIS_URL)
 
 ### Changed
 - `shared-config.env` now references profiles for mode switching

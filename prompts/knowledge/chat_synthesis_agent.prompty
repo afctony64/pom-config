@@ -54,7 +54,6 @@ model:
     # Issue #723: Knowledge base search tools for on-demand context
     tools: [page_facts_search, research_search]
   parameters:
-    temperature: 0.6
     max_tokens: 4096
 
 # Issue #723: Tool context injected into tool calls

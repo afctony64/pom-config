@@ -27,7 +27,6 @@ model:
     type: openai
     model: gpt-4o
   parameters:
-    temperature: 0.3
     max_tokens: 1500
 
 # Disable post-processors - this is an analysis report, not data generation

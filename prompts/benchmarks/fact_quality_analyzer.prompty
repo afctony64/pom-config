@@ -52,7 +52,7 @@ defaults:
 model:
   api: chat
   configuration:
-    type: pom-llm-proxy
+    type: openai_chat
     model: gpt-5.2
   parameters:
     max_output_tokens: 4000
