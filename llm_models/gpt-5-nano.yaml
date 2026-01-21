@@ -6,7 +6,7 @@ provider:
   name: openai
   api_type: chat
 adapter_config:
-  type: openai
+  type: openai_chat  # Use Chat Completions API (fast) instead of Responses API
   model: gpt-5-nano
   base_url: null
   base_url_env: OPENAI_API_KEY
