@@ -45,7 +45,7 @@ model:
     model: gpt-5-nano
   parameters:
     temperature: 0.5
-    max_tokens: 4096
+    max_output_tokens: 4096
     reasoning_effort: low  # Faster responses
 
 output_description: Markdown formatted response with business insights and citations
