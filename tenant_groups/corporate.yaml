@@ -72,7 +72,7 @@ display_names:
 # - Output: Research_* (no prefix)
 entity:
   entity_type: Company
-  # ENTITY MODEL: Source is Domain (not Company_source)
+  # ENTITY MODEL: Source is Domain
   source_collection: Domain
   # ENTITY MODEL: No prefix for research collections
   research_schema_prefix: ""  # Results in Research_industry, Research_financial, etc.

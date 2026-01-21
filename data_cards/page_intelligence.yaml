@@ -4,8 +4,7 @@
 # Use Case: Get page intelligence data for analysis
 #
 # ✅ Native fetch executor with standard field set
-# ⚠️  NOTE: Company_source reference REMOVED - cross-cluster references not supported
-#     Page_intelligence is on Spark cluster, Company_source is on Cloud cluster
+# ⚠️  NOTE: Cross-cluster references are not supported
 
 id: page_intelligence
 name: Page Intelligence
@@ -226,7 +225,7 @@ collections:
   - collection: Page_intelligence
     field_set: standard
     required: true
-    # references: REMOVED - Company_source is on different cluster (Cloud vs Spark)
+    # references: REMOVED - cross-cluster references not supported
 
 # Query behavior
 supports_relationships: false  # Cross-cluster references not supported

@@ -113,16 +113,13 @@ documentation:
   overview: |
     This data card queries a single Research_* collection based on researcher_id parameter.
     DataFactory automatically resolves researcher_id to the correct collection name using
-    tenant group configuration (Entity Model: Research_*, Legacy: Company_research_*).
-
-    Works with Entity Model: Research_* collections (not Company_research_*).
+    tenant group configuration (Entity Model only).
 
   researcher_resolution: |
     RESEARCHER ID RESOLUTION:
 
     User provides: researcher_id="product"
-    DataFactory resolves: Research_product (for Entity Model tenants)
-    DataFactory resolves: Company_research_product (for Legacy tenants)
+    DataFactory resolves: Research_product
 
     Supported researcher_ids:
     - industry

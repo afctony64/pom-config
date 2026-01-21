@@ -88,7 +88,7 @@ collections:
   # Domain collection (digital presence - websites, pages)
   Domain: "cloud"
 
-  # Research output collections (Entity Model - replaces Company_research_*)
+  # Research output collections (Entity Model)
   Research_industry: "cloud"
   Research_financial: "cloud"
   Research_leadership: "cloud"
@@ -109,10 +109,6 @@ collections:
   Page_facts: "spark"
   Page_content: "spark"
   Page_source: "spark"
-
-  # ═══════════════════════════════════════════════════════════════════════════
-  # LEGACY (Company_source removed - migrated to Source collection)
-  # ═══════════════════════════════════════════════════════════════════════════
 
 # ══════════════════════════════════════════════════════════════════════════════
 # URL PATTERNS - Legal Services Domain-Specific

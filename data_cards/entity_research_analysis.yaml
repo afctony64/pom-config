@@ -121,7 +121,7 @@ documentation:
     This data card fetches ONLY LLM (AI-generated analysis) fields using tag-based filtering.
     Optimized for detailed insights and qualitative analysis without categorical data.
 
-    Works with Entity Model: Domain + Research_* collections (not Company_source).
+    Works with Entity Model: Domain + Research_* collections.
 
   tag_strategy: |
     LLM FIELD SELECTION:

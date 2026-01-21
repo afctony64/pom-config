@@ -118,7 +118,7 @@ documentation:
     Optimized for pivot tables, cross-tabs, and efficient categorical analysis.
     Smaller payload than full research data - ideal for dashboards and reports.
 
-    Works with Entity Model: Domain + Research_* collections (not Company_source).
+    Works with Entity Model: Domain + Research_* collections.
 
   tag_strategy: |
     CATEGORICAL FIELD SELECTION:

@@ -8,7 +8,7 @@ description: Prismatic - embedded iPaaS platform for B2B SaaS companies
 # ══════════════════════════════════════════════════════════════════════════════
 # Prismatic now uses the Entity Model (as of Dec 2024):
 # - Source: Domain (the URL/domain IS the entity)
-# - Output: Research_* (no Company_ prefix)
+# - Output: Research_* collections
 #
 # This aligns with all other production tenants.
 tenant_group: corporate

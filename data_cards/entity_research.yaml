@@ -163,7 +163,7 @@ documentation:
     It returns all Cat fields (classifications), LLM fields (analysis), and research
     fields (detailed facts) for complete entity intelligence.
 
-    Works with Entity Model: Domain + Research_* collections (not Company_source).
+    Works with Entity Model: Domain + Research_* collections.
 
   tag_strategy: |
     HYBRID FIELD SELECTION:

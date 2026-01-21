@@ -23,6 +23,6 @@ data_sources:
 # Collection routing - ALL collections route to mac-weaviate for testing
 # Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
 collections:
-  # Company collections
-  Company_research_customer: "mac"
-  Company_source: "mac"
+  # Entity model collections
+  Domain: "mac"
+  Research_customer: "mac"

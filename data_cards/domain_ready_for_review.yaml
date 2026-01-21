@@ -62,8 +62,7 @@ parameters:
       competitors: skip
 
   # Reference fields to include
-  references:
-    - company  # Reference to Company_source
+  references: []
 
   # Field tags for reference collections
   field_tags: []
@@ -137,16 +136,7 @@ field_sets:
         source: property
         description: Last processing timestamp
 
-      # Company reference fields (flattened)
-      - name: company_accountName
-        type: text
-        source: reference
-        description: Company name from Company_source
-
-      - name: company_industry
-        type: text
-        source: reference
-        description: Company industry
+      # Research reference fields can be included via dynamic_templates
 
   extended:
     description: "Full domain profile with research status and all fields"
@@ -234,41 +224,13 @@ field_sets:
         source: property
         description: Total content chunks
 
-      # Company reference fields (extended)
-      - name: company_accountName
-        type: text
-        source: reference
-        description: Company name
-
-      - name: company_industry
-        type: text
-        source: reference
-        description: Company industry
-
-      - name: company_employees
-        type: number
-        source: reference
-        description: Employee count
-
-      - name: company_annualRevenue
-        type: number
-        source: reference
-        description: Annual revenue
-
-      - name: company_description
-        type: text
-        source: reference
-        description: Company description
+      # Research reference fields can be included via dynamic_templates
 
 # Collection configuration for references
 collections:
   - collection: Domain
     field_set: ready_review
     required: true
-    references:
-      company:
-        target_collection: Company_source
-        field_set: standard
 
 # Query behavior
 supports_relationships: true

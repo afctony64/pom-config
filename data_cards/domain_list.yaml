@@ -189,7 +189,7 @@ documentation:
     Fast enumeration of entities with minimal fields (domain, url, title, description).
     Perfect for entity lookups, domain enumeration, and quick entity lists.
 
-    Works with Entity Model: Domain collection (not Company_source).
+    Works with Entity Model: Domain collection.
 
   field_sets: |
     FIELD SET CONFIGURATION:

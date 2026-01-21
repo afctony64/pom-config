@@ -38,7 +38,7 @@ description: |
   - Added physical presence fields (phone, email, address, etc.)
   - Consolidated social fields (15 → 10)
   - Removed 52 unused legacy fields
-  - Removed Company_ references
+  - Removed legacy references
 
 vectorConfig:
   default:

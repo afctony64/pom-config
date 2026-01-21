@@ -11,7 +11,7 @@ description: >
 # THIS IS AN OPTIMIZED DATA MODEL FOR PIVOT TABLES (ENTITY MODEL)
 # Fetches opportunity fields + domain Cat fields (no LLM or research fields)
 # 3-4x faster than opportunity_with_account due to smaller payload
-# Uses Opportunity → Domain → Research_* (entity model) instead of Company_opportunity → Company_source → Company_research_*
+# Uses Opportunity → Domain → Research_* (entity model)
 
 # Tagging system
 tags:

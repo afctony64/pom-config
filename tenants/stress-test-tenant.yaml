@@ -19,4 +19,3 @@ analysis_config:
 collections:
   StressTestCollection: "mac"
   IsolationTestCollection: "mac"
-  Company_source: "mac"

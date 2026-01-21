@@ -2,7 +2,7 @@ id: core_test_db
 name: Core Test Database
 type: tenant
 description: Purpose-built test database tenant for pom-core library testing and validation
-# Groups: company (Company_* collections), url (Page_* collections only, excludes Domain)
+# Groups: company (Domain + Research_* collections), url (Page_* collections only, excludes Domain)
 # Note: Knowledge_base access is granted separately if needed
 groups: ["company", "url"]
 
@@ -33,25 +33,24 @@ data_sources:
 # Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
 # Note: Add new collections here as they are created to ensure test isolation
 collections:
-  # Company collections
-  Company_source: "mac"
-  Company_opportunity: "mac"
-  Company_research_competitor: "mac"
-  Company_research_customer: "mac"
-  Company_research_financial: "mac"
-  Company_research_industry: "mac"
-  Company_research_journalist: "mac"
-  Company_research_leadership: "mac"
-  Company_research_partner: "mac"
-  Company_research_product: "mac"
-  Company_research_risk: "mac"
-  Company_research_social: "mac"
+  # Entity model collections
+  Domain: "mac"
+  Research_competitor: "mac"
+  Research_customer: "mac"
+  Research_financial: "mac"
+  Research_industry: "mac"
+  Research_journalist: "mac"
+  Research_leadership: "mac"
+  Research_partner: "mac"
+  Research_product: "mac"
+  Research_risk: "mac"
+  Research_social: "mac"
+  Opportunity: "mac"
   # Page collections
   Page_facts: "mac"
   Page_intelligence: "mac"
   Page_source: "mac"
   # Other collections
-  Domain: "mac"
   Knowledge_base: "mac"
   API_intelligence: "mac"
 

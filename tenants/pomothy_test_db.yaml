@@ -2,7 +2,7 @@ id: pomothy_test_db
 name: Pomothy Test Database
 type: tenant
 description: Test database tenant for Pomothy (duplicate of test_db for local testing)
-# Groups: company (Company_* collections), url (Page_* collections only, excludes Domain)
+# Groups: company (Domain + Research_* collections), url (Page_* collections only, excludes Domain)
 # Note: Knowledge_base access is granted separately if needed
 groups: ["company", "url"]
 
@@ -33,32 +33,23 @@ data_sources:
 # Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
 # Note: Add new collections here as they are created to ensure test isolation
 collections:
-  # Company collections
-  Company_source: "mac"
-  Company_opportunity: "mac"
-  Company_research_competitor: "mac"
-  Company_research_customer: "mac"
-  Company_research_financial: "mac"
-  Company_research_industry: "mac"
-  Company_research_journalist: "mac"
-  Company_research_leadership: "mac"
-  Company_research_partner: "mac"
-  Company_research_product: "mac"
-  Company_research_risk: "mac"
-  Company_research_social: "mac"
-  Company_research_taxonomy: "mac"
-  Company_snapshot: "mac"
-  Company_account: "mac"
-  Company_enrichment: "mac"
-  Company_domain: "mac"
-  Company_source_truth: "mac"
-  # Opportunity collections
-  Company_opportunity_stage_history: "mac"
-  # Research support collections
+  # Entity model collections
+  Domain: "mac"
+  Research_competitor: "mac"
+  Research_customer: "mac"
+  Research_financial: "mac"
+  Research_industry: "mac"
+  Research_journalist: "mac"
+  Research_leadership: "mac"
+  Research_partner: "mac"
+  Research_product: "mac"
+  Research_risk: "mac"
+  Research_social: "mac"
   Research_taxonomy: "mac"
   Research_taxonomy_topic: "mac"
+  # Opportunity collections
+  Opportunity: "mac"
   # Domain collections
-  Domain: "mac"
   Domain_snapshot: "mac"
   Domain_task: "mac"
   # Page collections
