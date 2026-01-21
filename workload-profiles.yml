@@ -168,10 +168,10 @@ profiles:
         note: "Browser pool is separate - backend only needs memory for workers, not browsers"
       browser_pool:
         enabled: true
-        pool_size: 50            # Increased from 25 - 2x capacity (50 contexts)
-        memory_limit: 48G         # Increased from 24G - supports 50 contexts comfortably
-        cpus: 14                  # Increased from 8 - more CPU for parallel rendering
-        note: "Spark browser pool: 50 parallel contexts, priority service (browser pool is separate from backend)"
+        pool_size: 800           # 800 contexts for high throughput
+        memory_limit: 56G        # 56GB balances with Weaviate (72GB) on 119GB system
+        cpus: 18                 # High CPU for parallel rendering
+        note: "Spark browser pool: 800 contexts for high throughput"
         
     mac:
       weaviate:
@@ -302,10 +302,10 @@ profiles:
         crawl_max_concurrent: 300
       browser_pool:
         enabled: true
-        pool_size: 100
-        memory_limit: 80G
+        pool_size: 800           # 800 contexts for high throughput
+        memory_limit: 56G        # 56GB balances with Weaviate (72GB) on 119GB system
         cpus: 18
-        note: "Maximum capacity browser pool for scraping"
+        note: "Maximum capacity browser pool for high-throughput scraping"
         
     mac:
       weaviate:
@@ -501,9 +501,9 @@ profiles:
 # Profile          | Ollama | Weaviate | Backend | Transformers | Browser Pool | HTTP Conn | Best For
 # -----------------|--------|----------|---------|--------------|--------------|-----------|------------------
 # ai               | 80 GB ★| 72 GB    | 24 GB   | 3 instances  | 10 contexts  | 750       | Researcher prompts
-# data_pipeline    | 16 GB  | 80 GB ★  | 16 GB   | 5 instances  | 50 contexts ★| 1500      | Domain/Page/Facts
+# data_pipeline    | 16 GB  | 80 GB ★  | 16 GB   | 5 instances  | 800 contexts★| 1500      | Domain/Page/Facts
 # balanced         | 48 GB  | 72 GB    | 32 GB   | 3 instances  | 25 contexts  | 1000      | General dev
-# web_scraping     | 12 GB  | 72 GB    | 12 GB   | 5 instances  | 100 contexts★| 3000      | Bulk scraping
+# web_scraping     | 12 GB  | 72 GB    | 12 GB   | 5 instances  | 800 contexts★| 3000      | Bulk scraping
 # network_friendly | 48 GB  | 72 GB    | 32 GB   | 3 instances  | 5 contexts   | 500       | Shared network
 # query_only       | OFF    | 72 GB    | OFF     | 1 instance   | Disabled     | N/A       | Search/exploration
 # travel           | N/A    | N/A      | N/A     | N/A          | Disabled     | N/A       | Offline work
@@ -531,9 +531,9 @@ profiles:
 #   - Browser pool 50 contexts = 2x capacity increase (separate service)
 #
 # Browser Pool (Spark):
-#   - Pool Size: 10-50 contexts (profile dependent)
-#   - Memory: 8-48GB limit (data_pipeline: 48GB for 50 contexts)
-#   - CPU: 4-14 cores (data_pipeline: 14 cores for 50 contexts)
+#   - Pool Size: 10-400 contexts (profile dependent)
+#   - Memory: 8-56GB limit (data_pipeline/web_scraping: 56GB for 400 contexts)
+#   - CPU: 4-18 cores (data_pipeline/web_scraping: 18 cores for 400 contexts)
 #   - Available in: ai (reduced), data_pipeline, balanced profiles
 #   - SEPARATE SERVICE - not part of backend allocation!
 #
