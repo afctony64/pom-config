@@ -116,15 +116,8 @@ properties:
 - name: founderProfileLLM
   dataType:
   - text
-  description: 'Describe the founder(s) background and profile (100-150 words). Include: founder names,
-
-    previous company experience, relevant domain expertise, education, founder-led vs
-
-    professional management, and any notable achievements or exits.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in founderProfileCIT field.
-
-    '
+  description: |
+    Founder background: names, previous company experience, domain expertise, education, founder-led vs professional management, notable exits.
   tags:
   - LLM
   - research
@@ -284,15 +277,8 @@ properties:
 - name: executiveExperienceLLM
   dataType:
   - text
-  description: 'Describe the executive team''s collective experience (100-150 words). Include: key executives
-
-    and their roles, years of industry experience, previous companies and positions, domain
-
-    expertise depth, and any patterns (e.g., former [BigCo] executives, serial entrepreneurs).
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in executiveExperienceCIT field.
-
-    '
+  description: |
+    Executive team experience: key executives and roles, years of industry experience, previous companies, domain expertise, patterns (ex-BigCo, serial entrepreneurs).
   tags:
   - LLM
   - research
@@ -435,15 +421,8 @@ properties:
 - name: leadershipStyleLLM
   dataType:
   - text
-  description: 'Describe the leadership and company culture style (100-150 words). Include: management
-
-    approach (hands-on, distributed), decision-making style, company values emphasis,
-
-    growth philosophy (bootstrapped mindset vs hypergrowth), and any visible culture signals.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in leadershipStyleCIT field.
-
-    '
+  description: |
+    Leadership style: management approach (hands-on, distributed), decision-making style, company values, growth philosophy (bootstrapped vs hypergrowth), culture signals.
   tags:
   - LLM
   - research
@@ -661,6 +640,17 @@ properties:
   - prompt
   metadata:
     order: 910
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 911
 - name: citations
   dataType:
   - text[]

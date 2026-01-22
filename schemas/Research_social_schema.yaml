@@ -288,15 +288,8 @@ properties:
 - name: platformPresenceLLM
   dataType:
   - text
-  description: 'Descriptive analysis of social platform coverage and implementation strategy. Include which platforms they''re
-
-    active on (Twitter, LinkedIn, GitHub, Discord, etc.), social auth/sharing implementation, account discovery, engagement
-
-    score, and how platform choices align with their business model and audience.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in platformPresenceCIT field.
-
-    '
+  description: |
+    Platform presence: active platforms (Twitter, LinkedIn, GitHub, Discord), social auth/sharing implementation, engagement level, platform-business alignment.
   tags:
   - LLM
   - score
@@ -324,15 +317,8 @@ properties:
 - name: socialContentLLM
   dataType:
   - text
-  description: 'Descriptive analysis of content strategy, messaging themes, and thought leadership positioning. Include content
-
-    themes (product updates, technical education, customer stories), messaging style (promotional, educational, community-focused),
-
-    social proof indicators, and content maturity level.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in socialContentCIT field.
-
-    '
+  description: |
+    Content strategy: content themes (product updates, education, customer stories), messaging style (promotional, educational, community-focused), social proof indicators.
   tags:
   - LLM
   - research
@@ -360,17 +346,8 @@ properties:
 - name: communityEngagementLLM
   dataType:
   - text
-  description: 'Describe community engagement and relationship building (2 sentences, ~75 words max).
-
-    START with overall engagement approach:
-
-    - How actively does the entity engage with its community?
-
-    Then list primary channels and note interaction level (two-way vs broadcast-only).
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in communityEngagementCIT field.
-
-    '
+  description: |
+    Community engagement: engagement approach, primary community channels, interaction level (two-way vs broadcast-only), community building efforts.
   tags:
   - LLM
   sets:
@@ -532,6 +509,17 @@ properties:
   - prompt
   metadata:
     order: 902
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 903
 - name: citations
   dataType:
   - text[]
@@ -543,7 +531,7 @@ properties:
   - system
   - prompt
   metadata:
-    order: 902
+    order: 904
 - name: researcher_model_id
   dataType:
   - text

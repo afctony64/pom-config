@@ -216,13 +216,8 @@ properties:
 - name: productTypeLLM
   dataType:
   - text[]
-  description: 'Product type description - detailed narrative explaining the product''s nature, capabilities, and how it delivers
-
-    value. Single-element array containing one comprehensive description paragraph.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in productTypeCIT field.
-
-    '
+  description: |
+    Product type: what the product is, core capabilities, how it delivers value to customers.
   tags:
   - LLM
   sets:
@@ -334,14 +329,8 @@ properties:
 - name: technologyStackLLM
   dataType:
   - text[]
-  description: 'Technology Stack Description - detailed descriptions for each classified technology stack. Array supports
-    multi-stack
-
-    classification (ordered by similarity score, [0] is primary).
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in technologyStackCIT field.
-
-    '
+  description: |
+    Technology stack: programming languages, frameworks, infrastructure, cloud platforms, key technical architecture choices.
   tags:
   - LLM
   - score
@@ -393,15 +382,8 @@ properties:
 - name: pricingModelLLM
   dataType:
   - text
-  description: 'Describe the entity''s pricing and revenue model (100-150 words). Include: pricing structure
-
-    (per-seat, usage-based, tiered, enterprise), target customer segments by tier, free trial or
-
-    freemium availability, and any publicly stated pricing. Note if pricing requires contacting sales.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in pricingModelCIT field.
-
-    '
+  description: |
+    Pricing model: pricing structure (per-seat, usage-based, tiered), customer segments by tier, free trial/freemium, stated prices or "contact sales."
   tags:
   - LLM
   sets:
@@ -482,17 +464,8 @@ properties:
 - name: integrationProfileLLM
   dataType:
   - text
-  description: 'Describe the entity''s integration capabilities (100-150 words). Include: API availability and
-
-    documentation quality, pre-built integrations and marketplace, webhook support, authentication
-
-    methods (OAuth, API keys), and developer resources. Note integration philosophy (API-first vs
-
-    limited integrations).
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in integrationProfileCIT field.
-
-    '
+  description: |
+    Integration capabilities: API availability, pre-built integrations, marketplace presence, webhook support, authentication methods, developer resources.
   tags:
   - LLM
   sets:
@@ -683,11 +656,8 @@ properties:
 - name: productMaturityLLM
   dataType:
   - text
-  description: 'Descriptive analysis of product maturity stage and lifecycle position.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in productMaturityCIT field.
-
-    '
+  description: |
+    Product maturity: lifecycle stage (MVP, growth, established, mature), market adoption signals, enterprise readiness.
   tags:
   - LLM
   sets:
@@ -764,11 +734,8 @@ properties:
 - name: goToMarketLLM
   dataType:
   - text
-  description: 'Go-to-market strategy analysis including sales motion and customer acquisition approach.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in goToMarketCIT field.
-
-    '
+  description: |
+    Go-to-market strategy: sales motion (product-led, sales-led, partner-led), customer acquisition approach, primary distribution channels.
   tags:
   - LLM
   sets:
@@ -968,6 +935,17 @@ properties:
   - prompt
   metadata:
     order: 902
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 903
 - name: citations
   dataType:
   - text[]
@@ -979,7 +957,7 @@ properties:
   - system
   - prompt
   metadata:
-    order: 902
+    order: 904
 - name: researcher_model_id
   dataType:
   - text
