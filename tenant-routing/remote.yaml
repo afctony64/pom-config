@@ -20,6 +20,11 @@ tunnel_config:
     remote_port: 11434
     description: "SSH tunnel for Ollama access"
   
+  cloudflare_optional:
+    name: "${CLOUDFLARE_TUNNEL_MAC}"
+    hostname: "${LLM_PROXY_EXTERNAL_URL}"
+    note: "Optional - only for external access"
+
 weaviate_instances:
   cloud:
     url: "${WEAVIATE_CLOUD_URL}"
@@ -35,9 +40,9 @@ tenants:
     weaviate_target: cloud
     description: "Production tenant - routes to Cloud Weaviate"
     collections:
-      # Remote mode uses Mac for all local processing
       Research_*: cloud
       Opportunity: cloud
+      # Remote mode uses Mac for all local processing
       Domain: mac
       Page_facts: mac
       Page_intelligence: cloud

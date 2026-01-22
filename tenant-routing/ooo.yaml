@@ -23,6 +23,11 @@ tunnel_config:
       weaviate: "${SPARK_WEAVIATE_TUNNEL_URL}"
       transformers: "${SPARK_TRANSFORMERS_TUNNEL_URL}"
   
+  mac_cloudflare_tunnel:
+    name: "${CLOUDFLARE_TUNNEL_MAC}"
+    hostname: "${LLM_PROXY_EXTERNAL_URL}"
+    note: "Only needed for external device access to Mac LLM Proxy"
+
 weaviate_instances:
   spark:
     url: "${SPARK_WEAVIATE_TUNNEL_URL}"
@@ -42,9 +47,9 @@ tenants:
     weaviate_target: cloud
     description: "Production tenant - routes to Cloud Weaviate"
     collections:
-      # OOO mode uses Mac for page processing (safer than tunneling large data)
       Research_*: cloud
       Opportunity: cloud
+      # OOO mode uses Mac for page processing (safer than tunneling large data)
       Domain: mac
       Page_facts: mac
       Page_intelligence: cloud
@@ -58,7 +63,7 @@ tenants:
     description: "Demo tenant - local only"
 
 architecture:
-  external_access: "Cursor/Apps → Cloudflare → Mac (direct LLM adapters)"
+  external_access: "Cursor/Apps → ${LLM_PROXY_EXTERNAL_URL} → Cloudflare → Mac:4000 (pom-llm-proxy)"
   spark_access: "Apps → ${SPARK_OLLAMA_TUNNEL_URL} → Cloudflare → Spark (Ollama, Weaviate, Transformers)"
   security: "All access via Cloudflare Zero Trust, no direct port exposure"
 

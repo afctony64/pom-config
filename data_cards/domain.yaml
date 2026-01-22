@@ -1,20 +1,17 @@
-# Data Card: Domain with References
+# Data Card: Domain
 #
-# Purpose: Fetch Domain records with native reference traversal
-# Use Case: Get domain information with associated Research_* data
+# Purpose: Fetch Domain records with native methods
+# Use Case: Get domain information with research data
 #
-# ✅ Native fetch executor with reference traversal to Research_* collections
+# ✅ Native fetch executor
 
 id: domain
-name: Domain with Company Reference
+name: Domain
 type: data_card
 file: domain.yaml
 description: >
-  Fetches Domain records with extended field set and includes referenced Research_* data.
-  Uses Native fetch executor for efficient reference traversal.
-
-# Primary collection (required by integration tests)
-collection: Domain
+  Fetches Domain records with extended field set.
+  Uses Native fetch executor for efficient traversal.
 
 # Tagging system
 tags:
@@ -47,14 +44,13 @@ parameters:
   dynamic_templates: true
 
   # FIX #433: Traversal configuration to prevent circular references
-  # Domain → Research_* can be circular via competitor relationships
   traversal:
-    max_depth: 1                    # Domain → Research_* → STOP
+    max_depth: 1
     policies:
       competitor: skip              # Skip Domain.competitor (circular to Research_competitor)
       competitors: skip             # Skip plural form too
 
-  # Reference fields - NONE (Domain uses Research_* references via dynamic_templates)
+  # Reference fields
   references: []
 
   # Field tags for reference collections
@@ -106,8 +102,6 @@ field_sets:
         type: boolean
         source: property
         description: Blacklist status
-
-  # Research reference fields (flattened with underscore notation)
 
   extended:
     description: "Full domain profile with all fields and company reference"
@@ -178,14 +172,11 @@ field_sets:
         source: property
         description: Enricher results array
 
-  # Research reference fields (extended, flattened with underscore notation)
-
 # Collection configuration
 collections:
   - collection: Domain
     field_set: standard
     required: true
-    # NOTE: Domain uses Research_* references via dynamic_templates
 
 # Query behavior
 supports_relationships: true

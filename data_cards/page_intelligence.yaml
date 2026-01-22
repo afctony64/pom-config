@@ -4,7 +4,7 @@
 # Use Case: Get page intelligence data for analysis
 #
 # ✅ Native fetch executor with standard field set
-# ⚠️  NOTE: Cross-cluster references are not supported
+# Page_intelligence data card - on Spark cluster
 
 id: page_intelligence
 name: Page Intelligence
@@ -225,7 +225,6 @@ collections:
   - collection: Page_intelligence
     field_set: standard
     required: true
-    # references: REMOVED - cross-cluster references not supported
 
 # Query behavior
 supports_relationships: false  # Cross-cluster references not supported

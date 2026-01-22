@@ -423,16 +423,8 @@ properties:
   tags:
   - classification
   - metadata
-- name: likely_needs_browser
-  dataType:
-  - boolean
-  description: Whether this URL likely requires browser rendering (SPA/JavaScript detection)
-  indexFilterable: true
-  sets:
-  - standard
-  tags:
-  - technical
-  - scraping
+# REMOVED: likely_needs_browser - Use playwright_required instead (Issue #707)
+# Only 1 record had data vs 47,280 for playwright_required
 - name: relevance_details
   dataType:
   - object

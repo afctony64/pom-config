@@ -113,7 +113,9 @@ documentation:
   overview: |
     This data card queries a single Research_* collection based on researcher_id parameter.
     DataFactory automatically resolves researcher_id to the correct collection name using
-    tenant group configuration (Entity Model only).
+    tenant group configuration.
+
+    Works with Entity Model: Research_* collections.
 
   researcher_resolution: |
     RESEARCHER ID RESOLUTION:

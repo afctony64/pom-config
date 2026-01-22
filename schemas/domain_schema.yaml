@@ -38,7 +38,7 @@ description: |
   - Added physical presence fields (phone, email, address, etc.)
   - Consolidated social fields (15 → 10)
   - Removed 52 unused legacy fields
-  - Removed legacy references
+  - Simplified references
 
 vectorConfig:
   default:
@@ -1099,7 +1099,7 @@ properties:
 - name: page_facts_count
   dataType:
   - int
-  description: Count of unique URLs with Page_facts records for this domain. Updated by page_facts_cli after processing.
+  description: Count of unique base URLs (not chunks) with Page_facts records. Should match page_count when complete. Updated by page_facts_cli.
   indexFilterable: true
   sets:
   - extended

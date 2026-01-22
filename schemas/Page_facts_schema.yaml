@@ -70,7 +70,7 @@ properties:
 - name: url
   dataType:
   - text
-  description: Base URL of the page WITHOUT fragment (matches Page_intelligence). Issue #715 ensures fragments are stripped for correct page counting.
+  description: Base URL of the page WITHOUT fragment (matches Page_intelligence). Use url_with_fragment for chunk-specific navigation.
   indexFilterable: true
   tokenization: field
   indexSearchable: true
@@ -245,7 +245,7 @@ properties:
 - name: url_with_fragment
   dataType:
   - text
-  description: URL with fragment for chunk navigation (e.g., https://example.com/page#section-1). Contains section anchor for in-page navigation.
+  description: URL with fragment for chunk navigation (e.g., https://example.com/page#section-1). Used for UUID generation and linking to specific chunks.
   indexFilterable: true
   tokenization: field
   moduleConfig:

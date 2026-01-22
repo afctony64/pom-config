@@ -2,9 +2,9 @@ id: central_reach
 name: CentralReach
 type: tenant
 description: CentralReach - autism therapy and ABA practice intelligence
-# Groups: company (Domain + Research_* collections), url (Page_* collections only, excludes Domain)
+# Groups: research (Research_* collections), url (Page_* collections)
 # Note: Knowledge_base access is granted separately if needed
-groups: ["company", "url"]
+groups: ["research", "url"]
 
 # User/persona information (configuration data)
 user:

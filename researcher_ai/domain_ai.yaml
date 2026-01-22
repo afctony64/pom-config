@@ -180,7 +180,7 @@ focus_areas:
   - Founded year (look for "Founded in", "Established", "Since", "Launched", first funding round)
   - |
     Headquarters location: POPULATE ALL THREE FIELDS:
-    1. headquarters: Full formatted string like "San Francisco, CA, USA" or "London, UK"  
+    1. headquarters: Full formatted string like "San Francisco, CA, USA" or "London, UK"
     2. city: Just the city name (e.g., "San Francisco")
     3. country: ISO country code (e.g., "US", "UK", "IL")
     FIRST check page_facts for About/Contact pages. If NOT FOUND, USE brave_search to find '{entityName} headquarters address location'.

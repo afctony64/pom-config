@@ -29,9 +29,9 @@ tenants:
     weaviate_target: cloud
     description: "Production tenant - routes to Cloud Weaviate when available"
     collections:
-      # Spark collections redirect to Mac in travel mode
       Research_*: cloud
       Opportunity: cloud
+      # Spark collections redirect to Mac in travel mode
       Domain: mac
       Page_facts: mac
       Page_intelligence: cloud

@@ -217,6 +217,8 @@ documentation:
     Supports BM25 (keyword), hybrid (BM25 + vector), and vector search strategies.
     Can filter to specific researcher types or search all researchers.
 
+    Works with Entity Model: Research_* collections.
+
   search_strategies: |
     SEARCH STRATEGIES:
 
