@@ -662,7 +662,7 @@ properties:
   - system
   - prompt
   metadata:
-    order: 902
+    order: 904
 - name: researcher_model_id
   dataType:
   - text
