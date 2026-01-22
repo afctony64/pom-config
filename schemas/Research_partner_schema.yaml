@@ -114,15 +114,8 @@ properties:
 - name: partnerTypeLLM
   dataType:
   - text
-  description: 'Describe the entity''s partnership ecosystem (100-150 words). Include: types of partners
-
-    (technology, channel, integration, strategic), partner program structure, notable partner
-
-    names, and partnership strategy (open ecosystem vs selective partnerships).
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in partnerTypeCIT field.
-
-    '
+  description: |
+    Partnership ecosystem: types of partners (technology, channel, integration, strategic), partner program structure, notable partners, partnership strategy.
   tags:
   - LLM
   sets:
@@ -239,15 +232,8 @@ properties:
 - name: integrationLLM
   dataType:
   - text
-  description: 'Describe partnership integration depth (100-150 words). Include: how partners integrate
-
-    technically (APIs, native connectors, embedded), co-selling arrangements, joint solutions,
-
-    and integration maturity (marketplace listing vs deep product integration).
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in integrationCIT field.
-
-    '
+  description: |
+    Partnership integration depth: technical integration (APIs, connectors, embedded), co-selling arrangements, joint solutions, integration maturity.
   tags:
   - LLM
   sets:
@@ -313,15 +299,8 @@ properties:
 - name: revenueImpactLLM
   dataType:
   - text
-  description: 'Describe partnership revenue impact (100-150 words). Include: revenue sharing models,
-
-    referral programs, channel contribution to sales, partner-sourced vs direct revenue
-
-    balance, and any stated partnership revenue metrics.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in revenueImpactCIT field.
-
-    '
+  description: |
+    Partnership revenue impact: revenue sharing models, referral programs, channel contribution, partner-sourced vs direct revenue balance.
   tags:
   - LLM
   sets:
@@ -519,6 +498,17 @@ properties:
   - prompt
   metadata:
     order: 902
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 903
 - name: citations
   dataType:
   - text[]
@@ -530,7 +520,7 @@ properties:
   - system
   - prompt
   metadata:
-    order: 902
+    order: 904
 - name: researcher_model_id
   dataType:
   - text

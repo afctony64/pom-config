@@ -100,15 +100,8 @@ properties:
 - name: competitorAnalysisLLM
   dataType:
   - text
-  description: 'Descriptive analysis of competitive landscape and positioning. Include
-
-    direct competitors identified, alternative solutions, competitive advantages claimed,
-
-    differentiation factors, and competitive threats acknowledged.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in competitorAnalysisCIT field.
-
-    '
+  description: |
+    Competitive landscape: direct competitors, alternative solutions, claimed competitive advantages, differentiation factors, and competitive threats.
   tags:
   - LLM
   sets:
@@ -161,15 +154,8 @@ properties:
 - name: marketPositionLLM
   dataType:
   - text
-  description: 'Descriptive analysis of market position and competitive standing. Include
-
-    market leadership claims (leader, challenger, niche player), market share indicators,
-
-    positioning strategy (premium, value, specialist), and competitive moat strength.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in marketPositionCIT field.
-
-    '
+  description: |
+    Market position: leadership claims (leader, challenger, niche), market share indicators, positioning strategy (premium, value, specialist), competitive moat strength.
   tags:
   - LLM
   - research
@@ -589,6 +575,17 @@ properties:
   - prompt
   metadata:
     order: 902
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 903
 - name: citations
   dataType:
   - text[]

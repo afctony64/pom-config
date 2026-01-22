@@ -251,15 +251,8 @@ properties:
 - name: mediaTypeLLM
   dataType:
   - text
-  description: 'Descriptive analysis of types of media coverage and press presence. Include media types found (press releases,
-
-    news articles, podcast interviews, trade publications), newsroom/press page presence, media kit availability, and mix
-
-    of entity-generated vs external coverage.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in mediaTypeCIT field.
-
-    '
+  description: |
+    Media types: coverage found (press releases, articles, podcasts, trade publications), newsroom/press page presence, entity-generated vs external coverage mix.
   tags:
   - LLM
   sets:
@@ -286,15 +279,8 @@ properties:
 - name: coverageLevelLLM
   dataType:
   - text
-  description: 'Descriptive analysis of media visibility, coverage breadth, and news momentum. Include coverage volume (article
-
-    count, press release count), media outlet quality (tier-1 vs niche), recency of coverage, coverage trajectory (accelerating,
-
-    steady, declining), and credibility signals from external validation.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in coverageLevelCIT field.
-
-    '
+  description: |
+    Coverage level: volume (article/press release count), outlet quality (tier-1 vs niche), recency, coverage trajectory (accelerating, steady, declining).
   tags:
   - LLM
   sets:
@@ -321,15 +307,8 @@ properties:
 - name: mediaSentimentLLM
   dataType:
   - text
-  description: 'Descriptive analysis of sentiment and tone in external media coverage. Include overall sentiment (positive,
-
-    neutral, negative, mixed), media perception (emerging leader, struggling, solid player), how the entity is portrayed externally,
-
-    and tone consistency across different outlets.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in mediaSentimentCIT field.
-
-    '
+  description: |
+    Media sentiment: overall tone (positive, neutral, negative, mixed), media perception (emerging leader, solid player), portrayal consistency across outlets.
   tags:
   - LLM
   - research
@@ -566,6 +545,17 @@ properties:
   - prompt
   metadata:
     order: 902
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 903
 - name: citations
   dataType:
   - text[]
@@ -577,7 +567,7 @@ properties:
   - system
   - prompt
   metadata:
-    order: 902
+    order: 904
 - name: researcher_model_id
   dataType:
   - text

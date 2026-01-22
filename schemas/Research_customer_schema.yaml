@@ -232,13 +232,8 @@ properties:
 - name: useCaseLLM
   dataType:
   - text[]
-  description: 'Use Case Description - detailed descriptions for each classified use case. Array supports multi-use-case classification
-
-    (ordered by similarity score, [0] is primary).
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in useCaseCIT field.
-
-    '
+  description: |
+    Use case descriptions: what customers actually do with the product/service, problems solved, workflows enabled.
   tags:
   - LLM
   - score
@@ -555,15 +550,8 @@ properties:
 - name: customerIndustrySegmentLLM
   dataType:
   - text
-  description: 'Primary industry segment description for entity''s customer base (entity-level summary) - rich semantic description
-
-    (50-150 words) of the primary customer segment. Represents the most common or strategically important segment. Source
-
-    for classification to customerIndustrySegmentCat.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in customerIndustrySegmentCIT field.
-
-    '
+  description: |
+    Primary customer segment: industry vertical, company profile, and defining characteristics of the entity's main customer base.
   tags:
   - LLM
   - industry
@@ -740,15 +728,8 @@ properties:
 - name: keyCustomerIndustrySegmentLLM
   dataType:
   - text[]
-  description: 'Specific industry segment/vertical for each keyCustomer (parallel to keyCustomers array) - detailed categorization
-
-    within the broader industry for each customer. Array index aligns with keyCustomers array. Source for classification to
-
-    keyCustomerIndustrySegmentCat.
-
-    FACTS ONLY - no inline citations or URLs. Put source URLs in keyCustomerIndustrySegmentCIT field.
-
-    '
+  description: |
+    Industry segment for each key customer (parallel to keyCustomers): specific vertical, niche, or specialization.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -906,6 +887,17 @@ properties:
   - timestamp
   metadata:
     order: 909
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 910
 - name: citations
   dataType:
   - text[]

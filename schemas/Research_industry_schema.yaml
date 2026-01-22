@@ -193,10 +193,7 @@ properties:
   dataType:
   - text[]
   description: |
-    Descriptive analysis of business model and revenue generation approach. Include how they make money (B2B SaaS
-    subscriptions, marketplace commissions, professional services), customer acquisition model, and go-to-market strategy
-    fundamentals. Array supports multi-segment classification (ordered by similarity score, [0] is primary).
-    FACTS ONLY - no inline citations or URLs. Put source URLs in businessModelCIT field.
+    How they make money: charging model (subscription, hourly, commission, contingency), who pays (B2B/B2C, enterprise/SMB/consumer), primary revenue stream.
   tags:
   - LLM
   - score
@@ -250,12 +247,7 @@ properties:
   dataType:
   - text[]
   description: |
-    Describe how the entity delivers its products/services to customers (2-3 sentences, ~150 words max). START
-    with the primary delivery mechanism: Does it involve physical hardware or is it software-only? Is infrastructure cloud-hosted,
-    customer-hosted, or shared? How do customers access it (browser, mobile, API, physical device)? Then briefly note deployment
-    approach and key service delivery characteristics. Array supports multi-segment classification (ordered by similarity
-    score, [0] is primary).
-    FACTS ONLY - no inline citations or URLs. Put source URLs in deliveryModelCIT field.
+    How they deliver: software vs hardware, cloud vs on-premise, access method (browser, mobile, API, physical device).
   tags:
   - LLM
   - score
@@ -301,13 +293,7 @@ properties:
   dataType:
   - text[]
   description: |
-    Describe the entity's industry segment positioning (100-150 words). Address these elements: 1. What they
-    do - their primary activity or offering (be specific, not generic) 2. Who they serve - target customers/clients and their
-    characteristics 3. How they operate - their approach or model for delivering value 4. Segment-defining characteristics
-    - what places them in one segment vs adjacent ones. Use specific terminology that would appear in industry publications.
-    Avoid generic terms like "provides solutions" or "offers services." Array supports multi-segment classification (ordered
-    by similarity score, [0] is primary).
-    FACTS ONLY - no inline citations or URLs. Put source URLs in industrySegmentCIT field.
+    Industry position: what they do (specific activity), who they serve (customer type), what distinguishes them from adjacent segments. Use industry terms, not generic phrases.
   tags:
   - LLM
   - score
@@ -525,6 +511,17 @@ properties:
   - prompt
   metadata:
     order: 902
+- name: page_facts_count
+  dataType:
+  - int
+  description: Page facts count from Domain at time of research. Used to trigger refresh when more facts become available.
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  metadata:
+    order: 903
 - name: citations
   dataType:
   - text[]
