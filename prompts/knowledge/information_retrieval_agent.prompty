@@ -24,8 +24,9 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-nano
+    model: groq-llama3.1-8b
   parameters:
+    temperature: 0.5
     max_tokens: 2048
 name: Information Retrieval Agent
 output_description: Markdown formatted response with business insights

@@ -68,7 +68,7 @@ data_requirements:
 model:
   api: chat
   configuration:
-    type: openai
+    type: openai_chat
     model: mistral:7b-instruct
   parameters:
     temperature: 0.7

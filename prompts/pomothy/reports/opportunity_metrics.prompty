@@ -34,7 +34,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai
+    type: openai_chat
     model: gpt-5-nano
     mode: urgent
   parameters:

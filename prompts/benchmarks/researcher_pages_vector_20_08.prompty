@@ -41,7 +41,7 @@ data_requirements:
 model:
   api: responses
   configuration:
-    type: openai
+    type: openai_chat
     model: gpt-5-mini
   parameters:
     response_format:

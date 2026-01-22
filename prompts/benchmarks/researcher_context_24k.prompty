@@ -39,7 +39,7 @@ data_requirements:
 model:
   api: chat
   configuration:
-    type: openai
+    type: openai_chat
     model: gpt-oss:20b
   parameters:
     max_tokens: 2000

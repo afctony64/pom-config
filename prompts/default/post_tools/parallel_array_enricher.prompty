@@ -89,7 +89,7 @@ model:
   configuration:
     connection: openai_conn
     model: gpt-5-nano
-    type: openai
+    type: openai_chat
   parameters:
     response_format:
       type: json_object

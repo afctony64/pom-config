@@ -6,7 +6,7 @@ authors:
 model:
   api: chat
   configuration:
-    type: openai
+    type: openai_chat
     model: gpt-5-mini
 sample:
   rendered_prompt: "You are an AI assistant..."

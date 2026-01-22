@@ -7,7 +7,7 @@ description: >
 
 id: chat_rag_agent
 group: knowledge
-type: chat
+type: standard
 
 inputs:
   user_question:
@@ -42,8 +42,9 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-4o-mini  # Fast chat model for low-latency responses
+    model: groq-llama3.1-8b
   parameters:
+    temperature: 0.5
     max_tokens: 4096
 
 output_description: Markdown formatted response with business insights and citations
@@ -96,7 +97,7 @@ user: |
   {% if conversation_history and conversation_history|length > 0 %}
   ## Conversation Context
   {% for msg in conversation_history[-5:] %}
-  **{{ msg.get('role', 'unknown')|upper }}**: {{ msg.get('content', '')[:300] }}{% if msg.get('content', '')|length > 300 %}...{% endif %}
+  **{{ msg.role|upper }}**: {{ msg.content[:300] }}{% if msg.content|length > 300 %}...{% endif %}
   {% endfor %}
   {% endif %}
   

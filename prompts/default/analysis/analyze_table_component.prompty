@@ -32,7 +32,7 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai
+    type: openai_chat
     model: gemma3:12b-it-qat  # Testing 3 workers
   parameters:
     temperature: 0.7

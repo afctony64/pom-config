@@ -45,7 +45,7 @@ model:
   api: chat
   configuration:
     # Use OpenAI as primary (Ollama fallback requires local server)
-    type: openai
+    type: openai_chat
     model: gpt-5-nano
   parameters:
     max_tokens: 2000

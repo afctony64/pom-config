@@ -28,7 +28,7 @@ inputs:
 model:
   api: chat  # ✅ Changed to match research_synopsis format
   configuration:
-    type: openai
+    type: openai_chat
     model: gpt-5-nano
     mode: urgent  # Routes to Groq for faster inference (vs batch/Ollama)
   parameters:

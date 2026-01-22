@@ -59,7 +59,7 @@ schema_ids:
 model:
   api: chat
   configuration:
-    type: openai
+    type: openai_chat
     model: qwen3:8b
   parameters:
     temperature: 0.1

@@ -19,8 +19,12 @@ tenant_group: corporate
 # Primary entity collection for this tenant (used by reference CLI and other tools)
 entity_collection: Domain
 
-# Collection access groups (legacy - for collection permissions)
-groups: ["company", "url"]
+# Classifier tenant for VecCat (vector-based classification)
+# Seeds live in the 'classifier' tenant in Cloud Weaviate
+classifier_tenant: classifier
+
+# Collection access groups
+groups: ["research", "url"]
 
 # User/persona information (configuration data)
 user:

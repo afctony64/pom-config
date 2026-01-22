@@ -35,10 +35,10 @@ inputs:
 model:
   api: chat
   configuration:
-    type: openai
+    type: openai_chat
     model: gpt-5-nano
   parameters:
-    max_tokens: 100
+    max_tokens: 500
 
 ---
 

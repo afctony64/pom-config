@@ -5,13 +5,9 @@ description: >
   a coherent, conversational response. Used as the final step in complex
   multi-source queries.
 
-  Issue #723: Now supports on-demand knowledge base search via tools.
-  The LLM can call page_facts_search and research_search to fetch
-  specific information rather than processing all context upfront.
-
 id: chat_synthesis_agent
 group: knowledge
-type: chat
+type: standard
 
 inputs:
   user_question:
@@ -33,33 +29,15 @@ inputs:
     description: Previous conversation messages
     type: array
     default: []
-  market_context:
-    description: Pre-loaded market fact base (entity + competitors/customers/partners)
-    type: string
-    default: ""
-  resolved_entity:
-    description: The resolved entity with domain for tool context (Issue #723)
-    type: object
-    default: {}
-  tenant_id:
-    description: Tenant ID for multi-tenancy (Issue #723)
-    type: string
-    default: "default"
 
 model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-4o-mini  # Fast chat model for low-latency synthesis
-    # Issue #723: Knowledge base search tools for on-demand context
-    tools: [page_facts_search, research_search]
+    model: groq-llama3.1-8b
   parameters:
+    temperature: 0.6
     max_tokens: 4096
-
-# Issue #723: Tool context injected into tool calls
-tool_context:
-  domain: "{{ resolved_entity.domain }}"
-  tenant_id: "{{ tenant_id }}"
 
 output_description: Final synthesized markdown response with citations
 
@@ -75,36 +53,13 @@ system: |
   
   Your job is to synthesize all of this into a single, well-structured response.
   
-  ## Knowledge Base Search Tools (Issue #723)
-  
-  You have access to on-demand knowledge base search tools. Use these to find
-  specific information when you need more context:
-  
-  ### page_facts_search
-  Vector search of page content for a company domain.
-  - Use when: Need factual information from company website
-  - Parameters: query (what to find), domain (company), limit (max 5)
-  - Returns: Page title, content snippet, URL, certainty score
-  
-  ### research_search
-  Vector search of AI-generated research analysis.
-  - Use when: Need strategic insights (competitors, financials, etc.)
-  - Parameters: query, domain, research_type (competitor/customer/financial/etc.), limit
-  - Returns: Research content with certainty score
-  
-  **Tool Usage Strategy:**
-  - Check if the pre-loaded context answers the question first
-  - Only call tools if you need additional specific information
-  - Use focused, descriptive queries for best results
-  - You can call multiple tools if needed
-  
   ## Synthesis Guidelines
   
   ### Information Priority
   1. **Direct evidence from Page_facts** - highest priority, cite URLs
   2. **Entity data from Domain** - company information, use for context
   3. **Research findings** - analytical insights from researchers
-  4. **Tool results** - web search, database lookups, knowledge base searches
+  4. **Tool results** - web search, database lookups
   5. **Your knowledge** - only to fill gaps and provide context
   
   ### Response Quality
@@ -120,35 +75,27 @@ system: |
   - Add a **Sources** section at the end for substantial answers
   
   ### Handling Gaps
-  - If sources don't fully answer the question, use the search tools
-  - If tools don't find relevant information, acknowledge this
+  - If sources don't fully answer the question, acknowledge this
   - Suggest what additional information would help
+  - Offer to search for more or refine the query
   
   ## Citation Format
   - Page content: [Source](url)
   - Research: [Research: type]
   - Web search: [Web](url)
-  - Knowledge base: [KB: Page_facts] or [KB: Research_type]
+  - Database: [DB: collection]
 ---
 
 user: |
   ## Original Question
   {{ user_question }}
   
-  {% if market_context %}
-  ## Pre-loaded Market Knowledge Base
-  The following facts have been pre-loaded for this entity and its market relationships.
-  Use this as your PRIMARY source of information.
-  
-  {{ market_context }}
-  {% endif %}
-  
   {% if query_classification %}
   ## Query Understanding
   - **Intent**: {{ query_classification.get('intent', 'unknown') }}
   - **Confidence**: {{ query_classification.get('confidence', 0) }}
   {% if query_classification.get('entities') %}
-  - **Entities**: {% for e in query_classification.entities %}{{ e.get('value', e.get('name', 'unknown')) }} ({{ e.get('type', 'entity') }}){% if not loop.last %}, {% endif %}{% endfor %}
+  - **Entities**: {% for e in query_classification.entities %}{{ e.value }} ({{ e.type }}){% if not loop.last %}, {% endif %}{% endfor %}
   {% endif %}
   {% if query_classification.get('reasoning') %}
   - **Analysis**: {{ query_classification.reasoning }}
@@ -202,7 +149,7 @@ user: |
   {% if conversation_history and conversation_history|length > 0 %}
   ## Conversation Context
   {% for msg in conversation_history[-3:] %}
-  **{{ msg.get('role', 'unknown')|upper }}**: {{ msg.get('content', '')[:200] }}{% if msg.get('content', '')|length > 200 %}...{% endif %}
+  **{{ msg.role|upper }}**: {{ msg.content[:200] }}{% if msg.content|length > 200 %}...{% endif %}
   {% endfor %}
   {% endif %}
   
