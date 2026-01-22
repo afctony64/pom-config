@@ -2,6 +2,8 @@
 
 Shared YAML configuration files for the Pom ecosystem.
 
+_Direct push test: branch protection verification._
+
 ## Overview
 
 This repository contains shared configuration files used across PomAI, Pomothy, and PomSpark.
