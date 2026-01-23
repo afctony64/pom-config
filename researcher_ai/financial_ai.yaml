@@ -28,6 +28,7 @@ search_queries:
   - "investor venture capital led by backed by funded"
   - "revenue ARR MRR growth valuation profitable"
   - "funding announcement press release investment"
+  - "announces million in funding round led by capital"
 
 # BM25 keyword queries - used by page_facts_vector injector (supplements vector)
 keyword_queries:
@@ -44,6 +45,8 @@ keyword_queries:
   - "million"
   - "funding round"
   - "announces"
+  - "led by"
+  - "capital"
 
 # URL boost patterns - used by page_facts_vector injector
 url_boost_patterns:
