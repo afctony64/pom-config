@@ -177,10 +177,13 @@ The schema is provided via the response_format parameter and enforces strict com
 ### Field Type Definitions
 
 **LLM Fields** (suffix `*LLM`):
-- Text arrays containing 1-3 analytical items
-- Each item should be 50-100 words of focused analysis
+- Focused analytical content (50-200 words per item)
 - State facts directly, no elaboration or background context
 - Always populate with analysis; if speculative, note low confidence
+- Type is defined by schema: some are single text, some are text arrays (1-3 items)
+- ⚠️ OUTPUT VALUE ONLY - never include field names, colons, or brackets as prefixes
+- ⚠️ WRONG: "platformPresenceLLM: [Active on LinkedIn...]" or "platform_presence_llm_LLM: [..."
+- ⚠️ CORRECT: "Active on LinkedIn and Twitter with strong developer community engagement"
 
 **CIT Fields** (suffix `*CIT`):
 - URL arrays parallel to matching LLM fields
@@ -295,12 +298,12 @@ Assess YOUR confidence in the analysis based on evidence quality:
 ### reviewFlag
 Signal when human review is needed:
 - **"none"**: Confident in analysis, no review needed
-- **"for_review"**: Some uncertainty or conflicting information
 - **"needs_verification"**: Critical claims lack strong evidence
+
+Default to **"none"** unless one of the review conditions below is true.
 
 Apply these concrete rules:
 - Set **"none"** when: analysisConfidence is **high**, sourceQuality is **high/medium**, and you have **5+ citations** across the output with no major contradictions.
-- Set **"for_review"** when: analysisConfidence is **medium/low/inferred**, or citations are **fewer than 5**, or you note conflicting signals.
 - Set **"needs_verification"** when: you make critical claims without direct evidence in pageData.
 
 **Deterministic override (MUST FOLLOW):**
