@@ -676,7 +676,7 @@ properties:
   sets:
   - prompt
   - array
-  - standard
+  - extended
   metadata:
     order: 205
 - name: keyCustomerIndustryCat
@@ -741,7 +741,6 @@ properties:
   sets:
   - prompt
   - array
-  - standard
   - extended
   metadata:
     order: 206
