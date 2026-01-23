@@ -1,0 +1,152 @@
+type: system
+class: Update_audit
+description: Audit trail for domain targeting updates, tracking applied changes,
+  failures, and DLQ entries for debugging and accountability
+invertedIndexConfig:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  cleanupIntervalSeconds: 60
+  indexTimestamps: true
+  indexNullState: true
+  indexPropertyLength: true
+  stopwords:
+    preset: en
+    additions: []
+    removals: []
+vectorizer: none
+multiTenancyConfig:
+  autoTenantActivation: true
+  autoTenantCreation: true
+  enabled: true
+properties:
+- name: timestamp
+  description: ISO 8601 timestamp when the operation occurred
+  dataType:
+  - date
+  indexFilterable: true
+  indexRangeFilters: true
+  sets:
+  - extended
+  tags:
+  - required
+  - temporal
+- name: tenant_id
+  description: Tenant identifier
+  dataType:
+  - text
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - required
+  - identity
+- name: update_type
+  description: Type of update (domain_update, status_fix, normalization)
+  dataType:
+  - text
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - required
+  - classification
+- name: target_uuid
+  description: UUID of the record that was updated
+  dataType:
+  - text
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - identity
+  - required
+- name: target_domain
+  description: Domain associated with the updated record
+  dataType:
+  - text
+  indexSearchable: true
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - identity
+- name: operation
+  description: Result of the operation (applied, verified, failed, dlq)
+  dataType:
+  - text
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - required
+  - status
+- name: changes
+  description: JSON string of field changes {field - {old - x, new - y}}
+  dataType:
+  - text
+  sets:
+  - extended
+  tags:
+  - audit
+- name: error
+  description: Error message if the operation failed
+  dataType:
+  - text
+  indexSearchable: true
+  sets:
+  - extended
+  tags:
+  - error
+  - debug
+- name: attempts
+  description: Number of attempts made to apply this update
+  dataType:
+  - int
+  sets:
+  - extended
+  tags:
+  - metrics
+- name: verified
+  description: Whether the update was verified by re-reading the record
+  dataType:
+  - boolean
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - quality
+- name: update_id
+  description: Idempotency key from the update queue
+  dataType:
+  - text
+  indexFilterable: true
+  sets:
+  - extended
+  tags:
+  - identity
+  - deduplication
+uuid_strategy:
+  fields:
+  - field: target_uuid
+    namespace: URL
+    suffix: timestamp
+    description: Generate UUID from target_uuid + timestamp for unique audit entries
+dependencies:
+- type: operational
+  requires:
+  - Domain
+  - Page_intelligence
+  - Page_facts
+data_sources:
+  entity_collection: null
+collection_groups:
+- system
+- audit
+schema_config:
+  additional_properties: false
+id: Update_audit
+name: Update Audit
+group: system
+weaviate_instance: spark
+devtype: Production

@@ -9,6 +9,7 @@ This directory contains environment configuration profiles for different operati
 | **Home** | `home.env` | Mac + Spark server both available |
 | **Travel** | `travel.env` | Only Mac available (remote work) |
 | **OOO** | `ooo.env` | Unattended Spark operation |
+| **Spark Test** | `spark_test.env` | Spark-only test environment (DMZ-safe) |
 
 ## How to Use
 
@@ -46,9 +47,9 @@ cd ~/Projects/PomSpark
 |---------|------|--------|-----|
 | **Ollama** | Spark GPU | Mac Metal | Spark GPU |
 | **Transformers** | Spark GPU cluster | Mac Metal | Spark GPU cluster |
-| **Weaviate** | Spark local | Mac local | Spark local |
-| **Mac Required** | Yes | Yes | No |
-| **Spark Required** | Yes | No | Yes |
+| **Weaviate** | Spark local | Mac local | Spark local | Spark local |
+| **Mac Required** | Yes | Yes | No | No |
+| **Spark Required** | Yes | No | Yes | Yes |
 
 ## Adding New Settings
 
