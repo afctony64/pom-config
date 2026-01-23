@@ -165,11 +165,10 @@ profiles:
         note: "Browser pool is separate - backend only needs memory for workers, not browsers"
       browser_pool:
         enabled: true
-        pool_size: 800           # 800 contexts for high throughput
+        pool_size: 200           # Conservative - can scale up if needed
         memory_limit: 56G        # 56GB balances with Weaviate (72GB) on 119GB system
         cpus: 18                 # High CPU for parallel rendering
-        note: "Spark browser pool: 800 contexts for high throughput"
-
+        note: "Spark browser pool: 200 contexts (conservative default)"
     mac:
       weaviate:
         memory_limit: 48G        # Increased: No GPU contention - Ollama/Transformers run natively
