@@ -33,6 +33,8 @@ search_queries:
 keyword_queries:
   - "series a"
   - "series b"
+  - "series c"
+  - "series d"
   - "seed funding"
   - "total funding"
   - "valuation"
