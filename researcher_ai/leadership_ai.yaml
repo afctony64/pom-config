@@ -84,11 +84,10 @@ tools:
 
 tool_guidance:
   brave_search:
-    priority: high
+    priority: critical
     max_calls: 3  # LIMIT: 3 searches for leadership
-    # Tool calling works reliably - use auto to let LLM decide based on page content
-    # See tool_guidance.when_to_use for search guidance
-    tool_choice: auto
+    # Force brave_search - employee count and LinkedIn URLs are rarely on company pages
+    tool_choice: required
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):
 
@@ -144,3 +143,24 @@ tool_guidance:
       Put ALL source URLs in the global `citations` array field too.
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
+
+# Parallel array enrichment configuration
+# Uses generic parallel_array_enricher.prompty to fill post fields via web search
+parallel_array_enrichment:
+  enabled: true
+  anchor_field: keyExecutives
+  context_fields:
+    - executiveRoles          # Role for search context (CEO, CTO, etc.)
+    - domain                  # Company domain for disambiguation
+  enrich_fields:
+    - executiveLinkedIn       # LinkedIn profile URL
+    - executiveBackgrounds    # Career background and experience
+    - executiveTenure         # How long in current role
+  search_query_template: >
+    {element} {executiveRoles} {domain} linkedin profile background
+
+# Post-execution tools: Run automatically after leadership researcher completes
+# Priority-ordered: lower number runs first
+post_execution_tools:
+  - parallel_array_enricher  # Priority 10: Fill post fields (uses parallel_array_enrichment config above)
+  - enum_cat                 # Priority 30: Classify EnumCat fields (leadershipStyleCat, etc.)
