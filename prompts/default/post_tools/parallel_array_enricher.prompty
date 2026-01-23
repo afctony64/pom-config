@@ -91,6 +91,8 @@ model:
     model: gpt-5-nano
     type: openai_chat
   parameters:
+    # Issue #746: Using json_object (not json_schema) for prompt-based JSON
+    # Post-tools don't have static schemas - fields come from post_fields input
     response_format:
       type: json_object
     reasoning_effort: low
