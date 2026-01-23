@@ -36,7 +36,7 @@ hardware:
       - "Metal acceleration works for Ollama"
       - "Transformers in Docker are CPU-only (no Metal support)"
       - "mac-transformers-metal runs NATIVE on host for Metal acceleration"
-      
+
   spark:
     total_ram: 128GB  # Updated: 128GB total RAM
     gpu: "NVIDIA GB10 (dedicated VRAM)"
@@ -66,7 +66,7 @@ profiles:
     description: "Priority LLM capacity for researcher prompts and AI extraction"
     use_case: "Researcher prompts, fact extraction, bulk LLM processing"
     warning: "⚠️ Embeddings reduced to 3 instances - good balance for LLM + queries"
-    
+
     spark:
       ollama:
         enabled: true
@@ -96,7 +96,7 @@ profiles:
         memory_limit: 8G
         cpus: 4
         note: "Reduced but functional for small dev jobs"
-        
+
     mac:
       weaviate:
         memory_limit: 48G        # No GPU contention - native services run separately
@@ -135,7 +135,7 @@ profiles:
     description: "Priority backend/embedding for Domain/Page/Facts pipeline"
     use_case: "Domain snapshots, Page_intelligence, Page_facts, bulk embeddings"
     warning: "⚠️ LLM minimal (16GB) - 7B models only, use 'ai' for larger"
-    
+
     spark:
       ollama:
         enabled: true            # FUNCTIONAL - minimal but can run 7B models
@@ -169,7 +169,7 @@ profiles:
         memory_limit: 56G        # 56GB balances with Weaviate (72GB) on 119GB system
         cpus: 18                 # High CPU for parallel rendering
         note: "Spark browser pool: 800 contexts for high throughput"
-        
+
     mac:
       weaviate:
         memory_limit: 48G        # Increased: No GPU contention - Ollama/Transformers run natively
@@ -204,7 +204,7 @@ profiles:
     description: "Default profile for mixed workloads"
     use_case: "General development, light usage of all features"
     warning: null
-    
+
     spark:
       ollama:
         enabled: true
@@ -233,7 +233,7 @@ profiles:
         memory_limit: 20G
         cpus: 8
         note: "Spark browser pool: 25 contexts available for balanced workloads"
-        
+
     mac:
       weaviate:
         memory_limit: 48G        # No GPU contention - native services run separately
@@ -267,7 +267,7 @@ profiles:
     description: "Maximum browser pool for high-throughput scraping"
     use_case: "Bulk scraping and batch Weaviate updates"
     warning: "⚠️ LLM minimal (12GB) - 7B models only, optimized for scraping"
-    
+
     spark:
       ollama:
         enabled: true
@@ -297,7 +297,7 @@ profiles:
         memory_limit: 56G        # 56GB balances with Weaviate (72GB) on 119GB system
         cpus: 18
         note: "Maximum capacity browser pool for high-throughput scraping"
-        
+
     mac:
       weaviate:
         memory_limit: 48G
@@ -323,7 +323,7 @@ profiles:
     description: "Minimal resources for search and query workloads"
     use_case: "Read-only exploration, vector search, low resource usage"
     warning: "⚠️ No LLM processing - Ollama stopped on Spark"
-    
+
     spark:
       ollama:
         enabled: false           # Stopped to free GPU memory
@@ -338,7 +338,7 @@ profiles:
       browser_pool:
         enabled: false
         note: "Not needed for query-only workloads"
-        
+
     mac:
       weaviate:
         memory_limit: 48G        # No GPU contention - native services run separately
@@ -372,7 +372,7 @@ profiles:
     description: "Low connection count for shared network - reduces NAT table pressure"
     use_case: "Scraping during peak hours, video calls active, shared home network"
     warning: "⚠️ Scraping 5x slower but won't interfere with other network traffic"
-    
+
     spark:
       ollama:
         enabled: true
@@ -405,7 +405,7 @@ profiles:
         memory_limit: 4G             # Reduced memory for fewer contexts
         cpus: 2                      # Reduced CPU allocation
         note: "3 contexts = ~3 concurrent page loads, prevents NAT exhaustion"
-        
+
     mac:
       weaviate:
         memory_limit: 48G        # No GPU contention - native services run separately
@@ -432,7 +432,7 @@ profiles:
     description: "Mac-only mode when Spark is unavailable"
     use_case: "Working offline, Spark unreachable, travel"
     warning: "⚠️ No GPU LLM - using Mac Metal (slower for large models)"
-    
+
     spark:
       # All Spark services disabled
       ollama:
@@ -446,7 +446,7 @@ profiles:
       browser_pool:
         enabled: false
         note: "Spark offline - browser pool unavailable"
-        
+
     mac:
       weaviate:
         memory_limit: 48G        # No GPU contention - native services run separately
