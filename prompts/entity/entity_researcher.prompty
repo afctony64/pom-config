@@ -298,6 +298,15 @@ Signal when human review is needed:
 - **"for_review"**: Some uncertainty or conflicting information
 - **"needs_verification"**: Critical claims lack strong evidence
 
+Apply these concrete rules:
+- Set **"none"** when: analysisConfidence is **high**, sourceQuality is **high/medium**, and you have **5+ citations** across the output with no major contradictions.
+- Set **"for_review"** when: analysisConfidence is **medium/low/inferred**, or citations are **fewer than 5**, or you note conflicting signals.
+- Set **"needs_verification"** when: you make critical claims without direct evidence in pageData.
+
+**Deterministic override (MUST FOLLOW):**
+- If the **"none"** conditions are met, you MUST output reviewFlag="none".
+- Do NOT set "for_review" in that case, even if you feel mild uncertainty.
+
 ## COMMON ANALYSIS PATTERNS
 
 When researching entities, look for these standard information sources:

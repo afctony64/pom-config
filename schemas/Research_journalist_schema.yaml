@@ -89,7 +89,6 @@ properties:
   tokenization: word
   indexFilterable: false
   sets:
-  - standard
   - extended
   tags:
   - reporting

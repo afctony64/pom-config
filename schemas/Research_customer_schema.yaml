@@ -65,7 +65,6 @@ properties:
   tokenization: word
   indexFilterable: false
   sets:
-  - standard
   - extended
   tags:
   - reporting
@@ -240,7 +239,7 @@ properties:
   sets:
   - prompt
   - array
-  - standard
+  - extended
   metadata:
     parallel_to: useCaseCat
     order: 132
@@ -403,8 +402,8 @@ properties:
   - usecase
   - score
   sets:
-  - standard
   - VecCat
+  - extended
   metadata:
     parallel_anchor: true
     order: 131
@@ -559,7 +558,6 @@ properties:
   sets:
   - prompt
   - extended
-  - standard
   metadata:
     order: 127
 - name: customerIndustrySegmentCIT
@@ -588,7 +586,6 @@ properties:
   - industry
   - segment
   sets:
-  - standard
   - VecCat
   - extended
   metadata:
@@ -774,8 +771,8 @@ properties:
   - segment
   - score
   sets:
-  - standard
   - VecCat
+  - extended
   metadata:
     parallel_to: keyCustomers
     classifier_collection: Research_industry

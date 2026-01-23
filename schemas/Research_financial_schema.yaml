@@ -244,8 +244,8 @@ properties:
   tags:
   - LLM
   sets:
-  - extended
   - prompt
+  - extended
   metadata:
     order: 126
 - name: growthVelocityCIT
@@ -271,10 +271,8 @@ properties:
   tags:
   - LLM
   sets:
-  - standard
   - prompt
   - extended
-  - standard
   metadata:
     order: 128
 - name: profitabilityProfileCIT
@@ -555,8 +553,8 @@ properties:
   - Cat
   - growth
   sets:
-  - extended
   - EnumCat
+  - extended
   metadata:
     source_llm: growthVelocityLLM
     order: 125
@@ -605,8 +603,8 @@ properties:
   - Cat
   - profitability
   sets:
-  - extended
   - EnumCat
+  - extended
   metadata:
     source_llm: profitabilityProfileLLM
     order: 127
@@ -656,8 +654,8 @@ properties:
   - growth
   - headcount
   sets:
-  - extended
   - EnumCat
+  - extended
   metadata:
     order: 142
 - name: processedDate
@@ -695,7 +693,7 @@ properties:
       skip: true
   sets:
   - system
-  - standard
+  - extended
   - prompt
   tags:
   - confidence
@@ -747,7 +745,7 @@ properties:
       skip: true
   sets:
   - system
-  - standard
+  - extended
   - prompt
   tags:
   - review
@@ -775,7 +773,7 @@ properties:
   - system
   - prompt
   metadata:
-    order: 904
+    order: 902
 - name: researcher_model_id
   dataType:
   - text

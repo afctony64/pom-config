@@ -80,7 +80,6 @@ properties:
   tokenization: word
   indexFilterable: false
   sets:
-  - standard
   - extended
   tags:
   - reporting
@@ -285,7 +284,6 @@ properties:
   sets:
   - prompt
   - extended
-  - standard
   metadata:
     order: 124
 - name: executiveExperienceCIT
@@ -429,7 +427,6 @@ properties:
   sets:
   - prompt
   - extended
-  - standard
   metadata:
     order: 126
 - name: leadershipStyleCIT
@@ -524,8 +521,8 @@ properties:
   - experience
   - research
   sets:
-  - standard
   - EnumCat
+  - extended
   metadata:
     order: 123
 - name: leadershipStyleCat
@@ -549,8 +546,8 @@ properties:
   - style
   - research
   sets:
-  - standard
   - EnumCat
+  - extended
   metadata:
     order: 125
 - name: processedDate
@@ -727,7 +724,6 @@ properties:
   sets:
   - extended
   - prompt
-  - standard
   tags:
   - research
   metadata:

@@ -166,7 +166,6 @@ properties:
   tokenization: word
   indexFilterable: false
   sets:
-  - standard
   - extended
   tags:
   - reporting
@@ -208,7 +207,6 @@ properties:
   - contextual
   - extractable
   sets:
-  - standard
   - extended
   - prompt
   metadata:
@@ -389,7 +387,6 @@ properties:
   sets:
   - prompt
   - extended
-  - standard
   metadata:
     order: 132
 - name: pricingModelCIT
@@ -455,7 +452,6 @@ properties:
   - Cat
   - pricing
   sets:
-  - standard
   - EnumCat
   - extended
   metadata:
@@ -471,7 +467,6 @@ properties:
   sets:
   - prompt
   - extended
-  - standard
   metadata:
     order: 134
 - name: integrationProfileCIT
@@ -534,7 +529,6 @@ properties:
   - Cat
   - integration
   sets:
-  - standard
   - EnumCat
   - extended
   metadata:
@@ -663,7 +657,6 @@ properties:
   sets:
   - prompt
   - extended
-  - standard
   metadata:
     order: 136
 - name: productMaturityCIT
@@ -725,7 +718,6 @@ properties:
   - Cat
   - research
   sets:
-  - standard
   - EnumCat
   - extended
   metadata:
@@ -981,7 +973,6 @@ properties:
   - number
   description: Overall product portfolio strength score (1-10)
   sets:
-  - standard
   - prompt
   - extended
   tags:

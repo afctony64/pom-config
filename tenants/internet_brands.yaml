@@ -16,6 +16,16 @@ description: Internet Brands - legal services domain expert researching law firm
 # See: config/tenant_groups/corporate.yaml
 tenant_group: corporate
 
+# Tenant-level exclusions (subtract from tenant_group master list)
+exclude_researchers:
+  - product
+  - risk
+  - partner
+exclude_collections:
+  - Research_product
+  - Research_risk
+  - Research_partner
+
 # Primary entity collection for this tenant (used by reference CLI and other tools)
 entity_collection: Domain
 
