@@ -2,7 +2,10 @@
 
 Shared YAML configuration files for the Pom ecosystem.
 
-_Direct push test: branch protection verification._
+## Branch Protection
+
+Updates to `main` must go through a pull request with at least one approval.
+Administrator bypass is disabled, so direct pushes to `main` are blocked.
 
 ## Overview
 
