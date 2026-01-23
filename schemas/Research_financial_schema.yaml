@@ -89,7 +89,6 @@ properties:
   tokenization: word
   indexFilterable: false
   sets:
-  - standard
   - extended
   tags:
   - reporting
@@ -146,7 +145,6 @@ properties:
   - research
   sets:
   - extended
-  - standard
   - prompt
   metadata:
     order: 112
@@ -157,8 +155,7 @@ properties:
   tags:
   - research
   sets:
-  - standard
-  - standard
+  - extended
   - prompt
   metadata:
     order: 111
@@ -247,10 +244,8 @@ properties:
   tags:
   - LLM
   sets:
-  - standard
-  - prompt
   - extended
-  - standard
+  - prompt
   metadata:
     order: 126
 - name: growthVelocityCIT
@@ -399,7 +394,7 @@ properties:
   tags:
   - research
   sets:
-  - standard
+  - extended
   - prompt
   metadata:
     order: 132
@@ -410,7 +405,7 @@ properties:
   tags:
   - research
   sets:
-  - standard
+  - extended
   - prompt
   metadata:
     order: 133
@@ -447,7 +442,7 @@ properties:
   tags:
   - research
   sets:
-  - standard
+  - extended
   - prompt
   metadata:
     order: 135
@@ -560,9 +555,8 @@ properties:
   - Cat
   - growth
   sets:
-  - standard
-  - EnumCat
   - extended
+  - EnumCat
   metadata:
     source_llm: growthVelocityLLM
     order: 125
@@ -611,9 +605,8 @@ properties:
   - Cat
   - profitability
   sets:
-  - standard
-  - EnumCat
   - extended
+  - EnumCat
   metadata:
     source_llm: profitabilityProfileLLM
     order: 127
@@ -663,7 +656,7 @@ properties:
   - growth
   - headcount
   sets:
-  - standard
+  - extended
   - EnumCat
   metadata:
     order: 142
