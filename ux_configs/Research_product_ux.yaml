@@ -51,10 +51,12 @@ fields:
   aggregations:
   - count
 - name: productCategories
+  label: Categories
   aggregations:
   - count
   - nunique
 - name: productPricing
+  label: Pricing
   aggregations:
   - count
   - nunique
