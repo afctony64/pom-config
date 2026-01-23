@@ -20,15 +20,15 @@ fields:
   aggregations:
   - count
 - name: executiveBackgrounds
-  label: Executive Backgrounds
+  label: Background
   aggregations:
   - count
 - name: executiveRoles
-  label: Executive Roles
+  label: Roles
   aggregations:
   - count
 - name: executiveTenure
-  label: Executive Tenure
+  label: Tenure
   aggregations:
   - count
 - name: advisors
@@ -42,7 +42,7 @@ fields:
   - nunique
 - name: executiveExperienceCat
   maxWidth: 250
-  label: Executive Experience
+  label: Experience
   aggregations:
   - count
   - nunique
