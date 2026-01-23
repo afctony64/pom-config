@@ -270,7 +270,7 @@ properties:
   - Cat
   - headcount
   sets:
-  - standard
+  - extended
   - EnumCat
   metadata:
     order: 117
