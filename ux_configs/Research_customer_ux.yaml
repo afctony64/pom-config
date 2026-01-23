@@ -11,7 +11,7 @@ fields:
   - nunique
 - name: customerIndustrySegmentCat
   maxWidth: 250
-  label: Customer Industry Segment
+  label: Industry Segment
   aggregations:
   - count
   - nunique
@@ -25,6 +25,21 @@ fields:
   - nunique
 - name: keyCustomers
   label: Key Customers
+  aggregations:
+  - count
+  - nunique
+- name: customerDomain
+  label: Domain
+  aggregations:
+  - count
+  - nunique
+- name: keyCustomerSizeCat
+  label: Size
+  aggregations:
+  - count
+  - nunique
+- name: keyCustomerSectorCat
+  label: Sector
   aggregations:
   - count
   - nunique
@@ -51,17 +66,17 @@ fields:
   - count
   - nunique
 - name: customerIndustry
-  label: Customer Industry
+  label: Industry
   aggregations:
   - count
   - nunique
 - name: keyCustomerNAICS
-  label: Customer Industry NAICS
+  label: NAICS
   aggregations:
   - count
   - nunique
 - name: keyCustomerIndustryCat
-  label: Customer Industry Category
+  label: Industry Category
   aggregations:
   - count
   - nunique

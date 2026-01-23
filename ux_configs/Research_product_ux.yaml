@@ -5,7 +5,7 @@ schema_id: Research_product  # Explicit link to pom-core schema
 fields:
 - name: productTypeCat
   maxWidth: 250
-  label: Product Type
+  label: Type
   aggregations:
   - count
   - nunique
@@ -29,7 +29,7 @@ fields:
   - nunique
 - name: productMaturityCat
   maxWidth: 250
-  label: Product Maturity
+  label: Maturity
   aggregations:
   - count
   - nunique
@@ -38,7 +38,7 @@ fields:
   - count
   - nunique
 - name: productMaturityLLM
-  label: Product Maturity Analysis
+  label: Maturity Analysis
   aggregations:
   - count
   - nunique
@@ -59,12 +59,12 @@ fields:
   - count
   - nunique
 - name: productFeatures
-  label: Product Features
+  label: Features
   aggregations:
   - count
   - nunique
 - name: productDomain
-  label: Product Domain
+  label: Domain
   aggregations:
   - count
   - nunique
