@@ -23,10 +23,10 @@
 defaults:
   mode: home
   profile: data_pipeline
-  
+
   # When true, startup will validate all services after starting
   validate_on_startup: true
-  
+
   # When true, mode/profile switch will require validation to pass
   require_validation_on_switch: true
 
@@ -51,7 +51,7 @@ modes:
     description: "Full development with Mac + Spark GPU"
     spark_required: true
     cloud_enabled: true
-    
+
     # Services that MUST be running in this mode
     required_services:
       mac:
@@ -67,12 +67,12 @@ modes:
         - spark-ollama
         - spark-transformers-lb
         - pomai-backend-spark
-    
+
     # Environment variables that MUST be set for this mode
     required_env:
       POMSPARK_MODE: home
       WEAVIATE_MODE: spark
-    
+
     # Health endpoints to validate
     health_checks:
       - url: http://localhost:8080/v1/.well-known/ready
@@ -94,7 +94,7 @@ modes:
     description: "Mac-only mode (Spark offline, offline capable)"
     spark_required: false
     cloud_enabled: false
-    
+
     required_services:
       mac:
         - mac-weaviate
@@ -107,11 +107,11 @@ modes:
       native:
         - mac-ollama-metal
         - mac-transformers-metal
-    
+
     required_env:
       POMSPARK_MODE: travel
       WEAVIATE_MODE: local
-    
+
     health_checks:
       - url: http://localhost:8080/v1/.well-known/ready
         service: mac-weaviate
@@ -126,15 +126,15 @@ modes:
     description: "Out-of-office mode (Spark via tunnel + Cloud)"
     spark_required: false  # Via tunnel, not direct
     cloud_enabled: true
-    
+
     required_services:
       mac:
         - mac-weaviate
         - mac-redis
-    
+
     required_env:
       POMSPARK_MODE: ooo
-    
+
     health_checks:
       - url: http://localhost:8080/v1/.well-known/ready
         service: mac-weaviate
@@ -146,14 +146,14 @@ profiles:
   data_pipeline:
     description: "Domain/Page/Facts processing (heavy embeddings)"
     priority_service: transformers
-    
+
     resource_allocation:
       spark_ollama: 16G        # Minimal - 7B models only
       spark_weaviate: 40G      # Good buffer for indexes
       pomai_backend: 56G       # Priority - page_facts processing
       spark_transformers: 5    # All 5 instances
       browser_pool: 25         # Maximum concurrent browsers
-    
+
     # Services that MUST be running for this profile
     required_services:
       spark:
@@ -166,25 +166,25 @@ profiles:
         - spark-transformers-5
         - pomai-backend-spark
         - spark-browser-pool
-    
+
     # Validation: Check transformer instances are running
     validation:
       spark_transformers_count: 5
       spark_ollama_running: true  # Keep running with reduced capacity
-    
+
     override_file: overrides/spark/docker-compose.spark.data_pipeline.yml
 
   ai:
     description: "Researcher prompts, LLM extraction (heavy Ollama)"
     priority_service: ollama
-    
+
     resource_allocation:
       spark_ollama: 80G        # Maximum - large models
       spark_weaviate: 32G      # Reduced but functional
       pomai_backend: 24G       # Reduced but functional
       spark_transformers: 3    # Reduced but functional
       browser_pool: 10         # Minimal
-    
+
     required_services:
       spark:
         - spark-ollama
@@ -194,25 +194,25 @@ profiles:
         - spark-transformers-2
         - spark-transformers-3
         - pomai-backend-spark
-    
+
     validation:
       spark_transformers_count: 3
       spark_ollama_running: true
       spark_ollama_memory_gb: 80
-    
+
     override_file: overrides/spark/docker-compose.spark.ai.yml
 
   balanced:
     description: "Default for mixed workloads"
     priority_service: none
-    
+
     resource_allocation:
       spark_ollama: 48G
       spark_weaviate: 40G
       pomai_backend: 32G
       spark_transformers: 3
       browser_pool: 25
-    
+
     required_services:
       spark:
         - spark-ollama
@@ -222,43 +222,43 @@ profiles:
         - spark-transformers-2
         - spark-transformers-3
         - pomai-backend-spark
-    
+
     validation:
       spark_transformers_count: 3
       spark_ollama_running: true
-    
+
     override_file: overrides/spark/docker-compose.spark.balanced.yml
 
   query_only:
     description: "Minimal resources for search and exploration"
     priority_service: weaviate
-    
+
     resource_allocation:
       spark_ollama: 0          # Stopped
       spark_weaviate: 48G      # Maximum for search
       pomai_backend: 0         # Not needed
       spark_transformers: 1    # Single instance
       browser_pool: 0          # Disabled
-    
+
     required_services:
       spark:
         - spark-weaviate
         - spark-transformers-1
-    
+
     validation:
       spark_transformers_count: 1
       spark_ollama_running: false
-    
+
     override_file: overrides/spark/docker-compose.spark.query-only.yml
 
   travel:
     description: "Mac-only mode (Spark offline)"
     priority_service: none
-    
+
     resource_allocation:
       mac_weaviate: 24G
       mac_redis: 4G
-    
+
     required_services:
       mac:
         - mac-weaviate
@@ -266,11 +266,11 @@ profiles:
       native:
         - mac-transformers-metal
         - mac-ollama-metal
-    
+
     validation:
       mac_ollama_running: true
       mac_transformers_running: true
-    
+
     override_file: null  # No Spark override
 
 # =============================================================================
@@ -279,13 +279,13 @@ profiles:
 validation:
   # Maximum time to wait for services to be ready (seconds)
   startup_timeout: 120
-  
+
   # Maximum time for health check per service (seconds)
   health_check_timeout: 10
-  
+
   # Retry count for failed health checks
   health_check_retries: 3
-  
+
   # Files that MUST exist after mode switch
   required_files:
     - path: ${CONFIGS_DIR}/.env
@@ -294,13 +294,13 @@ validation:
       description: "Tenant routing configuration"
     - path: ${CONFIGS_DIR}/.current-workload-profile
       description: "Current workload profile marker"
-  
+
   # Environment variables that must match across all containers
   consistent_env_vars:
     - POMSPARK_MODE
     - WEAVIATE_MODE
     - DEFAULT_WORKLOAD_PROFILE
-  
+
   # Container patterns to check for consistency
   containers_to_validate:
     - pomothy-backend
@@ -314,13 +314,13 @@ status_files:
   # Current mode marker (written by dev.sh)
   mode_file: ${CONFIGS_DIR}/.env
   mode_variable: POMSPARK_MODE
-  
+
   # Current profile marker (written by workload.sh)
   profile_file: ${CONFIGS_DIR}/.current-workload-profile
-  
+
   # Shared location readable by all containers
   shared_profile_file: ~/Projects/shared-reports/.current-workload-profile
-  
+
   # Validation results (JSON for programmatic access)
   validation_results: ${CONFIGS_DIR}/.last-validation-result.json
 
@@ -330,7 +330,7 @@ status_files:
 display:
   # Show detailed validation output
   verbose_validation: true
-  
+
   # Colors for terminal output
   colors:
     success: green
@@ -347,11 +347,11 @@ incompatible:
   - mode: travel
     profile: ai
     reason: "Travel mode has no Spark GPU for heavy LLM workloads"
-  
+
   - mode: travel
     profile: data_pipeline
     reason: "Travel mode has limited resources for full data pipeline"
-  
+
   - mode: ooo
     profile: data_pipeline
     reason: "OOO mode over tunnel is too slow for heavy embedding workloads"
