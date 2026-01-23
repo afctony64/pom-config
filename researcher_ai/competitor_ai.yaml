@@ -131,11 +131,28 @@ tool_guidance:
 entity_spawn:
   enabled: true  # Schema defines fields via sets: [spawn]
 
+# Parallel array enrichment configuration
+# Uses generic parallel_array_enricher.prompty to fill post fields via web search
+parallel_array_enrichment:
+  enabled: true
+  anchor_field: keyCompetitors
+  context_fields:
+    - domain                    # Source entity domain for disambiguation
+    - competitorAdvantagesVs    # Context about what we know
+  enrich_fields:
+    - competitorDomain          # Discover via web search (useparagon.com, etc.)
+    - keyCompetitorEvidence     # Find evidence from search results
+    - competitorPositioning     # Market position from reviews/analysis
+    - competitorTargetMarket    # Target market from company sites
+    - competitorPriceVs         # Pricing comparison from reviews
+  search_query_template: >
+    {element} {domain} official website company
+
 # Post-execution tools: Run automatically after competitor researcher completes
 # Priority-ordered: lower number runs first
 post_execution_tools:
-  - parallel_array_enricher  # Priority 10: Fill post fields (keyCompetitorEvidence)
-  - entity_spawn             # Priority 20: Create Domain records for competitors
+  - parallel_array_enricher  # Priority 10: Fill post fields (uses parallel_array_enrichment config above)
+  - entity_spawn             # Priority 20: Create Domain records for competitors (requires competitorDomain)
   - enum_cat                 # Priority 30: Classify EnumCat fields (competitorAnalysisCat, etc.)
   - vec_cat                  # Priority 40: Classify VecCat fields (if any)
   # References are now generated automatically by schema_coercer on upsert

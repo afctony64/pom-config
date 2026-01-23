@@ -39,6 +39,9 @@ keyword_queries:
   - "arr"
   - "mrr"
   - "investors"
+  - "million"
+  - "funding round"
+  - "announces"
 
 # URL boost patterns - used by page_facts_vector injector
 url_boost_patterns:

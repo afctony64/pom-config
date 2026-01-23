@@ -224,7 +224,6 @@ properties:
   - research
   sets:
   - array
-  - standard
   - spawn
   - post
   metadata:
