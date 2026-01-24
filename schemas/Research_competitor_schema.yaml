@@ -200,8 +200,8 @@ properties:
 - name: competitorAdvantagesVs
   dataType:
   - text[]
-  description: 'What THIS entity has that this competitor doesn''t. ENRICHMENT SEARCH:
-    "{element} vs comparison advantages weaknesses". Examples: "Better technology, simpler setup",
+  description: 'What {entity} has that {element} doesn''t. ENRICHMENT SEARCH:
+    "{element} vs {entity} comparison advantages". Examples: "Better technology, simpler setup",
     "Stronger customer support, faster delivery", "More flexible pricing, easier onboarding".
     Use "Not disclosed" if advantages unknown. MUST have same length as keyCompetitors array.'
   parallel_to: keyCompetitors
@@ -236,8 +236,8 @@ properties:
 - name: competitorGapsVs
   dataType:
   - text[]
-  description: 'What this competitor has that THIS entity doesn''t. ENRICHMENT SEARCH:
-    "{element} strengths advantages features". Examples: "More advanced features, larger market presence",
+  description: 'What {element} has that {entity} doesn''t. ENRICHMENT SEARCH:
+    "{element} vs {entity} comparison advantages". Examples: "More advanced features, larger market presence",
     "Established brand recognition, broader product line", "Better infrastructure, more resources".
     Use "Not disclosed" if gaps unknown. MUST have same length as keyCompetitors array.'
   parallel_to: keyCompetitors
@@ -271,8 +271,8 @@ properties:
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: 'Price comparison vs THIS entity. ENRICHMENT SEARCH: "{element}
-    pricing cost vs {element} comparison". Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
+  description: 'Price comparison {element} vs {entity}. ENRICHMENT SEARCH: "{element}
+    vs {entity} pricing comparison cost". Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
     "Similar tier". Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS ONLY.
 
     '

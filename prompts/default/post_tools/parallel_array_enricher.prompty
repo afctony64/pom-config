@@ -107,9 +107,11 @@ Context:
 {% if researcher_ai and researcher_ai.researcher_identity %}- Researcher: {{ researcher_ai.researcher_identity.title }} - {{ researcher_ai.researcher_identity.mission }}{% endif %}
 {% if record %}{% set props = record.get('properties') or record %}- Entity: {{ props.get('entityName') or props.get('domain') or 'Unknown' }}{% endif %}
 
+{% set props = record.get('properties') or record if record else {} %}
+{% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
 Fields to fill:
 {% for field in post_fields %}
-- {{ field.name }}: {{ field.description|replace('{element}', element) }}
+- {{ field.name }}: {{ field.description|replace('{element}', element)|replace('{entity}', entity_name) }}
 {% endfor %}
 
 Rules:
