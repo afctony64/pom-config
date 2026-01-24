@@ -85,7 +85,7 @@ outputs:
     description: "Object with field values keyed by field name"
 
 model:
-  api: responses
+  api: chat
   configuration:
     connection: openai_conn
     model: gpt-5-nano
@@ -93,8 +93,9 @@ model:
   parameters:
     response_format:
       type: json_object
-    reasoning_effort: low
-    max_retries: 2
+    max_completion_tokens: 4000
+    timeout: 120
+    max_retries: 3
 
 ---
 
