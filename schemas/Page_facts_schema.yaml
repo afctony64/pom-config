@@ -276,6 +276,14 @@ properties:
   moduleConfig:
     text2vec-transformers:
       skip: true
+- name: chunk_total
+  dataType:
+  - int
+  description: Total number of chunks for this page (FIX Issue #752)
+  indexFilterable: true
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
 - name: content_length
   dataType:
   - int
