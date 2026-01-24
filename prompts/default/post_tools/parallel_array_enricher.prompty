@@ -111,7 +111,7 @@ Context:
 {% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
 Fields to fill:
 {% for field in post_fields %}
-- {{ field.name }}: {{ field.description|replace('{element}', element)|replace('{entity}', entity_name) }}
+- {{ field.name }}: {{ field.description|replace('{subject}', element)|replace('{entity}', entity_name) }}
 {% endfor %}
 
 Rules:

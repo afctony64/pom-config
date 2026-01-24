@@ -350,7 +350,7 @@ properties:
 - name: executiveBackgrounds
   dataType:
   - text[]
-  description: 'Executive background and experience. ENRICHMENT SEARCH: "{element}
+  description: 'Executive background and experience. ENRICHMENT SEARCH: "{subject}
     career background education experience". Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups",
     "McKinsey alum, serial entrepreneur". Use "Not disclosed" if unknown. MUST align with keyExecutives.
 
@@ -385,7 +385,7 @@ properties:
 - name: executiveTenure
   dataType:
   - text[]
-  description: 'Tenure/time at entity for each executive. ENRICHMENT SEARCH: "{element}
+  description: 'Tenure/time at entity for each executive. ENRICHMENT SEARCH: "{subject}
     joined company tenure years". Examples: "5 years", "Since founding (2019)", "2 years", "6 months". Use "Not disclosed"
     if unknown. MUST align with keyExecutives.
 
@@ -404,7 +404,7 @@ properties:
 - name: executiveLinkedIn
   dataType:
   - text[]
-  description: 'LinkedIn profile URL for each executive. ENRICHMENT SEARCH: "{element}
+  description: 'LinkedIn profile URL for each executive. ENRICHMENT SEARCH: "{subject}
     linkedin profile". Format: https://www.linkedin.com/in/username/ Use "Not disclosed" if LinkedIn profile
     unknown. MUST align with keyExecutives.
 
