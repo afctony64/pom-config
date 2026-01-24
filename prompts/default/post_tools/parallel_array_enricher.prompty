@@ -24,20 +24,18 @@ inputs:
   anchor_field:
     description: "The anchor field name (e.g., 'keyCompetitors', 'keyExecutives')"
     type: string
-  row_context:
-    description: "All parallel array data for this row (LLM-filled fields)"
-    type: object
   post_fields:
     description: "Array of {name, description} for fields to fill"
     type: array
-  tenant_context:
-    description: "Tenant context (name, industry_focus)"
+  # Context injection (same as main prompts)
+  tenant:
+    description: "TenantConfig object (injected from tenant_id)"
     type: object
-  researcher_context:
-    description: "Researcher context (title, mission)"
+  researcher_ai:
+    description: "ResearcherAIConfig with researcher_identity (injected from researcher_id)"
     type: object
-  source_context:
-    description: "Source entity context (domain, title, industry)"
+  record:
+    description: "Source record being enriched (Domain or Research_* record)"
     type: object
 
 # Tools the LLM can call to search for specific field data
@@ -64,19 +62,19 @@ tool_guidance:
 data_requirements:
   include_enrichment_data: true
   injectors:
-    # Page facts - broad search without domain filter
+    # Page facts - search for element in entity's page facts
     - injector_template: data
       template_vars:
         data_card_id: page_facts_search
         inject_as: page_facts_response
         limit: 10
-        search_query: "{{ element }}{% if row_context %}{% for _key, value in row_context.items() %} {{ value }}{% endfor %}{% endif %}"
+        search_query: "{{ element }}"
         search_strategy: hybrid
-        domain: "{{ source_context.domain }}"
+        domain: "{{ (record.get('properties') or record).get('domain', '') if record else '' }}"
       search:
         type: hybrid
         alpha: 0.5
-        query: "{{ element }}{% if row_context %}{% for _key, value in row_context.items() %} {{ value }}{% endfor %}{% endif %}"
+        query: "{{ element }}"
   
   error_handling:
     missing_data: "continue"
@@ -105,9 +103,9 @@ system:
 You are enriching a single record for **{{ element }}**.
 
 Context:
-- Tenant: {{ tenant_context.name|default('Unknown') }} ({{ tenant_context.industry_focus|default('technology') }})
-- Researcher: {{ researcher_context.title|default('Unknown') }} - {{ researcher_context.mission|default('') }}
-- Entity: {{ source_context.title|default(source_context.domain)|default('Unknown') }}
+{% if tenant %}- Tenant: {{ tenant.name|default(tenant.id) }}{% if tenant.description %} - {{ tenant.description }}{% endif %}{% endif %}
+{% if researcher_ai and researcher_ai.researcher_identity %}- Researcher: {{ researcher_ai.researcher_identity.title }} - {{ researcher_ai.researcher_identity.mission }}{% endif %}
+{% if record %}{% set props = record.get('properties') or record %}- Entity: {{ props.get('entityName') or props.get('domain') or 'Unknown' }}{% endif %}
 
 Fields to fill:
 {% for field in post_fields %}
