@@ -181,7 +181,7 @@ properties:
 - name: keyCompetitors
   dataType:
   - text[]
-  description: "Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN OFFICIAL NAMES without \nqualifiers, product\
+  description: "Array of ALL identified DIRECT competitor COMPANY NAMES (typically 5-12). Use CLEAN OFFICIAL NAMES without \nqualifiers, product\
     \ variants, or parenthetical notes. Examples: \"Workato\" (not \n\"Workato Embedded\"), \"Boomi\" (not \"Boomi iPaaS\"\
     ), \"Zapier\" (not \"Zapier for Enterprise\"). \nReturn EMPTY ARRAY [] if no competitors identified. DO NOT put explanations\
     \ or \n\"no competitors found\" messages in this array. Used for domain lookups - spurious data breaks spawn.\n"
@@ -207,7 +207,7 @@ properties:
   sets:
   - array
   - standard
-  - prompt
+  - post
   metadata:
     order: 207
   label: Advantages
@@ -241,7 +241,7 @@ properties:
   sets:
   - array
   - standard
-  - prompt
+  - post
   metadata:
     order: 206
   label: Gaps
@@ -307,7 +307,7 @@ properties:
   sets:
   - array
   - extended
-  - prompt
+  - post
   tags:
   - score
   metadata:
@@ -342,7 +342,7 @@ properties:
   sets:
   - array
   - extended
-  - prompt
+  - post
   tags:
   - score
   metadata:
@@ -356,7 +356,7 @@ properties:
   sets:
   - array
   - extended
-  - prompt
+  - post
   tags:
   - score
   metadata:

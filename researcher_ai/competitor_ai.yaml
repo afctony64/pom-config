@@ -12,8 +12,8 @@ researcher_identity:
   mission: Provide structured competitive analysis with concise, actionable insights
   ecosystem_role: Competitor-focused researcher delivering JSON-formatted intelligence
   core_competencies:
-  - 'Direct Competitor Identification: Finding 2-5 companies customers actually compare
-    THIS company to'
+  - 'Direct Competitor Identification: Finding ALL companies customers compare
+    THIS company to (typically 5-12 from comparison pages)'
   - 'Structured VS Analysis: Price comparison, advantage mapping, gap identification
     per competitor'
   - 'Market Positioning: Leader/Challenger/Niche positioning relative to each competitor'
@@ -37,6 +37,7 @@ keyword_queries:
   - "alternatives"
   - "competitors"
   - "comparison"
+  - "compare"
   - "g2"
   - "capterra"
   - "gartner"
@@ -52,7 +53,9 @@ url_boost_patterns:
 
 # Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
-  - Direct competitors (2-5 companies customers actually compare to)
+  - "CRITICAL: Extract EVERY competitor from /how-we-compare or comparison pages - do NOT skip any"
+  - "Include ALL companies with dedicated comparison pages (Paragon, Boomi, Cyclr, Pandium, Appmixer, N8n, Tray, Workato, Zapier, etc.)"
+  - "Aim for 8-15 competitors - include smaller/niche players, not just market leaders"
   - Competitive advantages vs each competitor (what THIS company does better)
   - Competitive gaps vs each competitor (where competitors are stronger)
   - Market positioning (leader, challenger, niche player)
@@ -75,7 +78,6 @@ avoid:
   - Speculating on competitor strategy without evidence from sources
   - Including companies that serve different customer segments entirely
   - Using the company's own biased comparison pages as sole source
-  - Listing more than 5 competitors (focus on most relevant)
   - Confusing technology partners with competitors
 
 # Tools available for this researcher (AITools that can be called by the AI)
@@ -101,7 +103,7 @@ tool_guidance:
       (Only if G2 search didn't identify competitors)
 
       **STOP after finding:**
-      - 3-5 key competitors
+      - All key competitors mentioned
       - Positioning (leader/challenger/niche)
       - Key differentiators
 
@@ -138,13 +140,7 @@ parallel_array_enrichment:
   anchor_field: keyCompetitors
   context_fields:
     - domain                    # Source entity domain for disambiguation
-    - competitorAdvantagesVs    # Context about what we know
-  enrich_fields:
-    - competitorDomain          # Discover via web search (useparagon.com, etc.)
-    - keyCompetitorEvidence     # Find evidence from search results
-    - competitorPositioning     # Market position from reviews/analysis
-    - competitorTargetMarket    # Target market from company sites
-    - competitorPriceVs         # Pricing comparison from reviews
+  # enrich_fields: Auto-detected from schema via sets: [post]
   search_query_template: >
     {element} {domain} official website company
 
