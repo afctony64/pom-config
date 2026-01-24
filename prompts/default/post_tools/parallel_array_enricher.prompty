@@ -54,12 +54,11 @@ tool_guidance:
       **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
       Examples of what to look for in descriptions:
       - "official website domain" → Search: "{element} {industry} official website"
-      - "LinkedIn profile" → Search: "{element} {role} linkedin profile"
+      - "LinkedIn profile" → Search: "{element} linkedin profile" (+ role if known)
       - "company size" → Search: "{element} employees company size"
       
       **DISAMBIGUATION:**
       - For common names, include: {source_context.title} and {source_context.industry}
-      - For executives: include their role and company name
       - For competitors: include the industry vertical
 
 data_requirements:
@@ -68,11 +67,16 @@ data_requirements:
     # Page facts - broad search without domain filter
     - injector_template: data
       template_vars:
-        collection: Page_facts
-        query: "{{ element }}"
-        alpha: 0.5
+        data_card_id: page_facts_search
+        inject_as: page_facts_response
         limit: 10
-        inject_as: page_facts
+        search_query: "{{ element }}{% if row_context %}{% for _key, value in row_context.items() %} {{ value }}{% endfor %}{% endif %}"
+        search_strategy: hybrid
+        domain: "{{ source_context.domain }}"
+      search:
+        type: hybrid
+        alpha: 0.5
+        query: "{{ element }}{% if row_context %}{% for _key, value in row_context.items() %} {{ value }}{% endfor %}{% endif %}"
   
   error_handling:
     missing_data: "continue"
@@ -85,7 +89,7 @@ outputs:
     description: "Object with field values keyed by field name"
 
 model:
-  api: responses
+  api: chat
   configuration:
     connection: openai_conn
     model: gpt-5-nano
@@ -93,88 +97,46 @@ model:
   parameters:
     response_format:
       type: json_object
-    reasoning_effort: low
     max_retries: 2
 
 ---
 
 system:
-{% if _rendered_system_message %}
-## Researcher Context
-{{ _rendered_system_message[:1500] }}{% if _rendered_system_message|length > 1500 %}
-... (truncated){% endif %}
+You are enriching a single record for **{{ element }}**.
 
----
-{% endif %}
+Context:
+- Tenant: {{ tenant_context.name|default('Unknown') }}
+- Researcher: {{ researcher_context.title|default('Unknown') }}
 
-You are extracting information about **{{ element }}** to fill parallel array fields.
-
-**ENTITY:** {{ source_context.title|default(source_context.domain) }} ({{ source_context.industry|default('technology') }})
-**ARRAY:** {{ anchor_field }} (e.g., keyCompetitors, keyExecutives, keyCustomers)
-{% if row_context %}
-**ROW DATA:** {% for key, value in row_context.items() %}{% if value and value != 'Not disclosed' %}{{ key }}={{ value }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
-{% endif %}
-
-**FIELDS TO FILL (READ THE DESCRIPTIONS - they contain search guidance!):**
+Fields to fill (use descriptions for search guidance):
 {% for field in post_fields %}
-- **{{ field.name }}**: {{ field.description }}
+- {{ field.name }}: {{ field.description }}
 {% endfor %}
 
-**SEARCH STRATEGY:**
-1. Check page_facts first for any existing data
-2. Use brave_search for fields that need web lookup - ALWAYS include company name for disambiguation:
-   - For domains: Search "{{ element }} {{ source_context.industry|default('technology') }} official website"
-   - For LinkedIn: Search "{{ element }} [their role] {{ source_context.title|default(source_context.domain) }} linkedin profile"
-   - For company info: Search "{{ element }} company employees size"
-
-**CRITICAL - DOMAIN FINDING:**
-- Do NOT use LinkedIn, Crunchbase, G2, or profile sites as domains
-- Extract the actual company domain from search results
-- If multiple similar results exist, pick the one that is a competitor/alternative to {{ source_context.title|default(source_context.domain) }}
-- Example: For "CompanyName" in {{ source_context.industry|default('technology') }} context → search "CompanyName {{ source_context.industry|default('technology') }} integration platform official website" to find the right company (not other companies with similar names)
-
-**OUTPUT:** Return JSON with field names as keys. Use null if not found.
-
-{% if researcher_example %}
-## Example Output
-
-For reference, here's an example of expected field values for this researcher type:
-
-```json
-{{ researcher_example | tojson(indent=2) }}
-```
-{% endif %}
+Rules:
+- Use page_facts first when relevant.
+- If web lookup is required, use brave_search.
+- Treat "{{ element }}" as the only company name to search for. Do not search for other competitors.
+- Replace {element} in ENRICHMENT SEARCH templates with "{{ element }}".
+- Return JSON with ONLY the fields listed above. Use null if not found.
 
 user:
 **SUBJECT:** {{ element }}
 
-{% if row_context %}
-**KNOWN DATA:**
-{% for key, value in row_context.items() %}
-{% if value and value != 'Not disclosed' %}
-- {{ key }}: {{ value }}
-{% endif %}
-{% endfor %}
-{% endif %}
-
-{% if page_facts_response is defined and page_facts_response and page_facts_response.results %}
-**PAGE FACTS:**
-{% for fact in page_facts_response.results[:5] %}
-- {{ fact.content|default(fact.properties.content|default(''))|truncate(200) }}
+{% if page_facts_response is defined and page_facts_response %}
+**PAGE FACTS (top 5):**
+{% for fact in page_facts_response[:5] %}
+- {% if fact.content is defined %}{{ fact.content|truncate(200) }}{% elif fact.get is defined %}{{ fact.get('content')|default(fact.get('properties', {}).get('content', ''))|truncate(200) }}{% endif %}
 {% endfor %}
 {% endif %}
 
 **INSTRUCTIONS:**
-1. Review the field descriptions above - they tell you HOW to search
-2. Use brave_search for any fields that need web data:
-   - competitorDomain → search for official website (NOT LinkedIn, G2, Crunchbase)
-   - executiveLinkedIn → search for LinkedIn profile
-   - customerDomain → search for company website
-   - etc.
-3. For domains: ALWAYS search with industry context to find the RIGHT company
-   - Example: "CompanyName" + "{{ source_context.industry|default('technology') }}" + "official website" → finds the correct company domain (not other companies with similar names)
-4. Return JSON with values for: {% for field in post_fields %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+1. Fill the fields for **{{ element }}** only.
+2. Use page_facts if available; otherwise use brave_search.
+3. Follow the field descriptions for search terms and formatting.
+4. Every brave_search query MUST include "{{ element }}" and no other competitor names.
 
+Return JSON with ONLY these exact field names:
 ```json
 {
 {% for field in post_fields %}

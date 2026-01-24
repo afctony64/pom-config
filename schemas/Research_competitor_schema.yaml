@@ -200,23 +200,24 @@ properties:
 - name: competitorAdvantagesVs
   dataType:
   - text[]
-  description: What THIS entity has that this competitor doesn't (parallel to keyCompetitors array) - e.g., "Better technology,
-    simpler setup", "Stronger customer support, faster delivery", "More flexible pricing, easier onboarding". Use "Not disclosed"
-    if advantages unknown. MUST have same length as keyCompetitors array.
+  description: 'What THIS entity has that this competitor doesn''t. ENRICHMENT SEARCH:
+    "{element} vs comparison advantages weaknesses". Examples: "Better technology, simpler setup",
+    "Stronger customer support, faster delivery", "More flexible pricing, easier onboarding".
+    Use "Not disclosed" if advantages unknown. MUST have same length as keyCompetitors array.'
   parallel_to: keyCompetitors
   tags:
   - research
   sets:
   - array
   - standard
-  - prompt
+  - post
   metadata:
     order: 207
   label: Advantages
 - name: competitorDomain
   dataType:
   - text[]
-  description: 'Primary domain for each competitor (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
+  description: 'Primary domain for each competitor. ENRICHMENT SEARCH: "{element}
     official website domain company". Format: "competitor.com" (no https://, no www). Use "Not disclosed" if cannot find.
     MUST align with keyCompetitors.
 
@@ -235,23 +236,24 @@ properties:
 - name: competitorGapsVs
   dataType:
   - text[]
-  description: What this competitor has that THIS entity doesn't (parallel to keyCompetitors array) - e.g., "More advanced
-    features, larger market presence", "Established brand recognition, broader product line", "Better infrastructure, more
-    resources". Use "Not disclosed" if gaps unknown. MUST have same length as keyCompetitors array.
+  description: 'What this competitor has that THIS entity doesn''t. ENRICHMENT SEARCH:
+    "{element} strengths advantages features". Examples: "More advanced features, larger market presence",
+    "Established brand recognition, broader product line", "Better infrastructure, more resources".
+    Use "Not disclosed" if gaps unknown. MUST have same length as keyCompetitors array.'
   parallel_to: keyCompetitors
   tags:
   - research
   sets:
   - array
   - standard
-  - prompt
+  - post
   metadata:
     order: 206
   label: Gaps
 - name: competitorPositioning
   dataType:
   - text[]
-  description: 'Market positioning for each competitor (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
+  description: 'Market positioning for each competitor. ENRICHMENT SEARCH: "{element}
     market position leader challenger G2 Gartner". Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging
     Player". Use "Not disclosed" if unknown. MUST align with keyCompetitors.
 
@@ -269,8 +271,8 @@ properties:
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: 'Price comparison vs THIS entity (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
-    pricing cost vs {entity_name} comparison". Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
+  description: 'Price comparison vs THIS entity. ENRICHMENT SEARCH: "{element}
+    pricing cost vs {element} comparison". Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
     "Similar tier". Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS ONLY.
 
     '
@@ -287,7 +289,7 @@ properties:
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: 'Target market for each competitor (parallel to keyCompetitors array). ENRICHMENT SEARCH: "{competitor_name}
+  description: 'Target market for each competitor. ENRICHMENT SEARCH: "{element}
     target market customers enterprise SMB". Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
     Use "Not disclosed" if unknown. MUST align with keyCompetitors.
 
@@ -319,7 +321,7 @@ properties:
 - name: keyCompetitorEvidence
   dataType:
   - text[]
-  description: 'Evidence/context found for each keyCompetitor from page facts and web search (parallel to keyCompetitors).
+  description: 'Evidence/context found for each keyCompetitor from page facts and web search.
     Auto-populated during enrichment. Contains source text snippets about competitive positioning, pricing, features mentioned
     for this competitor. MUST align with keyCompetitors.
 
