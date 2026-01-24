@@ -105,19 +105,19 @@ system:
 You are enriching a single record for **{{ element }}**.
 
 Context:
-- Tenant: {{ tenant_context.name|default('Unknown') }}
-- Researcher: {{ researcher_context.title|default('Unknown') }}
+- Tenant: {{ tenant_context.name|default('Unknown') }} ({{ tenant_context.industry_focus|default('technology') }})
+- Researcher: {{ researcher_context.title|default('Unknown') }} - {{ researcher_context.mission|default('') }}
+- Entity: {{ source_context.title|default(source_context.domain)|default('Unknown') }}
 
-Fields to fill (use descriptions for search guidance):
+Fields to fill:
 {% for field in post_fields %}
-- {{ field.name }}: {{ field.description }}
+- {{ field.name }}: {{ field.description|replace('{element}', element) }}
 {% endfor %}
 
 Rules:
 - Use page_facts first when relevant.
 - If web lookup is required, use brave_search.
-- Treat "{{ element }}" as the only company name to search for. Do not search for other competitors.
-- Replace {element} in ENRICHMENT SEARCH templates with "{{ element }}".
+- Search for "{{ element }}" only. Do not search for other names.
 - Return JSON with ONLY the fields listed above. Use null if not found.
 
 user:
