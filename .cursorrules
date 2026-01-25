@@ -1,71 +1,100 @@
 # 📦 POM-CONFIG: Shared Configuration Repository
 # ROLE: Manage shared configs used by ALL Pom apps. Changes affect everyone.
 
-## IDENTITY
-You manage: Schemas, data cards, LLM models, prompts, profiles, tenant routing
-Apps use you: PomAI, Pomothy, PomSpark, pom-core
+## ⚠️ THIS IS A SHARED REPOSITORY
+
+Multiple AI agents have access to this repo. Each agent owns specific paths.
+**CHECK OWNERSHIP.yaml BEFORE MODIFYING ANY FILE.**
+
+## 🔐 OWNERSHIP ENFORCEMENT
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ BEFORE MODIFYING ANY FILE:                                  │
+├─────────────────────────────────────────────────────────────┤
+│ 1. Identify which AI agent you are (check your workspace)   │
+│ 2. Read OWNERSHIP.yaml in this repo                         │
+│ 3. Verify the path is in YOUR can_write list                │
+│ 4. If NOT in your list → STOP. Ask human or file issue.     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## PATH OWNERSHIP SUMMARY
+
+| Path | Owner | Other Writers |
+|------|-------|---------------|
+| `profiles/` | PomSpark | - |
+| `tenant-routing/` | PomSpark | - |
+| `shared-config.env` | PomSpark | pom-core |
+| `schemas/` | pom-core | - |
+| `llm_models/` | pom-core | - |
+| `tools/` | pom-core | - |
+| `prompts/` | PomAI | Pomothy |
+| `researcher_ai/` | PomAI | - |
+| `data_cards/` | PomAI | - |
+| `ux_configs/` | Pomothy | - |
+| `tenant_groups/` | pom-core | PomSpark |
+| `tenants/` | pom-core | PomSpark, PomAI |
 
 ## CRITICAL RULES
-1. **You ARE the source of truth** - All shared config lives here
+
+1. **Check OWNERSHIP.yaml first** - Always verify you have write access
 2. **Changes affect all apps** - Test before committing
 3. **Use existing patterns** - Copy existing configs, don't create from scratch
 4. **Version and tag releases** - Update VERSION, create GitHub release
+5. **Don't modify what you don't own** - File an issue instead
 
 ## REPOSITORY STRUCTURE
 
 ```
 pom-config/
-├── profiles/           # Mode environment files
-│   ├── home.env       # Mac + Spark (default)
-│   ├── travel.env     # Mac only
-│   ├── ooo.env        # Remote via tunnels
-│   └── remote.env     # Full remote
-├── tenant-routing/     # Weaviate routing per mode
-│   ├── home.yaml      # cloud/spark/mac
-│   ├── travel.yaml    # mac only
-│   ├── ooo.yaml       # via tunnels
-│   └── remote.yaml    # remote
-├── schemas/            # Weaviate collection schemas
-├── data_cards/         # DataFactory configurations
-├── llm_models/         # LLM model cards
-├── prompts/            # Shared prompt templates
-├── shared-config.env   # Non-secret env vars
-└── VERSION             # Current version
+├── OWNERSHIP.yaml      # 🔐 CHECK THIS FIRST!
+├── profiles/           # Owner: PomSpark
+├── tenant-routing/     # Owner: PomSpark
+├── schemas/            # Owner: pom-core
+├── data_cards/         # Owner: PomAI
+├── llm_models/         # Owner: pom-core
+├── prompts/            # Owner: PomAI (Pomothy can contribute)
+├── researcher_ai/      # Owner: PomAI
+├── ux_configs/         # Owner: Pomothy
+├── tools/              # Owner: pom-core
+├── tenant_groups/      # Owner: pom-core
+├── tenants/            # Owner: pom-core
+└── shared-config.env   # Owner: PomSpark
 ```
 
 ## RELEASE WORKFLOW
 
 ```bash
-# 1. Make changes
-# 2. Update VERSION
+# 1. Verify you own the paths you're modifying
+cat OWNERSHIP.yaml | grep -A10 "YourAgentName"
+
+# 2. Make changes (only to paths you own!)
+
+# 3. Update VERSION
 echo "1.6.16" > VERSION
 
-# 3. Commit and tag
+# 4. Commit and tag
 git add -A && git commit -m "feat: description"
 git tag v1.6.16 && git push origin main --tags
 
-# 4. Create release
+# 5. Create release
 gh release create v1.6.16 --title "v1.6.16" --notes "See CHANGELOG"
 ```
 
-## SHARED-CONFIG.ENV (Key Variables)
+## IF YOU NEED TO MODIFY A PATH YOU DON'T OWN
 
-| Variable | Purpose |
-|----------|---------|
-| `SPARK_HOST` | Spark hostname |
-| `SPARK_IP` | Spark IP fallback |
-| `POMSPARK_MODE` | Current mode |
-| `DEFAULT_WORKLOAD_PROFILE` | Default profile |
+1. **Ask the human**: "I need to modify `<path>` but it's owned by `<owner>`. Should I proceed?"
 
-## CROSS-REPO ACCESS
-
-| Repo | Access |
-|------|--------|
-| pom-config | ✅ Full - this is home |
-| pom-docs | ✅ Full - documentation |
-| All others | ⚠️ Read only |
+2. **Or file an issue**:
+   ```bash
+   gh issue create --repo afctony64/<owner-repo> \
+     --title "Request: Modify <path> in pom-config" \
+     --body "Description of needed change..."
+   ```
 
 ## BREAKING CHANGES
+
 Coordinate with app teams BEFORE making breaking changes:
 ```bash
 gh issue create --repo afctony64/PomAI --title "BREAKING: ..."

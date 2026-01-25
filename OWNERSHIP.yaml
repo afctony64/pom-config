@@ -1,0 +1,178 @@
+# =============================================================================
+# POM-CONFIG OWNERSHIP DEFINITIONS
+# =============================================================================
+# This file defines which AI agents own and can modify which paths.
+# Human owner (tony) has FULL ACCESS to everything - these rules are for AIs.
+#
+# ENFORCEMENT: AI agents MUST check this file before modifying pom-config.
+# Use the 'check-ownership' skill or verify manually.
+# =============================================================================
+
+human_owner: tony
+human_access: full  # Human can modify anything
+
+# =============================================================================
+# AI AGENT OWNERSHIP
+# =============================================================================
+# Each agent has:
+#   - owns: Paths this agent is the primary owner of
+#   - can_write: Paths this agent may modify (includes owned paths)
+#   - read_only: Paths this agent can read but MUST NOT modify
+#
+# If a path is not listed, default is READ-ONLY.
+# =============================================================================
+
+ai_agents:
+
+  # ---------------------------------------------------------------------------
+  # POMSPARK - Infrastructure & DevOps
+  # ---------------------------------------------------------------------------
+  PomSpark:
+    description: "Infrastructure manager - Docker, networking, modes, profiles"
+    identity_file: "/Users/tonyeales/Projects/PomSpark/.cursorrules"
+    
+    owns:
+      - profiles/              # Mode environment files (home.env, travel.env, etc.)
+      - tenant-routing/        # Weaviate routing per mode
+      
+    can_write:
+      - profiles/
+      - tenant-routing/
+      - shared-config.env      # Non-secret environment variables
+      - .pom_config_pkg/       # Package configuration
+      
+    read_only:
+      - schemas/               # Owned by pom-core
+      - prompts/               # Owned by PomAI
+      - llm_models/            # Owned by pom-core
+      - data_cards/            # Owned by PomAI
+      - ux_configs/            # Owned by Pomothy
+      - researcher_ai/         # Owned by PomAI
+      - tools/                 # Owned by pom-core
+      - tenant_groups/         # Shared - requires coordination
+      - tenants/               # Shared - requires coordination
+
+  # ---------------------------------------------------------------------------
+  # POM-CORE - Core Library
+  # ---------------------------------------------------------------------------
+  pom-core:
+    description: "Core library - schemas, LLM models, tools, base functionality"
+    identity_file: "/path/to/pom-core/.cursorrules"
+    
+    owns:
+      - schemas/               # Weaviate collection schemas
+      - llm_models/            # LLM model cards and configurations
+      - tools/                 # Tool definitions
+      
+    can_write:
+      - schemas/
+      - llm_models/
+      - tools/
+      - tenant_groups/         # Can define tenant groupings
+      - tenants/               # Can define tenant configurations
+      
+    read_only:
+      - profiles/              # Owned by PomSpark
+      - tenant-routing/        # Owned by PomSpark
+      - prompts/               # Owned by PomAI
+      - ux_configs/            # Owned by Pomothy
+      - researcher_ai/         # Owned by PomAI
+      - data_cards/            # Owned by PomAI
+
+  # ---------------------------------------------------------------------------
+  # POMAI - Research AI Application
+  # ---------------------------------------------------------------------------
+  PomAI:
+    description: "Research AI - prompts, researcher configs, data cards"
+    identity_file: "/path/to/PomAI/.cursorrules"
+    
+    owns:
+      - prompts/               # Shared prompt templates (.prompty files)
+      - researcher_ai/         # Researcher AI configurations
+      - data_cards/            # DataFactory configurations
+      
+    can_write:
+      - prompts/
+      - researcher_ai/
+      - data_cards/
+      
+    read_only:
+      - schemas/               # Owned by pom-core
+      - llm_models/            # Owned by pom-core
+      - profiles/              # Owned by PomSpark
+      - tenant-routing/        # Owned by PomSpark
+      - ux_configs/            # Owned by Pomothy
+      - tools/                 # Owned by pom-core
+
+  # ---------------------------------------------------------------------------
+  # POMOTHY - UX/Chat AI Application
+  # ---------------------------------------------------------------------------
+  Pomothy:
+    description: "UX/Chat AI - user experience configurations"
+    identity_file: "/path/to/Pomothy/.cursorrules"
+    
+    owns:
+      - ux_configs/            # UX configuration files
+      
+    can_write:
+      - ux_configs/
+      - prompts/               # Can contribute to shared prompts
+      
+    read_only:
+      - schemas/               # Owned by pom-core
+      - llm_models/            # Owned by pom-core
+      - profiles/              # Owned by PomSpark
+      - tenant-routing/        # Owned by PomSpark
+      - researcher_ai/         # Owned by PomAI
+      - data_cards/            # Owned by PomAI
+      - tools/                 # Owned by pom-core
+
+# =============================================================================
+# SPECIAL PATHS
+# =============================================================================
+# These paths require extra care or coordination
+
+special_paths:
+  
+  shared_config.env:
+    description: "Non-secret environment variables"
+    primary_owner: PomSpark
+    contributors: [pom-core]
+    notes: "Infrastructure-related vars only. Secrets go in secrets.env"
+    
+  tenant_groups/:
+    description: "Tenant grouping definitions"
+    primary_owner: pom-core
+    contributors: [PomSpark]
+    notes: "Changes affect all apps - coordinate before modifying"
+    
+  tenants/:
+    description: "Individual tenant configurations"
+    primary_owner: pom-core
+    contributors: [PomSpark, PomAI]
+    notes: "Changes affect routing - test thoroughly"
+
+# =============================================================================
+# ENFORCEMENT RULES
+# =============================================================================
+
+enforcement:
+  
+  before_write:
+    - "Check OWNERSHIP.yaml to verify you have write access"
+    - "If path is in read_only, STOP and do not modify"
+    - "If path is owned by another agent, file an issue instead"
+    
+  if_uncertain:
+    - "Ask the human owner for clarification"
+    - "Default to READ-ONLY if not explicitly listed in can_write"
+    
+  violations:
+    - "Modifying read_only paths is a violation"
+    - "Log violations for human review"
+
+# =============================================================================
+# VERSION
+# =============================================================================
+version: "1.0.0"
+last_updated: "2026-01-23"
