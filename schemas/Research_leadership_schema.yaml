@@ -336,7 +336,7 @@ properties:
 - name: keyExecutiveEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyExecutive from page facts search (parallel to keyExecutives array). Stores
+  description: Evidence/context found for each keyExecutive from page facts search. Stores
     the factual basis for classifications and extracted values.
   parallel_to: keyExecutives
   moduleConfig:
@@ -350,8 +350,8 @@ properties:
 - name: executiveBackgrounds
   dataType:
   - text[]
-  description: 'Executive background and experience (parallel to keyExecutives array). ENRICHMENT SEARCH: "{executive_name}
-    {role} career background education experience". Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups",
+  description: 'Executive background and experience. ENRICHMENT SEARCH: "{subject}
+    career background education experience". Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups",
     "McKinsey alum, serial entrepreneur". Use "Not disclosed" if unknown. MUST align with keyExecutives.
 
     '
@@ -369,7 +369,7 @@ properties:
 - name: executiveRoles
   dataType:
   - text[]
-  description: Role/title for each executive (parallel to keyExecutives array) - e.g., "CEO", "CTO", "VP Engineering", "Head
+  description: Role/title for each executive - e.g., "CEO", "CTO", "VP Engineering", "Head
     of Product". Use "Not disclosed" if role unknown. MUST have same length as keyExecutives array.
   parallel_to: keyExecutives
   tags:
@@ -385,8 +385,8 @@ properties:
 - name: executiveTenure
   dataType:
   - text[]
-  description: 'Tenure/time at entity for each executive (parallel to keyExecutives array). ENRICHMENT SEARCH: "{executive_name}
-    joined {company} tenure years". Examples: "5 years", "Since founding (2019)", "2 years", "6 months". Use "Not disclosed"
+  description: 'Tenure/time at entity for each executive. ENRICHMENT SEARCH: "{subject}
+    joined company tenure years". Examples: "5 years", "Since founding (2019)", "2 years", "6 months". Use "Not disclosed"
     if unknown. MUST align with keyExecutives.
 
     '
@@ -404,8 +404,8 @@ properties:
 - name: executiveLinkedIn
   dataType:
   - text[]
-  description: 'LinkedIn profile URL for each executive (parallel to keyExecutives array). ENRICHMENT SEARCH: "{executive_name}
-    {role} {company} linkedin profile". Format: https://www.linkedin.com/in/username/ Use "Not disclosed" if LinkedIn profile
+  description: 'LinkedIn profile URL for each executive. ENRICHMENT SEARCH: "{subject}
+    linkedin profile". Format: https://www.linkedin.com/in/username/ Use "Not disclosed" if LinkedIn profile
     unknown. MUST align with keyExecutives.
 
     '

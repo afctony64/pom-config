@@ -11,7 +11,7 @@ tags:
 
 # Model Configuration - GPT-5 with Native Web Search
 model:
-  api: responses
+  api: chat
   configuration:
     connection: openai_conn
     model: gpt-5-mini

@@ -57,7 +57,7 @@ data_requirements:
         inject_as: edgarSections
 
 model:
-  api: responses
+  api: chat
   configuration:
     type: openai_chat
     model: gpt-5-mini  # OpenAI flagship model

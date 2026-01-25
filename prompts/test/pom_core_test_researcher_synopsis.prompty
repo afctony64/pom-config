@@ -14,7 +14,7 @@ inputs:
     default: ""
 
 model:
-  api: responses
+  api: chat
   configuration:
     connection: openai_conn
     model: gpt-5-nano

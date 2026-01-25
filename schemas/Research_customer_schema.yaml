@@ -133,7 +133,7 @@ properties:
 - name: customerDomain
   dataType:
   - text[]
-  description: 'Primary domain for each key customer (parallel to keyCustomers array). ENRICHMENT SEARCH: "{customer_name}
+  description: 'Primary domain for each key customer. ENRICHMENT SEARCH: "{subject}
     official website domain company". Format: "customer.com" (no https://, no www, just the domain). Use "Not disclosed" if
     cannot find. MUST align with keyCustomers array. Used for spawning Domain records.
 
@@ -154,7 +154,7 @@ properties:
 - name: keyCustomerSizeCat
   dataType:
   - text[]
-  description: 'Customer size segment for each keyCustomer (parallel to keyCustomers array). ENRICHMENT SEARCH: "{customer_name}
+  description: 'Customer size segment for each keyCustomer. ENRICHMENT SEARCH: "{subject}
     company employees size revenue". Classify as Enterprise (1000+ employees), Mid-Market (100-999), SMB (10-99), Startup
     (<10). Use "Not disclosed" if segment unknown. MUST have same length as keyCustomers array.
 
@@ -183,7 +183,7 @@ properties:
 - name: productUsed
   dataType:
   - text[]
-  description: Product or service each keyCustomer uses (parallel to keyCustomers array) - e.g., "Premium Plan", "Professional
+  description: Product or service each keyCustomer uses - e.g., "Premium Plan", "Professional
     Service", "Complete Package". Use "Not disclosed" if product unknown. MUST have same length as keyCustomers array.
   parallel_to: keyCustomers
   moduleConfig:
@@ -199,7 +199,7 @@ properties:
 - name: primaryUseCase
   dataType:
   - text[]
-  description: Primary use case for each keyCustomer (parallel to keyCustomers array) - e.g., "Core operations", "Business
+  description: Primary use case for each keyCustomer - e.g., "Core operations", "Business
     management", "Service delivery". Use "Not disclosed" if use case unknown. MUST have same length as keyCustomers array.
   parallel_to: keyCustomers
   moduleConfig:
@@ -215,7 +215,7 @@ properties:
 - name: keyCustomerEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyCustomer from page facts and web search (parallel to keyCustomers array).
+  description: Evidence/context found for each keyCustomer from page facts and web search.
     Summarize factual basis for classifications and extracted values.
   parallel_to: keyCustomers
   moduleConfig:
@@ -297,7 +297,7 @@ properties:
 - name: caseStudies
   dataType:
   - text[]
-  description: Case study summary for each keyCustomer (parallel to keyCustomers array) - one concise line per customer success
+  description: Case study summary for each keyCustomer - one concise line per customer success
     story with quantifiable results. Use "Not disclosed" if no case study available for a customer. MUST have same length
     as keyCustomers array.
   parallel_to: keyCustomers
@@ -411,7 +411,7 @@ properties:
 - name: useCaseSimilarities
   dataType:
   - number[]
-  description: Similarity scores for each classified use case (parallel to useCaseCat, ordered highest to lowest, [0] is primary)
+  description: Similarity scores for each classified use case (ordered highest to lowest, [0] is primary)
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -427,7 +427,7 @@ properties:
 - name: useCaseMatchedSeeds
   dataType:
   - text[]
-  description: Names of seed records matched for each use case (parallel to useCaseCat, [0] is primary)
+  description: Names of seed records matched for each use case ([0] is primary)
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -622,7 +622,7 @@ properties:
 - name: keyCustomerSectorCat
   dataType:
   - text[]
-  description: Industry sector for each keyCustomer (parallel to keyCustomers array) - Level 1 top-level industry classification
+  description: Industry sector for each keyCustomer - Level 1 top-level industry classification
     (Software, Healthcare, Financial Services, etc.). Enum values mirror Industry.sector field. Use "Unknown" if sector cannot
     be determined. MUST have same length as keyCustomers array.
   enum:
@@ -662,7 +662,7 @@ properties:
 - name: keyCustomerNAICS
   dataType:
   - text[]
-  description: NAICS description for each keyCustomer (parallel to keyCustomers array) - 6-digit NAICS classification with
+  description: NAICS description for each keyCustomer - 6-digit NAICS classification with
     name (e.g., "Software Publishers (511210)"). Use "Unknown" if NAICS cannot be determined. MUST have same length as keyCustomers
     array.
   parallel_to: keyCustomers
@@ -682,7 +682,7 @@ properties:
 - name: keyCustomerIndustryCat
   dataType:
   - text[]
-  description: Industry category for each keyCustomer (parallel to keyCustomers array) - Level 2 mid-level industry classification
+  description: Industry category for each keyCustomer - Level 2 mid-level industry classification
     within sector (e.g., "Enterprise Applications", "Medical Devices", "Banking & Lending"). Enum values mirror Industry.industry
     field. Use "Unknown" if industry cannot be determined. MUST have same length as keyCustomers array.
   enum:
@@ -729,7 +729,7 @@ properties:
   dataType:
   - text[]
   description: |
-    Industry segment for each key customer (parallel to keyCustomers): specific vertical, niche, or specialization.
+    Industry segment for each key customer: specific vertical, niche, or specialization.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -762,7 +762,7 @@ properties:
 - name: keyCustomerIndustrySegmentCat
   dataType:
   - text[]
-  description: Granular industry segment classification for each keyCustomer (parallel to keyCustomers array) - semantic classification
+  description: Granular industry segment classification for each keyCustomer - semantic classification
     using shared industrySegment seed data from Industry research. Provides granular industry understanding across hundreds
     of possible verticals (e.g., "Healthcare - Medical Devices" vs "Healthcare - Telemedicine" vs "Healthcare - Pharma").
     Uses same vector training as industrySegmentCat for consistency. Array supports multi-segment classification (ordered

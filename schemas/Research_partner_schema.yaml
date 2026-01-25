@@ -169,7 +169,7 @@ properties:
 - name: keyPartnerEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyPartner from page facts search (parallel to keyPartners array). Stores the
+  description: Evidence/context found for each keyPartner from page facts search. Stores the
     factual basis for classifications and extracted values.
   parallel_to: keyPartners
   moduleConfig:
@@ -183,7 +183,7 @@ properties:
 - name: partnerTypes
   dataType:
   - text[]
-  description: Type of partnership for each partner (parallel to keyPartners array) - e.g., "Technology Partner", "Strategic
+  description: Type of partnership for each partner - e.g., "Technology Partner", "Strategic
     Alliance", "Distribution Partner", "Integration Partner". Use "Not disclosed" if type unknown. MUST have same length as
     keyPartners array.
   parallel_to: keyPartners
@@ -198,7 +198,7 @@ properties:
 - name: partnerValue
   dataType:
   - text[]
-  description: Strategic value/benefit of each partnership (parallel to keyPartners array) - e.g., "Market access", "Technology
+  description: Strategic value/benefit of each partnership - e.g., "Market access", "Technology
     enhancement", "Revenue growth", "Brand recognition". Use "Not disclosed" if value unknown. MUST have same length as keyPartners
     array.
   parallel_to: keyPartners
@@ -213,7 +213,7 @@ properties:
 - name: partnerDomain
   dataType:
   - text[]
-  description: 'Primary domain for each partner (parallel to keyPartners array). ENRICHMENT SEARCH: "{partner_name} official
+  description: 'Primary domain for each partner. ENRICHMENT SEARCH: "{subject} official
     website domain company". Format: "partner.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST align with
     keyPartners. Used for spawning Domain records.'
   parallel_to: keyPartners
