@@ -261,7 +261,7 @@ properties:
 - name: productTypeSimilarities
   dataType:
   - number[]
-  description: Similarity scores for each classified product type (parallel to productTypeCat, ordered highest to lowest,
+  description: Similarity scores for each classified product type (ordered highest to lowest,
     [0] is primary)
   moduleConfig:
     text2vec-weaviate:
@@ -277,7 +277,7 @@ properties:
 - name: productTypeMatchedSeeds
   dataType:
   - text[]
-  description: Names of seed records matched for each product type (parallel to productTypeCat, [0] is primary)
+  description: Names of seed records matched for each product type ([0] is primary)
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -590,7 +590,7 @@ properties:
 - name: productEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each product from page facts search (parallel to products array). Stores the factual
+  description: Evidence/context found for each product from page facts search. Stores the factual
     basis for classifications and extracted values.
   parallel_to: products
   moduleConfig:
@@ -604,7 +604,7 @@ properties:
 - name: productCategories
   dataType:
   - text[]
-  description: Product category for each product (parallel to products array) - e.g., "Software", "Hardware", "Service", "Platform",
+  description: Product category for each product - e.g., "Software", "Hardware", "Service", "Platform",
     "Tool". Use "Not disclosed" if category unknown. MUST have same length as products array.
   parallel_to: products
   moduleConfig:
@@ -621,7 +621,7 @@ properties:
 - name: productPricing
   dataType:
   - text[]
-  description: Pricing information for each product (parallel to products array) - e.g., "$99/mo", "One-time $499", "Usage-based".
+  description: Pricing information for each product - e.g., "$99/mo", "One-time $499", "Usage-based".
     Use "Not disclosed" if pricing unavailable for a product. MUST have same length as products array.
   parallel_to: products
   moduleConfig:
@@ -638,7 +638,7 @@ properties:
 - name: productFeatures
   dataType:
   - text[]
-  description: Key features summary for each product (parallel to products array) - e.g., "Feature A, Feature B, Feature C",
+  description: Key features summary for each product - e.g., "Feature A, Feature B, Feature C",
     "Core functionality, automation, integrations", "Standard tier, advanced tier, enterprise tier". Use "Not disclosed" if
     features unknown. MUST have same length as products array.
   parallel_to: products

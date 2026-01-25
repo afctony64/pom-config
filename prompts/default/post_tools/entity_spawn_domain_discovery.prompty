@@ -62,7 +62,7 @@ outputs:
     description: "Confidence 0.0-1.0"
 
 model:
-  api: responses
+  api: chat
   configuration:
     connection: openai_conn
     model: gpt-5-nano

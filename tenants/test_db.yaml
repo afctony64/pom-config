@@ -1,0 +1,64 @@
+id: test_db
+name: Test Database
+type: tenant
+description: Test database tenant for validation and integration tests
+
+# Groups: company (Domain + Research_* collections), url (Page_* collections only, excludes Domain)
+# Note: Knowledge_base access is granted separately if needed
+groups: ["company", "url"]
+
+# User/persona information (configuration data)
+user:
+  name: Test User
+  email: test@testdb.org
+  role: Database Tester
+
+# Analysis configuration - OPTIMIZED for token efficiency
+analysis_config:
+  mission: "Test database with predictable Fortune 100 company data for validation and testing"
+  industry_focus: ["fortune_100", "database_testing", "data_validation", "system_testing"]
+
+# Data sources configuration (infrastructure only)
+data_sources:
+  data_dir: "Data"
+  upload_dir: "Data/uploads"
+
+  # Note: Seed files and taxonomy paths are in tenant_ai configs (PomAI-owned)
+  # See: PomAI/core/config/tenants/test_db_ai.yaml for:
+  #   - data_sources.seed_files
+  #
+  # For standalone testing: Use RESEARCHER_SEED_OUTPUT_DIR env var
+  # Research collections auto-discover seeds from Data/seeds/ taxonomy
+
+# Collection routing - ALL collections route to mac-weaviate for testing
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
+# Note: Add new collections here as they are created to ensure test isolation
+collections:
+  # ENTITY MODEL: Domain (primary entity)
+  Domain: "mac"
+
+  # ENTITY MODEL: Research_* collections (current production)
+  Research_competitor: "mac"
+  Research_customer: "mac"
+  Research_financial: "mac"
+  Research_industry: "mac"
+  Research_journalist: "mac"
+  Research_leadership: "mac"
+  Research_partner: "mac"
+  Research_product: "mac"
+  Research_risk: "mac"
+  Research_social: "mac"
+
+  # Page collections
+  Page_facts: "mac"
+  Page_intelligence: "mac"
+  Page_source: "mac"
+  Page_content: "mac"
+  Page_researcher: "mac"
+
+  # Other collections
+  Knowledge_base: "mac"
+  API_intelligence: "mac"
+  Fact_base: "mac"
+  Source: "mac"
+  Opportunity: "mac"

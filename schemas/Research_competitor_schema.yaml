@@ -200,10 +200,9 @@ properties:
 - name: competitorAdvantagesVs
   dataType:
   - text[]
-  description: 'What {entity} has that {subject} doesn''t. ENRICHMENT SEARCH:
-    "{subject} vs {entity} comparison advantages". Examples: "Better technology, simpler setup",
+  description: 'What {entity} has that {subject} doesn''t. Examples: "Better technology, simpler setup",
     "Stronger customer support, faster delivery", "More flexible pricing, easier onboarding".
-    Use "Not disclosed" if advantages unknown. MUST have same length as keyCompetitors array.'
+    Use "Not disclosed" if advantages unknown.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -217,11 +216,7 @@ properties:
 - name: competitorDomain
   dataType:
   - text[]
-  description: 'Primary domain for each competitor. ENRICHMENT SEARCH: "{subject}
-    official website domain company". Format: "competitor.com" (no https://, no www). Use "Not disclosed" if cannot find.
-    MUST align with keyCompetitors.
-
-    '
+  description: 'Primary domain for {subject}. Example: "competitor.com" (no https://, no www). Always use brave_search to confirm the domain. Use "Not disclosed" if cannot find.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -236,10 +231,9 @@ properties:
 - name: competitorGapsVs
   dataType:
   - text[]
-  description: 'What {subject} has that {entity} doesn''t. ENRICHMENT SEARCH:
-    "{subject} vs {entity} comparison advantages". Examples: "More advanced features, larger market presence",
+  description: 'What {subject} has that {entity} doesn''t. Examples: "More advanced features, larger market presence",
     "Established brand recognition, broader product line", "Better infrastructure, more resources".
-    Use "Not disclosed" if gaps unknown. MUST have same length as keyCompetitors array.'
+    Use "Not disclosed" if gaps unknown.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -253,11 +247,8 @@ properties:
 - name: competitorPositioning
   dataType:
   - text[]
-  description: 'Market positioning for each competitor. ENRICHMENT SEARCH: "{subject}
-    market position leader challenger G2 Gartner". Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging
-    Player". Use "Not disclosed" if unknown. MUST align with keyCompetitors.
-
-    '
+  description: 'Market positioning for {subject}. Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging
+    Player". Use "Not disclosed" if unknown.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -271,11 +262,8 @@ properties:
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: 'Price comparison {subject} vs {entity}. ENRICHMENT SEARCH: "{subject}
-    vs {entity} pricing comparison cost". Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
-    "Similar tier". Use "Not disclosed" if unknown. MUST align with keyCompetitors. CLEAN FACTS ONLY.
-
-    '
+  description: 'Price comparison {subject} vs {entity}. Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
+    "Similar tier". Use "Not disclosed" if unknown. CLEAN FACTS ONLY.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -289,11 +277,8 @@ properties:
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: 'Target market for each competitor. ENRICHMENT SEARCH: "{subject}
-    target market customers enterprise SMB". Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
-    Use "Not disclosed" if unknown. MUST align with keyCompetitors.
-
-    '
+  description: 'Target market for {subject}. Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
+    Use "Not disclosed" if unknown.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -321,11 +306,9 @@ properties:
 - name: keyCompetitorEvidence
   dataType:
   - text[]
-  description: 'Evidence/context found for each keyCompetitor from page facts and web search.
+  description: 'Evidence/context for {subject} from page facts and web search.
     Auto-populated during enrichment. Contains source text snippets about competitive positioning, pricing, features mentioned
-    for this competitor. MUST align with keyCompetitors.
-
-    '
+    for this subject.'
   parallel_to: keyCompetitors
   moduleConfig:
     text2vec-weaviate:
