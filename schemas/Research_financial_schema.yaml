@@ -179,7 +179,7 @@ properties:
 - name: fundingAmounts
   dataType:
   - text[]
-  description: Amount raised per funding round (parallel to fundingRounds) - e.g., "$5M", "$20M", "Undisclosed"
+  description: Amount raised per funding round - e.g., "$5M", "$20M", "Undisclosed"
   tags:
   - financial
   - funding
@@ -194,7 +194,7 @@ properties:
 - name: fundingDates
   dataType:
   - text[]
-  description: Date of each funding round (parallel to fundingRounds) - e.g., "2023-06", "2024-01", "Q1 2024"
+  description: Date of each funding round - e.g., "2023-06", "2024-01", "Q1 2024"
   tags:
   - financial
   - funding
@@ -209,7 +209,7 @@ properties:
 - name: fundingInvestors
   dataType:
   - text[]
-  description: Lead investors for each funding round (parallel to fundingRounds) - e.g., "Sequoia Capital", "a16z, Greylock"
+  description: Lead investors for each funding round - e.g., "Sequoia Capital", "a16z, Greylock"
   tags:
   - financial
   - funding

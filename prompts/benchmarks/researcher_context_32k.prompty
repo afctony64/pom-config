@@ -49,7 +49,7 @@ data_requirements:
         inject_as: edgarData
 
 model:
-  api: responses
+  api: chat
   configuration:
     type: openai_chat
     model: gpt-5-mini

@@ -18,8 +18,8 @@ authors:
   - AI Assistant
 
 inputs:
-  element:
-    description: "The anchor element to deep-dive on (e.g., 'Boomi', 'John Smith')"
+  subject:
+    description: "The anchor subject to deep-dive on (e.g., 'Boomi', 'John Smith')"
     type: string
   anchor_field:
     description: "The anchor field name (e.g., 'keyCompetitors', 'keyExecutives')"
@@ -37,6 +37,10 @@ inputs:
   record:
     description: "Source record being enriched (Domain or Research_* record)"
     type: object
+  execution_artifacts:
+    description: "Canonical execution artifacts (prompt, llm_context, llm_response, tools)"
+    type: object
+    type: object
 
 # Tools the LLM can call to search for specific field data
 tools:
@@ -45,36 +49,37 @@ tools:
 tool_guidance:
   brave_search:
     priority: high
-    max_calls: 3
+    max_calls: 5
     when_to_use: |
-      Use brave_search to find specific data for each field based on its description.
+      Use brave_search when page_facts are missing or insufficient for a field.
+      Always use brave_search to confirm the domain for {subject}.
       
       **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
       Examples of what to look for in descriptions:
-      - "official website domain" → Search: "{element} {industry} official website"
-      - "LinkedIn profile" → Search: "{element} linkedin profile" (+ role if known)
-      - "company size" → Search: "{element} employees company size"
+      - "official website domain" → Search: "{subject} {industry} official website"
+      - "LinkedIn profile" → Search: "{subject} linkedin profile" (+ role if known)
+      - "company size" → Search: "{subject} employees company size"
       
       **DISAMBIGUATION:**
-      - For common names, include: {source_context.title} and {source_context.industry}
-      - For competitors: include the industry vertical
+      - For common names, include the {{ entity }} name and industry if known
+      - For competitors, include the industry vertical
 
 data_requirements:
   include_enrichment_data: true
   injectors:
-    # Page facts - search for element in entity's page facts
+    # Page facts - search using field descriptions
     - injector_template: data
       template_vars:
         data_card_id: page_facts_search
         inject_as: page_facts_response
         limit: 10
-        search_query: "{{ element }}"
+        search_query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
         search_strategy: hybrid
         domain: "{{ (record.get('properties') or record).get('domain', '') if record else '' }}"
       search:
         type: hybrid
         alpha: 0.5
-        query: "{{ element }}"
+        query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
   
   error_handling:
     missing_data: "continue"
@@ -100,28 +105,51 @@ model:
 ---
 
 system:
-You are enriching a single record for **{{ element }}**.
+You are enriching a single record for **{{ subject }}**.
+
+Prompt definition:
+Use the context and search to provide answers for each listed field for the subject. Return JSON with those fields only.
 
 Context:
+{% if execution_artifacts is defined and execution_artifacts and execution_artifacts.system_prompt %}
+{{ execution_artifacts.system_prompt }}
+{% if execution_artifacts.prompt %}
+
+Prior prompt (full):
+{{ execution_artifacts.prompt }}
+{% endif %}
+{% else %}
 {% if tenant %}- Tenant: {{ tenant.name|default(tenant.id) }}{% if tenant.description %} - {{ tenant.description }}{% endif %}{% endif %}
 {% if researcher_ai and researcher_ai.researcher_identity %}- Researcher: {{ researcher_ai.researcher_identity.title }} - {{ researcher_ai.researcher_identity.mission }}{% endif %}
 {% if record %}{% set props = record.get('properties') or record %}- Entity: {{ props.get('entityName') or props.get('domain') or 'Unknown' }}{% endif %}
+{% endif %}
 
 {% set props = record.get('properties') or record if record else {} %}
 {% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
-Fields to fill:
+{% set entity = entity_name %}
+Data injection queries ({{ entity }} context):
 {% for field in post_fields %}
-- {{ field.name }}: {{ field.description|replace('{subject}', element)|replace('{entity}', entity_name) }}
+{% if field.name != 'keyCompetitorEvidence' %}
+{% set raw_desc = field.description|replace('{subject}', subject)|replace('{entity}', entity_name) %}
+{% set base_desc = raw_desc.split('Examples:')[0].split('Example:')[0].strip() %}
+- {{ base_desc }}
+{% endif %}
+{% endfor %}
+
+Fields to fill ({{ entity }} context):
+{% for field in post_fields %}
+- {{ field.name }}: {{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}
 {% endfor %}
 
 Rules:
 - Use page_facts first when relevant.
-- If web lookup is required, use brave_search.
-- Search for "{{ element }}" only. Do not search for other names.
+- Use brave_search when page_facts are missing or insufficient.
+- Always use brave_search to confirm the domain for {{ subject }}.
+- Every brave_search query MUST include "{{ subject }}". Include {{ entity }} when relevant.
 - Return JSON with ONLY the fields listed above. Use null if not found.
 
 user:
-**SUBJECT:** {{ element }}
+**SUBJECT:** {{ subject }}
 
 {% if page_facts_response is defined and page_facts_response %}
 **PAGE FACTS (top 5):**
@@ -131,10 +159,11 @@ user:
 {% endif %}
 
 **INSTRUCTIONS:**
-1. Fill the fields for **{{ element }}** only.
+1. Use the context and search to answer each listed field for **{{ subject }}** only.
 2. Use page_facts if available; otherwise use brave_search.
-3. Follow the field descriptions for search terms and formatting.
-4. Every brave_search query MUST include "{{ element }}" and no other competitor names.
+3. Follow the field descriptions for formatting.
+4. Always use brave_search to confirm the domain for **{{ subject }}**.
+5. Every brave_search query MUST include "{{ subject }}".
 
 Return JSON with ONLY these exact field names:
 ```json
