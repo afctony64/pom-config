@@ -9,14 +9,16 @@ ROOT_ALLOWLIST = {
 }
 
 
-def main(argv: list[str]) -> int:
-    blocked = [
-        path
-        for path in argv
-        if "/" not in path
+def is_blocked(path: str) -> bool:
+    return (
+        "/" not in path
         and path.endswith(".md")
         and path not in ROOT_ALLOWLIST
-    ]
+    )
+
+
+def main(argv: list[str]) -> int:
+    blocked = [path for path in argv if is_blocked(path)]
     if not blocked:
         return 0
 

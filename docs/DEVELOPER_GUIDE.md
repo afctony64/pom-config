@@ -21,6 +21,12 @@ This guide explains how to use the pom-config system to create new research doma
 
 The Pom configuration system enables you to define complete entity research pipelines using YAML configuration files. These files are validated by Pydantic models in `pom-core` and loaded by `CoreModelService`.
 
+### Repo Guardrails
+
+- Root markdown files are restricted to a small allowlist.
+- Hook: `scripts/hooks/block_root_markdown.py`
+- Hook tests: `python scripts/hooks/tests/test_block_root_markdown.py`
+
 ### Key Concepts
 
 | Concept | Definition | Example |

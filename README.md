@@ -71,13 +71,19 @@ See [frontend/README.md](frontend/README.md) for usage.
 
 ## Testing Philosophy
 
-**pom-config does NOT have unit tests.** Here's why:
+**pom-config does NOT have unit tests for configuration files.** Here's why:
 
 | Concern | Where Tested | Why |
 |---------|--------------|-----|
 | YAML syntax | Apps + Validation scripts | pom-core Pydantic models validate on load |
 | Schema correctness | Pomothy/PomAI acceptance tests | Real database operations prove validity |
 | Frontend mocks | App test suites | Mocks validated by component tests that use them |
+
+### Repo Guardrails
+
+- Root markdown files are restricted to a small allowlist.
+- Hook: `scripts/hooks/block_root_markdown.py`
+- Run tests: `python scripts/hooks/tests/test_block_root_markdown.py`
 | Prompts | Benchmark tests in apps | LLM output quality tests |
 
 **pom-config is configuration, not code.** Testing configuration means testing it in context - when apps consume it.
