@@ -1,102 +1,40 @@
 # 📦 POM-CONFIG: Shared Configuration Repository
-# ROLE: Manage shared configs used by ALL Pom apps. Changes affect everyone.
 
-## ⚠️ THIS IS A SHARED REPOSITORY
+## ⚠️ SHARED REPO - CHECK OWNERSHIP FIRST
+This repo is shared by multiple AI agents. Before modifying any file:
+1. Check `OWNERSHIP.yaml` to verify you have write access
+2. See global rules for full governance details
 
-Multiple AI agents have access to this repo. Each agent owns specific paths.
-**CHECK OWNERSHIP.yaml BEFORE MODIFYING ANY FILE.**
+## STRUCTURE & OWNERSHIP
 
-## 🔐 OWNERSHIP ENFORCEMENT
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ BEFORE MODIFYING ANY FILE:                                  │
-├─────────────────────────────────────────────────────────────┤
-│ 1. Identify which AI agent you are (check your workspace)   │
-│ 2. Read OWNERSHIP.yaml in this repo                         │
-│ 3. Verify the path is in YOUR can_write list                │
-│ 4. If NOT in your list → STOP. Ask human or file issue.     │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## PATH OWNERSHIP SUMMARY
-
-| Path | Owner | Other Writers |
-|------|-------|---------------|
-| `profiles/` | PomSpark | - |
-| `tenant-routing/` | PomSpark | - |
-| `shared-config.env` | PomSpark | pom-core |
-| `schemas/` | pom-core | - |
-| `llm_models/` | pom-core | - |
-| `tools/` | pom-core | - |
-| `prompts/` | PomAI | Pomothy |
-| `researcher_ai/` | PomAI | - |
-| `data_cards/` | PomAI | - |
-| `ux_configs/` | Pomothy | - |
-| `tenant_groups/` | pom-core | PomSpark |
-| `tenants/` | pom-core | PomSpark, PomAI |
+| Path | Owner |
+|------|-------|
+| `profiles/` | PomSpark |
+| `tenant-routing/` | PomSpark |
+| `shared-config.env` | PomSpark |
+| `schemas/` | pom-core |
+| `llm_models/` | pom-core |
+| `tools/` | pom-core |
+| `prompts/` | PomAI |
+| `researcher_ai/` | PomAI |
+| `data_cards/` | PomAI |
+| `ux_configs/` | Pomothy |
 
 ## CRITICAL RULES
-
-1. **Check OWNERSHIP.yaml first** - Always verify you have write access
+1. **Check OWNERSHIP.yaml** - Verify write access before modifying
 2. **Changes affect all apps** - Test before committing
 3. **Use existing patterns** - Copy existing configs, don't create from scratch
-4. **Version and tag releases** - Update VERSION, create GitHub release
-5. **Don't modify what you don't own** - File an issue instead
-
-## REPOSITORY STRUCTURE
-
-```
-pom-config/
-├── OWNERSHIP.yaml      # 🔐 CHECK THIS FIRST!
-├── profiles/           # Owner: PomSpark
-├── tenant-routing/     # Owner: PomSpark
-├── schemas/            # Owner: pom-core
-├── data_cards/         # Owner: PomAI
-├── llm_models/         # Owner: pom-core
-├── prompts/            # Owner: PomAI (Pomothy can contribute)
-├── researcher_ai/      # Owner: PomAI
-├── ux_configs/         # Owner: Pomothy
-├── tools/              # Owner: pom-core
-├── tenant_groups/      # Owner: pom-core
-├── tenants/            # Owner: pom-core
-└── shared-config.env   # Owner: PomSpark
-```
+4. **Version releases** - Update VERSION file for releases
 
 ## RELEASE WORKFLOW
-
 ```bash
-# 1. Verify you own the paths you're modifying
-cat OWNERSHIP.yaml | grep -A10 "YourAgentName"
-
-# 2. Make changes (only to paths you own!)
-
-# 3. Update VERSION
-echo "1.6.16" > VERSION
-
-# 4. Commit and tag
+echo "1.6.17" > VERSION
 git add -A && git commit -m "feat: description"
-git tag v1.6.16 && git push origin main --tags
-
-# 5. Create release
-gh release create v1.6.16 --title "v1.6.16" --notes "See CHANGELOG"
+git tag v1.6.17 && git push origin main --tags
+gh release create v1.6.17 --title "v1.6.17" --notes "Changes..."
 ```
 
-## IF YOU NEED TO MODIFY A PATH YOU DON'T OWN
-
-1. **Ask the human**: "I need to modify `<path>` but it's owned by `<owner>`. Should I proceed?"
-
-2. **Or file an issue**:
-   ```bash
-   gh issue create --repo afctony64/<owner-repo> \
-     --title "Request: Modify <path> in pom-config" \
-     --body "Description of needed change..."
-   ```
-
-## BREAKING CHANGES
-
-Coordinate with app teams BEFORE making breaking changes:
-```bash
-gh issue create --repo afctony64/PomAI --title "BREAKING: ..."
-gh issue create --repo afctony64/Pomothy --title "BREAKING: ..."
-```
+## KEY FILES
+- `OWNERSHIP.yaml` - Who owns what (CHECK FIRST!)
+- `shared-config.env` - Non-secret environment variables
+- `VERSION` - Current version number
