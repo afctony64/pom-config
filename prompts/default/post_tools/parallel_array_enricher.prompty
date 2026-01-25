@@ -102,6 +102,8 @@ model:
     # Post-tools don't have static schemas - fields come from post_fields input
     response_format:
       type: json_object
+    max_completion_tokens: 4000
+    timeout: 120
     max_retries: 2
 
 ---
