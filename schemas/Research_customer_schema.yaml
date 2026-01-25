@@ -133,11 +133,8 @@ properties:
 - name: customerDomain
   dataType:
   - text[]
-  description: 'Primary domain for each key customer. ENRICHMENT SEARCH: "{subject}
-    official website domain company". Format: "customer.com" (no https://, no www, just the domain). Use "Not disclosed" if
-    cannot find. MUST align with keyCustomers array. Used for spawning Domain records.
-
-    '
+  description: 'Primary domain for {subject}. Example: "customer.com" (no https://, no www). Always use brave_search to confirm
+    the domain. Use "Not disclosed" if cannot find.'
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -154,11 +151,8 @@ properties:
 - name: keyCustomerSizeCat
   dataType:
   - text[]
-  description: 'Customer size segment for each keyCustomer. ENRICHMENT SEARCH: "{subject}
-    company employees size revenue". Classify as Enterprise (1000+ employees), Mid-Market (100-999), SMB (10-99), Startup
-    (<10). Use "Not disclosed" if segment unknown. MUST have same length as keyCustomers array.
-
-    '
+  description: 'Customer size segment for {subject}. Classify as Enterprise (1000+ employees), Mid-Market (100-999), SMB (10-99),
+    Startup (<10). Use "Not disclosed" if segment unknown.'
   parallel_to: keyCustomers
   enum:
   - Enterprise

@@ -53,16 +53,14 @@ tool_guidance:
     when_to_use: |
       Use brave_search when page_facts are missing or insufficient for a field.
       Always use brave_search to confirm the domain for {subject}.
+      Prefer official company root domains over hosted subdomains.
       
       **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
+      For common names, add the tenant name and industry vertical to disambiguate.
       Examples of what to look for in descriptions:
       - "official website domain" → Search: "{subject} {industry} official website"
       - "LinkedIn profile" → Search: "{subject} linkedin profile" (+ role if known)
       - "company size" → Search: "{subject} employees company size"
-      
-      **DISAMBIGUATION:**
-      - For common names, include the {{ entity }} name and industry if known
-      - For competitors, include the industry vertical
 
 data_requirements:
   include_enrichment_data: true
@@ -126,6 +124,8 @@ Prior prompt (full):
 
 {% set props = record.get('properties') or record if record else {} %}
 {% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
+{% set tenant_name = tenant.name|default(tenant.id) if tenant else 'Unknown' %}
+{% set tenant_industry = (tenant|attr('industry_focus'))|default(props.get('industry') if props else '') %}
 {% set entity = entity_name %}
 Data injection queries ({{ entity }} context):
 {% for field in post_fields %}
@@ -141,11 +141,16 @@ Fields to fill ({{ entity }} context):
 - {{ field.name }}: {{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}
 {% endfor %}
 
+Disambiguation:
+- Include tenant context ({{ tenant_name }}) and industry when relevant{% if tenant_industry %} ({{ tenant_industry }}){% endif %}
+- For competitors, include the industry vertical
+
 Rules:
 - Use page_facts first when relevant.
 - Use brave_search when page_facts are missing or insufficient.
 - Always use brave_search to confirm the domain for {{ subject }}.
-- Every brave_search query MUST include "{{ subject }}". Include {{ entity }} when relevant.
+- Every brave_search query MUST include "{{ subject }}". Include {{ tenant_name }} when relevant.
+- Prefer official company root domains; avoid hosted subdomains unless that is the official domain.
 - Return JSON with ONLY the fields listed above. Use null if not found.
 
 user:

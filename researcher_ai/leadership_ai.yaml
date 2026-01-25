@@ -157,7 +157,7 @@ parallel_array_enrichment:
     - executiveBackgrounds    # Career background and experience
     - executiveTenure         # How long in current role
   search_query_template: >
-    {element} {executiveRoles} {domain} linkedin profile background
+    {subject} {executiveRoles} {domain} linkedin profile background
 
 # Post-execution tools: Run automatically after leadership researcher completes
 # Priority-ordered: lower number runs first

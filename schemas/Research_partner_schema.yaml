@@ -213,9 +213,8 @@ properties:
 - name: partnerDomain
   dataType:
   - text[]
-  description: 'Primary domain for each partner. ENRICHMENT SEARCH: "{subject} official
-    website domain company". Format: "partner.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST align with
-    keyPartners. Used for spawning Domain records.'
+  description: 'Primary domain for {subject}. Example: "partner.com" (no https://, no www). Always use brave_search to confirm
+    the domain. Use "Not disclosed" if cannot find.'
   parallel_to: keyPartners
   moduleConfig:
     text2vec-weaviate:
