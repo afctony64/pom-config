@@ -183,9 +183,7 @@ properties:
 - name: partnerTypes
   dataType:
   - text[]
-  description: Type of partnership for each partner - e.g., "Technology Partner", "Strategic
-    Alliance", "Distribution Partner", "Integration Partner". Use "Not disclosed" if type unknown. MUST have same length as
-    keyPartners array.
+  description: 'Partnership type for {subject}. Examples: "Technology Partner", "Strategic Alliance", "Distribution Partner", "Integration Partner". Use "Not disclosed" if type unknown.'
   parallel_to: keyPartners
   tags:
   - partner
@@ -198,9 +196,7 @@ properties:
 - name: partnerValue
   dataType:
   - text[]
-  description: Strategic value/benefit of each partnership - e.g., "Market access", "Technology
-    enhancement", "Revenue growth", "Brand recognition". Use "Not disclosed" if value unknown. MUST have same length as keyPartners
-    array.
+  description: 'Strategic value of partnership with {subject}. Examples: "Market access", "Technology enhancement", "Revenue growth", "Brand recognition". Use "Not disclosed" if value unknown.'
   parallel_to: keyPartners
   tags:
   - partner

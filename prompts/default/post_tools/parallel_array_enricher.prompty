@@ -93,7 +93,7 @@ model:
   api: chat
   configuration:
     connection: openai_conn
-    model: gpt-5-nano
+    model: gpt-5-mini
     type: openai_chat
   parameters:
     response_format:
@@ -135,7 +135,7 @@ Prior context to reuse:
 {% set entity = entity_name %}
 Data injection queries ({{ entity }} context):
 {% for field in post_fields %}
-{% if field.name != 'keyCompetitorEvidence' %}
+{% if not field.name.endswith('Evidence') %}
 {% set raw_desc = field.description|replace('{subject}', subject)|replace('{entity}', entity_name) %}
 {% set base_desc = raw_desc.split('Examples:')[0].split('Example:')[0].strip() %}
 - {{ base_desc }}
@@ -149,16 +149,19 @@ Fields to fill ({{ entity }} context):
 
 Disambiguation:
 - Include tenant context ({{ tenant_name }}) and industry when relevant{% if tenant_industry %} ({{ tenant_industry }}){% endif %}
-- For competitors, include the industry vertical
+- For ambiguous names (common company/person names), add context from the anchor field ({{ anchor_field }})
 
 Rules:
 - Use page_facts first when relevant.
 - Use brave_search when page_facts are missing or insufficient.
 - Always use brave_search to confirm the domain for {{ subject }}.
 - Every brave_search query MUST include "{{ subject }}". Include {{ tenant_name }} when relevant.
-- Prefer official company root domains; avoid hosted subdomains unless that is the official domain.
-- Use execution_artifacts for broad comparison context, then add new direct competitor evidence from page_facts/brave_search.
-- Return JSON with ONLY the fields listed above. Use null if not found.
+- For domains: prefer official root domains over hosted subdomains.
+- For LinkedIn: search "{subject} linkedin profile" with role/company context.
+- Use execution_artifacts as broad context, then add direct evidence from page_facts/brave_search for {{ subject }}.
+- **CRITICAL: EXTRACT DATA FROM SEARCH RESULTS.** If brave_search returns descriptions, pricing info, positioning claims, or target market info - USE IT. Do not return "Not disclosed" when data is available.
+- Infer from messaging when explicit data isn't stated (e.g., "enterprise" from enterprise pricing page, positioning from taglines).
+- Return JSON with ONLY the fields listed above. Use null ONLY if truly no relevant data found after searching.
 
 user:
 **SUBJECT:** {{ subject }}
@@ -176,7 +179,8 @@ user:
 3. Follow the field descriptions for formatting.
 4. Always use brave_search to confirm the domain for **{{ subject }}**.
 5. Every brave_search query MUST include "{{ subject }}".
-6. Prioritize direct competitor evidence over generic summaries.
+6. Prioritize direct evidence about {{ subject }} over generic summaries.
+7. **EXTRACT DATA FROM RESULTS:** When brave_search returns info about {{ subject }}, use it! Extract details from taglines, bios, official pages, and profiles. Do NOT say "Not disclosed" if the search returned relevant data.
 
 Return JSON with ONLY these exact field names:
 ```json

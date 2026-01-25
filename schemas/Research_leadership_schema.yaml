@@ -366,8 +366,7 @@ properties:
 - name: executiveRoles
   dataType:
   - text[]
-  description: Role/title for each executive - e.g., "CEO", "CTO", "VP Engineering", "Head
-    of Product". Use "Not disclosed" if role unknown. MUST have same length as keyExecutives array.
+  description: 'Role/title for {subject}. Examples: "CEO", "CTO", "VP Engineering", "Head of Product". Use "Not disclosed" if role unknown.'
   parallel_to: keyExecutives
   tags:
   - executive
