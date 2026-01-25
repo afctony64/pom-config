@@ -200,9 +200,9 @@ properties:
 - name: competitorAdvantagesVs
   dataType:
   - text[]
-  description: 'What {entity} has that {subject} doesn''t. Examples: "Better technology, simpler setup",
-    "Stronger customer support, faster delivery", "More flexible pricing, easier onboarding".
-    Use "Not disclosed" if advantages unknown.'
+  description: 'What {entity} has that {subject} doesn''t. Prefer direct competitor evidence from comparison, vs, or alternatives
+    pages (e.g., "{subject} vs {entity}", "{subject} competitors", "{subject} alternatives"). Use "Not disclosed" if advantages
+    unknown.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -231,9 +231,8 @@ properties:
 - name: competitorGapsVs
   dataType:
   - text[]
-  description: 'What {subject} has that {entity} doesn''t. Examples: "More advanced features, larger market presence",
-    "Established brand recognition, broader product line", "Better infrastructure, more resources".
-    Use "Not disclosed" if gaps unknown.'
+  description: 'What {subject} has that {entity} doesn''t. Prefer direct competitor evidence from comparison, vs, or alternatives
+    pages (e.g., "{subject} vs {entity}", "{subject} competitors", "{subject} alternatives"). Use "Not disclosed" if gaps unknown.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -247,8 +246,8 @@ properties:
 - name: competitorPositioning
   dataType:
   - text[]
-  description: 'Market positioning for {subject}. Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging
-    Player". Use "Not disclosed" if unknown.'
+  description: 'Market positioning for {subject}. Use comparison/alternatives pages and product positioning pages. Examples:
+    "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging Player". Use "Not disclosed" if unknown.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -262,8 +261,8 @@ properties:
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: 'Price comparison {subject} vs {entity}. Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
-    "Similar tier". Use "Not disclosed" if unknown. CLEAN FACTS ONLY.'
+  description: 'Price comparison {subject} vs {entity}. Prefer official pricing pages or reputable comparison sources. Use "Not
+    disclosed" if unknown. CLEAN FACTS ONLY.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -277,8 +276,8 @@ properties:
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: 'Target market for {subject}. Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
-    Use "Not disclosed" if unknown.'
+  description: 'Target market for {subject}. Prefer about/customers/case studies or industry/segment pages. Examples:
+    "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical". Use "Not disclosed" if unknown.'
   parallel_to: keyCompetitors
   tags:
   - research

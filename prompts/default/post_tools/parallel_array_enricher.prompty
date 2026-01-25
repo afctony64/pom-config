@@ -122,6 +122,12 @@ Prior prompt (full):
 {% if record %}{% set props = record.get('properties') or record %}- Entity: {{ props.get('entityName') or props.get('domain') or 'Unknown' }}{% endif %}
 {% endif %}
 
+Prior context to reuse:
+{% if execution_artifacts is defined and execution_artifacts %}
+- Use execution_artifacts as broad comparison context (it already surfaced {{ subject }}).
+- Combine it with new, direct evidence from page_facts and brave_search for {{ subject }}.
+{% endif %}
+
 {% set props = record.get('properties') or record if record else {} %}
 {% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
 {% set tenant_name = tenant.name|default(tenant.id) if tenant else 'Unknown' %}
@@ -151,6 +157,7 @@ Rules:
 - Always use brave_search to confirm the domain for {{ subject }}.
 - Every brave_search query MUST include "{{ subject }}". Include {{ tenant_name }} when relevant.
 - Prefer official company root domains; avoid hosted subdomains unless that is the official domain.
+- Use execution_artifacts for broad comparison context, then add new direct competitor evidence from page_facts/brave_search.
 - Return JSON with ONLY the fields listed above. Use null if not found.
 
 user:
@@ -169,6 +176,7 @@ user:
 3. Follow the field descriptions for formatting.
 4. Always use brave_search to confirm the domain for **{{ subject }}**.
 5. Every brave_search query MUST include "{{ subject }}".
+6. Prioritize direct competitor evidence over generic summaries.
 
 Return JSON with ONLY these exact field names:
 ```json
