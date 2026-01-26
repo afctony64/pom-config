@@ -40,32 +40,43 @@ inputs:
   execution_artifacts:
     description: "Canonical execution artifacts (prompt, llm_context, llm_response, tools)"
     type: object
-    type: object
 
-# Tools the LLM can call to search for specific field data
+# Tools available for additional field enrichment (NOT for domain resolution)
+# Domain is resolved via: 1) pre-resolved subject_domain OR 2) pre-injected domain_candidates
 tools:
   - brave_search
 
 tool_guidance:
   brave_search:
-    priority: high
-    max_calls: 5
+    priority: medium
+    max_calls: 3
     when_to_use: |
-      Use brave_search when page_facts are missing or insufficient for a field.
-      Always use brave_search to confirm the domain for {subject}.
-      Prefer official company root domains over hosted subdomains.
+      **DO NOT use brave_search for domain resolution** - use subject_domain or domain_candidates instead.
       
-      **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
-      For common names, add the tenant name and industry vertical to disambiguate.
-      Examples of what to look for in descriptions:
-      - "official website domain" → Search: "{subject} {industry} official website"
-      - "LinkedIn profile" → Search: "{subject} linkedin profile" (+ role if known)
-      - "company size" → Search: "{subject} employees company size"
+      Use brave_search ONLY when:
+      - page_facts are missing or insufficient for NON-DOMAIN fields
+      - You need fresh data for specific field values (e.g., positioning, funding)
+      
+      Search strategy per field:
+      1. Extract key terms from the field description
+      2. Search: "{subject} [key terms from description]"
+      3. For well-known subjects, general knowledge is acceptable as fallback
 
 data_requirements:
   include_enrichment_data: true
   injectors:
+    # Domain candidates - pre-search for official domain before LLM runs
+    # Only runs if subject_domain is not already resolved (skips if we have the domain)
+    - injector_template: mcp
+      skip_if: "{{ 'true' if (subject_domain is defined and subject_domain) else 'false' }}"
+      template_vars:
+        tool: brave_search
+        params:
+          query: "{{ subject }} {% if tenant and tenant.description %}{{ tenant.description[:100] }}{% endif %} official website domain"
+          count: 5
+        inject_as: domain_candidates
     # Page facts - search using field descriptions
+    # Uses resolved_domains (list) from pre-injection phase for contains_any filter
     - injector_template: data
       template_vars:
         data_card_id: page_facts_search
@@ -73,7 +84,9 @@ data_requirements:
         limit: 10
         search_query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
         search_strategy: hybrid
-        domain: "{{ (record.get('properties') or record).get('domain', '') if record else '' }}"
+        # Use resolved_domains list if available, fallback to single domain
+        domains: "{{ resolved_domains if resolved_domains is defined and resolved_domains else [] }}"
+        domain: "{{ (record.get('properties') or record).get('domain', '') if (not resolved_domains or resolved_domains is not defined) and record else '' }}"
       search:
         type: hybrid
         alpha: 0.5
@@ -105,82 +118,77 @@ model:
 system:
 You are enriching a single record for **{{ subject }}**.
 
-Prompt definition:
-Use the context and search to provide answers for each listed field for the subject. Return JSON with those fields only.
-
-Context:
-{% if execution_artifacts is defined and execution_artifacts and execution_artifacts.system_prompt %}
-{{ execution_artifacts.system_prompt }}
-{% if execution_artifacts.prompt %}
-
-Prior prompt (full):
-{{ execution_artifacts.prompt }}
-{% endif %}
-{% else %}
-{% if tenant %}- Tenant: {{ tenant.name|default(tenant.id) }}{% if tenant.description %} - {{ tenant.description }}{% endif %}{% endif %}
-{% if researcher_ai and researcher_ai.researcher_identity %}- Researcher: {{ researcher_ai.researcher_identity.title }} - {{ researcher_ai.researcher_identity.mission }}{% endif %}
-{% if record %}{% set props = record.get('properties') or record %}- Entity: {{ props.get('entityName') or props.get('domain') or 'Unknown' }}{% endif %}
-{% endif %}
-
-Prior context to reuse:
-{% if execution_artifacts is defined and execution_artifacts %}
-- Use execution_artifacts as broad comparison context (it already surfaced {{ subject }}).
-- Combine it with new, direct evidence from page_facts and brave_search for {{ subject }}.
-{% endif %}
-
 {% set props = record.get('properties') or record if record else {} %}
 {% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
 {% set tenant_name = tenant.name|default(tenant.id) if tenant else 'Unknown' %}
 {% set tenant_industry = (tenant|attr('industry_focus'))|default(props.get('industry') if props else '') %}
-{% set entity = entity_name %}
-Data injection queries ({{ entity }} context):
-{% for field in post_fields %}
-{% if not field.name.endswith('Evidence') %}
-{% set raw_desc = field.description|replace('{subject}', subject)|replace('{entity}', entity_name) %}
-{% set base_desc = raw_desc.split('Examples:')[0].split('Example:')[0].strip() %}
-- {{ base_desc }}
-{% endif %}
-{% endfor %}
 
-Fields to fill ({{ entity }} context):
+Context:
+{% if tenant %}- Tenant: {{ tenant.name|default(tenant.id) }}{% if tenant.description %} - {{ tenant.description }}{% endif %}{% endif %}
+{% if researcher_ai and researcher_ai.researcher_identity %}- Researcher: {{ researcher_ai.researcher_identity.title }} - {{ researcher_ai.researcher_identity.mission }}{% endif %}
+- Source Entity: {{ entity_name }}
+
+**DOMAIN RESOLUTION (2 modes):**
+{% if subject_domain is defined and subject_domain %}
+✅ **MODE 1 - RESOLVED:** Domain for {{ subject }} is **{{ subject_domain }}**. Use page_facts only.
+{% else %}
+📋 **MODE 2 - CANDIDATES:** Pick domain from pre-searched DOMAIN CANDIDATES in user message.
+{% endif %}
+
+Fields to fill:
 {% for field in post_fields %}
 - {{ field.name }}: {{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}
 {% endfor %}
 
-Disambiguation:
-- Include tenant context ({{ tenant_name }}) and industry when relevant{% if tenant_industry %} ({{ tenant_industry }}){% endif %}
-- For ambiguous names (common company/person names), add context from the anchor field ({{ anchor_field }})
-
 Rules:
-- Use page_facts first when relevant.
-- Use brave_search when page_facts are missing or insufficient.
-- Always use brave_search to confirm the domain for {{ subject }}.
-- Every brave_search query MUST include "{{ subject }}". Include {{ tenant_name }} when relevant.
-- For domains: prefer official root domains over hosted subdomains.
-- For LinkedIn: search "{subject} linkedin profile" with role/company context.
-- Use execution_artifacts as broad context, then add direct evidence from page_facts/brave_search for {{ subject }}.
-- **CRITICAL: EXTRACT DATA FROM SEARCH RESULTS.** If brave_search returns descriptions, pricing info, positioning claims, or target market info - USE IT. Do not return "Not disclosed" when data is available.
-- Infer from messaging when explicit data isn't stated (e.g., "enterprise" from enterprise pricing page, positioning from taglines).
-- Return JSON with ONLY the fields listed above. Use null ONLY if truly no relevant data found after searching.
+{% if subject_domain is defined and subject_domain %}
+- **MODE 1**: Domain resolved. Use page_facts only. Do NOT call brave_search.
+{% else %}
+- **MODE 2**: Pick competitorDomain from DOMAIN CANDIDATES (match title to {{ tenant_industry }} context).
+- For other fields: Use page_facts first, then brave_search if needed.
+{% endif %}
+- Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
+- Prefer official company sites over linkedin/crunchbase/ycombinator
+- Return JSON with ONLY the fields listed above. Use null only if truly unanswerable.
 
 user:
 **SUBJECT:** {{ subject }}
+{% if subject_domain is defined and subject_domain %}**SUBJECT DOMAIN:** {{ subject_domain }}{% endif %}
+
+{% if domain_candidates is defined and domain_candidates and domain_candidates.results is defined %}
+**DOMAIN CANDIDATES FOR {{ subject }} (pre-searched - pick the correct one):**
+{% for result in domain_candidates.results[:5] %}
+- {{ result.url }} | {{ result.title }}
+{% endfor %}
+{% endif %}
 
 {% if page_facts_response is defined and page_facts_response %}
+{% if has_subject_page_facts is defined and has_subject_page_facts %}
+**PAGE FACTS FROM {{ subject_domain }} ({{ page_facts_response|length }} facts - PREFERRED SOURCE):**
+{% else %}
 **PAGE FACTS (top 5):**
-{% for fact in page_facts_response[:5] %}
-- {% if fact.content is defined %}{{ fact.content|truncate(200) }}{% elif fact.get is defined %}{{ fact.get('content')|default(fact.get('properties', {}).get('content', ''))|truncate(200) }}{% endif %}
+{% endif %}
+{% for fact in page_facts_response[:10] %}
+- {% if fact.content is defined %}{{ fact.content|truncate(300) }}{% elif fact.get is defined %}{{ fact.get('content')|default(fact.get('properties', {}).get('content', ''))|truncate(300) }}{% endif %}
 {% endfor %}
 {% endif %}
 
 **INSTRUCTIONS:**
-1. Use the context and search to answer each listed field for **{{ subject }}** only.
-2. Use page_facts if available; otherwise use brave_search.
-3. Follow the field descriptions for formatting.
-4. Always use brave_search to confirm the domain for **{{ subject }}**.
-5. Every brave_search query MUST include "{{ subject }}".
-6. Prioritize direct evidence about {{ subject }} over generic summaries.
-7. **EXTRACT DATA FROM RESULTS:** When brave_search returns info about {{ subject }}, use it! Extract details from taglines, bios, official pages, and profiles. Do NOT say "Not disclosed" if the search returned relevant data.
+{% if subject_domain is defined and subject_domain %}
+**MODE 1 - DOMAIN RESOLVED:** {{ subject_domain }}
+1. Use competitorDomain = "{{ subject_domain }}"
+2. Extract other fields from page_facts only. Do NOT call brave_search.
+{% elif domain_candidates is defined and domain_candidates and domain_candidates.results is defined %}
+**MODE 2 - PICK FROM CANDIDATES:**
+1. For competitorDomain: Pick the official company website from DOMAIN CANDIDATES above.
+   - Match title to {{ subject }} in the context (e.g., "Integration Infrastructure" for iPaaS)
+   - Extract just domain (e.g., "useparagon.com" from "https://www.useparagon.com/")
+   - Ignore linkedin, crunchbase, ycombinator, etc.
+2. For other fields: Use page_facts, then brave_search if needed.
+{% else %}
+1. Use page_facts if available, otherwise brave_search.
+2. For competitorDomain: Extract official domain from search results.
+{% endif %}
 
 Return JSON with ONLY these exact field names:
 ```json
