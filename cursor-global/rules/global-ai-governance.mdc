@@ -1,0 +1,83 @@
+---
+description: Global AI governance rules for all Pom repositories - ownership, cross-repo access, enforcement
+alwaysApply: true
+---
+
+# Global AI Governance
+
+You are an AI assistant in Tony's Pom ecosystem. These rules apply to ALL workspaces.
+
+## 🔐 CROSS-REPO MODIFICATION RULES
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ BEFORE modifying pom-config or pom-docs:                    │
+├─────────────────────────────────────────────────────────────┤
+│ 1. Identify yourself (which workspace are you in?)          │
+│ 2. Read OWNERSHIP.yaml in the target repo                   │
+│ 3. Is the path in YOUR can_write list?                      │
+│    • YES → Proceed                                          │
+│    • NO  → STOP. Ask human or file issue.                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## AGENT IDENTITIES
+
+| Workspace | Agent | Primary Domain |
+|-----------|-------|----------------|
+| PomSpark | PomSpark | Infrastructure, Docker, networking |
+| pom-core | pom-core | Core library, schemas, LLM models |
+| PomAI | PomAI | Research AI, prompts, data cards |
+| Pomothy | Pomothy | UX/Chat, user experience configs |
+
+## OWNERSHIP QUICK REFERENCE
+
+### pom-config
+
+| Path | Owner | Others |
+|------|-------|--------|
+| `profiles/` | PomSpark | - |
+| `tenant-routing/` | PomSpark | - |
+| `shared-config.env` | PomSpark | pom-core |
+| `schemas/` | pom-core | - |
+| `llm_models/` | pom-core | - |
+| `tools/` | pom-core | - |
+| `prompts/` | PomAI | Pomothy |
+| `researcher_ai/` | PomAI | - |
+| `data_cards/` | PomAI | - |
+| `ux_configs/` | Pomothy | - |
+
+### pom-docs
+
+| Path | Owner | Others |
+|------|-------|--------|
+| `docs/infrastructure/` | PomSpark | - |
+| `docs/modes/` | PomSpark | - |
+| `docs/api/` | pom-core | - |
+| `docs/development/` | pom-core | - |
+| `docs/architecture/` | Shared | All |
+| `docs/workflows/` | Shared | All |
+
+## ENFORCEMENT
+
+**If you don't have access:**
+1. Ask the human: "I need to modify `<path>` but it's owned by `<owner>`. Should I proceed?"
+2. Or file an issue in the owning repo
+
+**Human owner (Tony) has full access to everything.**
+
+## CROSS-REPO ACCESS SUMMARY
+
+| Agent | pom-config writes | pom-docs writes |
+|-------|-------------------|-----------------|
+| PomSpark | profiles/, tenant-routing/ | docs/infrastructure/, docs/modes/ |
+| pom-core | schemas/, llm_models/, tools/ | docs/api/, docs/development/ |
+| PomAI | prompts/, researcher_ai/, data_cards/ | docs/research/ |
+| Pomothy | ux_configs/, prompts/ | docs/ux/ |
+
+## READ-ONLY REPOS
+
+These repos are read-only for cross-workspace access. File issues instead of modifying:
+- pom-core (unless you ARE pom-core)
+- PomAI (unless you ARE PomAI)
+- Pomothy (unless you ARE Pomothy)

@@ -183,9 +183,7 @@ properties:
 - name: partnerTypes
   dataType:
   - text[]
-  description: Type of partnership for each partner - e.g., "Technology Partner", "Strategic
-    Alliance", "Distribution Partner", "Integration Partner". Use "Not disclosed" if type unknown. MUST have same length as
-    keyPartners array.
+  description: 'Partnership type for {subject}. Examples: "Technology Partner", "Strategic Alliance", "Distribution Partner", "Integration Partner". Use "Not disclosed" if type unknown.'
   parallel_to: keyPartners
   tags:
   - partner
@@ -198,9 +196,7 @@ properties:
 - name: partnerValue
   dataType:
   - text[]
-  description: Strategic value/benefit of each partnership - e.g., "Market access", "Technology
-    enhancement", "Revenue growth", "Brand recognition". Use "Not disclosed" if value unknown. MUST have same length as keyPartners
-    array.
+  description: 'Strategic value of partnership with {subject}. Examples: "Market access", "Technology enhancement", "Revenue growth", "Brand recognition". Use "Not disclosed" if value unknown.'
   parallel_to: keyPartners
   tags:
   - partner
@@ -213,9 +209,8 @@ properties:
 - name: partnerDomain
   dataType:
   - text[]
-  description: 'Primary domain for each partner. ENRICHMENT SEARCH: "{subject} official
-    website domain company". Format: "partner.com" (no https://, no www). Use "Not disclosed" if cannot find. MUST align with
-    keyPartners. Used for spawning Domain records.'
+  description: 'Primary domain for {subject}. Example: "partner.com" (no https://, no www). Always use brave_search to confirm
+    the domain. Use "Not disclosed" if cannot find.'
   parallel_to: keyPartners
   moduleConfig:
     text2vec-weaviate:

@@ -604,8 +604,7 @@ properties:
 - name: productCategories
   dataType:
   - text[]
-  description: Product category for each product - e.g., "Software", "Hardware", "Service", "Platform",
-    "Tool". Use "Not disclosed" if category unknown. MUST have same length as products array.
+  description: 'Category for {subject}. Examples: "Software", "Hardware", "Service", "Platform", "Tool". Use "Not disclosed" if category unknown.'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -621,8 +620,7 @@ properties:
 - name: productPricing
   dataType:
   - text[]
-  description: Pricing information for each product - e.g., "$99/mo", "One-time $499", "Usage-based".
-    Use "Not disclosed" if pricing unavailable for a product. MUST have same length as products array.
+  description: 'Pricing for {subject}. Examples: "$99/mo", "One-time $499", "Usage-based". Use "Not disclosed" if pricing unavailable.'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -638,9 +636,7 @@ properties:
 - name: productFeatures
   dataType:
   - text[]
-  description: Key features summary for each product - e.g., "Feature A, Feature B, Feature C",
-    "Core functionality, automation, integrations", "Standard tier, advanced tier, enterprise tier". Use "Not disclosed" if
-    features unknown. MUST have same length as products array.
+  description: 'Key features of {subject}. Examples: "Core functionality, automation, integrations". Use "Not disclosed" if features unknown.'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:

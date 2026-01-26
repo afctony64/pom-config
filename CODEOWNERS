@@ -1,0 +1,23 @@
+# Default owner
+* @afctony64
+
+# PomSpark (Infrastructure)
+/profiles/ @afctony64
+/tenant-routing/ @afctony64
+/shared-config.env @afctony64
+/.pom_config_pkg/ @afctony64
+
+# pom-core (Schemas, models, tools)
+/schemas/ @afctony64
+/llm_models/ @afctony64
+/tools/ @afctony64
+/tenant_groups/ @afctony64
+/tenants/ @afctony64
+
+# PomAI (Prompts, researcher configs, data cards)
+/prompts/ @afctony64
+/researcher_ai/ @afctony64
+/data_cards/ @afctony64
+
+# Pomothy (UX configs)
+/ux_configs/ @afctony64

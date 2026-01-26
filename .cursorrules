@@ -1,73 +1,40 @@
 # 📦 POM-CONFIG: Shared Configuration Repository
-# ROLE: Manage shared configs used by ALL Pom apps. Changes affect everyone.
 
-## IDENTITY
-You manage: Schemas, data cards, LLM models, prompts, profiles, tenant routing
-Apps use you: PomAI, Pomothy, PomSpark, pom-core
+## ⚠️ SHARED REPO - CHECK OWNERSHIP FIRST
+This repo is shared by multiple AI agents. Before modifying any file:
+1. Check `OWNERSHIP.yaml` to verify you have write access
+2. See global rules for full governance details
+
+## STRUCTURE & OWNERSHIP
+
+| Path | Owner |
+|------|-------|
+| `profiles/` | PomSpark |
+| `tenant-routing/` | PomSpark |
+| `shared-config.env` | PomSpark |
+| `schemas/` | pom-core |
+| `llm_models/` | pom-core |
+| `tools/` | pom-core |
+| `prompts/` | PomAI |
+| `researcher_ai/` | PomAI |
+| `data_cards/` | PomAI |
+| `ux_configs/` | Pomothy |
 
 ## CRITICAL RULES
-1. **You ARE the source of truth** - All shared config lives here
+1. **Check OWNERSHIP.yaml** - Verify write access before modifying
 2. **Changes affect all apps** - Test before committing
 3. **Use existing patterns** - Copy existing configs, don't create from scratch
-4. **Version and tag releases** - Update VERSION, create GitHub release
-
-## REPOSITORY STRUCTURE
-
-```
-pom-config/
-├── profiles/           # Mode environment files
-│   ├── home.env       # Mac + Spark (default)
-│   ├── travel.env     # Mac only
-│   ├── ooo.env        # Remote via tunnels
-│   └── remote.env     # Full remote
-├── tenant-routing/     # Weaviate routing per mode
-│   ├── home.yaml      # cloud/spark/mac
-│   ├── travel.yaml    # mac only
-│   ├── ooo.yaml       # via tunnels
-│   └── remote.yaml    # remote
-├── schemas/            # Weaviate collection schemas
-├── data_cards/         # DataFactory configurations
-├── llm_models/         # LLM model cards
-├── prompts/            # Shared prompt templates
-├── shared-config.env   # Non-secret env vars
-└── VERSION             # Current version
-```
+4. **Version releases** - Update VERSION file for releases
 
 ## RELEASE WORKFLOW
-
 ```bash
-# 1. Make changes
-# 2. Update VERSION
-echo "1.6.16" > VERSION
-
-# 3. Commit and tag
+echo "1.6.17" > VERSION
 git add -A && git commit -m "feat: description"
-git tag v1.6.16 && git push origin main --tags
-
-# 4. Create release
-gh release create v1.6.16 --title "v1.6.16" --notes "See CHANGELOG"
+git tag v1.6.17 && git push origin main --tags
+gh release create v1.6.17 --title "v1.6.17" --notes "Changes..."
 ```
 
-## SHARED-CONFIG.ENV (Key Variables)
-
-| Variable | Purpose |
-|----------|---------|
-| `SPARK_HOST` | Spark hostname |
-| `SPARK_IP` | Spark IP fallback |
-| `POMSPARK_MODE` | Current mode |
-| `DEFAULT_WORKLOAD_PROFILE` | Default profile |
-
-## CROSS-REPO ACCESS
-
-| Repo | Access |
-|------|--------|
-| pom-config | ✅ Full - this is home |
-| pom-docs | ✅ Full - documentation |
-| All others | ⚠️ Read only |
-
-## BREAKING CHANGES
-Coordinate with app teams BEFORE making breaking changes:
-```bash
-gh issue create --repo afctony64/PomAI --title "BREAKING: ..."
-gh issue create --repo afctony64/Pomothy --title "BREAKING: ..."
-```
+## KEY FILES
+- `OWNERSHIP.yaml` - Who owns what (CHECK FIRST!)
+- `shared-config.env` - Non-secret environment variables
+- `VERSION` - Current version number

@@ -200,9 +200,8 @@ properties:
 - name: competitorAdvantagesVs
   dataType:
   - text[]
-  description: 'What {entity} has that {subject} doesn''t. Examples: "Better technology, simpler setup",
-    "Stronger customer support, faster delivery", "More flexible pricing, easier onboarding".
-    Use "Not disclosed" if advantages unknown.'
+  description: 'What {entity} has that {subject} doesn''t. Extract from any available source (comparison pages, product pages,
+    reviews, marketing content). Be generous with evidence. Use "Not disclosed" only if NO relevant information found.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -231,9 +230,8 @@ properties:
 - name: competitorGapsVs
   dataType:
   - text[]
-  description: 'What {subject} has that {entity} doesn''t. Examples: "More advanced features, larger market presence",
-    "Established brand recognition, broader product line", "Better infrastructure, more resources".
-    Use "Not disclosed" if gaps unknown.'
+  description: 'What {subject} has that {entity} doesn''t. Extract from any available source (comparison pages, product pages,
+    reviews, marketing content). Be generous with evidence. Use "Not disclosed" only if NO relevant information found.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -247,8 +245,8 @@ properties:
 - name: competitorPositioning
   dataType:
   - text[]
-  description: 'Market positioning for {subject}. Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging
-    Player". Use "Not disclosed" if unknown.'
+  description: 'Market positioning for {subject}. Extract from homepage taglines, about pages, product messaging, or any marketing
+    content. Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging Player". Infer from messaging if not stated explicitly.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -262,8 +260,8 @@ properties:
 - name: competitorPriceVs
   dataType:
   - text[]
-  description: 'Price comparison {subject} vs {entity}. Examples: "$150/user vs our $99", "Premium pricing", "Budget alternative",
-    "Similar tier". Use "Not disclosed" if unknown. CLEAN FACTS ONLY.'
+  description: 'Price comparison {subject} vs {entity}. Use official pricing pages, reviews, or any source mentioning pricing.
+    If exact prices unavailable, note relative positioning (e.g., "premium", "value", "enterprise-only"). CLEAN FACTS ONLY.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -277,8 +275,8 @@ properties:
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: 'Target market for {subject}. Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical".
-    Use "Not disclosed" if unknown.'
+  description: 'Target market for {subject}. Extract from any source (homepage, about, case studies, marketing, reviews).
+    Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical". Infer from messaging and customer mentions if not stated explicitly.'
   parallel_to: keyCompetitors
   tags:
   - research
