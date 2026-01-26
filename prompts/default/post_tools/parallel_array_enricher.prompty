@@ -76,17 +76,17 @@ data_requirements:
           count: 5
         inject_as: domain_candidates
     # Page facts - search using field descriptions
-    # Uses resolved_domains (list) from pre-injection phase for contains_any filter
+    # Use resolved_domains (all resolved competitor domains) as market filter
     - injector_template: data
       template_vars:
         data_card_id: page_facts_search
         inject_as: page_facts_response
-        limit: 10
+        limit: 20
         search_query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
         search_strategy: hybrid
-        # Use resolved_domains list if available, fallback to single domain
+        # Use resolved_domains list (all resolved competitor domains) for market-wide filter
+        # This provides full competitive context from all competitor page_facts
         domains: "{{ resolved_domains if resolved_domains is defined and resolved_domains else [] }}"
-        domain: "{{ (record.get('properties') or record).get('domain', '') if (not resolved_domains or resolved_domains is not defined) and record else '' }}"
       search:
         type: hybrid
         alpha: 0.5
