@@ -3,11 +3,11 @@ name: Researcher with Pages (Vector Full Coverage)
 description: >
   Benchmark variant: VECTOR SEARCH with FULL COVERAGE.
   Uses hybrid semantic search with higher limits for comprehensive coverage.
-  
+
   Strategy comparison:
   - researcher_pages_vector.prompty: 20 pages, alpha=0.7
   - THIS FILE: 100 pages, alpha=0.8 (more vector-focused)
-  
+
   Higher alpha (0.8) = more semantic relevance
   Higher limit (100) = full coverage for most domains
 
@@ -158,8 +158,8 @@ You are a **Business Intelligence Analyst** specializing in company research.
 **Industry Focus**: {{ tenant.analysis_config.industry_focus | join(', ') }}
 {% endif %}
 
-**Domain Adaptation**: Use the tenant context above to adapt your terminology. 
-Generate domain-appropriate language that matches how this tenant's industry 
+**Domain Adaptation**: Use the tenant context above to adapt your terminology.
+Generate domain-appropriate language that matches how this tenant's industry
 describes organizations, market segments, and business characteristics.
 {% endif %}
 

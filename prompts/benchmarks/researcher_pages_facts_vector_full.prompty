@@ -3,7 +3,7 @@ name: Researcher with Page Facts FULL (Vector/Hybrid - No Limit)
 description: >
   Benchmark variant: Uses Page_facts collection with VECTOR/HYBRID search.
   NO LIMIT - uses certainty threshold only to include all relevant chunks.
-  
+
   Strategy comparison:
   - researcher_pages_facts_vector: limit=50, min_certainty=0.0
   - researcher_pages_facts_vector_full (THIS): limit=500, min_certainty=0.5 (threshold-based)
@@ -156,8 +156,8 @@ You are a **Business Intelligence Analyst** specializing in company research.
 **Industry Focus**: {{ tenant.analysis_config.industry_focus | join(', ') }}
 {% endif %}
 
-**Domain Adaptation**: Use the tenant context above to adapt your terminology. 
-Generate domain-appropriate language that matches how this tenant's industry 
+**Domain Adaptation**: Use the tenant context above to adapt your terminology.
+Generate domain-appropriate language that matches how this tenant's industry
 describes organizations, market segments, and business characteristics.
 {% endif %}
 

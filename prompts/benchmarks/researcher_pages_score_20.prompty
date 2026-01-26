@@ -3,7 +3,7 @@ name: Researcher with Pages (Score Top 20)
 description: >
   Benchmark variant: SCORE-BASED - Top 20 pages by pre-computed researcher score
   Uses Page_content with primary_score filtering.
-  
+
   Parameters:
   - min_score: 0.5 (baseline threshold)
   - limit: 20 (top 20 by researcher score)

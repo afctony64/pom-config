@@ -4,7 +4,7 @@ description: >
   LLM-powered quality analysis for fact extraction benchmarks.
   Evaluates accuracy, completeness, cohesion, and relevance of extracted facts
   against researcher objectives and tenant context.
-  
+
   GENERIC: Works with any entity, researcher, and tenant configuration.
   Uses the same context injection as entity_researcher.prompty.
 
@@ -14,7 +14,7 @@ inputs:
     description: Array of extracted facts from benchmark to analyze
     type: array
     required: true
-  
+
   # === CONTEXT INJECTION (same as entity_researcher) ===
   researcher_ai:
     description: ResearcherAIConfig with identity, focus_areas, fact_types
@@ -32,13 +32,13 @@ inputs:
     description: Entity record that was analyzed (Domain or Source)
     type: object
     required: true
-  
+
   # === SOURCE CONTENT FOR VERIFICATION ===
   pageData:
     description: Source page content used for extraction (for accuracy verification)
     type: array
     default: null
-  
+
   # === OPTIONAL METADATA ===
   benchmark_metadata:
     description: Optional benchmark run metadata (model, timestamp, etc.)

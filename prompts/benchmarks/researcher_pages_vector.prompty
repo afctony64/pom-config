@@ -4,7 +4,7 @@ description: >
   Benchmark variant: Uses VECTOR/SEMANTIC search to find relevant pages.
   Instead of filtering by pre-computed scores (primary_researcher + primary_score),
   this uses hybrid search with researcher-specific semantic queries.
-  
+
   Strategy comparison:
   - Score-based (researcher_pages_*.prompty): Filter by primary_score >= min_score
   - Vector-based (this file): Hybrid search with researcher semantic query
@@ -156,8 +156,8 @@ You are a **Business Intelligence Analyst** specializing in company research.
 **Industry Focus**: {{ tenant.analysis_config.industry_focus | join(', ') }}
 {% endif %}
 
-**Domain Adaptation**: Use the tenant context above to adapt your terminology. 
-Generate domain-appropriate language that matches how this tenant's industry 
+**Domain Adaptation**: Use the tenant context above to adapt your terminology.
+Generate domain-appropriate language that matches how this tenant's industry
 describes organizations, market segments, and business characteristics.
 {% endif %}
 

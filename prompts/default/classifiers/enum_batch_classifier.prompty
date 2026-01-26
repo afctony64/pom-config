@@ -3,13 +3,13 @@ name: Batch Enum Field Classifier
 id: enum_batch_classifier
 description: |
   Batch classification of ALL EnumCat fields in a single LLM call.
-  
+
   Replaces sequential per-field classification with batched approach.
   Fields and enum values are injected dynamically from schema - no hardcoding.
-  
+
   AI Tool Type: Prompt
   Stage: post_execution
-  
+
   Performance: Reduces N LLM calls to 1, saving ~80% of enum_cat execution time.
 
 classification:

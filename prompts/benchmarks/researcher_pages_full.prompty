@@ -4,7 +4,7 @@ description: >
   Benchmark variant: FULL COVERAGE with higher quality threshold.
   Instead of arbitrary page limits (10, 20, 50), this gets ALL pages
   that meet a higher relevance threshold (min_score >= 0.7).
-  
+
   Strategy: Quality over quantity - higher threshold, no hard limit.
   - Uses pre-computed researcher scores (fast, deterministic)
   - min_score: 0.7 (higher bar = more relevant pages only)
@@ -155,8 +155,8 @@ You are a **Business Intelligence Analyst** specializing in company research.
 **Industry Focus**: {{ tenant.analysis_config.industry_focus | join(', ') }}
 {% endif %}
 
-**Domain Adaptation**: Use the tenant context above to adapt your terminology. 
-Generate domain-appropriate language that matches how this tenant's industry 
+**Domain Adaptation**: Use the tenant context above to adapt your terminology.
+Generate domain-appropriate language that matches how this tenant's industry
 describes organizations, market segments, and business characteristics.
 {% endif %}
 

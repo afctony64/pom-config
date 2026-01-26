@@ -3,7 +3,7 @@ name: Researcher with Pages (Vector 20 > 0.8)
 description: >
   Benchmark variant: VECTOR SEARCH - Top 20 pages with certainty > 0.8
   Uses hybrid semantic search with min_certainty threshold and limit.
-  
+
   Parameters:
   - alpha: 0.8 (80% vector, 20% BM25)
   - min_certainty: 0.8 (only pages with high confidence)

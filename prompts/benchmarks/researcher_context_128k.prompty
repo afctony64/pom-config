@@ -217,4 +217,3 @@ Analyze **{{ company_name }}** using your expertise and the provided data.
 The JSON schema below defines the EXACT structure you must return. The schema will be dynamically injected with the complete field definitions for this researcher's collection. Review the schema carefully and ensure your response matches it exactly.
 
 Focus your analysis specifically on **{{ company_name }}** using all available data sources.
-

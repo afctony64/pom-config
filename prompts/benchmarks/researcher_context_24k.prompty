@@ -87,4 +87,3 @@ Domain: {{ props.get('domain') or 'N/A' }}
 
 ## TASK
 Analyze company. Return JSON matching schema exactly. Cite URLs.
-
