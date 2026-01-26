@@ -183,7 +183,7 @@ properties:
 - name: keyCompetitors
   dataType:
   - text[]
-  description: "Array of 2-5 DIRECT competitor COMPANY NAMES only. Use CLEAN OFFICIAL NAMES without \nqualifiers, product\
+  description: "Array of ALL DIRECT competitor COMPANY NAMES found in the data. Use CLEAN OFFICIAL NAMES without \nqualifiers, product\
     \ variants, or parenthetical notes. Examples: \"Workato\" (not \n\"Workato Embedded\"), \"Boomi\" (not \"Boomi iPaaS\"\
     ), \"Zapier\" (not \"Zapier for Enterprise\"). \nReturn EMPTY ARRAY [] if no competitors identified. DO NOT put explanations\
     \ or \n\"no competitors found\" messages in this array. Used for domain lookups - spurious data breaks spawn.\n"
@@ -201,7 +201,7 @@ properties:
   dataType:
   - text[]
   description: 'What {entity} has that {subject} doesn''t. Extract from any available source (comparison pages, product pages,
-    reviews, marketing content). Be generous with evidence. Use "Not disclosed" only if NO relevant information found.'
+    reviews, marketing content). Be generous with evidence. If no advantages found, use "No significant advantages identified".'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -231,7 +231,7 @@ properties:
   dataType:
   - text[]
   description: 'What {subject} has that {entity} doesn''t. Extract from any available source (comparison pages, product pages,
-    reviews, marketing content). Be generous with evidence. Use "Not disclosed" only if NO relevant information found.'
+    reviews, marketing content). Be generous with evidence. If no gaps found, use "No significant gaps identified".'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -261,7 +261,7 @@ properties:
   dataType:
   - text[]
   description: 'Price comparison {subject} vs {entity}. Use official pricing pages, reviews, or any source mentioning pricing.
-    If exact prices unavailable, note relative positioning (e.g., "premium", "value", "enterprise-only"). CLEAN FACTS ONLY.'
+    If exact prices unavailable, note relative positioning (e.g., "premium", "value", "enterprise-only"). If no pricing info found, use "No pricing comparison available".'
   parallel_to: keyCompetitors
   tags:
   - research

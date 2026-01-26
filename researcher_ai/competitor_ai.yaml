@@ -12,7 +12,7 @@ researcher_identity:
   mission: Provide structured competitive analysis with concise, actionable insights
   ecosystem_role: Competitor-focused researcher delivering JSON-formatted intelligence
   core_competencies:
-  - 'Direct Competitor Identification: Finding 2-5 companies customers actually compare
+  - 'Direct Competitor Identification: Finding ALL companies customers actually compare
     THIS company to'
   - 'Structured VS Analysis: Price comparison, advantage mapping, gap identification
     per competitor'
@@ -52,7 +52,7 @@ url_boost_patterns:
 
 # Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
-  - Direct competitors (2-5 companies customers actually compare to)
+  - Direct competitors (all companies customers actually compare to)
   - Competitive advantages vs each competitor (what THIS company does better)
   - Competitive gaps vs each competitor (where competitors are stronger)
   - Market positioning (leader, challenger, niche player)
@@ -75,7 +75,7 @@ avoid:
   - Speculating on competitor strategy without evidence from sources
   - Including companies that serve different customer segments entirely
   - Using the company's own biased comparison pages as sole source
-  - Listing more than 5 competitors (focus on most relevant)
+  - Confusing indirect competitors with direct competitors
   - Confusing technology partners with competitors
 
 # Tools available for this researcher (AITools that can be called by the AI)
@@ -101,7 +101,7 @@ tool_guidance:
       (Only if G2 search didn't identify competitors)
 
       **STOP after finding:**
-      - 3-5 key competitors
+      - All key competitors mentioned in sources
       - Positioning (leader/challenger/niche)
       - Key differentiators
 
