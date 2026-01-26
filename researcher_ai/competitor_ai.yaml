@@ -37,6 +37,8 @@ keyword_queries:
   - "alternatives"
   - "competitors"
   - "comparison"
+  - "how-we-compare"
+  - "vs"
   - "g2"
   - "capterra"
   - "gartner"
@@ -46,6 +48,7 @@ keyword_queries:
 url_boost_patterns:
   - "/compare"
   - "/comparison"
+  - "/how-we-compare"
   - "/vs"
   - "/alternatives"
   - "/competitors"
