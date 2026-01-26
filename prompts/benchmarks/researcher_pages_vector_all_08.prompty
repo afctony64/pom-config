@@ -56,7 +56,7 @@ model:
           additionalProperties: false
 
 processing_config:
-  source_collection: Company_source
+  source_collection: Source
   schema_ids:
     - Company_research_product
   max_turns: 15

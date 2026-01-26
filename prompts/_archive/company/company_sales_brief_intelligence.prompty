@@ -50,7 +50,7 @@ inputs:
     type: object
   company_source_data:
     default: {}
-    description: Core company data from Company_source
+    description: Core company data from Source
     type: object
   sales_context:
     default:

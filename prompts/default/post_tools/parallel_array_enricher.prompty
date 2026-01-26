@@ -52,11 +52,11 @@ tool_guidance:
     max_calls: 3
     when_to_use: |
       **DO NOT use brave_search for domain resolution** - use subject_domain or domain_candidates instead.
-      
+
       Use brave_search ONLY when:
       - page_facts are missing or insufficient for NON-DOMAIN fields
       - You need fresh data for specific field values (e.g., positioning, funding)
-      
+
       Search strategy per field:
       1. Extract key terms from the field description
       2. Search: "{subject} [key terms from description]"
@@ -91,7 +91,7 @@ data_requirements:
         type: hybrid
         alpha: 0.5
         query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
-  
+
   error_handling:
     missing_data: "continue"
     empty_results: "continue"

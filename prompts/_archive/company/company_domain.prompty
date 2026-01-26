@@ -7,7 +7,7 @@ deprecated_canonical: "PomAI/core/config/prompts/company/domain_research.prompty
 
 name: Company Domain Research
 id: company_domain
-description: "[DEPRECATED] LEGACY Company_source domain research. For new model, use domain_research.prompty in PomAI"
+description: "[DEPRECATED] LEGACY Source domain research. For new model, use domain_research.prompty in PomAI"
 
 # === MODEL SELECTION CLASSIFICATION ===
 classification:
@@ -62,11 +62,11 @@ outputs:
 
 # 🎯 SCHEMA IDS: Where to save the processed results
 schema_ids:
-  - collection_name: Company_source  # Update source records with AI results
+  - collection_name: Source  # Update source records with AI results
 
 # Processing Configuration
 processing_config:
-  source_collection: "Company_source"
+  source_collection: "Source"
   mode: "update"  # Update existing records (preserve UUID and all fields)
   # 🔍 Process records where we tried but found no domain
   filters:
@@ -75,7 +75,7 @@ processing_config:
       value: true
     - field: "domain"
       operator: "is_null"
-  mode_description: "Process Company_source records where domain processing was attempted but no domain found (discover URLs via Google Search)"
+  mode_description: "Process Source records where domain processing was attempted but no domain found (discover URLs via Google Search)"
 
 # Model Configuration
 model:

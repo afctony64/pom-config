@@ -47,7 +47,7 @@ model:
       type: json_object
 
 processing_config:
-  source_collection: Company_source
+  source_collection: Source
   target_collections:
     - Company_research_industry
   max_turns: 5  # Minimal tool calling for speed

@@ -45,7 +45,7 @@ Test tenants remain in `pom-core/config/tenants/`:
 
 **Legacy Model** (deprecated):
 - `tenant_group: company`
-- Source: `Company_source`
+- Source: `Source`
 - Output: `Company_research_*` collections
 
 ## Example

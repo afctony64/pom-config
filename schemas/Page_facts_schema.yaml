@@ -345,6 +345,19 @@ properties:
   - standard
   tags:
   - technical
+- name: scrape_method
+  dataType:
+  - text
+  description: Scrape method derived from fetch_method (http or playwright)
+  indexFilterable: true
+  tokenization: field
+  moduleConfig:
+    text2vec-transformers:
+      skip: true
+  sets:
+  - standard
+  tags:
+  - technical
 - name: accessible
   dataType:
   - boolean

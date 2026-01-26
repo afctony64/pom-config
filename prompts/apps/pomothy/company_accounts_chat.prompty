@@ -7,8 +7,8 @@ group: company
 id: company_accounts_chat
 inputs:
   collection_name:
-    default: Company_source
-    description: Collection name (should be Company_source)
+    default: Source
+    description: Collection name (should be Source)
     type: string
   conversation_history:
     default: []
@@ -20,7 +20,7 @@ inputs:
     type: integer
   search_results:
     default: []
-    description: Vector search results from Company_source
+    description: Vector search results from Source
     type: array
   user_question:
     default: What can you tell me about these companies?
@@ -112,7 +112,7 @@ system: 'You are a business intelligence assistant specializing in company accou
 
   '
 schema_ids:
-- Company_source
+- Source
 type: chat
 ---
 

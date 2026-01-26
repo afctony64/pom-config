@@ -90,7 +90,7 @@ export const defaultFields: FieldDefinition[] = [
 ];
 
 export const defaultCollections: string[] = [
-  'Company_source',
+  'Source',
   'Company_opportunity',
   'Domain',
   'Page_content',
@@ -104,7 +104,7 @@ export const defaultViewCards: ViewCard[] = [
 ];
 
 export const defaultDataCards: DataCard[] = [
-  { id: 'company_source', name: 'Company Source', collection: 'Company_source' },
+  { id: 'source', name: 'Source', collection: 'Source' },
   { id: 'domain_list', name: 'Domain List', collection: 'Domain' },
   { id: 'opportunities', name: 'Opportunities', collection: 'Company_opportunity' },
 ];

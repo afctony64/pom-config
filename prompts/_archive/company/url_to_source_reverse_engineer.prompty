@@ -8,7 +8,7 @@ deprecated_canonical: "PomAI/core/config/prompts/company/url_to_source_reverse_e
 
 name: URL Snapshot to Source Record Reverse Engineering
 id: url_to_source_reverse_engineer
-description: "[DEPRECATED] Reverse engineer Company_source records from URL snapshot data using AI analysis of web content - USE PomAI VERSION"
+description: "[DEPRECATED] Reverse engineer Source records from URL snapshot data using AI analysis of web content - USE PomAI VERSION"
 
 # === MODEL SELECTION CLASSIFICATION ===
 classification:
@@ -35,14 +35,14 @@ inputs:
 
 # 🎯 SCHEMA IDS: Where to save the processed results
 schema_ids:
-  - collection_name: Company_source
+  - collection_name: Source
     output_object: root
 
 # Processing Configuration
 processing_config:
   source_collection: "Domain"
   empty_fields: []
-  mode_description: "Process Domain records to create Company_source records"
+  mode_description: "Process Domain records to create Source records"
 
 outputs:
   accountName: string        # Primary company name extracted from web content
@@ -67,7 +67,7 @@ outputs:
 
 # 🎯 SCHEMA IDS: Where to save the processed results
 schema_ids:
-  - collection_name: Company_source  # Create new source records
+  - collection_name: Source  # Create new source records
 
 # Model Configuration
 model:
@@ -84,7 +84,7 @@ model:
 ---
 
 system:
-You are an expert business intelligence analyst specializing in reverse engineering company profiles from website data. Your task is to analyze URL snapshot data and extract structured company information to create comprehensive Company_source records.
+You are an expert business intelligence analyst specializing in reverse engineering company profiles from website data. Your task is to analyze URL snapshot data and extract structured company information to create comprehensive Source records.
 
 **CRITICAL REQUIREMENTS:**
 1. **MANDATORY ANALYSIS**: You MUST analyze the provided URL snapshot data thoroughly
@@ -212,4 +212,4 @@ Domain: {{record.domain}}
 Site Readable: {{record.site_readable}}
 Enrichment Status: {{record.enrichment_status}}
 
-Please provide a complete Company_source record based on this URL snapshot analysis.
+Please provide a complete Source record based on this URL snapshot analysis.
