@@ -147,6 +147,7 @@ Rules:
 - **MODE 2**: Pick competitorDomain from DOMAIN CANDIDATES (match title to {{ tenant_industry }} context).
 - For other fields: Use page_facts first, then brave_search if needed.
 {% endif %}
+- **CRITICAL**: competitorDomain must NEVER equal "{{ entity_name }}" (the source entity). {{ subject }} is a DIFFERENT company.
 - Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
 - Prefer official company sites over linkedin/crunchbase/ycombinator
 - Return JSON with ONLY the fields listed above. Use null only if truly unanswerable.
@@ -174,6 +175,9 @@ user:
 {% endif %}
 
 **INSTRUCTIONS:**
+{% set source_domain = props.get('domain', '') %}
+⚠️ **NEVER use "{{ source_domain }}" as competitorDomain** - that is the SOURCE company, not {{ subject }}.
+
 {% if subject_domain is defined and subject_domain %}
 **MODE 1 - DOMAIN RESOLVED:** {{ subject_domain }}
 1. Use competitorDomain = "{{ subject_domain }}"
@@ -183,11 +187,13 @@ user:
 1. For competitorDomain: Pick the official company website from DOMAIN CANDIDATES above.
    - Match title to {{ subject }} in the context (e.g., "Integration Infrastructure" for iPaaS)
    - Extract just domain (e.g., "useparagon.com" from "https://www.useparagon.com/")
+   - **NEVER pick {{ source_domain }}** - that is the source entity, not the competitor
    - Ignore linkedin, crunchbase, ycombinator, etc.
 2. For other fields: Use page_facts, then brave_search if needed.
 {% else %}
 1. Use page_facts if available, otherwise brave_search.
 2. For competitorDomain: Extract official domain from search results.
+   - **NEVER use {{ source_domain }}** - that is the source entity
 {% endif %}
 
 Return JSON with ONLY these exact field names:
