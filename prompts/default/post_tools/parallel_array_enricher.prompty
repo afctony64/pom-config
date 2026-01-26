@@ -154,7 +154,7 @@ Rules:
 {% if domain_field_name %}- **CRITICAL**: {{ domain_field_name }} must NEVER equal "{{ entity_name }}" (the source entity). {{ subject }} is a DIFFERENT entity.{% endif %}
 - Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
 - Prefer official company sites over linkedin/crunchbase/ycombinator
-- Return JSON with ONLY the fields listed above. Use null only if truly unanswerable.
+- Return JSON with ONLY the fields listed above. NEVER use null - use the fallback value specified in each field description.
 
 user:
 **SUBJECT:** {{ subject }}
@@ -200,11 +200,11 @@ user:
    - **NEVER use {{ source_domain }}** - that is the source entity{% endif %}
 {% endif %}
 
-Return JSON with ONLY these exact field names:
+Return JSON with ONLY these exact field names (use fallback values from descriptions, never null):
 ```json
 {
 {% for field in post_fields %}
-  "{{ field.name }}": "value or null"{% if not loop.last %},{% endif %}
+  "{{ field.name }}": "value"{% if not loop.last %},{% endif %}
 
 {% endfor %}
 }

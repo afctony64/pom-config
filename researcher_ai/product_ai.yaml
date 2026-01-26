@@ -119,3 +119,10 @@ tool_guidance:
       Put ALL source URLs in the global `citations` array field too.
 
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
+
+# Post-execution tools for this researcher
+# Run in priority order after main LLM completes
+post_execution_tools:
+  - parallel_array_enricher  # Priority 10: Fill post fields (productCategories, productPricing, productFeatures, scores per product)
+  - enum_cat                 # Priority 30: Classify EnumCat fields (productDomain, technologyStackCat, pricingModelCat, etc.)
+  - vec_cat                  # Priority 40: Classify VecCat fields (productTypeCat)

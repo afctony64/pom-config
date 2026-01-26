@@ -604,7 +604,7 @@ properties:
 - name: productCategories
   dataType:
   - text[]
-  description: 'Category for {subject}. Examples: "Software", "Hardware", "Service", "Platform", "Tool". Use "Not disclosed" if category unknown.'
+  description: 'Category for {subject}. Examples: "Software", "Hardware", "Service", "Platform", "Tool". Infer from product name and context if not stated explicitly. If truly unclassifiable, use "Unknown".'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -614,13 +614,13 @@ properties:
   sets:
   - standard
   - array
-  - prompt
+  - post
   metadata:
     order: 202
 - name: productPricing
   dataType:
   - text[]
-  description: 'Pricing for {subject}. Examples: "$99/mo", "One-time $499", "Usage-based". Use "Not disclosed" if pricing unavailable.'
+  description: 'Pricing for {subject}. Examples: "$99/mo", "One-time $499", "Usage-based", "Contact sales". Extract from pricing pages, reviews, or marketing content. If no pricing info found, use "Not disclosed".'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -630,13 +630,13 @@ properties:
   sets:
   - standard
   - array
-  - prompt
+  - post
   metadata:
     order: 203
 - name: productFeatures
   dataType:
   - text[]
-  description: 'Key features of {subject}. Examples: "Core functionality, automation, integrations". Use "Not disclosed" if features unknown.'
+  description: 'Key features of {subject}. Examples: "Workflow automation, API integrations, Real-time sync". Extract from product pages, documentation, or marketing content. If no features found, use "Features not documented".'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -646,7 +646,7 @@ properties:
   sets:
   - standard
   - array
-  - prompt
+  - post
   metadata:
     order: 204
 - name: productMaturityLLM
@@ -987,10 +987,10 @@ properties:
 - name: marketFitScore
   dataType:
   - number[]
-  description: Market fit score per product (1-10)
+  description: 'Market fit score for {subject} (1-10). Assess product-market alignment based on target audience clarity and value proposition strength. Infer from available evidence. Use 0 if insufficient data.'
   parallel_to: products
   sets:
-  - prompt
+  - post
   tags:
   - score
   metadata:
@@ -998,10 +998,10 @@ properties:
 - name: maturityAdoptionScore
   dataType:
   - number[]
-  description: Product maturity/adoption score per product (1-10)
+  description: 'Product maturity/adoption score for {subject} (1-10). Assess lifecycle stage and market adoption signals. Infer from product age, customer mentions, feature maturity. Use 0 if insufficient data.'
   parallel_to: products
   sets:
-  - prompt
+  - post
   tags:
   - score
   metadata:
@@ -1009,10 +1009,10 @@ properties:
 - name: revenueContributionScore
   dataType:
   - number[]
-  description: Revenue contribution score per product (1-10)
+  description: 'Revenue contribution score for {subject} (1-10). Estimate based on pricing visibility, customer traction signals, and product prominence. Use 0 if insufficient data.'
   parallel_to: products
   sets:
-  - prompt
+  - post
   tags:
   - score
   metadata:
