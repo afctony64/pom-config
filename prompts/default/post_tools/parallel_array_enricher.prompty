@@ -13,7 +13,7 @@ classification:
   context_size: small
   priority: speed
 
-version: 1.2.0
+version: 1.3.0
 authors:
   - AI Assistant
 
@@ -84,8 +84,8 @@ data_requirements:
         limit: 20
         search_query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
         search_strategy: hybrid
-        # Use resolved_domains list (all resolved competitor domains) for market-wide filter
-        # This provides full competitive context from all competitor page_facts
+        # Use resolved_domains list (all resolved entity domains) for market-wide filter
+        # This provides full context from all related entity page_facts
         domains: "{{ resolved_domains if resolved_domains is defined and resolved_domains else [] }}"
       search:
         type: hybrid
@@ -122,6 +122,10 @@ You are enriching a single record for **{{ subject }}**.
 {% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
 {% set tenant_name = tenant.name|default(tenant.id) if tenant else 'Unknown' %}
 {% set tenant_industry = (tenant|attr('industry_focus'))|default(props.get('industry') if props else '') %}
+{# Detect the domain field name dynamically from post_fields (e.g., competitorDomain, customerDomain, partnerDomain) #}
+{% set ns = namespace(domain_field='') %}
+{% for field in post_fields %}{% if 'Domain' in field.name and ns.domain_field == '' %}{% set ns.domain_field = field.name %}{% endif %}{% endfor %}
+{% set domain_field_name = ns.domain_field %}
 
 Context:
 {% if tenant %}- Tenant: {{ tenant.name|default(tenant.id) }}{% if tenant.description %} - {{ tenant.description }}{% endif %}{% endif %}
@@ -144,10 +148,10 @@ Rules:
 {% if subject_domain is defined and subject_domain %}
 - **MODE 1**: Domain resolved. Use page_facts only. Do NOT call brave_search.
 {% else %}
-- **MODE 2**: Pick competitorDomain from DOMAIN CANDIDATES (match title to {{ tenant_industry }} context).
+- **MODE 2**: Pick {{ domain_field_name }} from DOMAIN CANDIDATES (match title to {{ tenant_industry }} context).
 - For other fields: Use page_facts first, then brave_search if needed.
 {% endif %}
-- **CRITICAL**: competitorDomain must NEVER equal "{{ entity_name }}" (the source entity). {{ subject }} is a DIFFERENT company.
+{% if domain_field_name %}- **CRITICAL**: {{ domain_field_name }} must NEVER equal "{{ entity_name }}" (the source entity). {{ subject }} is a DIFFERENT entity.{% endif %}
 - Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
 - Prefer official company sites over linkedin/crunchbase/ycombinator
 - Return JSON with ONLY the fields listed above. Use null only if truly unanswerable.
@@ -176,24 +180,24 @@ user:
 
 **INSTRUCTIONS:**
 {% set source_domain = props.get('domain', '') %}
-⚠️ **NEVER use "{{ source_domain }}" as competitorDomain** - that is the SOURCE company, not {{ subject }}.
+{% if domain_field_name %}⚠️ **NEVER use "{{ source_domain }}" as {{ domain_field_name }}** - that is the SOURCE entity, not {{ subject }}.{% endif %}
 
 {% if subject_domain is defined and subject_domain %}
 **MODE 1 - DOMAIN RESOLVED:** {{ subject_domain }}
-1. Use competitorDomain = "{{ subject_domain }}"
+1. Use {{ domain_field_name }} = "{{ subject_domain }}"
 2. Extract other fields from page_facts only. Do NOT call brave_search.
 {% elif domain_candidates is defined and domain_candidates and domain_candidates.results is defined %}
 **MODE 2 - PICK FROM CANDIDATES:**
-1. For competitorDomain: Pick the official company website from DOMAIN CANDIDATES above.
+1. For {{ domain_field_name }}: Pick the official company website from DOMAIN CANDIDATES above.
    - Match title to {{ subject }} in the context (e.g., "Integration Infrastructure" for iPaaS)
    - Extract just domain (e.g., "useparagon.com" from "https://www.useparagon.com/")
-   - **NEVER pick {{ source_domain }}** - that is the source entity, not the competitor
+   - **NEVER pick {{ source_domain }}** - that is the source entity, not {{ subject }}
    - Ignore linkedin, crunchbase, ycombinator, etc.
 2. For other fields: Use page_facts, then brave_search if needed.
 {% else %}
 1. Use page_facts if available, otherwise brave_search.
-2. For competitorDomain: Extract official domain from search results.
-   - **NEVER use {{ source_domain }}** - that is the source entity
+{% if domain_field_name %}2. For {{ domain_field_name }}: Extract official domain from search results.
+   - **NEVER use {{ source_domain }}** - that is the source entity{% endif %}
 {% endif %}
 
 Return JSON with ONLY these exact field names:
