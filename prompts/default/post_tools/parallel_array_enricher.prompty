@@ -147,11 +147,10 @@ Fields to fill:
 Rules:
 {% set is_person_enrichment = anchor_field in ['keyExecutives', 'boardMembers', 'advisors'] if anchor_field else False %}
 {% if is_person_enrichment %}
-- **PERSON ENRICHMENT MODE**: {{ subject }} is a person (executive/leader).
-- **USE brave_search** to find LinkedIn profile, background, and tenure for "{{ subject }} {{ entity_name }} LinkedIn".
-- LinkedIn is the PREFERRED source for professional info - actively search for it.
-- For executiveLinkedIn: Search "{{ subject }} {{ entity_name }} LinkedIn" and return the profile URL.
-- For executiveBackgrounds: Include education, prior roles, career highlights.
+- **PERSON ENRICHMENT MODE**: {{ subject }} is a person at {{ entity_name }}.
+- **USE brave_search** to find background info: "{{ subject }} {{ entity_name }} CEO executive biography career experience"
+- For executiveLinkedIn: Construct URL as linkedin.com/in/firstname-lastname (e.g., "Tom Goodmanson" → "linkedin.com/in/tom-goodmanson"). Use "Not disclosed" only for very unusual names.
+- For executiveBackgrounds: Extract education, prior companies, career highlights from search results.
 - For executiveTenure: Look for when they joined {{ entity_name }} (e.g., "since 2019", "3 years").
 {% elif subject_domain is defined and subject_domain %}
 - **MODE 1**: Domain resolved. Use page_facts only. Do NOT call brave_search.
