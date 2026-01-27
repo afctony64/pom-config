@@ -209,8 +209,7 @@ properties:
 - name: partnerDomain
   dataType:
   - text[]
-  description: 'Primary domain for {subject}. Example: "partner.com" (no https://, no www). Always use brave_search to confirm
-    the domain. Use "Not disclosed" if cannot find.'
+  description: 'Primary domain for {subject}. Example: "partner.com" (no https://, no www). Use "Not disclosed" if unknown.'
   parallel_to: keyPartners
   moduleConfig:
     text2vec-weaviate:
@@ -553,6 +552,10 @@ references:
   target_collection: Domain
   uuid_source_field: domain
   description: Reference to the source Domain record for beacon traversal (uses research record's own UUID)
+- name: keyPartnerRefs
+  uuid_source_field: partnerDomain
+  target_collection: Domain
+  description: References to partner Domain records (UUID3 from partnerDomain array)
 group: research
 weaviate_instance: cloud
 collection_name: Research_partner

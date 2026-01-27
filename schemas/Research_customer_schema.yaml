@@ -133,8 +133,7 @@ properties:
 - name: customerDomain
   dataType:
   - text[]
-  description: 'Primary domain for {subject}. Example: "customer.com" (no https://, no www). Always use brave_search to confirm
-    the domain. Use "Not disclosed" if cannot find.'
+  description: 'Primary domain for {subject}. Example: "customer.com" (no https://, no www). Use "Not disclosed" if unknown.'
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -207,8 +206,7 @@ properties:
 - name: keyCustomerEvidence
   dataType:
   - text[]
-  description: Evidence/context found for each keyCustomer from page facts and web search.
-    Summarize factual basis for classifications and extracted values.
+  description: Evidence/context snippets for each keyCustomer used to justify classifications and extracted values.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -973,6 +971,10 @@ references:
   target_collection: Domain
   uuid_source_field: domain
   description: Reference to the source Domain record for beacon traversal (uses research record's own UUID)
+- name: keyCustomerRefs
+  uuid_source_field: customerDomain
+  target_collection: Domain
+  description: References to customer Domain records (UUID3 from customerDomain array)
 group: research
 weaviate_instance: cloud
 collection_name: Research_customer
