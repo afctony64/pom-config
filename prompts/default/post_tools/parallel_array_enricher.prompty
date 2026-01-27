@@ -145,15 +145,23 @@ Fields to fill:
 {% endfor %}
 
 Rules:
-{% if subject_domain is defined and subject_domain %}
+{% set is_person_enrichment = anchor_field in ['keyExecutives', 'boardMembers', 'advisors'] if anchor_field else False %}
+{% if is_person_enrichment %}
+- **PERSON ENRICHMENT MODE**: {{ subject }} is a person (executive/leader).
+- **USE brave_search** to find LinkedIn profile, background, and tenure for "{{ subject }} {{ entity_name }} LinkedIn".
+- LinkedIn is the PREFERRED source for professional info - actively search for it.
+- For executiveLinkedIn: Search "{{ subject }} {{ entity_name }} LinkedIn" and return the profile URL.
+- For executiveBackgrounds: Include education, prior roles, career highlights.
+- For executiveTenure: Look for when they joined {{ entity_name }} (e.g., "since 2019", "3 years").
+{% elif subject_domain is defined and subject_domain %}
 - **MODE 1**: Domain resolved. Use page_facts only. Do NOT call brave_search.
 {% else %}
 - **MODE 2**: Pick {{ domain_field_name }} from DOMAIN CANDIDATES (match title to {{ tenant_industry }} context).
 - For other fields: Use page_facts first, then brave_search if needed.
 {% endif %}
 {% if domain_field_name %}- **CRITICAL**: {{ domain_field_name }} must NEVER equal "{{ entity_name }}" (the source entity). {{ subject }} is a DIFFERENT entity.{% endif %}
-- Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
-- Prefer official company sites over linkedin/crunchbase/ycombinator
+{% if not is_person_enrichment %}- Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
+- Prefer official company sites over linkedin/crunchbase/ycombinator{% endif %}
 - Return JSON with ONLY the fields listed above. NEVER use null - use the fallback value specified in each field description.
 
 user:
