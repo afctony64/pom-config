@@ -604,7 +604,7 @@ properties:
 - name: productCategories
   dataType:
   - text[]
-  description: 'Category for {subject}. Examples: "Software", "Hardware", "Service", "Platform", "Tool". Infer from product name and context if not stated explicitly. If truly unclassifiable, use "Unknown".'
+  description: 'Concise category for {subject}. Examples: "Software", "Hardware", "Service", "Platform", "Tool". Use "Unknown" if unclear. No citations or URLs; use evidence/CIT fields for sources.'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -620,7 +620,7 @@ properties:
 - name: productPricing
   dataType:
   - text[]
-  description: 'Pricing for {subject}. Examples: "$99/mo", "One-time $499", "Usage-based", "Contact sales". Extract from pricing pages, reviews, or marketing content. If no pricing info found, use "Not disclosed".'
+  description: 'Concise pricing for {subject}. Examples: "$99/mo", "One-time $499", "Usage-based", "Contact sales". Use "Not disclosed" if unknown. No citations or URLs; use evidence/CIT fields for sources.'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -636,7 +636,7 @@ properties:
 - name: productFeatures
   dataType:
   - text[]
-  description: 'Key features of {subject}. Examples: "Workflow automation, API integrations, Real-time sync". Extract from product pages, documentation, or marketing content. If no features found, use "Features not documented".'
+  description: 'Concise key features of {subject}. Examples: "Workflow automation, API integrations, Real-time sync". Use "Features not documented" if none. No citations or URLs; use evidence/CIT fields for sources.'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -987,7 +987,7 @@ properties:
 - name: marketFitScore
   dataType:
   - number[]
-  description: 'Market fit score for {subject} (1-10). Assess product-market alignment based on target audience clarity and value proposition strength. Infer from available evidence. Use 0 if insufficient data.'
+  description: 'Market fit score for {subject} (1-10). Assess product-market alignment based on target audience clarity and value proposition strength. Use 0 if insufficient data.'
   parallel_to: products
   sets:
   - post
@@ -998,7 +998,7 @@ properties:
 - name: maturityAdoptionScore
   dataType:
   - number[]
-  description: 'Product maturity/adoption score for {subject} (1-10). Assess lifecycle stage and market adoption signals. Infer from product age, customer mentions, feature maturity. Use 0 if insufficient data.'
+  description: 'Product maturity/adoption score for {subject} (1-10). Assess lifecycle stage and adoption signals. Use 0 if insufficient data.'
   parallel_to: products
   sets:
   - post

@@ -70,11 +70,11 @@ ai_agents:
       - tools/
       - tenant_groups/         # Can define tenant groupings
       - tenants/               # Can define tenant configurations
+      - prompts/               # Allowed by human request
       
     read_only:
       - profiles/              # Owned by PomSpark
       - tenant-routing/        # Owned by PomSpark
-      - prompts/               # Owned by PomAI
       - ux_configs/            # Owned by Pomothy
       - researcher_ai/         # Owned by PomAI
       - data_cards/            # Owned by PomAI
@@ -95,9 +95,9 @@ ai_agents:
       - prompts/
       - researcher_ai/
       - data_cards/
+      - schemas/               # Allowed by human request
       
     read_only:
-      - schemas/               # Owned by pom-core
       - llm_models/            # Owned by pom-core
       - profiles/              # Owned by PomSpark
       - tenant-routing/        # Owned by PomSpark
@@ -151,6 +151,18 @@ special_paths:
     primary_owner: pom-core
     contributors: [PomSpark, PomAI]
     notes: "Changes affect routing - test thoroughly"
+
+  prompts/:
+    description: "Shared prompt templates (.prompty files)"
+    primary_owner: PomAI
+    contributors: [pom-core]
+    notes: "Exception granted by human: pom-core may edit prompts"
+
+  schemas/:
+    description: "Weaviate collection schemas"
+    primary_owner: pom-core
+    contributors: [PomAI]
+    notes: "Exception granted by human: PomAI may edit schemas"
 
 # =============================================================================
 # ENFORCEMENT RULES

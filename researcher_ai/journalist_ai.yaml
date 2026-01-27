@@ -96,18 +96,6 @@ tool_guidance:
     recommended_searches:
       primary: "{company_name} news 2024 announcement press"
       tech_press: "{company_name} TechCrunch VentureBeat Forbes coverage"
-  citation_format:
-    priority: high
-    usage_instructions: |
-      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
-      ❌ "Featured in TechCrunch — see https://techcrunch.com/article"
-      ✅ "Featured in TechCrunch covering their Series B announcement"
 
-      For each LLM field, put supporting URLs in the matching CIT field:
-      - mediaTypeLLM → mediaTypeCIT
-      - coverageLevelLLM → coverageLevelCIT
-      - mediaSentimentLLM → mediaSentimentCIT
-
-      Put ALL source URLs in the global `citations` array field too.
-
+citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)

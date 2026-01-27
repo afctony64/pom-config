@@ -161,17 +161,5 @@ tool_guidance:
       - Provides detailed 10-K financial analysis
 
       ⚠️ Only works for public companies with SEC filings
-  citation_format:
-    priority: high
-    usage_instructions: |
-      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
-      ❌ "Raised $50M Series B — see https://crunchbase.com/company"
-      ✅ "Raised $50M Series B led by Sequoia Capital in 2024"
 
-      For each LLM field, put supporting URLs in the matching CIT field:
-      - fundingStageLLM → fundingStageCIT
-      - revenueSizeLLM → revenueSizeCIT
-      - growthVelocityLLM → growthVelocityCIT
-      - profitabilityProfileLLM → profitabilityProfileCIT
-
-      Put ALL source URLs in the global `citations` array field too.
+citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."

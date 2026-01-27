@@ -111,16 +111,5 @@ tool_guidance:
 
     recommended_searches:
       primary: "{company_name} LinkedIn Twitter GitHub community"
-  citation_format:
-    priority: high
-    usage_instructions: |
-      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
-      ❌ "Active on LinkedIn and Twitter — see https://linkedin.com/company"
-      ✅ "Active on LinkedIn and Twitter with strong developer community engagement"
 
-      For each LLM field, put supporting URLs in the matching CIT field:
-      - platformPresenceLLM → platformPresenceCIT
-      - socialContentLLM → socialContentCIT
-      - communityEngagementLLM → communityEngagementCIT
-
-      Put ALL source URLs in the global `citations` array field too.
+citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."

@@ -92,19 +92,8 @@ tool_guidance:
 
     recommended_searches:
       primary: "{company_name} customer case study success story"
-  citation_format:
-    priority: high
-    usage_instructions: |
-      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
-      ❌ "Enterprise customers include Fortune 500 — see https://example.com/customers"
-      ✅ "Enterprise customers include Fortune 500 companies across financial services"
 
-      For each LLM field, put supporting URLs in the matching CIT field:
-      - useCaseLLM → useCaseCIT
-      - customerIndustrySegmentLLM → customerIndustrySegmentCIT
-      - keyCustomerIndustrySegmentLLM → keyCustomerIndustrySegmentCIT
-
-      Put ALL source URLs in the global `citations` array field too.
+citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
 
 # Post-execution tools for customer research
 post_execution_tools:

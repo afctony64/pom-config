@@ -131,16 +131,5 @@ tool_guidance:
       - Best source for official risk disclosures
 
       ⚠️ SEC filings have legally-required risk disclosure!
-  citation_format:
-    priority: high
-    usage_instructions: |
-      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
-      ❌ "SOC2 Type II certified — see https://example.com/security"
-      ✅ "SOC2 Type II certified with annual penetration testing"
 
-      For each LLM field, put supporting URLs in the matching CIT field:
-      - securityPostureLLM → securityPostureCIT
-      - complianceCertificationLLM → complianceCertificationCIT
-      - regulatoryEnvironmentLLM → regulatoryEnvironmentCIT
-
-      Put ALL source URLs in the global `citations` array field too.
+citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."

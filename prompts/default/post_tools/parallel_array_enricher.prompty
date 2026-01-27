@@ -132,8 +132,10 @@ Context:
 {% if researcher_ai and researcher_ai.researcher_identity %}- Researcher: {{ researcher_ai.researcher_identity.title }} - {{ researcher_ai.researcher_identity.mission }}{% endif %}
 - Source Entity: {{ entity_name }}
 
-**DOMAIN RESOLUTION (2 modes):**
-{% if subject_domain is defined and subject_domain %}
+**DOMAIN RESOLUTION (3 modes):**
+{% if person_domain is defined and person_domain %}
+🧑 **PERSON MODE:** {{ subject }} is a person. Use {{ subject_domain }} only as a LinkedIn hint.
+{% elif subject_domain is defined and subject_domain %}
 ✅ **MODE 1 - RESOLVED:** Domain for {{ subject }} is **{{ subject_domain }}**. Use page_facts only.
 {% else %}
 📋 **MODE 2 - CANDIDATES:** Pick domain from pre-searched DOMAIN CANDIDATES in user message.
@@ -145,22 +147,18 @@ Fields to fill:
 {% endfor %}
 
 Rules:
-{% set is_person_enrichment = anchor_field in ['keyExecutives', 'boardMembers', 'advisors'] if anchor_field else False %}
-{% if is_person_enrichment %}
-- **PERSON ENRICHMENT MODE**: {{ subject }} is a person at {{ entity_name }}.
-- **USE brave_search** to find background info: "{{ subject }} {{ entity_name }} CEO executive biography career experience"
-- For executiveLinkedIn: Construct URL as linkedin.com/in/firstname-lastname (e.g., "Tom Goodmanson" → "linkedin.com/in/tom-goodmanson"). Use "Not disclosed" only for very unusual names.
-- For executiveBackgrounds: Extract education, prior companies, career highlights from search results.
-- For executiveTenure: Look for when they joined {{ entity_name }} (e.g., "since 2019", "3 years").
-{% elif subject_domain is defined and subject_domain %}
+{% if subject_domain is defined and subject_domain and not (person_domain is defined and person_domain) %}
 - **MODE 1**: Domain resolved. Use page_facts only. Do NOT call brave_search.
+{% elif person_domain is defined and person_domain %}
+- **PERSON MODE**: Use brave_search for LinkedIn profile/background/tenure. Use {{ subject_domain }} as a hint.
 {% else %}
 - **MODE 2**: Pick {{ domain_field_name }} from DOMAIN CANDIDATES (match title to {{ tenant_industry }} context).
 - For other fields: Use page_facts first, then brave_search if needed.
 {% endif %}
 {% if domain_field_name %}- **CRITICAL**: {{ domain_field_name }} must NEVER equal "{{ entity_name }}" (the source entity). {{ subject }} is a DIFFERENT entity.{% endif %}
-{% if not is_person_enrichment %}- Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
-- Prefer official company sites over linkedin/crunchbase/ycombinator{% endif %}
+- Extract just domain from URLs (e.g., "useparagon.com" from "https://www.useparagon.com/")
+- Prefer official company sites over linkedin/crunchbase/ycombinator
+- Do NOT include citations or inline URLs in field values unless the field explicitly expects a URL (e.g., domain or LinkedIn fields). Put sources in evidence/CIT fields.
 - Return JSON with ONLY the fields listed above. NEVER use null - use the fallback value specified in each field description.
 
 user:
@@ -189,10 +187,15 @@ user:
 {% set source_domain = props.get('domain', '') %}
 {% if domain_field_name %}⚠️ **NEVER use "{{ source_domain }}" as {{ domain_field_name }}** - that is the SOURCE entity, not {{ subject }}.{% endif %}
 
-{% if subject_domain is defined and subject_domain %}
+{% if subject_domain is defined and subject_domain and not (person_domain is defined and person_domain) %}
 **MODE 1 - DOMAIN RESOLVED:** {{ subject_domain }}
 1. Use {{ domain_field_name }} = "{{ subject_domain }}"
 2. Extract other fields from page_facts only. Do NOT call brave_search.
+{% elif person_domain is defined and person_domain %}
+**PERSON MODE - LINKEDIN SEARCH:**
+1. Use brave_search to find the best LinkedIn profile for {{ subject }}.
+2. Use {{ subject_domain }} as a hint only; verify with search results.
+3. Fill person fields (LinkedIn, background, tenure) from search/page_facts.
 {% elif domain_candidates is defined and domain_candidates and domain_candidates.results is defined %}
 **MODE 2 - PICK FROM CANDIDATES:**
 1. For {{ domain_field_name }}: Pick the official company website from DOMAIN CANDIDATES above.

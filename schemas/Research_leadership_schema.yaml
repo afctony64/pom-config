@@ -350,7 +350,7 @@ properties:
 - name: executiveBackgrounds
   dataType:
   - text[]
-  description: 'Background for {subject} at {entity}. Search "{subject} {entity} LinkedIn background career". Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups". Use "Not disclosed" if unknown.'
+  description: 'Concise background for {subject} at {entity} (education, prior roles). Examples: "MBA Stanford, 15yr SaaS veteran", "Ex-Google engineer, 3 startups". Use "Not disclosed" if unknown. No citations or URLs; use evidence/CIT fields for sources.'
   parallel_to: keyExecutives
   tags:
   - executive
@@ -380,7 +380,7 @@ properties:
 - name: executiveTenure
   dataType:
   - text[]
-  description: 'Tenure for {subject} at {entity}. Search "{subject} {entity} joined tenure years". Examples: "5 years", "Since founding (2019)", "2 years". Use "Not disclosed" if unknown.'
+  description: 'Tenure for {subject} at {entity}. Examples: "5 years", "Since founding (2019)", "2 years". Use "Not disclosed" if unknown. No citations or URLs; use evidence/CIT fields for sources.'
   parallel_to: keyExecutives
   tags:
   - executive
@@ -395,7 +395,7 @@ properties:
 - name: executiveLinkedIn
   dataType:
   - text[]
-  description: 'LinkedIn URL for {subject} at {entity}. Search "{subject} {entity} LinkedIn". Example: https://www.linkedin.com/in/username/. Use "Not disclosed" if unknown.'
+  description: 'LinkedIn profile URL for {subject} at {entity}. Treat LinkedIn as the required person-domain source; provide a profile URL when possible. Example: https://www.linkedin.com/in/username/. Use "Not disclosed" if unknown. No citations or URLs elsewhere; use evidence/CIT fields for sources.'
   parallel_to: keyExecutives
   tags:
   - research

@@ -115,16 +115,9 @@ tool_guidance:
       # Only if primary didn't find competitors:
       comparison: "{company_name} vs competitors comparison market"
 
-  citation_format:
-    priority: high
-    usage_instructions: |
-      📝 CLEAN FACTS ONLY - no inline URLs:
-      ❌ "Purpose-built for iPaaS — see https://example.com"
-      ✅ "Purpose-built for embedded iPaaS serving B2B SaaS"
-
-      Put ALL source URLs in the `citations` array field.
-
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
+
+citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
 
 # Entity spawn configuration
 # Spawn fields are auto-detected from schema via sets: [spawn] (pom-core#295)

@@ -128,21 +128,9 @@ tool_guidance:
 
       # Only if board info missing:
       board: "{company_name} board of directors investors advisors"
-  citation_format:
-    priority: high
-    usage_instructions: |
-      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
-      ❌ "CEO with 20 years experience — see https://linkedin.com/in/ceo"
-      ✅ "CEO with 20 years experience in enterprise software"
-
-      For each LLM field, put supporting URLs in the matching CIT field:
-      - founderProfileLLM → founderProfileCIT
-      - executiveExperienceLLM → executiveExperienceCIT
-      - leadershipStyleLLM → leadershipStyleCIT
-
-      Put ALL source URLs in the global `citations` array field too.
-
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
+
+citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
 
 # Parallel array enrichment configuration
 # Uses generic parallel_array_enricher.prompty to fill post fields via web search
@@ -157,7 +145,8 @@ parallel_array_enrichment:
     - executiveBackgrounds    # Career background and experience
     - executiveTenure         # How long in current role
   search_query_template: >
-    {subject} {executiveRoles} {domain} linkedin profile background
+    {subject} {executiveRoles} {entity} site:linkedin.com/in
+    current role background experience tenure since
 
 # Post-execution tools: Run automatically after leadership researcher completes
 # Priority-ordered: lower number runs first
