@@ -400,6 +400,7 @@ properties:
   tags:
   - research
   sets:
+  - array
   - post
   - extended
   - standard
