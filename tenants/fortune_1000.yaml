@@ -34,10 +34,26 @@ data_sources:
 
 # Collection routing configuration
 # Maps collection names to Weaviate instances: "cloud", "spark", "local" (mac-weaviate)
-# fortune_1000 tenant routes to Cloud by default (fallback to collection-level routing if not specified)
+# fortune_1000 tenant routes Research/Domain to Cloud and Page/API to Spark
 collections:
-  # Explicitly route to Cloud (optional - falls back to collection-level routing if not specified)
-  Domain: "cloud"  # Domain collection routing for spider pipeline
-  Page_intelligence: "cloud"  # Page intelligence for spider pipeline
-  Page_facts: "cloud"  # Page facts for spider pipeline
-  # Other collections will use collection-level routing from schema or default to Cloud
+  # Entity model collections (cloud)
+  Domain: "cloud"
+  Research_competitor: "cloud"
+  Research_customer: "cloud"
+  Research_financial: "cloud"
+  Research_industry: "cloud"
+  Research_journalist: "cloud"
+  Research_leadership: "cloud"
+  Research_partner: "cloud"
+  Research_product: "cloud"
+  Research_risk: "cloud"
+  Research_social: "cloud"
+
+  # Page collections (spark)
+  Page_intelligence: "spark"
+  Page_facts: "spark"
+  Page_content: "spark"
+  Page_source: "spark"
+
+  # API caches (spark)
+  API_intelligence: "spark"

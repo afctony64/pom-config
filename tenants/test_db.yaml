@@ -57,8 +57,6 @@ collections:
   Page_researcher: "mac"
 
   # Other collections
-  Knowledge_base: "mac"
   API_intelligence: "mac"
-  Fact_base: "mac"
   Source: "mac"
   Opportunity: "mac"

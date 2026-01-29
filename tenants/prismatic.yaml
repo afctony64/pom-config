@@ -236,9 +236,6 @@ collections:
   Page_intelligence: "spark"
 
 
-  # Fact base (canonical facts per Domain × Researcher × Source) - on Spark
-  Fact_base: "spark"
-
   # API cache (external API responses) - on Spark
   API_intelligence: "spark"
 

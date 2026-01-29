@@ -19,11 +19,11 @@ weaviate_instances:
     url: "${WEAVIATE_CLOUD_URL}"
     api_key_env: WEAVIATE_CLOUD_KEY
     description: "Cloud Weaviate - Production data"
-  
+
   spark:
     url: "http://spark-65d6.local:8080"
     description: "Spark Weaviate - Page processing data"
-  
+
   mac:
     url: "http://mac-weaviate:8080"
     description: "Mac Weaviate - Local development/testing"

@@ -48,16 +48,14 @@ collections:
   Research_product: "cloud"
   Research_risk: "cloud"
   Research_social: "cloud"
-  
+
   # Source collections (for reverse reference lookups)
   Domain: "cloud"
-  
+
   # Page collections (for benchmarking and data injection)
   Page_facts: "spark"
   Page_intelligence: "spark"
   Page_content: "spark"
-  
-  # Knowledge and fact collections
-  Knowledge_base: "spark"
-  Fact_base: "spark"
-  
+
+  # Knowledge and fact collections (deprecated)
+

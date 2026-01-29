@@ -35,9 +35,30 @@ data_sources:
   # For standalone testing: Use RESEARCHER_SEED_OUTPUT_DIR env var
   # Research collections auto-discover seeds from Data/seeds/ taxonomy
 
-# Weaviate instance routing (optional)
-# If not specified, uses collection-based routing from schema weaviate_instance field
-# weaviate_routing:
-#   Collection_name:
-#     cluster_url: "http://weaviate-instance:8080"
-#     api_key: ""  # Optional, not needed for local instances
+# Collection routing (REQUIRED for tenant isolation)
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
+# CentralReach tenant routes Research/Domain to Cloud and Page/API to Spark
+collections:
+  # Entity model collections (cloud)
+  Source: "cloud"
+  Domain: "cloud"
+  Research_competitor: "cloud"
+  Research_customer: "cloud"
+  Research_financial: "cloud"
+  Research_industry: "cloud"
+  Research_journalist: "cloud"
+  Research_leadership: "cloud"
+  Research_partner: "cloud"
+  Research_product: "cloud"
+  Research_risk: "cloud"
+  Research_social: "cloud"
+  Opportunity: "cloud"
+
+  # Page collections (spark)
+  Page_facts: "spark"
+  Page_intelligence: "spark"
+  Page_content: "spark"
+  Page_source: "spark"
+
+  # API caches (spark)
+  API_intelligence: "spark"

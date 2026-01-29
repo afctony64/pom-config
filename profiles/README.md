@@ -9,6 +9,7 @@ This directory contains environment configuration profiles for different operati
 | **Home** | `home.env` | Mac + Spark server both available |
 | **Travel** | `travel.env` | Only Mac available (remote work) |
 | **OOO** | `ooo.env` | Unattended Spark operation |
+| **Spark Test** | `spark_test.env` | Spark-only test runs (DMZ-safe) |
 
 ## How to Use
 
@@ -49,6 +50,14 @@ cd ~/Projects/PomSpark
 | **Weaviate** | Spark local | Mac local | Spark local |
 | **Mac Required** | Yes | Yes | No |
 | **Spark Required** | Yes | No | Yes |
+
+## Spark Test Mode
+
+Spark Test mirrors OOO (Spark-only) but sets test flags:
+- `POMSPARK_MODE=test`
+- `ENVIRONMENT=test`
+- `PYTEST_RUNNING=true`
+- Uses Spark-local service hostnames (e.g., `spark-weaviate`)
 
 ## Adding New Settings
 
