@@ -27,4 +27,3 @@ weaviate_instances:
   mac:
     url: "http://mac-weaviate:8080"
     description: "Mac Weaviate - Local development/testing"
-
