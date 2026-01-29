@@ -152,7 +152,7 @@ response_structure:
 documentation:
   overview: |
     Customer intelligence data card.
-    
+
     TRAVERSAL PATHS:
     1. Research_customer → Domain (source entity info via domainBeacon)
     2. Research_customer → Domain[] (via keyCustomerRefs = customer entities)
@@ -163,7 +163,7 @@ documentation:
     7. CustomerDomain → Research_customer (customer's customer intel)
     8. CustomerDomain → Research_competitor (customer's competitor intel)
     9. CustomerDomain → Research_risk (customer's risk intel)
-    
+
     RESULT: For each customer in keyCustomers, you get their FULL research dossier:
     - Domain metadata (title, description, url)
     - Industry classification and analysis
