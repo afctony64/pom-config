@@ -5,6 +5,18 @@ All notable changes to pom-config will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.17] - 2026-01-29
+
+### Added
+- Spark test profile and docs for Spark-only test mode.
+- Shared report sync settings in `shared-config.env`.
+
+### Changed
+- Ownership rules: `data_cards/` now owned by pom-core.
+- Customer data card traversal extended to include `keyCustomerRefs` with full research traversal.
+- Evidence fields in leadership/partner/product schemas marked for post enrichment.
+- Routing configs updated to map research collections to Cloud and page/API to Spark.
+
 ## [1.7.5] - 2026-01-19
 
 ### Added
