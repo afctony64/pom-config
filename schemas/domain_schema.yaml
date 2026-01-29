@@ -1,6 +1,6 @@
 type: core
 class: Domain
-version: 9.3
+version: 9.4
 group: url
 weaviate_instance: cloud
 description: |
@@ -19,6 +19,9 @@ description: |
   2. Enrichers discover: content, social_accounts, sitemaps, etc.
   3. TenantGroup.researchers analyze → Research_* collections
   4. Research records reference back to this Domain
+  
+  SCHEMA v9.4 CHANGES:
+  - Added page_facts_last_run_status for last Page Facts outcome
   
   SCHEMA v9.3 CHANGES:
   - Added typed relationship references: competitorOf, customerOf, partnerOf
@@ -1011,6 +1014,21 @@ properties:
   tags:
   - pipeline
   - processing
+
+- name: page_facts_last_run_status
+  dataType:
+  - text
+  description: Last Page_facts run outcome (scraped/failed/unknown)
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - standard
+  - status_update
+  - system
+  tags:
+  - pipeline
+  - processing
+  - status
 
 - name: domain_research
   dataType:
