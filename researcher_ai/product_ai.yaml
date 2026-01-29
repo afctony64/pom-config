@@ -118,4 +118,21 @@ tool_guidance:
 
       Put ALL source URLs in the global `citations` array field too.
 
+# Parallel array enrichment configuration
+# Uses generic parallel_array_enricher.prompty to fill post fields via web search
+parallel_array_enrichment:
+  enabled: true
+  anchor_field: products
+  context_fields:
+    - domain                    # Source entity domain for disambiguation
+  # enrich_fields: Auto-detected from schema via sets: [post]
+  search_query_template: >
+    {subject} {domain} product type technology stack features pricing domain evidence
+
+# Post-execution tools: Run automatically after product researcher completes
+post_execution_tools:
+  - parallel_array_enricher  # Priority 10: Fill post fields (productDomain, productEvidence, etc.)
+  - enum_cat                 # Priority 30: Classify EnumCat fields
+  - vec_cat                  # Priority 40: Classify VecCat fields
+
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
