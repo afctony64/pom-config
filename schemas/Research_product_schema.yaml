@@ -596,9 +596,13 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags: []
+  tags:
+  - research
+  - evidence
   sets:
+  - array
   - system
+  - post
   metadata:
     order: 219
 - name: productCategories

@@ -342,9 +342,15 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags: []
+  tags:
+  - executive
+  - leadership
+  - research
+  - evidence
   sets:
+  - array
   - system
+  - post
   metadata:
     order: 916
 - name: executiveBackgrounds

@@ -175,9 +175,14 @@ properties:
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  tags: []
+  tags:
+  - partner
+  - research
+  - evidence
   sets:
+  - array
   - system
+  - post
   metadata:
     order: 916
 - name: partnerTypes

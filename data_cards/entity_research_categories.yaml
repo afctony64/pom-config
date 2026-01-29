@@ -48,9 +48,8 @@ parameters:
   traversal:
     max_depth: 1
     max_complexity: 150
+    use_default_policies: false     # ✅ Allow competitor refs; avoid only explicit skips
     policies:
-      competitor: skip
-      competitors: skip
       domainBeacon: skip
 
   # Fetch one or more entities (high limit for full dataset queries)

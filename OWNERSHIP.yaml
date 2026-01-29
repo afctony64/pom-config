@@ -63,11 +63,13 @@ ai_agents:
       - schemas/               # Weaviate collection schemas
       - llm_models/            # LLM model cards and configurations
       - tools/                 # Tool definitions
+      - data_cards/            # DataFactory configurations
 
     can_write:
       - schemas/
       - llm_models/
       - tools/
+      - data_cards/
       - tenant_groups/         # Can define tenant groupings
       - tenants/               # Can define tenant configurations
       - prompts/               # Allowed by human request
@@ -77,7 +79,6 @@ ai_agents:
       - tenant-routing/        # Owned by PomSpark
       - ux_configs/            # Owned by Pomothy
       - researcher_ai/         # Owned by PomAI
-      - data_cards/            # Owned by PomAI
 
   # ---------------------------------------------------------------------------
   # POMAI - Research AI Application
@@ -89,12 +90,10 @@ ai_agents:
     owns:
       - prompts/               # Shared prompt templates (.prompty files)
       - researcher_ai/         # Researcher AI configurations
-      - data_cards/            # DataFactory configurations
 
     can_write:
       - prompts/
       - researcher_ai/
-      - data_cards/
       - schemas/               # Allowed by human request
 
     read_only:
@@ -103,6 +102,7 @@ ai_agents:
       - tenant-routing/        # Owned by PomSpark
       - ux_configs/            # Owned by Pomothy
       - tools/                 # Owned by pom-core
+      - data_cards/            # Owned by pom-core
 
   # ---------------------------------------------------------------------------
   # POMOTHY - UX/Chat AI Application
