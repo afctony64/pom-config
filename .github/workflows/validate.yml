@@ -20,7 +20,7 @@ jobs:
 
       - name: Install pom-core
         run: |
-          pip install pom-core pyyaml
+          pip install "git+https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/afctony64/pom-core.git@main" pyyaml
 
       - name: Validate all configs
         run: |
