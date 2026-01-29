@@ -179,6 +179,7 @@ properties:
   - partner
   - research
   - evidence
+  - post
   sets:
   - array
   - system

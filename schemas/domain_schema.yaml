@@ -1019,6 +1019,10 @@ properties:
   dataType:
   - text
   description: Last Page_facts run outcome (scraped/failed/unknown)
+  enum:
+  - scraped
+  - failed
+  - unknown
   indexFilterable: true
   tokenization: field
   sets:

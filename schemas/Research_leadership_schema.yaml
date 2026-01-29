@@ -347,6 +347,7 @@ properties:
   - leadership
   - research
   - evidence
+  - post
   sets:
   - array
   - system
