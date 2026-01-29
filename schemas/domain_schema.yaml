@@ -5,7 +5,7 @@ group: url
 weaviate_instance: cloud
 description: |
   Domain collection - THE UNIVERSAL ENTITY COLLECTION.
-  
+
   KEY CONCEPT: The Entity IS the Domain record.
   - URL is the entity's digital signature (identity)
   - Domain represents BOTH digital and physical presence
@@ -13,30 +13,30 @@ description: |
   - Tenant isolation defines whose research it is
   - TenantGroup defines which researchers to run
   - Everything else is DISCOVERED by enrichers and researchers
-  
+
   FLOW:
   1. URL seed → Domain record created (entity exists)
   2. Enrichers discover: content, social_accounts, sitemaps, etc.
   3. TenantGroup.researchers analyze → Research_* collections
   4. Research records reference back to this Domain
-  
+
   SCHEMA v9.4 CHANGES:
   - Added page_facts_last_run_status for last Page Facts outcome
-  
+
   SCHEMA v9.3 CHANGES:
   - Added typed relationship references: competitorOf, customerOf, partnerOf
   - These enable market traversal queries (e.g., "who are X's competitors?")
   - A domain can have multiple relationships across different companies
   - Deprecated spawnedFromRef (Phase 2 will migrate and remove)
-  
+
   SCHEMA v9.2 CHANGES:
   - Added 'prompt' set for LLM-extractable information fields
   - Added 'system' set for infrastructure/pipeline fields (protected from LLM)
-  - Prompt fields: entityName, description, foundedYear, headquarters, 
+  - Prompt fields: entityName, description, foundedYear, headquarters,
     phone, email, address, city, region, country, postalCode, coordinates
-  - System fields: sitemaps, homepage stats, security, social, technical, 
+  - System fields: sitemaps, homepage stats, security, social, technical,
     processing flags, enricher results, spawn fields
-  
+
   SCHEMA v9.0 CHANGES:
   - Added physical presence fields (phone, email, address, etc.)
   - Consolidated social fields (15 → 10)
