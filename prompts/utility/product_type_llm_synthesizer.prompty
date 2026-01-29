@@ -34,8 +34,8 @@ model:
           required: []
           additionalProperties: false
 processing_config:
-  source_collection: Company_research_product
-  schema_id: Company_research_product
+  source_collection: Research_product
+  schema_id: Research_product
   researcher_id: product
   include_fields: ["productTypeLLM"]
   filters:

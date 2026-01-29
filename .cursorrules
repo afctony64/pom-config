@@ -17,7 +17,7 @@ This repo is shared by multiple AI agents. Before modifying any file:
 | `tools/` | pom-core |
 | `prompts/` | PomAI |
 | `researcher_ai/` | PomAI |
-| `data_cards/` | PomAI |
+| `data_cards/` | pom-core |
 | `ux_configs/` | Pomothy |
 
 ## CRITICAL RULES

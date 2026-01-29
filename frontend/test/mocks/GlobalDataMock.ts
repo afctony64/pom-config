@@ -94,7 +94,7 @@ export const defaultCollections: string[] = [
   'Company_opportunity',
   'Domain',
   'Page_content',
-  'Company_research',
+  'Research',
 ];
 
 export const defaultViewCards: ViewCard[] = [

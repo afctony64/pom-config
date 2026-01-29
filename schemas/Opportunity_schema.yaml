@@ -569,7 +569,7 @@ properties:
   - name: company
     dataType:
     - uuid[]
-    description: Company source UUIDs
+    description: Entity source UUIDs
 
 references:
 - name: domainBeacon

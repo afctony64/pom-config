@@ -113,8 +113,8 @@ performance:
 
 # Comparison with other cards
 comparison:
-  opportunity_with_account: "All fields (complete) - comprehensive but slower (legacy model)"
-  opportunity_with_company_categories: "Cat fields only - fast and efficient for pivot tables (legacy model)"
+  opportunity_with_account: "All fields (complete) - comprehensive but slower"
+  opportunity_with_company_categories: "Cat fields only - fast and efficient for pivot tables"
   opportunity_with_domain_categories: "Cat fields only - fast and efficient for pivot tables (entity model) - THIS CARD"
 
 # Data model summary

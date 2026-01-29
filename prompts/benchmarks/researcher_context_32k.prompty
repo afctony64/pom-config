@@ -69,7 +69,7 @@ model:
 processing_config:
   source_collection: Source
   target_collections:
-    - Company_research_industry
+    - Research_industry
   max_turns: 10  # Reduced for smaller context
   iteration_parameter: researcher_id
   iteration_values: "ALL_RESEARCHERS"

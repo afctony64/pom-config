@@ -211,7 +211,7 @@ afterEach(() => {
 ### Collections
 
 ```typescript
-['Source', 'Company_opportunity', 'Domain', 'Page_content', 'Company_research']
+['Source', 'Company_opportunity', 'Domain', 'Page_content', 'Research']
 ```
 
 ## Relationship to pom-config

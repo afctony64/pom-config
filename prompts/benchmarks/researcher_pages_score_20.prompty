@@ -56,7 +56,7 @@ model:
 processing_config:
   source_collection: Source
   schema_ids:
-    - Company_research_product
+    - Research_product
   max_turns: 15
   iteration_parameter: researcher_id
   iteration_values: "ALL_RESEARCHERS"

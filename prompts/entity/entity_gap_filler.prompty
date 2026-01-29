@@ -49,7 +49,7 @@ model:
 
 processing_config:
   mode: update
-  # ENTITY MODEL: Use Research_* collections (not Company_research_*)
+  # ENTITY MODEL: Use Research_* collections (avoid legacy names)
   source_collection: Research_{{ researcher_id }}
   schema_id: Research_{{ researcher_id }}
   include_fields_tag: LLM

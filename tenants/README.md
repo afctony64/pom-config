@@ -43,10 +43,14 @@ Test tenants remain in `pom-core/config/tenants/`:
 - Source: `Domain`
 - Output: `Research_*` collections
 
-**Legacy Model** (deprecated):
-- `tenant_group: company`
-- Source: `Source`
-- Output: `Company_research_*` collections
+## Standard Routing
+
+Default pattern for production tenants:
+- **Research_*** and **Domain** → `cloud`
+- **Page_*** and **API_*** → `spark`
+
+Legacy collections:
+- `Fact_base` and `Knowledge_base` are deprecated and should not be configured
 
 ## Example
 

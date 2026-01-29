@@ -46,8 +46,8 @@ model:
           additionalProperties: false
 processing_config:
   mode: update
-  source_collection: Company_research_{{ researcher_id }}
-  schema_id: Company_research_{{ researcher_id }}
+  source_collection: Research_{{ researcher_id }}
+  schema_id: Research_{{ researcher_id }}
   include_fields_tag: LLM
   filters:
     - field: seed

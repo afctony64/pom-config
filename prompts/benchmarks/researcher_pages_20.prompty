@@ -68,7 +68,7 @@ model:
 processing_config:
   source_collection: Source
   schema_ids:
-    - Company_research_industry
+    - Research_industry
   required_processing_flags:
     researcher_processing_status: null
   max_turns: 15
