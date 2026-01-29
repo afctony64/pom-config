@@ -18,6 +18,14 @@ repos:
       - id: detect-private-key
         name: "🔒 Detect Private Keys [BLOCKING]"
 
+  - repo: local
+    hooks:
+      - id: block-root-markdown
+        name: "🛑 Block Root Markdown Edits [BLOCKING]"
+        entry: python scripts/hooks/block_root_markdown.py
+        language: python
+        files: '^[^/]+\\.md$'
+
   # ═══════════════════════════════════════════════════
   # TIER 2: YAML/CONFIG VALIDATION
   # ═══════════════════════════════════════════════════

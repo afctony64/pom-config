@@ -37,19 +37,33 @@ keyword_queries:
   - "ceo"
   - "cto"
   - "cfo"
+  - "vp"
+  - "president"
+  - "vice president"
 
 # URL boost patterns - used by page_facts_vector injector
 url_boost_patterns:
   - "/team"
+  - "/our-team"
+  - "/the-team"
   - "/leadership"
+  - "/leadership-team"
   - "/executives"
+  - "/executive-team"
+  - "/management"
+  - "/management-team"
   - "/board"
   - "/about"
+  - "/about-us"
   - "/company"
+  - "/people"
+  - "/staff"
 
 # Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
-  - Executive names and roles (CEO, CTO, CFO, etc.)
+  - Extract ALL executives mentioned - include every VP and C-level (aim for 8-12 executives)
+  - Include ALL VPs (VP Engineering, VP Product, VP Customer Success, VP Sales, VP Marketing, VP Finance, etc.)
+  - Executive names and roles (CEO, CTO, CFO, COO, CRO, CMO, CPO, and ALL VPs)
   - Executive backgrounds (previous companies, education, experience)
   - LinkedIn profile URLs for each executive
   - Board members and advisors
@@ -145,7 +159,7 @@ parallel_array_enrichment:
     - executiveBackgrounds    # Career background and experience
     - executiveTenure         # How long in current role
   search_query_template: >
-    {subject} {executiveRoles} {entity} site:linkedin.com/in
+    {subject} {executiveRoles} {domain} site:linkedin.com/in
     current role background experience tenure since
 
 # Post-execution tools: Run automatically after leadership researcher completes

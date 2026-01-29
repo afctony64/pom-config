@@ -61,6 +61,8 @@ tool_guidance:
       1. Extract key terms from the field description
       2. Search: "{subject} [key terms from description]"
       3. For well-known subjects, general knowledge is acceptable as fallback
+      **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
+      For common names, add the tenant name and industry vertical to disambiguate.
 
 data_requirements:
   include_enrichment_data: true
@@ -109,8 +111,12 @@ model:
     model: gpt-5-mini
     type: openai_chat
   parameters:
+    # Issue #746: Using json_object (not json_schema) for prompt-based JSON
+    # Post-tools don't have static schemas - fields come from post_fields input
     response_format:
       type: json_object
+    max_completion_tokens: 4000
+    timeout: 120
     max_retries: 2
 
 ---
@@ -145,6 +151,10 @@ Fields to fill:
 {% for field in post_fields %}
 - {{ field.name }}: {{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}
 {% endfor %}
+
+Disambiguation:
+- Include tenant context ({{ tenant_name }}) and industry when relevant{% if tenant_industry %} ({{ tenant_industry }}){% endif %}
+- For ambiguous names (common company/person names), add context from the anchor field ({{ anchor_field }})
 
 Rules:
 {% if subject_domain is defined and subject_domain and not (person_domain is defined and person_domain) %}

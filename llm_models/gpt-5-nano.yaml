@@ -11,7 +11,7 @@ adapter_config:
   base_url: null
   base_url_env: OPENAI_API_KEY
 parameters:
-  max_tokens: 8192
+  max_completion_tokens: 8192
   reasoning_effort: low  # Reduced for faster streaming
 capabilities:
   structured_output: json_strict  # OpenAI supports strict JSON schema enforcement
