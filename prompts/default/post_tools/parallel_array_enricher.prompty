@@ -1,7 +1,7 @@
 ---
 name: Parallel Array Enricher
 id: parallel_array_enricher
-description: "Schema-driven enricher for parallel array elements. Uses field descriptions to guide searches."
+description: "Schema-driven enricher for parallel array subjects. Uses field descriptions to guide searches."
 
 stage: post_execution
 reusable: true
@@ -54,7 +54,7 @@ tool_guidance:
       Use brave_search when page_facts are missing or insufficient for a field.
       Always use brave_search to confirm the domain for {subject}.
       Prefer official company root domains over hosted subdomains.
-      
+
       **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
       For common names, add the tenant name and industry vertical to disambiguate.
       Examples of what to look for in descriptions:
@@ -66,19 +66,20 @@ data_requirements:
   include_enrichment_data: true
   injectors:
     # Page facts - search using field descriptions
+    # Using BM25 (keyword) search for named entity lookup (company names, domains)
+    # BM25 is faster and more accurate for exact string matching than hybrid/vector
     - injector_template: data
       template_vars:
         data_card_id: page_facts_search
         inject_as: page_facts_response
         limit: 10
         search_query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
-        search_strategy: hybrid
+        search_strategy: bm25
         domain: "{{ (record.get('properties') or record).get('domain', '') if record else '' }}"
       search:
-        type: hybrid
-        alpha: 0.5
+        type: bm25
         query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
-  
+
   error_handling:
     missing_data: "continue"
     empty_results: "continue"
@@ -156,6 +157,9 @@ Disambiguation:
 - For ambiguous names (common company/person names), add context from the anchor field ({{ anchor_field }})
 
 Rules:
+- **CRITICAL: COMPLETE ALL FIELDS**: You are processing ONE subject ({{ subject }}) from the {{ anchor_field }} array.
+  You MUST return a value for EVERY field listed below. Each field represents one aspect of {{ subject }}.
+  Do not skip any fields - fill all of them with data extracted from page_facts or brave_search.
 - Use page_facts first when relevant.
 - Use brave_search when page_facts are missing or insufficient.
 - Always use brave_search to confirm the domain for {{ subject }}.
@@ -163,7 +167,10 @@ Rules:
 - For domains: prefer official root domains over hosted subdomains.
 - For LinkedIn: search "{subject} linkedin profile" with role/company context.
 - Use execution_artifacts as broad context, then add direct evidence from page_facts/brave_search for {{ subject }}.
-- **CRITICAL: EXTRACT DATA FROM SEARCH RESULTS.** If brave_search returns descriptions, pricing info, positioning claims, or target market info - USE IT. Do not return "Not disclosed" when data is available.
+- **CRITICAL: EXTRACT DATA FROM SEARCH RESULTS.** If brave_search or page_facts return info about {{ subject }}, USE IT!
+  Extract details from taglines, bios, official pages, and profiles.
+  Do NOT say "Not disclosed" if search returned relevant data.
+  Only use "Not disclosed" or null if NO data found after searching page_facts AND brave_search.
 - Infer from messaging when explicit data isn't stated (e.g., "enterprise" from enterprise pricing page, positioning from taglines).
 - Return JSON with ONLY the fields listed above. Use null ONLY if truly no relevant data found after searching.
 
@@ -184,13 +191,15 @@ user:
 4. Always use brave_search to confirm the domain for **{{ subject }}**.
 5. Every brave_search query MUST include "{{ subject }}".
 6. Prioritize direct evidence about {{ subject }} over generic summaries.
-7. **EXTRACT DATA FROM RESULTS:** When brave_search returns info about {{ subject }}, use it! Extract details from taglines, bios, official pages, and profiles. Do NOT say "Not disclosed" if the search returned relevant data.
+7. **EXTRACT DATA FROM RESULTS:** When brave_search or page_facts return info about {{ subject }}, use it! Extract details from taglines, bios, official pages, and profiles. Do NOT say "Not disclosed" if the search returned relevant data.
+8. **COMPLETE ALL FIELDS:** You must return a value for EVERY field listed below. Each field represents one aspect of {{ subject }}. Fill all of them.
 
 Return JSON with ONLY these exact field names:
+**IMPORTANT**: Return a SINGLE value (not an array) for each field - this is for ONE subject ({{ subject }}).
 ```json
 {
 {% for field in post_fields %}
-  "{{ field.name }}": "value or null"{% if not loop.last %},{% endif %}
+  "{{ field.name }}": "value"{% if not loop.last %},{% endif %}
 
 {% endfor %}
 }

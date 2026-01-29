@@ -142,7 +142,7 @@ parallel_array_enrichment:
     - domain                    # Source entity domain for disambiguation
   # enrich_fields: Auto-detected from schema via sets: [post]
   search_query_template: >
-    {element} {domain} official website company
+    {subject} {domain} competitor positioning target market pricing comparison advantages
 
 # Post-execution tools: Run automatically after competitor researcher completes
 # Priority-ordered: lower number runs first
