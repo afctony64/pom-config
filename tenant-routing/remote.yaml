@@ -19,18 +19,13 @@ tunnel_config:
     local_port: 11436
     remote_port: 11434
     description: "SSH tunnel for Ollama access"
-  
-  cloudflare_optional:
-    name: "${CLOUDFLARE_TUNNEL_MAC}"
-    hostname: "${LLM_PROXY_EXTERNAL_URL}"
-    note: "Optional - only for external access"
 
 weaviate_instances:
   cloud:
     url: "${WEAVIATE_CLOUD_URL}"
     api_key_env: WEAVIATE_CLOUD_KEY
     description: "Cloud Weaviate - Production data"
-  
+
   mac:
     url: "http://mac-weaviate:8080"
     description: "Mac Weaviate - Local development/testing"
@@ -46,11 +41,11 @@ tenants:
       Domain: mac
       Page_facts: mac
       Page_intelligence: cloud
-  
+
   test_db:
     weaviate_target: mac
     description: "Test tenant - always routes to local mac-weaviate"
-  
+
   demo:
     weaviate_target: mac
     description: "Demo tenant - local only"

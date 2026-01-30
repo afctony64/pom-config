@@ -66,6 +66,17 @@ invertedIndexConfig:
     k1: 1.2
 
 properties:
+# UUID field - system only, not for standard field set
+- name: uuid
+  description: Weaviate UUID for this record
+  dataType:
+  - uuid
+  sets:
+  - system
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+
 # ============================================================================
 # IDENTITY (5 fields)
 # ============================================================================
@@ -78,7 +89,7 @@ properties:
   indexSearchable: true
   indexInverted: true
   sets:
-  - standard
+  - system
   - status_update
   tags:
   - identity
@@ -93,7 +104,7 @@ properties:
   tokenization: field
   indexSearchable: true
   sets:
-  - standard
+  - system
   - status_update
   tags:
   - research  # FIX #457: Include in research data card traversals
@@ -107,7 +118,7 @@ properties:
   indexFilterable: true
   tokenization: field
   sets:
-  - standard
+  - system
   tags:
   - identity
   - categorical
@@ -120,7 +131,6 @@ properties:
   indexFilterable: true
   tokenization: field
   sets:
-  - standard
   - system
   tags:
   - identity
@@ -133,7 +143,6 @@ properties:
   indexSearchable: true
   tokenization: word
   sets:
-  - standard
   - system
   tags:
   - content
@@ -147,7 +156,7 @@ properties:
   indexSearchable: true
   tokenization: word
   sets:
-  - standard
+  - system
   - prompt
   tags:
   - identity
@@ -161,7 +170,7 @@ properties:
   indexSearchable: true
   tokenization: word
   sets:
-  - standard
+  - system
   - prompt
   tags:
   - content
@@ -372,7 +381,6 @@ properties:
   description: JSON string of discovered social media accounts by platform
   indexSearchable: true
   sets:
-  - standard
   - system
   tags:
   - accounts
@@ -485,7 +493,6 @@ properties:
   description: Array of social authentication methods detected
   indexSearchable: true
   sets:
-  - standard
   - system
   tags:
   - authentication
@@ -498,7 +505,6 @@ properties:
   description: Array of social sharing features detected
   indexSearchable: true
   sets:
-  - standard
   - system
   tags:
   - sharing
@@ -932,7 +938,6 @@ properties:
   description: Whether the domain has been successfully enriched (has title, description, or content >= 50 chars)
   indexFilterable: true
   sets:
-  - standard
   - system
   tags:
   - filtering
@@ -944,7 +949,6 @@ properties:
   description: Whether the URL was blacklisted during processing
   indexFilterable: true
   sets:
-  - standard
   - system
   tags:
   - filtering
@@ -955,7 +959,6 @@ properties:
   description: Number of failed enrichment attempts (max 3, then domain is skipped)
   indexFilterable: true
   sets:
-  - standard
   - system
   tags:
   - filtering
@@ -980,7 +983,6 @@ properties:
   indexFilterable: true
   indexSearchable: false
   sets:
-  - standard
   - status_update
   - system
   tags:
@@ -993,7 +995,6 @@ properties:
   description: Count of Page_intelligence records (pages) discovered for this domain
   indexFilterable: true
   sets:
-  - standard
   - status_update
   - system
   tags:
@@ -1008,7 +1009,6 @@ properties:
   indexFilterable: true
   indexSearchable: false
   sets:
-  - standard
   - status_update
   - system
   tags:
@@ -1026,7 +1026,6 @@ properties:
   indexFilterable: true
   tokenization: field
   sets:
-  - standard
   - status_update
   - system
   tags:
@@ -1041,8 +1040,8 @@ properties:
   indexFilterable: true
   indexSearchable: false
   sets:
-  - standard
   - status_update
+  - system
   - prompt
   tags:
   - pipeline
@@ -1057,7 +1056,6 @@ properties:
   description: Count of completed researcher analyses (0-10). Updated after each researcher completes. Used to determine ready_for_review status.
   indexFilterable: true
   sets:
-  - standard
   - status_update
   - system
   tags:
@@ -1072,8 +1070,8 @@ properties:
   indexFilterable: true
   indexSearchable: false
   sets:
-  - standard
   - status_update
+  - system
   - frontend
   tags:
   - pipeline
@@ -1086,7 +1084,6 @@ properties:
   description: Timestamp when domain became ready for review (ready_for_review set to true)
   indexFilterable: true
   sets:
-  - standard
   - status_update
   - system
   tags:
@@ -1099,7 +1096,6 @@ properties:
   description: Timestamp when this domain was last processed by any researcher
   indexFilterable: true
   sets:
-  - standard
   - status_update
   - system
   tags:
@@ -1193,7 +1189,6 @@ properties:
   indexFilterable: true
   indexSearchable: false
   sets:
-  - standard
   - status_update
   - system
   tags:

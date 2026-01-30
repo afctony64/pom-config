@@ -128,7 +128,6 @@ This starts:
 | `pom-config/shared-config.env` | Environment variables with ports |
 | `PomSpark/configs/docker-compose.mac.yml` | Mac Docker services |
 | `PomSpark/configs/docker-compose.spark.yml` | Spark Docker services |
-| `PomSpark/configs/docker-compose.llm-proxy.yml` | LLM Proxy service |
 
 ---
 
@@ -164,7 +163,6 @@ REPORT_SERVER_PORT=8886
 
 # Backends
 POMOTHY_BACKEND_PORT=8001
-LLM_PROXY_EXTERNAL_PORT=4001
 
 # Databases
 WEAVIATE_PORT=8080
@@ -197,8 +195,8 @@ ports:
 ┌────────────────────────────▼────────────────────────────────────────────────┐
 │                          BACKENDS (API)                                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Pomothy Backend      LLM Proxy           PomAI Backend (Spark)             │
-│  :8001                :4001               (internal only)                   │
+│  Pomothy Backend                          PomAI Backend (Spark)             │
+│  :8001                                     (internal only)                   │
 └────────────────────────────┬────────────────────────────────────────────────┘
                              │
 ┌────────────────────────────▼────────────────────────────────────────────────┐
@@ -224,7 +222,6 @@ ports:
 
 If you see errors on port 4000:
 1. This is expected - Cursor uses port 4000 for MCP
-2. LLM Proxy is configured on port 4001 to avoid this
 3. Run `./scripts/test-ports.sh cursor` to verify
 
 ### Service Not Starting

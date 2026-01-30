@@ -323,6 +323,10 @@ properties:
   - standard
   metadata:
     order: 201
+    placeholder_values:
+    - Unknown
+    - Not disclosed
+    - N/A
 - name: keyExecutivesIds
   dataType:
   - text[]
@@ -406,6 +410,7 @@ properties:
   parallel_to: keyExecutives
   tags:
   - research
+  - linkedin
   sets:
   - array
   - post
@@ -474,6 +479,10 @@ properties:
   - prompt
   metadata:
     order: 206
+    placeholder_values:
+    - Unknown
+    - Not disclosed
+    - N/A
 - name: founderProfileCat
   dataType:
   - text

@@ -196,6 +196,10 @@ properties:
   - prompt
   metadata:
     order: 201
+    placeholder_values:
+    - Unknown
+    - Not disclosed
+    - N/A
   label: Key Competitors
 - name: competitorAdvantagesVs
   dataType:
@@ -218,6 +222,7 @@ properties:
   parallel_to: keyCompetitors
   tags:
   - research
+  - web
   sets:
   - array
   - standard
