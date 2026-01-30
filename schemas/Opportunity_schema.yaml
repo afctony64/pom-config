@@ -589,7 +589,6 @@ references:
 group: company
 weaviate_instance: cloud
 collection_name: Opportunity
-id: Opportunity
 field_sets:
   system:
   - uuid
