@@ -1,6 +1,7 @@
 type: core
 class: Opportunity
 id: Opportunity
+version: 1.0
 description: Schema for opportunities with flat field structure (Entity Model - no sourceData nesting)
 invertedIndexConfig:
   bm25:

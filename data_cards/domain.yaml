@@ -21,6 +21,7 @@ tags:
   - extended-fields
 
 target_scope: domain_intelligence
+collection: Domain
 
 # ✅ STANDARD: Use 'fetch' for all data cards
 executor: fetch

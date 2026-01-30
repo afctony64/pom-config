@@ -1,5 +1,6 @@
 type: core
 class: Source
+version: 1.0
 description: Master entity source collection - comprehensive contact/physical record with optional digital presence linking to Domain collection
 invertedIndexConfig:
   bm25:
