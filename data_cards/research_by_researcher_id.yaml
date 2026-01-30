@@ -21,7 +21,7 @@ executor: fetch  # ✅ Use native methods (native methods)
 
 # 🎨 Frontend Display Control
 display: true  # User-facing card for single researcher queries
-relationship_support: false  # Single collection, no traversal needed
+relationship_support: true  # Optional traversal via enable_traversal
 
 personas:
   - "*"
@@ -40,6 +40,11 @@ parameters:
   # No traversal needed - single collection query
   relationship_traversal: false
   dynamic_templates: false
+
+  # Optional traversal for deep-dive researchers (customer/competitor/partner)
+  enable_traversal: false
+  reference_field: null
+  preserve_reference_arrays: false
   
   # Fetch limits
   limit: 1000
@@ -69,6 +74,108 @@ collections:
           - field: ready_for_review
             operator: equal
             value: true
+      keyCustomerRefs:
+        target_collection: Domain
+        field_set: [standard]
+        references:
+          industry:
+            target_collection: Research_industry
+            field_set: [standard]
+          financial:
+            target_collection: Research_financial
+            field_set: [standard]
+          product:
+            target_collection: Research_product
+            field_set: [standard]
+          leadership:
+            target_collection: Research_leadership
+            field_set: [standard]
+          customer:
+            target_collection: Research_customer
+            field_set: [standard]
+          competitor:
+            target_collection: Research_competitor
+            field_set: [standard]
+          partner:
+            target_collection: Research_partner
+            field_set: [standard]
+          journalist:
+            target_collection: Research_journalist
+            field_set: [standard]
+          social:
+            target_collection: Research_social
+            field_set: [standard]
+          risk:
+            target_collection: Research_risk
+            field_set: [standard]
+      keyCompetitorRefs:
+        target_collection: Domain
+        field_set: [standard]
+        references:
+          industry:
+            target_collection: Research_industry
+            field_set: [standard]
+          financial:
+            target_collection: Research_financial
+            field_set: [standard]
+          product:
+            target_collection: Research_product
+            field_set: [standard]
+          leadership:
+            target_collection: Research_leadership
+            field_set: [standard]
+          customer:
+            target_collection: Research_customer
+            field_set: [standard]
+          competitor:
+            target_collection: Research_competitor
+            field_set: [standard]
+          partner:
+            target_collection: Research_partner
+            field_set: [standard]
+          journalist:
+            target_collection: Research_journalist
+            field_set: [standard]
+          social:
+            target_collection: Research_social
+            field_set: [standard]
+          risk:
+            target_collection: Research_risk
+            field_set: [standard]
+      keyPartnerRefs:
+        target_collection: Domain
+        field_set: [standard]
+        references:
+          industry:
+            target_collection: Research_industry
+            field_set: [standard]
+          financial:
+            target_collection: Research_financial
+            field_set: [standard]
+          product:
+            target_collection: Research_product
+            field_set: [standard]
+          leadership:
+            target_collection: Research_leadership
+            field_set: [standard]
+          customer:
+            target_collection: Research_customer
+            field_set: [standard]
+          competitor:
+            target_collection: Research_competitor
+            field_set: [standard]
+          partner:
+            target_collection: Research_partner
+            field_set: [standard]
+          journalist:
+            target_collection: Research_journalist
+            field_set: [standard]
+          social:
+            target_collection: Research_social
+            field_set: [standard]
+          risk:
+            target_collection: Research_risk
+            field_set: [standard]
 
 # Chat intelligence integration
 chat_integration:
