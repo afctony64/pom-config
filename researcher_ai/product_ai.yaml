@@ -101,6 +101,35 @@ tool_guidance:
       - Basic product info (on website)
       - Feature lists (check docs)
       - Pricing (see pricing page)
+
+  citation_format:
+    priority: high
+    usage_instructions: |
+      📝 CLEAN FACTS ONLY - no inline URLs in LLM fields:
+      ❌ "Cloud-native integration platform — see https://example.com/platform"
+      ✅ "Cloud-native integration platform with 500+ pre-built connectors"
+
+      For each LLM field, put supporting URLs in the matching CIT field:
+      - productTypeLLM → productTypeCIT
+      - technologyStackLLM → technologyStackCIT
+      - pricingModelLLM → pricingModelCIT
+      - integrationProfileLLM → integrationProfileCIT
+      - productMaturityLLM → productMaturityCIT
+      - goToMarketLLM → goToMarketCIT
+
+      Put ALL source URLs in the global `citations` array field too.
+
+# Parallel array enrichment configuration
+# Uses generic parallel_array_enricher.prompty to fill post fields via web search
+parallel_array_enrichment:
+  enabled: true
+  anchor_field: products
+  context_fields:
+    - domain                    # Source entity domain for disambiguation
+  # enrich_fields: Auto-detected from schema via sets: [post]
+  search_query_template: >
+    {subject} {domain} product type technology stack features pricing domain evidence
+
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
 
 citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."

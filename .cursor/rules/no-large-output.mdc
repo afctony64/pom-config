@@ -1,0 +1,12 @@
+---
+description: Avoid large output and log streaming
+alwaysApply: true
+---
+
+# Avoid Large Output and Log Streaming
+
+- Do not stream logs or read large files.
+- Read at most 50-200 lines from any log or file when needed.
+- Prefer summaries and final outcomes over progress updates.
+- Use small, bounded searches (e.g., head limits).
+- Avoid repeated polling unless explicitly requested.

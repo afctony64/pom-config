@@ -103,6 +103,17 @@ citation_note: "No inline URLs in field values; put sources in CIT/evidence fiel
 entity_spawn:
   enabled: true  # Schema defines fields via sets: [spawn]
 
+# Parallel array enrichment configuration
+# Uses generic parallel_array_enricher.prompty to fill post fields via web search
+parallel_array_enrichment:
+  enabled: true
+  anchor_field: keyPartners
+  context_fields:
+    - domain                    # Source entity domain for disambiguation
+  # enrich_fields: Auto-detected from schema via sets: [post]
+  search_query_template: >
+    {subject} {domain} partner integration type marketplace evidence domain
+
 # Post-execution tools: Run automatically after partner researcher completes
 # Priority-ordered: lower number runs first
 post_execution_tools:
