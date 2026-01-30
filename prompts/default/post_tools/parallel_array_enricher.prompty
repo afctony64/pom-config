@@ -49,7 +49,8 @@ tools:
 tool_guidance:
   brave_search:
     priority: medium
-    max_calls: 3
+    # Issue #798: Reduce from 3 to 2 to minimize API calls and timeouts
+    max_calls: 2
     when_to_use: |
       **DO NOT use brave_search for domain resolution** - use subject_domain or domain_candidates instead.
 
@@ -118,6 +119,9 @@ model:
     max_completion_tokens: 4000
     timeout: 120
     max_retries: 2
+    # Issue #798: Reduce max_turns from default 5 to 2 for faster enrichment
+    # Domain is pre-resolved via injectors, so LLM only needs 1-2 turns
+    max_turns: 2
 
 ---
 
