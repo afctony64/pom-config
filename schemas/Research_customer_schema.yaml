@@ -701,6 +701,11 @@ properties:
   - Pharmaceuticals & Biotechnology
   - Healthcare Services & Facilities
   - Health IT & Digital Health
+  - Public Administration
+  - Municipal Services & Utilities
+  - Public Safety
+  - Courts & Justice
+  - Education Administration
   - Not Available
   - Unknown
   parallel_to: keyCustomers
