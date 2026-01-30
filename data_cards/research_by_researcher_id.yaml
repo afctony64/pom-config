@@ -28,15 +28,15 @@ personas:
 
 parameters:
   type: fetch  # Legacy parameter format (for compatibility)
-  
+
   # Default collection (fallback if researcher_id not provided)
   collection: Research_product
-  
+
   # ✅ KEY PARAMETER: researcher_id resolves to Research_{researcher_id}
   # DataFactory handles resolution using tenant group config
   # Options: industry, financial, product, customer, leadership, competitor, partner, risk, journalist, social
   researcher_id: product  # Default, can be overridden by user
-  
+
   # No traversal needed - single collection query
   relationship_traversal: false
   dynamic_templates: false
@@ -45,7 +45,7 @@ parameters:
   enable_traversal: false
   reference_field: null
   preserve_reference_arrays: false
-  
+
   # Fetch limits
   limit: 1000
   limit_default: 1000
