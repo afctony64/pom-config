@@ -156,6 +156,10 @@ properties:
   - spawn
   metadata:
     order: 201
+    placeholder_values:
+    - Unknown
+    - Not disclosed
+    - N/A
 - name: keyPartnersIds
   dataType:
   - text[]
@@ -194,6 +198,7 @@ properties:
   tags:
   - partner
   - research
+  - web
   sets:
   - array
   - prompt
@@ -223,6 +228,7 @@ properties:
   tags:
   - partner
   - research
+  - web
   sets:
   - array
   - spawn

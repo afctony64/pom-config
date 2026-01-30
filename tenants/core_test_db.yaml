@@ -1,0 +1,54 @@
+id: core_test_db
+name: Core Test Database
+type: tenant
+description: Core test database tenant for pom-core integration tests
+
+# Groups: company (Domain + Research_* collections), url (Page_* collections only, excludes Domain)
+# Note: Knowledge_base access is granted separately if needed
+groups: ["company", "url"]
+
+# User/persona information (configuration data)
+user:
+  name: Core Test User
+  email: core-test@testdb.org
+  role: Core Test Database
+
+# Analysis configuration - OPTIMIZED for token efficiency
+analysis_config:
+  mission: "Core test database for pom-core integration validation"
+  industry_focus: ["integration_testing", "data_validation", "system_testing"]
+
+# Data sources configuration (infrastructure only)
+data_sources:
+  data_dir: "Data"
+  upload_dir: "Data/uploads"
+
+# Collection routing - ALL collections route to mac-weaviate for testing
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
+collections:
+  # ENTITY MODEL: Domain (primary entity)
+  Domain: "mac"
+
+  # ENTITY MODEL: Research_* collections (current production)
+  Research_competitor: "mac"
+  Research_customer: "mac"
+  Research_financial: "mac"
+  Research_industry: "mac"
+  Research_journalist: "mac"
+  Research_leadership: "mac"
+  Research_partner: "mac"
+  Research_product: "mac"
+  Research_risk: "mac"
+  Research_social: "mac"
+
+  # Page collections
+  Page_facts: "mac"
+  Page_intelligence: "mac"
+  Page_source: "mac"
+  Page_content: "mac"
+  Page_researcher: "mac"
+
+  # Other collections
+  API_intelligence: "mac"
+  Source: "mac"
+  Opportunity: "mac"

@@ -131,6 +131,10 @@ properties:
   - spawn
   metadata:
     order: 201
+    placeholder_values:
+    - Unknown
+    - Not disclosed
+    - N/A
 - name: customerDomain
   dataType:
   - text[]
@@ -142,6 +146,7 @@ properties:
   tags:
   - customer
   - research
+  - web
   sets:
   - spawn
   - standard
@@ -490,6 +495,7 @@ properties:
   - Telecommunications
   - Government
   - Nonprofit
+  - Not Available
   - Unknown
   tags:
   - research
@@ -528,6 +534,7 @@ properties:
   - Pharmaceuticals & Biotechnology
   - Healthcare Services & Facilities
   - Health IT & Digital Health
+  - Not Available
   - Unknown
   tags:
   - research
@@ -612,7 +619,7 @@ properties:
 - name: keyCustomerSectorCat
   dataType:
   - text[]
-  description: 'Industry sector for {subject} - Level 1 top-level classification (Software, Healthcare, Financial Services, etc.). Use "Unknown" if sector cannot be determined.'
+  description: 'Industry sector for {subject} - Level 1 top-level classification (Software, Healthcare, Financial Services, etc.). Use "Not Available" if sector cannot be determined.'
   enum:
   - Software
   - Professional Services
@@ -631,6 +638,7 @@ properties:
   - Telecommunications
   - Government
   - Nonprofit
+  - Not Available
   - Unknown
   parallel_to: keyCustomers
   moduleConfig:
@@ -668,7 +676,7 @@ properties:
 - name: keyCustomerIndustryCat
   dataType:
   - text[]
-  description: 'Industry category for {subject} - Level 2 mid-level classification (e.g., "Enterprise Applications", "Medical Devices", "Banking & Lending"). Use "Unknown" if industry cannot be determined.'
+  description: 'Industry category for {subject} - Level 2 mid-level classification (e.g., "Enterprise Applications", "Medical Devices", "Banking & Lending"). Use "Not Available" if industry cannot be determined.'
   enum:
   - Enterprise Applications
   - Data & AI Platforms
@@ -693,6 +701,7 @@ properties:
   - Pharmaceuticals & Biotechnology
   - Healthcare Services & Facilities
   - Health IT & Digital Health
+  - Not Available
   - Unknown
   parallel_to: keyCustomers
   moduleConfig:

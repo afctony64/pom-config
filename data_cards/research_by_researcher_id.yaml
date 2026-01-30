@@ -46,6 +46,13 @@ parameters:
   reference_field: null
   preserve_reference_arrays: false
 
+  # Traversal depth control - prevents Domain fields from being included when traversing to Research_*
+  traversal:
+    max_depth: 2  # Research_* → Domain (1) → Research_* properties resolved (2), Domain fields excluded at depth 2
+    max_complexity: 200
+    policies:
+      domainBeacon: skip  # Skip circular Domain refs from researchers
+
   # Fetch limits
   limit: 1000
   limit_default: 1000
@@ -76,41 +83,10 @@ collections:
             value: true
       keyCustomerRefs:
         target_collection: Domain
-        field_set: [standard]
-        references:
-          industry:
-            target_collection: Research_industry
-            field_set: [standard]
-          financial:
-            target_collection: Research_financial
-            field_set: [standard]
-          product:
-            target_collection: Research_product
-            field_set: [standard]
-          leadership:
-            target_collection: Research_leadership
-            field_set: [standard]
-          customer:
-            target_collection: Research_customer
-            field_set: [standard]
-          competitor:
-            target_collection: Research_competitor
-            field_set: [standard]
-          partner:
-            target_collection: Research_partner
-            field_set: [standard]
-          journalist:
-            target_collection: Research_journalist
-            field_set: [standard]
-          social:
-            target_collection: Research_social
-            field_set: [standard]
-          risk:
-            target_collection: Research_risk
-            field_set: [standard]
+        fields: [domain]  # Only fetch domain field - no further traversal
       keyCompetitorRefs:
         target_collection: Domain
-        field_set: [standard]
+        fields: [domain]  # Only fetch domain field - minimal for traversal
         references:
           industry:
             target_collection: Research_industry
@@ -144,7 +120,7 @@ collections:
             field_set: [standard]
       keyPartnerRefs:
         target_collection: Domain
-        field_set: [standard]
+        fields: [domain]  # Only fetch domain field - minimal for traversal
         references:
           industry:
             target_collection: Research_industry

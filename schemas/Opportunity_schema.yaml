@@ -1,6 +1,7 @@
 type: core
 class: Opportunity
 id: Opportunity
+version: 1.0
 description: Schema for opportunities with flat field structure (Entity Model - no sourceData nesting)
 invertedIndexConfig:
   bm25:
@@ -588,7 +589,6 @@ references:
 group: company
 weaviate_instance: cloud
 collection_name: Opportunity
-id: Opportunity
 field_sets:
   system:
   - uuid
