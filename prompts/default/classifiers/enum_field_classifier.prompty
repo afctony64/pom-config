@@ -87,7 +87,7 @@ user:
 ## Available Options
 
 {% for option in enum_values %}
-{{ loop.index }}. {{ option }}
+- {{ option }}
 {% endfor %}
 
 ## Your Classification
