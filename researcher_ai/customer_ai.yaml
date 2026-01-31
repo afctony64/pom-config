@@ -123,7 +123,7 @@ parallel_array_enrichment:
   # Domain resolution: "Yoti B2B SaaS customer company official website"
   # Evidence/details: "{subject} {domain} customer case study use case industry segment size evidence"
   search_query_template: >
-    {element} B2B SaaS customer company official website
+    {subject} official website
 
 # Post-execution tools for customer research
 post_execution_tools:

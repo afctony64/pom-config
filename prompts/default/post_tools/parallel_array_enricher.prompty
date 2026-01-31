@@ -75,7 +75,7 @@ data_requirements:
       template_vars:
         tool: brave_search
         params:
-          query: "{{ subject }} {% if tenant and tenant.description %}{{ tenant.description[:100] }}{% endif %} official website domain"
+          query: "{{ subject }} official website"
           count: 5
         inject_as: domain_candidates
     # Page facts - search using field descriptions
@@ -126,21 +126,19 @@ model:
 ---
 
 system:
-You are enriching a single record for **{{ subject }}**.
-
 {% set props = record.get('properties') or record if record else {} %}
 {% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
 {% set tenant_name = tenant.name|default(tenant.id) if tenant else 'Unknown' %}
-{% set tenant_industry = (tenant|attr('industry_focus'))|default(props.get('industry') if props else '') %}
+{% set tenant_desc = tenant.description|default('') if tenant else '' %}
+{% set researcher_type = researcher_ai.researcher_type|default('related entity') if researcher_ai else 'related entity' %}
 {# Detect the domain field name dynamically from post_fields (e.g., competitorDomain, customerDomain, partnerDomain) #}
 {% set ns = namespace(domain_field='') %}
 {% for field in post_fields %}{% if 'Domain' in field.name and ns.domain_field == '' %}{% set ns.domain_field = field.name %}{% endif %}{% endfor %}
 {% set domain_field_name = ns.domain_field %}
 
-Context:
-{% if tenant %}- Tenant: {{ tenant.name|default(tenant.id) }}{% if tenant.description %} - {{ tenant.description }}{% endif %}{% endif %}
-{% if researcher_ai and researcher_ai.researcher_identity %}- Researcher: {{ researcher_ai.researcher_identity.title }} - {{ researcher_ai.researcher_identity.mission }}{% endif %}
-- Source Entity: {{ entity_name }}
+You are researching **{{ subject }}** as a {{ researcher_type }} of **{{ entity_name }}** for {{ tenant_name }}{% if tenant_desc %}, {{ tenant_desc }}{% endif %}.
+
+**{{ subject }}** is the subject being classified - fill in attributes about {{ subject }}, not {{ entity_name }}.
 
 **DOMAIN RESOLUTION (3 modes):**
 {% if person_domain is defined and person_domain %}
@@ -157,8 +155,13 @@ Fields to fill:
 {% endfor %}
 
 Disambiguation:
-- Include tenant context ({{ tenant_name }}) and industry when relevant{% if tenant_industry %} ({{ tenant_industry }}){% endif %}
 - For ambiguous names (common company/person names), add context from the anchor field ({{ anchor_field }})
+
+**WELL-KNOWN ENTITIES:**
+For famous companies, cities, government agencies, or institutions - trust your training knowledge.
+- You know "City of Denver" is Government, "Microsoft" is Software, "Harvard" is Education
+- page_facts below may be irrelevant (from wrong domains) - ignore if they don't match {{ subject }}
+- Only use page_facts if they clearly reference {{ subject }} specifically
 
 Rules:
 {% if subject_domain is defined and subject_domain and not (person_domain is defined and person_domain) %}

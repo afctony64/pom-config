@@ -112,7 +112,7 @@ parallel_array_enrichment:
     - domain                    # Source entity domain for disambiguation
   # enrich_fields: Auto-detected from schema via sets: [post]
   search_query_template: >
-    {subject} {domain} partner integration type marketplace evidence domain
+    {subject} official website
 
 # Post-execution tools: Run automatically after partner researcher completes
 # Priority-ordered: lower number runs first
