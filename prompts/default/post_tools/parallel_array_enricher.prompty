@@ -187,7 +187,7 @@ user:
 {% if domain_candidates is defined and domain_candidates and domain_candidates.results is defined %}
 **DOMAIN CANDIDATES FOR {{ subject }} (pre-searched - pick the correct one):**
 {% for result in domain_candidates.results[:5] %}
-- {{ result.url }} | {{ result.title }}
+- {{ result.url }} | {{ result.title }}{% if result.description %} | {{ result.description }}{% endif %}
 {% endfor %}
 {% endif %}
 
