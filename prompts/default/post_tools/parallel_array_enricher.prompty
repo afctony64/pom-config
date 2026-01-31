@@ -49,20 +49,22 @@ tools:
 tool_guidance:
   brave_search:
     priority: medium
-    # Issue #798: Reduce from 3 to 2 to minimize API calls and timeouts
-    max_calls: 2
+    # Balance: allow brave_search fallback when page_facts insufficient
+    max_calls: 4
     when_to_use: |
+      **ALWAYS check page_facts FIRST** before calling brave_search.
+
+      Use brave_search when:
+      - page_facts are missing or insufficient for the field
+      - page_facts don't contain information specific to the subject
+      - You need fresh/current data (e.g., recent funding, current positioning)
+
       **DO NOT use brave_search for domain resolution** - use subject_domain or domain_candidates instead.
 
-      Use brave_search ONLY when:
-      - page_facts are missing or insufficient for NON-DOMAIN fields
-      - You need fresh data for specific field values (e.g., positioning, funding)
-
-      Search strategy per field:
-      1. Extract key terms from the field description
-      2. Search: "{subject} [key terms from description]"
+      Search strategy:
+      1. Check page_facts first - if they answer the field, use them
+      2. If page_facts are empty/irrelevant for a field, search: "{subject} [key terms from field description]"
       3. For well-known subjects, general knowledge is acceptable as fallback
-      **READ THE FIELD DESCRIPTIONS** - they contain search guidance!
       For common names, add the tenant name and industry vertical to disambiguate.
 
 data_requirements:
@@ -119,9 +121,9 @@ model:
     max_completion_tokens: 4000
     timeout: 120
     max_retries: 2
-    # Issue #798: Reduce max_turns from default 5 to 2 for faster enrichment
-    # Domain is pre-resolved via injectors, so LLM only needs 1-2 turns
-    max_turns: 2
+    # Issue #798 fix: 4 turns allows page_facts check + brave_search fallback
+    # Domain is pre-resolved via injectors; brave_search enabled for field enrichment
+    max_turns: 4
 
 ---
 
@@ -144,7 +146,7 @@ You are researching **{{ subject }}** as a {{ researcher_type }} of **{{ entity_
 {% if person_domain is defined and person_domain %}
 🧑 **PERSON MODE:** {{ subject }} is a person. Use {{ subject_domain }} only as a LinkedIn hint.
 {% elif subject_domain is defined and subject_domain %}
-✅ **MODE 1 - RESOLVED:** Domain for {{ subject }} is **{{ subject_domain }}**. Use page_facts only.
+✅ **MODE 1 - RESOLVED:** Domain for {{ subject }} is **{{ subject_domain }}**. Use page_facts first, brave_search if insufficient.
 {% else %}
 📋 **MODE 2 - CANDIDATES:** Pick domain from pre-searched DOMAIN CANDIDATES in user message.
 {% endif %}
@@ -165,11 +167,11 @@ For famous companies, cities, government agencies, or institutions - trust your 
 
 Rules:
 {% if subject_domain is defined and subject_domain and not (person_domain is defined and person_domain) %}
-- **MODE 1**: Domain resolved. Use page_facts only. Do NOT call brave_search.
+- **MODE 1**: Domain resolved. Use page_facts FIRST. If page_facts are insufficient for a field, use brave_search.
 {% elif person_domain is defined and person_domain %}
 - **PERSON MODE**: Use brave_search for LinkedIn profile/background/tenure. Use {{ subject_domain }} as a hint.
 {% else %}
-- **MODE 2**: Pick {{ domain_field_name }} from DOMAIN CANDIDATES (match title to {{ tenant_industry }} context).
+- **MODE 2**: Pick {{ domain_field_name }} from DOMAIN CANDIDATES (match title to {{ subject }}).
 - For other fields: Use page_facts first, then brave_search if needed.
 {% endif %}
 {% if domain_field_name %}- **CRITICAL**: {{ domain_field_name }} must NEVER equal "{{ entity_name }}" (the source entity). {{ subject }} is a DIFFERENT entity.{% endif %}
@@ -207,7 +209,8 @@ user:
 {% if subject_domain is defined and subject_domain and not (person_domain is defined and person_domain) %}
 **MODE 1 - DOMAIN RESOLVED:** {{ subject_domain }}
 1. Use {{ domain_field_name }} = "{{ subject_domain }}"
-2. Extract other fields from page_facts only. Do NOT call brave_search.
+2. Extract other fields from page_facts FIRST.
+3. If page_facts are missing or insufficient for a field, use brave_search to fill gaps.
 {% elif person_domain is defined and person_domain %}
 **PERSON MODE - LINKEDIN SEARCH:**
 1. Use brave_search to find the best LinkedIn profile for {{ subject }}.
