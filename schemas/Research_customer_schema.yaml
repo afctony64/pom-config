@@ -624,7 +624,7 @@ properties:
 - name: keyCustomerSectorCat
   dataType:
   - text[]
-  description: 'Industry sector for {subject} - Level 1 top-level classification (Software, Healthcare, Financial Services, etc.). Use "Not Available" if sector cannot be determined.'
+  description: 'Industry sector for {subject} - Level 1 top-level classification. INFER from keyCustomerIndustryCat: each industry maps to exactly one sector (e.g., Enterprise Applications → Software, Banking & Lending → Financial Services, Medical Devices → Healthcare). Use "Not Available" only if industry is unknown.'
   enum:
   - Software
   - Professional Services
