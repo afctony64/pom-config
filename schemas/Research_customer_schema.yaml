@@ -624,7 +624,7 @@ properties:
 - name: keyCustomerSectorCat
   dataType:
   - text[]
-  description: 'Industry sector for {subject} - Level 1 top-level classification. INFER from keyCustomerIndustryCat: each industry maps to exactly one sector (e.g., Enterprise Applications → Software, Banking & Lending → Financial Services, Medical Devices → Healthcare). Use "Not Available" only if industry is unknown.'
+  description: 'Industry sector for {subject} - Level 1 top-level classification. Government = cities, states, federal agencies, water utilities, public services. Software = tech companies, SaaS. Financial Services = banks, insurers, fintech. Healthcare = hospitals, pharma, medical devices. ALWAYS fill this field based on what {subject} is.'
   enum:
   - Software
   - Professional Services
@@ -681,7 +681,7 @@ properties:
 - name: keyCustomerIndustryCat
   dataType:
   - text[]
-  description: 'Industry category for {subject} - Level 2 mid-level classification. INFER from keyCustomerSectorCat: Government → Public Administration/Municipal Services & Utilities/Public Safety/Courts & Justice; Software → Enterprise Applications/Data & AI/DevOps/etc; Financial Services → Banking/Investment/Insurance/Payments. Use "Not Available" only if sector is unknown.'
+  description: 'Industry category for {subject} - Level 2 mid-level classification. Water utilities/public water = Municipal Services & Utilities. City/state/federal agencies = Public Administration. Police/fire = Public Safety. Courts = Courts & Justice. SaaS/software = Enterprise Applications or Vertical SaaS. ALWAYS fill this field based on what {subject} is.'
   enum:
   - Enterprise Applications
   - Data & AI Platforms
