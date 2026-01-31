@@ -681,7 +681,7 @@ properties:
 - name: keyCustomerIndustryCat
   dataType:
   - text[]
-  description: 'Industry category for {subject} - Level 2 mid-level classification (e.g., "Enterprise Applications", "Medical Devices", "Banking & Lending"). Use "Not Available" if industry cannot be determined.'
+  description: 'Industry category for {subject} - Level 2 mid-level classification. INFER from keyCustomerSectorCat: Government → Public Administration/Municipal Services & Utilities/Public Safety/Courts & Justice; Software → Enterprise Applications/Data & AI/DevOps/etc; Financial Services → Banking/Investment/Insurance/Payments. Use "Not Available" only if sector is unknown.'
   enum:
   - Enterprise Applications
   - Data & AI Platforms
