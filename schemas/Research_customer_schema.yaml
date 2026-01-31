@@ -213,7 +213,7 @@ properties:
 - name: keyCustomerEvidence
   dataType:
   - text[]
-  description: 'Brief description of {subject} as an organization: what type of entity (city, water utility, company, agency), what industry/sector, what they do. Example: "Denver Water is a municipal water utility serving the Denver metro area" or "Acme Corp is an enterprise software company in fintech". This context is used for industry/sector classification.'
+  description: 'Brief description of {subject}: what type of organization, what industry/sector, what they do. Used for classification context.'
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
