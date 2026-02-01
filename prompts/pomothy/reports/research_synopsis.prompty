@@ -9,10 +9,9 @@ classification:
   complexity: complex         # simple=C tier, medium=B tier, complex=A tier
   context_size: large         # small=<8K, medium=8-32K, large=32-128K, huge=>128K
   priority: quality           # speed | balanced | quality
-  provider_constraint: free   # free (Ollama) | paid (API) | any - PENDING pom-core v2.1
+  provider_constraint: paid   # free (Ollama) | paid (API) | any - PENDING pom-core v2.1
   # Derived minimum tier: A (from complexity=complex)
   # Best free model: gemma3:12b-it-qat (instruction-tuned, highest quality)
-  # mode: urgent in configuration routes to Groq (vs batch/Ollama)
 
 # ✅ KEY DESIGN FEATURE: Prompt template declares what OTHER PROMPT TEMPLATES it depends on
 # This is declarative and "in reverse" - the prompt says what it needs
@@ -74,7 +73,6 @@ model:
   configuration:
     type: openai_chat
     model: gpt-5-nano
-    mode: urgent  # Routes to Groq for faster inference (vs batch/Ollama)
   parameters:
     max_tokens: 5000  # ✅ Increased from 1000 to prevent truncation
 ---

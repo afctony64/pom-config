@@ -36,7 +36,6 @@ model:
   configuration:
     type: openai_chat
     model: gpt-5-nano
-    mode: urgent
   parameters:
     max_tokens: 5000
 ---
