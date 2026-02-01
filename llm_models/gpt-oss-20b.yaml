@@ -14,24 +14,25 @@ adapter_config:
   base_url_env: GROQ_API_KEY
 parameters:
   temperature: 0.7
-  max_tokens: 8000
+  max_tokens: 65536
   top_p: 0.9
 capabilities:
   structured_output: true
-  reasoning: false
-  tool_calling: false
+  reasoning: true
+  tool_calling: true
   streaming: true
   vision: false
-  function_calling: false
+  function_calling: true
   multimodal: false
 cost:
-  per_1m_input_tokens: 0.59
-  per_1m_output_tokens: 0.99
+  per_1m_input_tokens: 0.075
+  per_1m_cached_input_tokens: 0.037
+  per_1m_output_tokens: 0.30
   currency: USD
-  notes: Placeholder values copied from gpt-oss:120b; verify pricing for 20B
+  notes: Groq pricing for openai/gpt-oss-20b
 performance:
-  avg_latency_ms: 300
-  tokens_per_second: 300
+  avg_latency_ms: 0  # Not published in Groq docs
+  tokens_per_second: 1000  # Groq docs: ~1000 tps
   context_window: 131072
 context_variants:
   throughput: {context_window: 16384}
@@ -39,16 +40,18 @@ context_variants:
   quality: {context_window: 65536}
   extended: {context_window: 131072}
 metadata:
-  description: GPT-OSS 20B on Groq LPU. Placeholder profile copied from 120B; verify model availability and limits.
+  description: GPT-OSS 20B on Groq LPU (openai/gpt-oss-20b).
   category: reasoning
-  status: provisional
+  status: stable
   release_date: '2025-01-01'
   last_verified: '2025-12-18'
   family: gpt-oss
   family_tier: balanced
+  max_output_tokens: 65536
   recommended_for:
     - Cost-effective reasoning
-    - Medium-scale analysis
+    - Tool-augmented applications
+    - Long-context processing
   not_recommended_for:
     - Maximum quality reasoning (use 120b)
 requirements:
@@ -63,7 +66,7 @@ resource_class:
   class: C
   vram_gb: 0
   throughput_tier: high
-  tokens_per_second_single: 300
+  tokens_per_second_single: 1000
 tier: A
 tier_rank: 2
 dimension_scores:
@@ -79,156 +82,6 @@ pom_benchmarks:
   calibration_version: '2.0'
   aggregate:
     avg_quality: 90
-    avg_latency_ms: 300
+    avg_latency_ms: 0
     total_prompts_tested: 0
-benchmarks: {}
-# ==============================================================================
-# MODEL CARD: gpt-oss:20b
-# ==============================================================================
-# GPT-OSS 20B - Balanced open source model
-# Good quality with reasonable resource requirements
-# ==============================================================================
-
-id: "gpt-oss:20b"
-name: GPT-OSS 20B
-type: llm_model
-version: "1.0.0"
-
-# === PROVIDER CONFIGURATION ===
-provider:
-  name: ollama
-  api_type: ollama
-
-# === ADAPTER CONFIGURATION ===
-adapter_config:
-  type: ollama
-  model: "gpt-oss:20b"
-  base_url: null
-  base_url_env: OLLAMA_HOST
-
-# === DEFAULT PARAMETERS ===
-parameters:
-  temperature: 0.7
-  max_tokens: 3000
-  top_p: 0.9
-
-# === CAPABILITIES ===
-capabilities:
-  structured_output: true
-  reasoning: false
-  tool_calling: false
-  streaming: true
-  vision: false
-  function_calling: false
-  multimodal: false
-
-# === COST ===
-cost:
-  per_1m_input_tokens: 0.0
-  per_1m_output_tokens: 0.0
-  currency: USD
-  notes: "Free local inference on DGX Spark"
-
-# === PERFORMANCE ===
-performance:
-  avg_latency_ms: 2200
-  tokens_per_second: 30
-  context_window: 24576  # Default 24K for 12B+ models - ratchet adjusts dynamically
-
-# Context variants for strategy-aware context management (local Ollama)
-context_variants:
-  throughput: {context_window: 8192}   # Fast processing
-  balanced: {context_window: 16384}    # Good balance
-  quality: {context_window: 24576}     # Full context for best quality
-
-# === METADATA ===
-metadata:
-  description: "GPT-OSS 20B - Balanced 20.9B parameter open source model. Good quality with reasonable throughput."
-  category: general
-  status: stable
-  release_date: "2025-01-01"
-  last_verified: "2025-12-05"
-  family: gpt-oss
-  family_tier: quality
-  recommended_for:
-    - "General purpose generation"
-    - "Balanced quality/speed tasks"
-    - "Batch processing"
-  not_recommended_for:
-    - "Maximum quality (use 120b)"
-    - "Long context tasks (32K limit)"
-
-# === HARDWARE REQUIREMENTS ===
-requirements:
-  gpu_vram_mb: 13800
-  system_ram_mb: 16000
-  cpu_cores: 4.0
-
-# === HARDWARE-SPECIFIC OPTIMIZATION ===
-hardware_detection:
-  execution_mode: local_gpu
-  optimal_concurrency: 6
-  max_concurrency: 8
-  dgx_spark:
-    optimal_parallel_workers: 8
-    recommended_batch_size: 1
-    memory_usage_gb: 13.8
-    estimated_throughput: 0.4
-    tokens_per_second: 30
-    notes: "Balanced capacity on Spark"
-  gpu_24gb_plus:
-    optimal_parallel_workers: 1
-    recommended_batch_size: 1
-  gpu_8gb_plus:
-    optimal_parallel_workers: 0
-    recommended_batch_size: 0
-    notes: "Requires 14GB+ VRAM"
-  cpu_only:
-    optimal_parallel_workers: 1
-    recommended_batch_size: 1
-    notes: "Very slow"
-
-# Groq fallback - ultra-fast cloud inference
-groq_fallback:
-  model: "openai/gpt-oss-20b"
-  cost_per_1m_input: 0.075
-  cost_per_1m_output: 0.30
-  tokens_per_second: 1000
-
-routing: [mac, spark, groq]  # Mac Metal 88 tok/s > Spark 12 tok/s
-
-resource_class:
-  class: C
-  vram_gb: 13.8
-  parallel_capacity_spark: 9
-  recommended_parallel: 8
-  throughput_tier: moderate
-  tokens_per_second_single: 30
-
-# ==============================================================================
-# MODEL RANKING SYSTEM
-# ==============================================================================
-tier: A
-tier_rank: 3
-
-# === DIMENSION SCORES (0-100) ===
-dimension_scores:
-  summarization: 84
-  reasoning: 86
-  instruction: 84
-  analysis: 85
-  coding: 80
-  speed: 38
-  context_efficiency: 70
-
-# === POM-SPECIFIC BENCHMARKS ===
-pom_benchmarks:
-  last_calibration: "2025-12-05"
-  calibration_version: "2.0"
-  prompts_tested: {}
-  aggregate:
-    avg_quality: 84
-    avg_latency_ms: 2200
-    total_prompts_tested: 0
-
 benchmarks: {}

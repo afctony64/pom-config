@@ -28,34 +28,36 @@ cost:
   per_1m_input_tokens: 0.0
   per_1m_output_tokens: 0.0
   currency: USD
-  notes: Free local inference on DGX Spark (placeholder; verify for 4B)
+  notes: Free local inference on DGX Spark
 performance:
-  avg_latency_ms: 63887
-  tokens_per_second: 21
-  context_window: 8192
+  avg_latency_ms: 0  # Not published for Ollama distributions
+  tokens_per_second: 0  # Not published for Ollama distributions
+  context_window: 4096  # Ollama default context length (configurable)
 context_variants:
   throughput: {context_window: 4096}
-  balanced: {context_window: 6144}
-  quality: {context_window: 8192}
+  balanced: {context_window: 8192}
 metadata:
-  description: 'Alibaba Qwen 3 4B. Placeholder profile copied from qwen3:14b; verify sizing and performance.'
+  description: Qwen 3 4B (Ollama Q4_K_M). Ollama default context is 4096 (configurable).
   category: reasoning
-  status: provisional
+  status: stable
   release_date: '2025-04-01'
   last_verified: '2025-12-22'
   family: qwen3
   family_tier: throughput
   strength: reasoning
+  model_size_gb: 2.5  # Ollama listing
+  parameters_b: 4.02  # Ollama listing
+  quantization: Q4_K_M  # Ollama listing
   recommended_for:
     - Fast local inference
     - Lightweight reasoning tasks
   not_recommended_for:
     - Deep analysis workloads
-  notes: Placeholder values derived from qwen3:14b; confirm with benchmarks.
+  notes: Context length can be increased in Ollama settings if VRAM allows.
 requirements:
-  gpu_vram_mb: 4500
-  system_ram_mb: 8000
-  cpu_cores: 4.0
+  gpu_vram_mb: 2500  # Model size from Ollama listing
+  system_ram_mb: 6000
+  cpu_cores: 2.0
 hardware_detection:
   execution_mode: local_gpu
   optimal_concurrency: 10
@@ -65,11 +67,11 @@ routing:
   - mac
 resource_class:
   class: C
-  vram_gb: 4.5
+  vram_gb: 2.5
   parallel_capacity_spark: 16
   recommended_parallel: 12
   throughput_tier: high
-  tokens_per_second_single: 45
+  tokens_per_second_single: 0  # Not published for Ollama distributions
 tier: B
 tier_rank: 3
 dimension_scores:
@@ -86,32 +88,6 @@ pom_benchmarks:
   prompts_tested: {}
   aggregate:
     avg_quality: 75
-    avg_latency_ms: 1400
+    avg_latency_ms: 0
     total_prompts_tested: 0
-benchmarks: {}
-id: "qwen3:4b"
-name: Qwen 3 4B
-type: llm_model
-version: "1.0.0"
-provider: {name: ollama, api_type: ollama}
-adapter_config: {type: ollama, model: "qwen3:4b", base_url: null, base_url_env: OLLAMA_HOST}
-parameters: {temperature: 0.7, max_tokens: 1000, top_p: 0.9}
-capabilities: {structured_output: true, reasoning: false, tool_calling: true, streaming: true, vision: false, function_calling: true, multimodal: false}
-cost: {per_1m_input_tokens: 0.0, per_1m_output_tokens: 0.0, currency: USD, notes: "Free local"}
-performance: {avg_latency_ms: 400, tokens_per_second: 100, context_window: 8192}  # Practical (theoretical: 131072)
-
-# Context variants for strategy-aware context management
-context_variants:
-  throughput: {context_window: 4096}   # Fast processing
-  balanced: {context_window: 8192}     # Default for 4B model
-  quality: {context_window: 16384}     # Extended for better quality
-  extended: {context_window: 32768}    # Large context if needed
-metadata: {description: "Alibaba Qwen 3 4B - Fast reasoning", category: reasoning, status: stable, release_date: "2025-04-01", last_verified: "2025-12-05", family: qwen3, family_tier: entry, recommended_for: ["Fast reasoning", "Tool calls"], not_recommended_for: ["Complex analysis"]}
-requirements: {gpu_vram_mb: 2500, system_ram_mb: 4000, cpu_cores: 2.0}
-hardware_detection: {execution_mode: local_gpu, optimal_concurrency: 32, max_concurrency: 48, dgx_spark: {optimal_parallel_workers: 40, recommended_batch_size: 4, memory_usage_gb: 2.5, tokens_per_second: 100}}
-resource_class: {class: A, vram_gb: 2.5, parallel_capacity_spark: 50, recommended_parallel: 40, throughput_tier: high, tokens_per_second_single: 100}
-tier: C
-tier_rank: 2
-dimension_scores: {summarization: 65, reasoning: 72, instruction: 70, analysis: 68, coding: 75, speed: 90, context_efficiency: 85}
-pom_benchmarks: {last_calibration: "2025-12-05", calibration_version: "2.0", aggregate: {avg_quality: 70, avg_latency_ms: 400, total_prompts_tested: 0}}
 benchmarks: {}

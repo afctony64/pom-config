@@ -1,0 +1,55 @@
+id: gpt-4o
+name: GPT 4o
+type: llm_model
+version: 1.0.0
+provider:
+  name: openai
+  api_type: chat
+adapter_config:
+  type: openai_chat
+  model: gpt-4o
+  base_url: null
+  base_url_env: OPENAI_API_KEY
+parameters:
+  max_tokens: 16384
+  temperature: 0.7
+capabilities:
+  structured_output: json_strict  # OpenAI supports strict JSON schema enforcement
+  reasoning: false
+  reasoning_summary: false
+  tool_calling: true
+  streaming: true
+  vision: true
+  function_calling: true
+cost:
+  per_1m_input_tokens: 2.50
+  per_1m_cached_input_tokens: 1.25
+  per_1m_output_tokens: 10.00
+  currency: USD
+performance:
+  avg_latency_ms: 0  # Not published in OpenAI docs
+  tokens_per_second: 0  # Not published in OpenAI docs
+  context_window: 128000
+context_variants:
+  throughput: {context_window: 8192}
+  balanced: {context_window: 32768}
+  quality: {context_window: 65536}
+  extended: {context_window: 128000}
+metadata:
+  description: OpenAI GPT-4o - flagship omni model for chat and multimodal tasks
+  category: general
+  status: stable
+  release_date: '2024-05-13'
+  knowledge_cutoff: '2023-10-01'
+  recommended_for:
+    - "Chat and assistant workflows"
+    - "Multimodal inputs (text + image)"
+    - "Structured outputs"
+  not_recommended_for:
+    - "Highest-reasoning tasks (use o-series)"
+tier: A
+tier_rank: 2
+resource_class:
+  class: A
+  vram_gb: 0.0
+  throughput_tier: high
