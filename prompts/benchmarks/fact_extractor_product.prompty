@@ -3,7 +3,7 @@ name: Fact Extractor - Product Researcher
 description: >
   Extract product facts from web page content using Llama/Ollama.
   Specialized prompt for product researcher with detailed extraction methodology.
-  
+
   Used by: llama_extractor.py for product researcher type
 
 inputs:
