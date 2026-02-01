@@ -1,6 +1,6 @@
 ---
 name: Web Search Test
-description: TEST: Dedicated prompt to verify GPT-5 native web search functionality
+description: "TEST: Dedicated prompt to verify GPT-5 native web search functionality"
 version: 1.0.0
 authors:
   - AI Assistant

@@ -1,6 +1,6 @@
 ---
 name: pom_core_test_Research Synopsis
-description: [TEST] Synthesize research insights from multiple analysts into a cohesive executive summary - pom-core test prompt
+description: "[TEST] Synthesize research insights from multiple analysts into a cohesive executive summary - pom-core test prompt"
 # ✅ KEY DESIGN FEATURE: Prompt template declares what OTHER PROMPT TEMPLATES it depends on
 # This is declarative and "in reverse" - the prompt says what it needs
 # PomFlow can then find all components using those prompt templates and execute them first

@@ -3,7 +3,7 @@ name: Fact Extractor - Generic Researcher
 description: >
   Extract facts from web page content using Llama/Ollama for any researcher type.
   Generic prompt that works for industry, customer, competitor, financial, leadership, partner researchers.
-  
+
   Used by: llama_extractor.py for non-product researcher types
 
 inputs:
@@ -17,7 +17,7 @@ inputs:
     required: true
 
 model:
-  api: ollama
+  api: chat
   configuration:
     type: direct
     model: llama3.1:70b-instruct-q4_K_M
