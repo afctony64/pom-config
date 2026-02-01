@@ -85,10 +85,16 @@ modes:
         service: pomai-frontend
       - url: http://localhost:8886/health
         service: mac-report-server
+      - url: http://localhost:8093/.well-known/ready
+        service: mac-transformers-metal
+      - url: http://localhost:4100/health
+        service: browser-proxy
       - url: http://spark-65d6.local:8080/v1/.well-known/ready
         service: spark-weaviate
       - url: http://spark-65d6.local:11434/api/version
         service: spark-ollama
+      - url: http://spark-65d6.local:8090/.well-known/ready
+        service: spark-transformers-lb
 
   travel:
     description: "Mac-only mode (Spark offline, offline capable)"
@@ -121,6 +127,8 @@ modes:
         service: pomothy-frontend
       - url: http://localhost:11435/api/version
         service: mac-ollama-metal
+      - url: http://localhost:8093/.well-known/ready
+        service: mac-transformers-metal
 
   ooo:
     description: "Out-of-office mode (Spark via tunnel + Cloud)"
