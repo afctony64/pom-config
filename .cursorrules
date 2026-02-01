@@ -6,11 +6,9 @@ Repo: pom-config
 Type: Shared repository (no resident agent)
 Role: Shared configuration - schemas, prompts, models, profiles
 Home Repo: afctony64/pom-config
-Shared By: All Pom agents (check OWNERSHIP.yaml for write access)
 ```
 **IMPORTANT**: When you work in pom-config, you keep your original agent identity
 (PomSpark, pom-core, PomAI, or Pomothy). Check OWNERSHIP.yaml for your write access.
-
 ## VISITING AGENT GUIDE
 
 | Your Agent | You Can Write | Read Only |
