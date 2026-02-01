@@ -1,0 +1,109 @@
+# Data Card: API FAQ (cached external API responses)
+#
+# Purpose: Fetch cached API responses for a domain to provide prior Q/A context
+# Use Case: Inject previously answered search queries (Brave/Google) into prompts
+#
+# ✅ Native fetch executor
+
+id: api_faq
+name: API FAQ (Cached Search)
+type: data_card
+file: api_faq.yaml
+description: >
+  Fetches cached external API responses from API_intelligence for a domain.
+  Designed to surface prior search queries and response snippets as an FAQ-style
+  context block before new searches are executed.
+
+# Tagging system
+tags:
+  - api-cache
+  - search
+  - brave
+  - faq
+
+target_scope: api_intelligence
+collection: API_intelligence
+
+# ✅ STANDARD: Use 'fetch' for all data cards
+executor: fetch
+
+# No relationship traversal
+relationship_support: false
+
+# Access control
+personas:
+  - "*"
+
+# Query parameters
+parameters:
+  type: fetch  # Must match executor
+
+  # Root collection
+  collection: API_intelligence
+
+  # Relationship traversal configuration
+  relationship_traversal: false
+  dynamic_templates: true
+
+  # No references
+  references: []
+
+  # Limits
+  limit: 20
+  limit_default: 20
+
+  # Field set configuration
+  field_set: standard
+  field_set_default: standard
+  field_set_options:
+    - standard
+
+# Field definitions
+field_sets:
+  standard:
+    description: "Cached API search responses for FAQ context"
+    fields:
+      - name: domain
+        type: text
+        source: property
+        description: Domain associated with cached response
+
+      - name: apiSource
+        type: text
+        source: property
+        description: API provider (brave, google, etc.)
+
+      - name: endpoint
+        type: text
+        source: property
+        description: API endpoint (search, enrich, etc.)
+
+      - name: search_query
+        type: text
+        source: property
+        description: Search query string (for search APIs)
+
+      - name: responseData
+        type: text
+        source: property
+        description: Raw API response JSON string (may include snippets)
+
+      - name: responseStatus
+        type: text
+        source: property
+        description: Response status (success, error, etc.)
+
+      - name: responseCode
+        type: int
+        source: property
+        description: HTTP status code
+
+      - name: lastFetched
+        type: date
+        source: property
+        description: Last successful fetch timestamp
+
+      - name: dataFreshness
+        type: text
+        source: property
+        description: Freshness indicator (fresh, stale, expired)
