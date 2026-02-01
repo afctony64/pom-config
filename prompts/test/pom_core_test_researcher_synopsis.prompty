@@ -1,6 +1,6 @@
 ---
 name: pom_core_test_Researcher Synopsis
-description: [TEST] Analyze research table and generate comprehensive strategic synopsis - pom-core test prompt
+description: "[TEST] Analyze research table and generate comprehensive strategic synopsis - pom-core test prompt"
 inputs:
   section_name:
     description: Name of the section (e.g., Industry Research, Customer Research)
