@@ -25,7 +25,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-4o
+    model_card_id: gpt-4o-mini
   parameters:
     max_tokens: 1500
 

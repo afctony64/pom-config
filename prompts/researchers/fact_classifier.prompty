@@ -39,7 +39,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: mistral:7b-instruct  # Mistral for classification expertise
+    model_card_id: mistral:7b  # Mistral for classification expertise
   parameters:
     temperature: 0.1
     response_format:
@@ -265,4 +265,3 @@ Use these for entity name normalization.
 5. **CONFIDENCE SCORES**: Rate how well the classification fits
 
 Begin classification:
-

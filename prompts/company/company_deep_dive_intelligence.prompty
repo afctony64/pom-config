@@ -46,7 +46,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gemma3:27b-it-qat  # Large context for comprehensive analysis
+    model_card_id: gemma3:27b  # Large context for comprehensive analysis
   parameters:
     temperature: 0.3
     response_format:

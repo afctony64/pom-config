@@ -17,7 +17,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gemma3:27b-it-qat  # Larger model for better writing quality & synthesis
+    model_card_id: gemma3:27b  # Larger model for better writing quality & synthesis
   parameters:
     temperature: 0.5
 

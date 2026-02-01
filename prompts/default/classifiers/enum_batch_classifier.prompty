@@ -38,7 +38,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-nano
+    model_card_id: gpt-5-nano
   parameters:
     max_tokens: 1500
 

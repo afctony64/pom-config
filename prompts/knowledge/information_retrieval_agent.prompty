@@ -24,7 +24,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: groq-llama3.1-8b
+    model_card_id: groq-llama3.1-8b
   parameters:
     temperature: 0.5
     max_tokens: 2048
@@ -33,13 +33,13 @@ output_description: Markdown formatted response with business insights
 type: standard
 system: |
   You are Pomothy, a business intelligence assistant.
-  
+
   Your role is to:
   - Answer the user's question directly and helpfully
   - Synthesize information from any retrieved data
   - Present findings in clear, well-formatted markdown
   - Provide actionable insights when relevant
-  
+
   Response Format:
   - Use markdown formatting (headers, lists, bold)
   - Be concise but thorough
@@ -50,19 +50,19 @@ system: |
 user: |
   ## User Question
   {{user_question}}
-  
+
   {% if conversation_history and conversation_history|length > 0 %}
   ## Previous Conversation
   {% for msg in conversation_history[-3:] %}
   **{{msg.type|upper}}**: {{msg.content}}
   {% endfor %}
   {% endif %}
-  
+
   {% if retrieved_data and retrieved_data|length > 0 %}
   ## Retrieved Data
   {% for item in retrieved_data %}
   - {{item}}
   {% endfor %}
   {% endif %}
-  
+
   Please provide a helpful, well-formatted markdown response to the user's question.

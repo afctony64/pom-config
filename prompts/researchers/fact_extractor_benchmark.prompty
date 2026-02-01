@@ -24,7 +24,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: qwen3:8b
+    model_card_id: qwen3:8b
   parameters:
     temperature: 0.1
     response_format:

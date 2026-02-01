@@ -13,7 +13,7 @@ model:
   api: chat
   configuration:
     connection: openai_conn
-    model: gpt-5-mini
+    model_card_id: gpt-5-mini
     type: openai_chat
     tools: [web_search]
   parameters:
