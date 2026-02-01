@@ -645,6 +645,7 @@ properties:
   - Government
   - Nonprofit
   - Not Available
+  - Not disclosed
   - Unknown
   parallel_to: keyCustomers
   moduleConfig:
@@ -713,6 +714,7 @@ properties:
   - Courts & Justice
   - Education Administration
   - Not Available
+  - Not disclosed
   - Unknown
   parallel_to: keyCustomers
   moduleConfig:
@@ -997,6 +999,8 @@ references:
   uuid_source_field: customerDomain
   target_collection: Domain
   description: References to customer Domain records (UUID3 from customerDomain array)
+  sets:
+  - extended
 group: research
 weaviate_instance: cloud
 collection_name: Research_customer
