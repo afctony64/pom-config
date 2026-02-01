@@ -1,5 +1,13 @@
 # 📦 POM-CONFIG: Shared Configuration Repository
 
+## IDENTITY
+```
+Repo: pom-config
+Role: Shared configuration - schemas, prompts, models, profiles
+Home Repo: afctony64/pom-config
+Shared By: All Pom agents (check OWNERSHIP.yaml for write access)
+```
+
 ## ⚠️ SHARED REPO - CHECK OWNERSHIP FIRST
 This repo is shared by multiple AI agents. Before modifying any file:
 1. Check `OWNERSHIP.yaml` to verify you have write access
