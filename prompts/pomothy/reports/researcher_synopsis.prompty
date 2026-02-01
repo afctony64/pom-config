@@ -28,7 +28,7 @@ model:
   api: chat  # ✅ Changed to match research_synopsis format
   configuration:
     type: openai_chat
-    model: gpt-5-nano
+    model_card_id: gpt-5-nano
   parameters:
     max_tokens: 2000  # ✅ Increased from 600 to allow full synopsis
 

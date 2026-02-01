@@ -3,9 +3,9 @@ name: Enum Field Classifier
 id: enum_field_classifier
 description: |
   Single-field enum classification. Used by EnumClassifier for one classification at a time.
-  
+
   Receives system message and researcher examples from parent prompt context.
-  
+
   AI Tool Type: Prompt
   Stage: post_execution
 
@@ -36,7 +36,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-nano
+    model_card_id: gpt-5-nano
   parameters:
     max_tokens: 500
 

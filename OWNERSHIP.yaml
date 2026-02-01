@@ -54,7 +54,7 @@ ai_agents:
   # ---------------------------------------------------------------------------
   pom-core:
     description: "Core library - schemas, LLM models, tools, base functionality"
-    identity_file: "/path/to/pom-core/.cursorrules"
+    identity_file: "/Users/tonyeales/Projects/pom-core/.cursorrules"
     owns:
       - schemas/               # Weaviate collection schemas
       - llm_models/            # LLM model cards and configurations
@@ -82,7 +82,7 @@ ai_agents:
   # ---------------------------------------------------------------------------
   PomAI:
     description: "Research AI - prompts, researcher configs, data cards"
-    identity_file: "/path/to/PomAI/.cursorrules"
+    identity_file: "/Users/tonyeales/Projects/PomAI/.cursorrules"
     owns:
       - prompts/               # Shared prompt templates (.prompty files)
       - researcher_ai/         # Researcher AI configurations
@@ -104,7 +104,7 @@ ai_agents:
   # ---------------------------------------------------------------------------
   Pomothy:
     description: "UX/Chat AI - user experience configurations"
-    identity_file: "/path/to/Pomothy/.cursorrules"
+    identity_file: "/Users/tonyeales/Projects/Pomothy/.cursorrules"
     owns:
       - ux_configs/            # UX configuration files
     can_write:

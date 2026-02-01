@@ -7,7 +7,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-mini
+    model_card_id: gpt-5-mini
 sample:
   rendered_prompt: "You are an AI assistant..."
   schema_fields: ["field1", "field2"]

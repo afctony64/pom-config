@@ -33,7 +33,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gemma3:12b-it-qat  # Testing 3 workers
+    model_card_id: gemma3:12b  # Testing 3 workers
   parameters:
     temperature: 0.7
     max_tokens: 500

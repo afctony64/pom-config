@@ -1,3 +1,94 @@
+id: qwen3:4b
+aliases:
+  - qwen3-4b
+name: Qwen 3 4B
+type: llm_model
+version: 1.0.0
+provider:
+  name: ollama
+  api_type: ollama
+adapter_config:
+  type: ollama
+  model: qwen3:4b
+  base_url: null
+  base_url_env: OLLAMA_HOST
+parameters:
+  temperature: 0.7
+  max_tokens: 2000
+  top_p: 0.9
+capabilities:
+  structured_output: true
+  reasoning: false
+  tool_calling: true
+  streaming: true
+  vision: false
+  function_calling: true
+  multimodal: false
+cost:
+  per_1m_input_tokens: 0.0
+  per_1m_output_tokens: 0.0
+  currency: USD
+  notes: Free local inference on DGX Spark (placeholder; verify for 4B)
+performance:
+  avg_latency_ms: 63887
+  tokens_per_second: 21
+  context_window: 8192
+context_variants:
+  throughput: {context_window: 4096}
+  balanced: {context_window: 6144}
+  quality: {context_window: 8192}
+metadata:
+  description: 'Alibaba Qwen 3 4B. Placeholder profile copied from qwen3:14b; verify sizing and performance.'
+  category: reasoning
+  status: provisional
+  release_date: '2025-04-01'
+  last_verified: '2025-12-22'
+  family: qwen3
+  family_tier: throughput
+  strength: reasoning
+  recommended_for:
+    - Fast local inference
+    - Lightweight reasoning tasks
+  not_recommended_for:
+    - Deep analysis workloads
+  notes: Placeholder values derived from qwen3:14b; confirm with benchmarks.
+requirements:
+  gpu_vram_mb: 4500
+  system_ram_mb: 8000
+  cpu_cores: 4.0
+hardware_detection:
+  execution_mode: local_gpu
+  optimal_concurrency: 10
+  max_concurrency: 16
+routing:
+  - spark
+  - mac
+resource_class:
+  class: C
+  vram_gb: 4.5
+  parallel_capacity_spark: 16
+  recommended_parallel: 12
+  throughput_tier: high
+  tokens_per_second_single: 45
+tier: B
+tier_rank: 3
+dimension_scores:
+  summarization: 72
+  reasoning: 76
+  instruction: 74
+  analysis: 73
+  coding: 72
+  speed: 65
+  context_efficiency: 80
+pom_benchmarks:
+  last_calibration: '2025-12-07'
+  calibration_version: '3.0'
+  prompts_tested: {}
+  aggregate:
+    avg_quality: 75
+    avg_latency_ms: 1400
+    total_prompts_tested: 0
+benchmarks: {}
 id: "qwen3:4b"
 name: Qwen 3 4B
 type: llm_model

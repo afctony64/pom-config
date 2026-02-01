@@ -20,7 +20,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: groq-llama3.1-8b
+    model_card_id: groq-llama3.1-8b
   parameters:
     temperature: 0.7
     max_tokens: 2048
@@ -29,28 +29,28 @@ output_description: Orchestration plan for query processing
 type: standard
 system: |
   You are a query orchestrator for Pomothy business intelligence.
-  
+
   Analyze the user's question and create a plan for how to answer it.
   Consider:
   - What type of question is this (discovery, analysis, comparison)?
   - What data sources might be relevant?
   - How should the response be structured?
-  
+
   Respond with a JSON object containing your orchestration plan.
 ---
 
 user: |
   Question: {{user_question}}
-  
+
   {% if collection_context %}
   Context: {{collection_context}}
   {% endif %}
-  
+
   {% if conversation_history and conversation_history|length > 0 %}
   Previous conversation:
   {% for msg in conversation_history[-5:] %}
   {{msg.type|upper}}: {{msg.content}}
   {% endfor %}
   {% endif %}
-  
+
   Create an orchestration plan for this query.

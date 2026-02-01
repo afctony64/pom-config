@@ -17,7 +17,7 @@ model:
   api: chat
   configuration:
     connection: openai_conn
-    model: gpt-5-nano
+    model_card_id: gpt-5-nano
     type: openai_chat
   fallback_to_web: false
   parameters:

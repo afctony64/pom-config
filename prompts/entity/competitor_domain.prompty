@@ -55,7 +55,7 @@ model:
   api: chat
   configuration:
     connection: openai_conn
-    model: gpt-5-mini
+    model_card_id: gpt-5-mini
     type: openai_chat
   parameters:
     response_format:
@@ -69,14 +69,14 @@ You are a competitor domain discovery specialist for competitive intelligence re
 
 **MISSION**: Extract the company name from competitor product/service names and find their official domain.
 
-**CRITICAL CHALLENGE**: 
+**CRITICAL CHALLENGE**:
 Competitor names are often PRODUCT or SERVICE names (e.g., "Siemens MindSphere", "Auth0 Passwordless", "Okta Identity Cloud") rather than company names. You must:
 1. **EXTRACT** the actual company name from the product/service name
 2. **FIND** the official domain for that company
 
 **EXAMPLES**:
 - "Siemens MindSphere" → Company: "Siemens" → Domain: "siemens.com"
-- "Auth0 Passwordless" → Company: "Auth0" → Domain: "auth0.com"  
+- "Auth0 Passwordless" → Company: "Auth0" → Domain: "auth0.com"
 - "Okta Identity Cloud" → Company: "Okta" → Domain: "okta.com"
 - "Oracle NetSuite" → Company: "Oracle" → Domain: "oracle.com"
 - "Workday Adaptive Planning" → Company: "Workday" → Domain: "workday.com"
@@ -167,7 +167,7 @@ user:
 }
 ```
 
-**CRITICAL**: 
+**CRITICAL**:
 - If you cannot extract a company name or find a domain, return null for url
 - Always provide the extracted companyName even if domain is null
 - confidence_score should reflect your certainty (0.0-1.0)

@@ -20,7 +20,7 @@ model:
   api: chat
   configuration:
     type: direct
-    model: llama3.1:70b-instruct-q4_K_M
+    model_card_id: llama3.1:70b
   parameters:
     temperature: 0.0
     top_p: 0.95

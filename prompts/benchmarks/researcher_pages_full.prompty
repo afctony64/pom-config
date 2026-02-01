@@ -60,7 +60,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-mini  # OpenAI flagship model
+    model_card_id: gpt-5-mini  # OpenAI flagship model
   parameters:
     response_format:
       type: json_schema

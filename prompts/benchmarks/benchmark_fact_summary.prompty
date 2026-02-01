@@ -11,7 +11,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5-mini
+    model_card_id: gpt-5-mini
   parameters:
     max_tokens: 16000
     response_format:
@@ -85,7 +85,7 @@ You are analyzing research outputs from {{ record.variant_count }} different dat
 
 Each strategy used different methods to select which web pages to inject into the prompt:
 - **researcher_pages_20** (20): Score-based selection (20 pages with highest researcher relevance scores)
-- **researcher_pages_vector_full** (VF): Vector/semantic search (100 most semantically relevant pages)  
+- **researcher_pages_vector_full** (VF): Vector/semantic search (100 most semantically relevant pages)
 - **researcher_pages_facts_vector** (FF): Chunk-based vector search (50 most relevant content chunks)
 
 ## ALL VARIANT OUTPUTS:
@@ -112,4 +112,3 @@ Extract and compare ALL facts from the variant outputs above.
 4. **Assess quality**: most comprehensive, any contradictions, missing info
 
 Return structured JSON matching the schema.
-

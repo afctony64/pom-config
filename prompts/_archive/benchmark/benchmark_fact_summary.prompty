@@ -28,7 +28,7 @@ model:
   api: responses
   configuration:
     type: openai_chat
-    model: gpt-5-mini
+    model_card_id: gpt-5-mini
   parameters:
     max_tokens: 16000
     response_format:

@@ -49,7 +49,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: qwen3:14b
+    model_card_id: qwen3:14b
   parameters:
     temperature: 0.3
     response_format:

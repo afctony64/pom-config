@@ -1,3 +1,87 @@
+id: gpt-oss:20b
+aliases:
+  - gpt-oss-20b
+name: GPT-OSS 20B
+type: llm_model
+version: 1.0.0
+provider:
+  name: groq
+  api_type: chat
+adapter_config:
+  type: groq
+  model: openai/gpt-oss-20b
+  base_url: https://api.groq.com/openai/v1
+  base_url_env: GROQ_API_KEY
+parameters:
+  temperature: 0.7
+  max_tokens: 8000
+  top_p: 0.9
+capabilities:
+  structured_output: true
+  reasoning: false
+  tool_calling: false
+  streaming: true
+  vision: false
+  function_calling: false
+  multimodal: false
+cost:
+  per_1m_input_tokens: 0.59
+  per_1m_output_tokens: 0.99
+  currency: USD
+  notes: Placeholder values copied from gpt-oss:120b; verify pricing for 20B
+performance:
+  avg_latency_ms: 300
+  tokens_per_second: 300
+  context_window: 131072
+context_variants:
+  throughput: {context_window: 16384}
+  balanced: {context_window: 32768}
+  quality: {context_window: 65536}
+  extended: {context_window: 131072}
+metadata:
+  description: GPT-OSS 20B on Groq LPU. Placeholder profile copied from 120B; verify model availability and limits.
+  category: reasoning
+  status: provisional
+  release_date: '2025-01-01'
+  last_verified: '2025-12-18'
+  family: gpt-oss
+  family_tier: balanced
+  recommended_for:
+    - Cost-effective reasoning
+    - Medium-scale analysis
+  not_recommended_for:
+    - Maximum quality reasoning (use 120b)
+requirements:
+  gpu_vram_mb: 0
+  system_ram_mb: 0
+  cpu_cores: 0
+hardware_detection:
+  execution_mode: cloud
+routing:
+  - groq
+resource_class:
+  class: C
+  vram_gb: 0
+  throughput_tier: high
+  tokens_per_second_single: 300
+tier: A
+tier_rank: 2
+dimension_scores:
+  summarization: 90
+  reasoning: 92
+  instruction: 90
+  analysis: 91
+  coding: 88
+  speed: 80
+  context_efficiency: 75
+pom_benchmarks:
+  last_calibration: '2025-12-18'
+  calibration_version: '2.0'
+  aggregate:
+    avg_quality: 90
+    avg_latency_ms: 300
+    total_prompts_tested: 0
+benchmarks: {}
 # ==============================================================================
 # MODEL CARD: gpt-oss:20b
 # ==============================================================================

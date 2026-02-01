@@ -30,7 +30,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: qwen3:8b
+    model_card_id: qwen3:8b
   parameters:
     response_format:
       json_schema:

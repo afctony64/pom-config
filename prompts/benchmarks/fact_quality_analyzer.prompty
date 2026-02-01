@@ -53,7 +53,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model: gpt-5.2
+    model_card_id: gpt-5.2
   parameters:
     max_output_tokens: 4000
     response_format:
