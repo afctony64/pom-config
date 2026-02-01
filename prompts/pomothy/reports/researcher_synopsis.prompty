@@ -8,10 +8,9 @@ classification:
   complexity: medium          # Structured input, moderate synthesis needed
   context_size: medium        # Typically 8-32K tokens (single table)
   priority: balanced          # Quality matters but not premium
-  provider_constraint: free   # free (Ollama) | paid (API) | any - PENDING pom-core v2.1
+  provider_constraint: paid   # free (Ollama) | paid (API) | any - PENDING pom-core v2.1
   # Derived minimum tier: B (from complexity=medium)
   # Best free model: gemma3:12b-it-qat (instruction-tuned, highest quality)
-  # mode: urgent in configuration routes to Groq (vs batch/Ollama)
 
 inputs:
   section_name:
@@ -30,7 +29,6 @@ model:
   configuration:
     type: openai_chat
     model: gpt-5-nano
-    mode: urgent  # Routes to Groq for faster inference (vs batch/Ollama)
   parameters:
     max_tokens: 2000  # ✅ Increased from 600 to allow full synopsis
 
