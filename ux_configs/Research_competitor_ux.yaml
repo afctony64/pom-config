@@ -62,14 +62,17 @@ fields:
   - count
   - nunique
 - name: competitorPositioning
+  min_width: 200
   aggregations:
   - count
   - nunique
 - name: competitorPriceVs
+  min_width: 200
   aggregations:
   - count
   - nunique
 - name: competitorTargetMarket
+  min_width: 200
   aggregations:
   - count
   - nunique
