@@ -191,7 +191,7 @@ properties:
   tags:
   - research
   sets:
-  - prompt
+  - post
   - array
   metadata:
     order: 208
@@ -206,7 +206,7 @@ properties:
   tags:
   - research
   sets:
-  - prompt
+  - post
   - array
   metadata:
     order: 209
@@ -227,6 +227,23 @@ properties:
   - system
   metadata:
     order: 203
+- name: keyCustomerSizeEvidence
+  dataType:
+  - text[]
+  description: 'Employee count or size signal for {subject}. Include ranges or estimates if available. Use "Not disclosed" if size cannot be determined.'
+  parallel_to: keyCustomers
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - customer
+  - research
+  - LLM
+  sets:
+  - post
+  - system
+  metadata:
+    order: 204
 - name: useCaseLLM
   dataType:
   - text[]
@@ -300,7 +317,7 @@ properties:
   tags:
   - research
   sets:
-  - prompt
+  - post
   - array
   metadata:
     order: 210
@@ -655,7 +672,6 @@ properties:
   - research
   - industry
   sets:
-  - prompt
   - EnumCat
   - array
   - standard
@@ -674,7 +690,7 @@ properties:
   - industry
   - LLM
   sets:
-  - prompt
+  - post
   - array
   - extended
   metadata:
@@ -723,7 +739,6 @@ properties:
   - research
   - industry
   sets:
-  - prompt
   - EnumCat
   - array
   - standard
@@ -743,7 +758,7 @@ properties:
   - industry
   - segment
   sets:
-  - prompt
+  - post
   - array
   - extended
   metadata:
@@ -759,7 +774,7 @@ properties:
   - CIT
   - provenance
   sets:
-  - prompt
+  - post
   metadata:
     source_llm: keyCustomerIndustrySegmentLLM
     order: 207
@@ -939,7 +954,7 @@ properties:
   description: Account size/revenue potential score per key customer (1-10)
   parallel_to: keyCustomers
   sets:
-  - prompt
+  - post
   tags:
   - score
   metadata:
@@ -950,7 +965,7 @@ properties:
   description: Strategic value score per key customer (1-10)
   parallel_to: keyCustomers
   sets:
-  - prompt
+  - post
   tags:
   - score
   metadata:
@@ -961,7 +976,7 @@ properties:
   description: Expansion potential score per key customer (1-10)
   parallel_to: keyCustomers
   sets:
-  - prompt
+  - post
   tags:
   - score
   metadata:

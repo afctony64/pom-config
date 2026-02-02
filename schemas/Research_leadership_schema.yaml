@@ -384,7 +384,7 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  - post
   - standard
   metadata:
     order: 202
