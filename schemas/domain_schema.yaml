@@ -21,7 +21,7 @@ description: |
   4. Research records reference back to this Domain
 
   SCHEMA v9.5 CHANGES:
-  - Added sitemap staleness detection fields (sitemap_stale, sitemap_404_rate, 
+  - Added sitemap staleness detection fields (sitemap_stale, sitemap_404_rate,
     sitemap_last_checked, sitemap_refresh_recommended)
   - Enables automatic detection of stale sitemap data based on 404 error rates
 

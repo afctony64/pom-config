@@ -1,0 +1,56 @@
+---
+description: Enforce complete issue workflow - fix AND close issues
+alwaysApply: true
+---
+
+# Issue Workflow - Fix AND Close
+
+When working on GitHub issues, you MUST complete the full cycle:
+
+## The Problem
+You frequently fix issues but forget to close them. This leaves stale issues open.
+
+## Required Workflow
+
+### 1. When Fixing an Issue
+After implementing a fix:
+```bash
+# Commit with closing keyword
+git commit -m "fix: description (fixes #123)"
+
+# If on feature branch, manually close
+gh issue close 123 --repo owner/repo --comment "Fixed in commit abc123"
+```
+
+### 2. When User Says "Issue is Done"
+IMMEDIATELY close it:
+```bash
+gh issue close <number> --repo afctony64/<repo> --comment "Resolved"
+```
+
+### 3. When Reviewing Open Issues
+For each issue, determine:
+- **Needs fix**: Fix it, then close it
+- **Already fixed**: Close with reference to fix
+- **Not this repo**: Transfer with `gh issue transfer`
+- **Question/RFC**: Answer and close, or leave open if discussion needed
+
+## Anti-Pattern (DO NOT DO THIS)
+```
+❌ Fix code → Move to next task (FORGOT TO CLOSE)
+❌ User says "it's done" → Just acknowledge (FORGOT TO CLOSE)
+❌ Review issues → List them but don't close resolved ones
+```
+
+## Correct Pattern
+```
+✅ Fix code → Commit → Close issue → Verify closed
+✅ User says "it's done" → Close immediately → Confirm closed
+✅ Review issues → Close all resolved ones → Report remaining
+```
+
+## Verification
+After closing, always verify:
+```bash
+gh issue list --repo owner/repo --state open --limit 5
+```
