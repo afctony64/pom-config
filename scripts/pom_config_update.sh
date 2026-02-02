@@ -64,6 +64,17 @@ update_config() {
     
     echo "✅ pom-config updated to $version"
     echo "   Location: $CONFIG_PKG_DIR"
+    
+    # Clear pom-core config caches to avoid stale schema warnings
+    echo ""
+    echo "🧹 Clearing pom-core config caches..."
+    if command -v docker &> /dev/null && docker ps --format '{{.Names}}' | grep -q pom-core-dev; then
+        docker exec pom-core-dev python scripts/clear_config_cache.py 2>/dev/null || echo "   ⚠️ Cache clear skipped (script not found or error)"
+    elif [ -f "$APP_ROOT/../pom-core/scripts/clear_config_cache.py" ]; then
+        python "$APP_ROOT/../pom-core/scripts/clear_config_cache.py" 2>/dev/null || echo "   ⚠️ Cache clear skipped (error)"
+    else
+        echo "   ℹ️ Run 'python scripts/clear_config_cache.py' in pom-core to clear caches"
+    fi
 }
 
 # Main

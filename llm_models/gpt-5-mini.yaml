@@ -15,6 +15,7 @@ parameters:
 capabilities:
   structured_output: json_strict  # OpenAI supports strict JSON schema enforcement
   reasoning: true
+  reasoning_summary: true  # Requires OpenAI org verification
   tool_calling: true
   streaming: true
   vision: true

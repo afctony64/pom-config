@@ -21,13 +21,9 @@ description: |
   4. Research records reference back to this Domain
 
   SCHEMA v9.5 CHANGES:
-  - Added 20 enricher metadata fields that were being dropped by SchemaCoercer:
-    advanced_social_features, attempted_locations, business_model_signals,
-    community_features, contact_data_found, contact_source, enrichers_executed,
-    enrichers_successful, homepage_meta_description, homepage_page_title,
-    is_suitable, missing_headers, security_percentage, security_weighted_percentage,
-    security_weighted_score, social_recommendations, stockSymbol,
-    successful_locations, tenantGroup, timeout_occurred
+  - Added sitemap staleness detection fields (sitemap_stale, sitemap_404_rate, 
+    sitemap_last_checked, sitemap_refresh_recommended)
+  - Enables automatic detection of stale sitemap data based on 404 error rates
 
   SCHEMA v9.4 CHANGES:
   - Added page_facts_last_run_status for last Page Facts outcome
@@ -786,6 +782,78 @@ properties:
   - count
 
 # ============================================================================
+# SITEMAP STALENESS DETECTION - SYSTEM FIELDS (pipeline-managed)
+# Detects when sitemap data is stale based on 404 error rates during scraping.
+# When a website restructures URLs, cached sitemap data becomes stale.
+# ============================================================================
+- name: sitemap_stale
+  dataType:
+  - boolean
+  description: Whether sitemap data appears stale (high 404 rate during scraping)
+  indexFilterable: true
+  sets:
+  - extended
+  - system
+  - status_update
+  tags:
+  - sitemap
+  - quality
+  - pipeline
+
+- name: sitemap_404_rate
+  dataType:
+  - number
+  description: Rate of 404 errors during last scrape attempt (0.0-1.0). Above 0.3 suggests stale sitemap.
+  indexFilterable: true
+  sets:
+  - extended
+  - system
+  - status_update
+  tags:
+  - sitemap
+  - quality
+  - metrics
+
+- name: sitemap_404_count
+  dataType:
+  - int
+  description: Count of 404 errors encountered during last scrape attempt
+  indexFilterable: true
+  sets:
+  - extended
+  - system
+  - status_update
+  tags:
+  - sitemap
+  - quality
+  - count
+
+- name: sitemap_last_checked
+  dataType:
+  - date
+  description: Timestamp when sitemap staleness was last checked
+  sets:
+  - system
+  - status_update
+  tags:
+  - sitemap
+  - temporal
+
+- name: sitemap_refresh_recommended
+  dataType:
+  - boolean
+  description: Flag indicating sitemap should be refreshed (re-run domain enrichment)
+  indexFilterable: true
+  sets:
+  - extended
+  - system
+  - status_update
+  tags:
+  - sitemap
+  - quality
+  - pipeline
+
+# ============================================================================
 # HOMEPAGE DISCOVERY STATS - SYSTEM FIELDS (enricher-managed)
 # ============================================================================
 - name: homepage_total_links
@@ -1226,232 +1294,6 @@ properties:
   - status_update
   tags:
   - temporal
-
-# ============================================================================
-# ENRICHER METADATA FIELDS - SYSTEM FIELDS (enricher-managed)
-# ============================================================================
-- name: advanced_social_features
-  dataType:
-  - text
-  description: JSON string of advanced social features detected by social_snapshot enricher
-  sets:
-  - system
-  tags:
-  - social
-  - enricher
-
-- name: attempted_locations
-  dataType:
-  - text[]
-  description: Array of URLs attempted during enrichment
-  sets:
-  - system
-  tags:
-  - enricher
-  - processing
-
-- name: business_model_signals
-  dataType:
-  - text
-  description: Business model indicators detected from robots.txt analysis
-  indexSearchable: true
-  tokenization: word
-  sets:
-  - system
-  tags:
-  - business
-  - enricher
-
-- name: community_features
-  dataType:
-  - text[]
-  description: Array of community features detected by social_snapshot enricher
-  sets:
-  - system
-  tags:
-  - social
-  - enricher
-
-- name: contact_data_found
-  dataType:
-  - boolean
-  description: Whether contact data was found during enrichment
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - contact
-  - enricher
-
-- name: contact_source
-  dataType:
-  - text
-  description: Source where contact data was found (e.g., homepage, contact page)
-  indexFilterable: true
-  tokenization: field
-  sets:
-  - system
-  tags:
-  - contact
-  - enricher
-
-- name: enrichers_executed
-  dataType:
-  - int
-  description: Count of enrichers executed for this domain
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - enricher
-  - metrics
-
-- name: enrichers_successful
-  dataType:
-  - int
-  description: Count of enrichers that completed successfully
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - enricher
-  - metrics
-
-- name: homepage_meta_description
-  dataType:
-  - text
-  description: Meta description extracted from homepage
-  indexSearchable: true
-  tokenization: word
-  sets:
-  - system
-  tags:
-  - homepage
-  - metadata
-
-- name: homepage_page_title
-  dataType:
-  - text
-  description: Page title extracted from homepage
-  indexSearchable: true
-  tokenization: word
-  sets:
-  - system
-  tags:
-  - homepage
-  - metadata
-
-- name: is_suitable
-  dataType:
-  - boolean
-  description: Whether domain is suitable for research (has sufficient content)
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - quality
-  - filtering
-
-- name: missing_headers
-  dataType:
-  - text[]
-  description: Array of missing security headers detected
-  sets:
-  - system
-  tags:
-  - security
-  - headers
-
-- name: security_percentage
-  dataType:
-  - number
-  description: Security score as percentage (0-100) from http_security_headers enricher
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - security
-  - metrics
-
-- name: security_weighted_percentage
-  dataType:
-  - number
-  description: Weighted security score as percentage (0-100) accounting for header importance
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - security
-  - metrics
-
-- name: security_weighted_score
-  dataType:
-  - number
-  description: Weighted security score accounting for header importance
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - security
-  - metrics
-
-- name: social_recommendations
-  dataType:
-  - text
-  description: Recommendations from social media analysis enricher
-  indexSearchable: true
-  tokenization: word
-  sets:
-  - system
-  tags:
-  - social
-  - enricher
-
-- name: stockSymbol
-  dataType:
-  - text
-  description: Stock ticker symbol if publicly traded company
-  indexFilterable: true
-  tokenization: field
-  sets:
-  - system
-  - prompt
-  tags:
-  - identity
-  - financial
-
-- name: successful_locations
-  dataType:
-  - text[]
-  description: Array of URLs successfully processed during enrichment
-  sets:
-  - system
-  tags:
-  - enricher
-  - processing
-
-- name: tenantGroup
-  dataType:
-  - text
-  description: Tenant group assignment for this domain (determines which researchers to run)
-  indexFilterable: true
-  tokenization: field
-  sets:
-  - system
-  tags:
-  - configuration
-  - processing
-
-- name: timeout_occurred
-  dataType:
-  - boolean
-  description: Whether a timeout occurred during enrichment
-  indexFilterable: true
-  sets:
-  - system
-  tags:
-  - enricher
-  - errors
 
 # ============================================================================
 # ENRICHER RESULTS (audit trail) - SYSTEM FIELD (pipeline-managed)

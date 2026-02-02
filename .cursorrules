@@ -1,5 +1,24 @@
 # 📦 POM-CONFIG: Shared Configuration Repository
 
+## IDENTITY
+```
+Repo: pom-config
+Type: Shared repository (no resident agent)
+Home Repo: afctony64/pom-config
+```
+
+**IMPORTANT**: When you work in pom-config, you keep your original agent identity
+(PomSpark, pom-core, PomAI, or Pomothy). Check OWNERSHIP.yaml for your write access.
+
+## VISITING AGENT GUIDE
+
+| Your Agent | You Can Write | Read Only |
+|------------|---------------|-----------|
+| **PomSpark** | profiles/, tenant-routing/, shared-config.env | everything else |
+| **pom-core** | schemas/, llm_models/, tools/, data_cards/, tenants/ | everything else |
+| **PomAI** | prompts/, researcher_ai/ | everything else |
+| **Pomothy** | ux_configs/ | everything else |
+
 ## ⚠️ SHARED REPO - CHECK OWNERSHIP FIRST
 This repo is shared by multiple AI agents. Before modifying any file:
 1. Check `OWNERSHIP.yaml` to verify you have write access
