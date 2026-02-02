@@ -157,14 +157,16 @@ parallel_array_enrichment:
   context_fields:
     - executiveRoles          # Role for search context (CEO, CTO, etc.)
     - domain                  # Company domain for disambiguation
+    - entityName              # Company name for better disambiguation
   enrich_fields:
     - executiveLinkedIn       # LinkedIn profile URL
     - executiveBackgrounds    # Career background and experience
     - executiveTenure         # How long in current role
   # Enhanced search template for LinkedIn profile discovery
-  # Includes quotes around name for exact match, company for disambiguation
+  # Uses site:linkedin.com/in to restrict to LinkedIn profiles only
+  # Includes company name and role for disambiguation
   search_query_template: >
-    "{subject}" "{domain}" linkedin profile {executiveRoles}
+    "{subject}" {executiveRoles} "{entityName}" site:linkedin.com/in
 
 # Post-execution tools: Run automatically after leadership researcher completes
 # Priority-ordered: lower number runs first
