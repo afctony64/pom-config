@@ -151,6 +151,9 @@ citation_note: "No inline URLs in field values; put sources in CIT/evidence fiel
 parallel_array_enrichment:
   enabled: true
   anchor_field: keyExecutives
+  # PERSON MODE: Treat each keyExecutives entry as a person, not a company
+  # This enables targeted LinkedIn profile search in parallel_array_enricher
+  person_mode: true
   context_fields:
     - executiveRoles          # Role for search context (CEO, CTO, etc.)
     - domain                  # Company domain for disambiguation
@@ -158,9 +161,10 @@ parallel_array_enrichment:
     - executiveLinkedIn       # LinkedIn profile URL
     - executiveBackgrounds    # Career background and experience
     - executiveTenure         # How long in current role
+  # Enhanced search template for LinkedIn profile discovery
+  # Includes quotes around name for exact match, company for disambiguation
   search_query_template: >
-    {subject} {executiveRoles} {domain} site:linkedin.com/in
-    current role background experience tenure since
+    "{subject}" "{domain}" linkedin profile {executiveRoles}
 
 # Post-execution tools: Run automatically after leadership researcher completes
 # Priority-ordered: lower number runs first
