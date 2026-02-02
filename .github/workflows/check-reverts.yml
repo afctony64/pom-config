@@ -1,0 +1,133 @@
+name: Check for Inadvertent Reverts
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-reverts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed for comparison
+
+      - name: Check for stale branch reverting recent changes
+        run: |
+          set -e
+          
+          echo "=== Checking for inadvertent reverts ==="
+          
+          # Get the merge base (where this branch diverged from main)
+          MERGE_BASE=$(git merge-base origin/main HEAD)
+          echo "Branch diverged from main at: $MERGE_BASE"
+          
+          # Count commits on main since this branch diverged
+          COMMITS_BEHIND=$(git rev-list --count $MERGE_BASE..origin/main)
+          echo "Commits on main since branch created: $COMMITS_BEHIND"
+          
+          # If branch is significantly behind, warn
+          if [ "$COMMITS_BEHIND" -gt 5 ]; then
+            echo "::warning::Branch is $COMMITS_BEHIND commits behind main. Consider rebasing to avoid reverting recent changes."
+          fi
+          
+          # Get files this PR deletes lines from
+          DELETED_FILES=$(git diff origin/main...HEAD --numstat | awk '$2 > 10 {print $3}')
+          
+          if [ -z "$DELETED_FILES" ]; then
+            echo "✅ No significant deletions detected"
+            exit 0
+          fi
+          
+          echo "Files with >10 line deletions: $DELETED_FILES"
+          
+          # For each file with significant deletions, check if we're reverting recent additions
+          REVERT_DETECTED=false
+          
+          for FILE in $DELETED_FILES; do
+            echo ""
+            echo "Checking: $FILE"
+            
+            # Get lines this PR deletes (excluding the - prefix)
+            PR_DELETIONS=$(git diff origin/main...HEAD -- "$FILE" | grep "^-" | grep -v "^---" | sed 's/^-//' | head -50)
+            
+            if [ -z "$PR_DELETIONS" ]; then
+              continue
+            fi
+            
+            # Check if any of these deleted lines were added in recent main commits
+            # Look at last 10 commits on main for this file
+            RECENT_ADDITIONS=$(git log origin/main -10 --format="" -p -- "$FILE" | grep "^+" | grep -v "^+++" | sed 's/^+//' | head -100)
+            
+            if [ -z "$RECENT_ADDITIONS" ]; then
+              continue
+            fi
+            
+            # Find overlap between PR deletions and recent additions
+            OVERLAP_COUNT=0
+            while IFS= read -r line; do
+              if [ -n "$line" ] && echo "$RECENT_ADDITIONS" | grep -qF "$line"; then
+                OVERLAP_COUNT=$((OVERLAP_COUNT + 1))
+                if [ "$OVERLAP_COUNT" -le 5 ]; then
+                  echo "  ⚠️  Deleting recently added: ${line:0:80}..."
+                fi
+              fi
+            done <<< "$PR_DELETIONS"
+            
+            if [ "$OVERLAP_COUNT" -gt 3 ]; then
+              echo ""
+              echo "::error file=$FILE::This PR deletes $OVERLAP_COUNT lines that were added in recent commits. This may be reverting previous work!"
+              REVERT_DETECTED=true
+            fi
+          done
+          
+          if [ "$REVERT_DETECTED" = true ]; then
+            echo ""
+            echo "❌ POTENTIAL REVERT DETECTED"
+            echo ""
+            echo "This PR appears to be reverting changes from recently merged PRs."
+            echo "This often happens when a branch is stale and gets squash-merged."
+            echo ""
+            echo "To fix:"
+            echo "  1. Rebase your branch: git fetch origin && git rebase origin/main"
+            echo "  2. Resolve any conflicts"
+            echo "  3. Force push: git push --force-with-lease"
+            echo ""
+            echo "If these deletions are intentional, add 'intentional-deletion' to the PR title."
+            
+            # Check if PR title contains override
+            if echo "${{ github.event.pull_request.title }}" | grep -qi "intentional-deletion"; then
+              echo ""
+              echo "✅ 'intentional-deletion' found in PR title - allowing merge"
+              exit 0
+            fi
+            
+            exit 1
+          fi
+          
+          echo ""
+          echo "✅ No inadvertent reverts detected"
+
+      - name: Check critical schema fields
+        run: |
+          # For schema files, verify critical fields still exist
+          if git diff origin/main...HEAD --name-only | grep -q "schemas/domain_schema.yaml"; then
+            echo "=== Checking domain_schema.yaml critical fields ==="
+            
+            CRITICAL_FIELDS="domain entityName enricherResults enrichers_executed ready_for_review"
+            MISSING=""
+            
+            for field in $CRITICAL_FIELDS; do
+              if ! grep -q "name: $field" schemas/domain_schema.yaml; then
+                MISSING="$MISSING $field"
+              fi
+            done
+            
+            if [ -n "$MISSING" ]; then
+              echo "::error::Critical schema fields missing:$MISSING"
+              exit 1
+            fi
+            
+            echo "✅ All critical schema fields present"
+          fi
