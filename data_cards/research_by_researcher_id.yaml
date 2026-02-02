@@ -83,19 +83,10 @@ collections:
             value: true
       keyCustomerRefs:
         target_collection: Domain
-        references:
-          customer:
-            target_collection: Research_customer
-            field_set: [standard]
-          industry:
-            target_collection: Research_industry
-            field_set: [standard]
-          financial:
-            target_collection: Research_financial
-            field_set: [standard]
-          product:
-            target_collection: Research_product
-            field_set: [standard]
+        # Note: Do NOT add nested references here - the spawned Domain objects don't have
+        # their own Research_* records. The research data for deep dives should come from
+        # looking up each domain's Research_* records at render time, not via traversal.
+        fields: [domain, entityName, enricherResults]  # Fetch key fields for display
       keyCompetitorRefs:
         target_collection: Domain
         fields: [domain]  # Only fetch domain field - minimal for traversal
