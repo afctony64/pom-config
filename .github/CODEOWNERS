@@ -1,0 +1,43 @@
+# CODEOWNERS for pom-config
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Each line is a file pattern followed by owner(s)
+# Owners are notified and required to approve PRs touching these files
+
+# ============================================================================
+# DEFAULT - All changes require review
+# ============================================================================
+* @afctony64
+
+# ============================================================================
+# CRITICAL PATHS - Schema and model changes require explicit approval
+# These files directly affect database structure and AI behavior
+# ============================================================================
+
+# Schemas define database structure - deletions can break data integrity
+/schemas/ @afctony64
+
+# LLM models affect all AI processing - changes cascade across all apps
+/llm_models/ @afctony64
+
+# Shared environment affects all deployments
+shared-config.env @afctony64
+
+# ============================================================================
+# OWNERSHIP BY AGENT (matches OWNERSHIP.yaml)
+# ============================================================================
+
+# PomAI owns
+/prompts/ @afctony64
+/researcher_ai/ @afctony64
+/data_cards/ @afctony64
+
+# pom-core owns
+/tools/ @afctony64
+
+# PomSpark owns
+/profiles/ @afctony64
+/tenant-routing/ @afctony64
+
+# Pomothy owns
+/ux_configs/ @afctony64
