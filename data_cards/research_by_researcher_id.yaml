@@ -83,7 +83,19 @@ collections:
             value: true
       keyCustomerRefs:
         target_collection: Domain
-        fields: [domain]  # Only fetch domain field - no further traversal
+        references:
+          customer:
+            target_collection: Research_customer
+            field_set: [standard]
+          industry:
+            target_collection: Research_industry
+            field_set: [standard]
+          financial:
+            target_collection: Research_financial
+            field_set: [standard]
+          product:
+            target_collection: Research_product
+            field_set: [standard]
       keyCompetitorRefs:
         target_collection: Domain
         fields: [domain]  # Only fetch domain field - minimal for traversal
