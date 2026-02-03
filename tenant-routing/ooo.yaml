@@ -1,52 +1,47 @@
 # =============================================================================
 # OOO (OUT OF OFFICE) MODE TENANT ROUTING
 # =============================================================================
-# Mode: Full remote access via Cloudflare tunnels
-# Use case: Remote development, unattended Spark operations
+# Mode: Mac + Cloud (Spark offline)
+# Use case: Background processing while away, Spark unavailable
 # =============================================================================
 
 mode: ooo
-version: "1.1"
-description: "OOO mode - Full remote access via Cloudflare tunnels"
+version: "1.2"
+description: "OOO mode - Mac compute + Cloud Weaviate (Spark offline)"
 
 defaults:
-  weaviate_target: spark
+  weaviate_target: cloud
   cloud_enabled: true
-  spark_enabled: true
-
-tunnel_config:
-  spark_cloudflare_tunnel:
-    name: spark-services
-    id: "${CLOUDFLARE_TUNNEL_SPARK_ID}"
-    services:
-      ollama: "${SPARK_OLLAMA_TUNNEL_URL}"
-      weaviate: "${SPARK_WEAVIATE_TUNNEL_URL}"
-      transformers: "${SPARK_TRANSFORMERS_TUNNEL_URL}"
+  spark_enabled: false  # Spark is offline
 
 weaviate_instances:
-  spark:
-    url: "${SPARK_WEAVIATE_TUNNEL_URL}"
-    description: "Spark Weaviate via Cloudflare tunnel"
-
   cloud:
     url: "${WEAVIATE_CLOUD_URL}"
     api_key_env: WEAVIATE_CLOUD_KEY
-    description: "Cloud Weaviate - Production data"
+    description: "Cloud Weaviate - Production data (70k+ prismatic objects)"
 
   mac:
     url: "http://mac-weaviate:8080"
     description: "Mac Weaviate - Local development/testing"
 
+  # Spark offline - not available
+  # spark:
+  #   url: "http://spark-65d6.local:8080"
+  #   description: "Spark Weaviate - OFFLINE"
+
 tenants:
   prismatic:
     weaviate_target: cloud
-    description: "Production tenant - routes to Cloud Weaviate"
+    description: "Production tenant - Cloud for research, Mac for pages"
     collections:
+      # Research collections on Cloud (40k+ total)
       Research_*: cloud
-      Opportunity: cloud
-      # OOO mode uses Mac for page processing (safer than tunneling large data)
-      Domain: mac
-      Page_facts: mac
+      Opportunity: cloud      # 1,553 objects
+      Domain: cloud           # 29,226 objects (source of truth)
+      # Page processing on Mac (937k+ objects - main data store)
+      Page_facts: mac         # 937,444 objects
+      Page_content: mac       # 84,414 objects
+      Page_researcher: mac    # 0 objects
       Page_intelligence: cloud
 
   test_db:
@@ -57,12 +52,13 @@ tenants:
     weaviate_target: mac
     description: "Demo tenant - local only"
 
-architecture:
-  spark_access: "Apps → ${SPARK_OLLAMA_TUNNEL_URL} → Cloudflare → Spark (Ollama, Weaviate, Transformers)"
-  security: "All access via Cloudflare Zero Trust, no direct port exposure"
+compute:
+  ollama: "Mac native (Metal GPU) - http://host.docker.internal:11435"
+  transformers: "Mac native (Metal) - http://host.docker.internal:8093"
+  redis: "Mac Docker - redis://mac-redis:6379"
 
 notes:
-  mode: "Full Mac stack running (Weaviate, Ollama, Transformers, Redis)"
-  cloud: "Cloud Weaviate accessible via API (if internet available)"
-  spark: "Full Spark access via Cloudflare tunnel (no SSH needed)"
-  tunnel: "Two Cloudflare tunnels: Mac (llm.pomothy.io) + Spark (spark-*.pomothy.io)"
+  mode: "Mac + Cloud (Spark offline)"
+  cloud: "Cloud Weaviate for prismatic production data"
+  mac: "Mac for compute (Ollama, Transformers) and local collections"
+  spark: "OFFLINE - switch to HOME mode when Spark is back"
