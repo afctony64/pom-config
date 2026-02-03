@@ -1,326 +1,552 @@
 # =============================================================================
-# POM ECOSYSTEM SERVICES REGISTRY
+# EXTERNAL SERVICE REGISTRY
 # =============================================================================
+# Single source of truth for all external cloud services and their requirements.
+# Managed by: PomSpark
+# Used by: All Pom repos (pom-core, PomAI, Pomothy, PomSpark)
 #
-# SINGLE SOURCE OF TRUTH for all service ports and configurations.
+# How to use:
+#   1. Credentials stored in: ~/Projects/PomSpark/configs/secrets.env
+#   2. Non-secret config in: pom-config/shared-config.env
+#   3. Verify with: ./scripts/check-credentials.sh
 #
-# This file defines all services across the Pom ecosystem. Docker Compose files,
-# validation scripts, and documentation should reference this file.
-#
-# Port Assignments:
-#   - 4000: RESERVED (Cursor MCP Server - DO NOT USE)
-#   - 5000: RESERVED (macOS ControlCenter - DO NOT USE)
-#   - 3000: RESERVED (Common dev servers - avoid if possible)
-#
+# Categories:
+#   - llm: Large Language Model providers
+#   - vector_db: Vector databases
+#   - database: Traditional databases
+#   - search: Search APIs
+#   - cloud: Cloud storage/compute
+#   - deployment: Deployment platforms
+#   - dev_tools: Development tools
+#   - ml: Machine learning services
+#   - research: Research data APIs
+#   - frontend: Frontend tooling
+#   - local: Local infrastructure
+#   - internal: Internal Pom services
+#   - network: Network monitoring
 # =============================================================================
 
-# =============================================================================
-# FRONTENDS
-# =============================================================================
-frontends:
+version: "1.0"
+description: "External service registry for Pom ecosystem"
+managed_by: "PomSpark"
+credentials_file: "~/Projects/PomSpark/configs/secrets.env"
+config_file: "~/Projects/pom-config/shared-config.env"
 
-  pomothy_frontend:
-    name: Pomothy Admin UI
-    container: pomothy-frontend
-    port: 5174                    # External port (changed from 5173 to avoid Cursor conflict)
-    internal_port: 5173           # Container internal port (Vite default)
-    type: vite
-    healthcheck: /
-    auto_start: true              # Starts with ./scripts/dev.sh home
-    description: Web admin interface for Pomothy intelligence platform
+services:
+  # ===========================================================================
+  # LLM PROVIDERS
+  # ===========================================================================
+  openai:
+    name: "OpenAI"
+    category: "llm"
+    description: "GPT models, embeddings, DALL-E"
+    credentials:
+      - OPENAI_API_KEY
+    verification:
+      command: "curl -s -o /dev/null -w '%{http_code}' -H 'Authorization: Bearer $OPENAI_API_KEY' https://api.openai.com/v1/models"
+      expected: "200"
+    docs: "https://platform.openai.com/docs"
+    dashboard: "https://platform.openai.com"
+    required: true
 
-  pomai_frontend:
-    name: PomAI Dev Tools
-    container: pomai-frontend
-    port: 5173                    # External port
-    internal_port: 5173           # Container internal port
-    type: vite
-    healthcheck: /
-    auto_start: true              # Starts with ./scripts/dev.sh home
-    description: Development tools and debugging UI for PomAI
+  anthropic:
+    name: "Anthropic/Claude"
+    category: "llm"
+    description: "Claude models for reasoning and analysis"
+    credentials:
+      - ANTHROPIC_API_KEY
+    verification:
+      command: "curl -s -o /dev/null -w '%{http_code}' -H 'x-api-key: $ANTHROPIC_API_KEY' -H 'anthropic-version: 2023-06-01' https://api.anthropic.com/v1/models"
+      expected: "200"
+    docs: "https://docs.anthropic.com"
+    dashboard: "https://console.anthropic.com"
+    required: true
 
-  report_server:
-    name: Unified Report Dashboard
-    container: mac-report-server
-    port: 8886                    # External port
-    internal_port: 80             # nginx internal port
-    type: nginx
-    healthcheck: /health
-    auto_start: true              # Starts with ./scripts/dev.sh home
-    description: HTML reports from all Pom projects (PomAI, Pomothy, PomSpark, pom-core)
+  groq:
+    name: "Groq"
+    category: "llm"
+    description: "Fast LLM inference (Llama, Mixtral)"
+    credentials:
+      - GROQ_API_KEY
+    verification:
+      command: "curl -s -o /dev/null -w '%{http_code}' -H 'Authorization: Bearer $GROQ_API_KEY' https://api.groq.com/openai/v1/models"
+      expected: "200"
+    docs: "https://console.groq.com/docs"
+    dashboard: "https://console.groq.com"
+    required: false
 
-# =============================================================================
-# BACKENDS
-# =============================================================================
-backends:
+  google_ai:
+    name: "Google AI (Gemini)"
+    category: "llm"
+    description: "Gemini models, Google AI Studio"
+    credentials:
+      - GOOGLE_API_KEY
+    docs: "https://ai.google.dev/docs"
+    dashboard: "https://aistudio.google.com"
+    required: false
 
-  pomothy_backend:
-    name: Pomothy API
-    container: pomothy-backend
-    port: 8001                    # External and internal port
-    internal_port: 8001
-    type: fastapi
-    healthcheck: /health/ready
-    auto_start: true
-    description: FastAPI backend for Pomothy web application
+  cohere:
+    name: "Cohere"
+    category: "llm"
+    description: "Embeddings, reranking, generation"
+    credentials:
+      - COHERE_API_KEY
+    docs: "https://docs.cohere.com"
+    dashboard: "https://dashboard.cohere.com"
+    required: false
 
-  pomai_backend_mac:
-    name: PomAI Backend (Mac)
-    container: pomai-backend-mac
-    port: null                    # No external port - CLI/batch only
-    type: python
-    healthcheck: null
-    auto_start: false             # Only in TRAVEL mode (profile: travel)
-    description: CLI and batch processing backend for Mac (TRAVEL mode)
+  # ===========================================================================
+  # VECTOR DATABASES & STORAGE
+  # ===========================================================================
+  weaviate_cloud:
+    name: "Weaviate Cloud"
+    category: "vector_db"
+    description: "Production vector database (WCD)"
+    credentials:
+      - WEAVIATE_CLOUD_KEY
+    config:
+      - WEAVIATE_CLOUD_URL
+    verification:
+      command: "curl -s -o /dev/null -w '%{http_code}' -H 'Authorization: Bearer $WEAVIATE_CLOUD_KEY' $WEAVIATE_CLOUD_URL/v1/.well-known/ready"
+      expected: "200"
+    docs: "https://weaviate.io/developers/weaviate"
+    dashboard: "https://console.weaviate.cloud"
+    required: true
 
-  pomai_backend_spark:
-    name: PomAI Backend (Spark)
-    container: pomai-backend-spark
-    port: null                    # No external port - CLI/batch only
-    type: python
-    healthcheck: null
-    auto_start: true              # Starts on Spark in HOME mode
-    location: spark
-    description: CLI and batch processing backend on Spark GPU server
+  pinecone:
+    name: "Pinecone"
+    category: "vector_db"
+    description: "Alternative vector database"
+    credentials:
+      - PINECONE_API_KEY
+    docs: "https://docs.pinecone.io"
+    dashboard: "https://app.pinecone.io"
+    required: false
 
-  pom_core_dev:
-    name: pom-core Development
-    container: pom-core-dev
-    port: null                    # No external port - development container
-    type: python
-    healthcheck: null
-    auto_start: true
-    description: Development container for pom-core library
+  # ===========================================================================
+  # DATABASES
+  # ===========================================================================
+  supabase:
+    name: "Supabase"
+    category: "database"
+    description: "PostgreSQL database, auth, storage"
+    credentials:
+      - SUPABASE_ANON_KEY
+      - SUPABASE_SERVICE_ROLE_KEY
+      - SUPABASE_DB_PASSWORD
+      - SUPABASE_JWT_SECRET
+    config:
+      - SUPABASE_URL
+    verification:
+      command: "curl -s -o /dev/null -w '%{http_code}' -H 'apikey: $SUPABASE_ANON_KEY' $SUPABASE_URL/rest/v1/"
+      expected: "200"
+    docs: "https://supabase.com/docs"
+    dashboard: "https://supabase.com/dashboard"
+    required: true
 
-# =============================================================================
-# DATABASES
-# =============================================================================
-databases:
+  # ===========================================================================
+  # SEARCH SERVICES
+  # ===========================================================================
+  brave:
+    name: "Brave Search"
+    category: "search"
+    description: "Web search API for research"
+    credentials:
+      - BRAVE_API_KEY
+    docs: "https://brave.com/search/api/"
+    dashboard: "https://api.search.brave.com"
+    required: true
+
+  google_search:
+    name: "Google Custom Search"
+    category: "search"
+    description: "Google Programmable Search Engine"
+    credentials:
+      - GOOGLE_API_KEY
+      - GOOGLE_SEARCH_CX
+    docs: "https://developers.google.com/custom-search"
+    dashboard: "https://programmablesearchengine.google.com"
+    required: false
+
+  # ===========================================================================
+  # CLOUD STORAGE & COMPUTE
+  # ===========================================================================
+  gcs:
+    name: "Google Cloud Storage"
+    category: "cloud"
+    description: "Weaviate backups, file storage"
+    credentials:
+      - GOOGLE_APPLICATION_CREDENTIALS
+    config:
+      - GCS_BACKUP_BUCKET
+    cli: "gcloud"
+    verification:
+      command: "test -f ${GOOGLE_APPLICATION_CREDENTIALS/#\\~/$HOME}"
+      description: "Check if service account JSON exists"
+    docs: "https://cloud.google.com/storage/docs"
+    dashboard: "https://console.cloud.google.com/storage"
+    required: true
+
+  google_oauth:
+    name: "Google OAuth"
+    category: "cloud"
+    description: "OAuth authentication for Google services"
+    credentials:
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
+    docs: "https://developers.google.com/identity/protocols/oauth2"
+    dashboard: "https://console.cloud.google.com/apis/credentials"
+    required: false
+
+  vastai:
+    name: "Vast.ai"
+    category: "cloud"
+    description: "Cloud GPU instances, serverless endpoints"
+    credentials:
+      - VAST_API_KEY
+    config:
+      - VAST_ENDPOINT_NAME
+    docs: "https://vast.ai/docs"
+    dashboard: "https://cloud.vast.ai"
+    required: false
+
+  # ===========================================================================
+  # DEPLOYMENT PLATFORMS
+  # ===========================================================================
+  railway:
+    name: "Railway"
+    category: "deployment"
+    description: "Pomothy frontend deployment"
+    credentials:
+      - RAILWAY_TOKEN
+    config:
+      - RAILWAY_SERVICE_ID
+    cli: "railway"
+    verification:
+      command: "railway whoami"
+      description: "Check Railway CLI authentication"
+    docs: "https://docs.railway.app"
+    dashboard: "https://railway.app/dashboard"
+    setup: "https://railway.app/account/tokens"
+    required: false
+
+  # ===========================================================================
+  # DEV TOOLS
+  # ===========================================================================
+  github:
+    name: "GitHub"
+    category: "dev_tools"
+    description: "Source control, issues, releases"
+    credentials:
+      - GITHUB_TOKEN
+      - GH_TOKEN
+    cli: "gh"
+    verification:
+      command: "gh auth status"
+      description: "Check GitHub CLI authentication"
+    docs: "https://docs.github.com/en/rest"
+    dashboard: "https://github.com"
+    setup: "https://github.com/settings/tokens"
+    required: true
+
+  # ===========================================================================
+  # ML SERVICES
+  # ===========================================================================
+  huggingface:
+    name: "HuggingFace"
+    category: "ml"
+    description: "Model hub, inference API"
+    credentials:
+      - HUGGINGFACE_API_KEY
+    docs: "https://huggingface.co/docs"
+    dashboard: "https://huggingface.co/settings/tokens"
+    required: false
+
+  kaggle:
+    name: "Kaggle"
+    category: "ml"
+    description: "Datasets, competitions, notebooks"
+    credentials:
+      - KAGGLE_API  # JSON format: {"username":"...","key":"..."}
+    docs: "https://www.kaggle.com/docs/api"
+    dashboard: "https://www.kaggle.com/settings/account"
+    notes: "KAGGLE_API is JSON format with username and key"
+    required: false
+
+  # ===========================================================================
+  # RESEARCH APIs
+  # ===========================================================================
+  core_api:
+    name: "CORE"
+    category: "research"
+    description: "Open access research papers"
+    credentials:
+      - CORE_API_KEY
+    docs: "https://core.ac.uk/documentation/api"
+    dashboard: "https://core.ac.uk/api-keys"
+    required: false
+
+  pubmed:
+    name: "PubMed/Entrez"
+    category: "research"
+    description: "NCBI biomedical literature"
+    credentials:
+      - ENTREZ_EMAIL
+    docs: "https://www.ncbi.nlm.nih.gov/books/NBK25501/"
+    notes: "Email required for API access, no API key needed"
+    required: false
+
+  courtlistener:
+    name: "CourtListener"
+    category: "research"
+    description: "US legal opinions and court data"
+    credentials:
+      - COURTLISTENER_API_KEY
+    docs: "https://www.courtlistener.com/help/api/"
+    dashboard: "https://www.courtlistener.com/profile/"
+    required: false
+
+  congress:
+    name: "Congress.gov"
+    category: "research"
+    description: "US congressional data"
+    credentials:
+      - CONGRESS_API_KEY
+    docs: "https://api.congress.gov/"
+    dashboard: "https://api.congress.gov/sign-up/"
+    required: false
+
+  fbi:
+    name: "FBI Crime Data"
+    category: "research"
+    description: "FBI crime statistics"
+    credentials:
+      - FBI_API_KEY
+    docs: "https://crime-data-explorer.fr.cloud.gov/pages/docApi"
+    required: false
+
+  # ===========================================================================
+  # FRONTEND TOOLING
+  # ===========================================================================
+  plasmic:
+    name: "Plasmic"
+    category: "frontend"
+    description: "Visual page builder"
+    credentials:
+      - PLASMIC_API_TOKEN
+    docs: "https://docs.plasmic.app"
+    dashboard: "https://studio.plasmic.app"
+    required: false
+
+  mui:
+    name: "MUI X"
+    category: "frontend"
+    description: "Premium React components (DataGrid, Charts)"
+    credentials:
+      - MUI_X_LICENSE_KEY
+    docs: "https://mui.com/x/introduction/"
+    dashboard: "https://mui.com/store/account/"
+    notes: "License key, not API - required for premium components"
+    required: true
+
+  # ===========================================================================
+  # INTERNAL POM SERVICES
+  # ===========================================================================
+  llm_proxy:
+    name: "Pom LLM Proxy"
+    category: "internal"
+    description: "Internal LLM routing proxy"
+    credentials:
+      - LLM_PROXY_API_KEY
+    config:
+      - LLM_PROXY_URL
+    notes: "Internal service - runs on Mac"
+    required: true
+
+  jwt_auth:
+    name: "JWT Authentication"
+    category: "internal"
+    description: "Internal JWT signing/verification"
+    credentials:
+      - JWT_SECRET_KEY
+    notes: "Internal secret for JWT tokens"
+    required: true
+
+  # ===========================================================================
+  # LOCAL INFRASTRUCTURE - MAC
+  # ===========================================================================
+  mac_redis:
+    name: "Mac Redis"
+    category: "local"
+    description: "Mac-local Redis for caching"
+    container: "mac-redis"
+    port: 6379
+    config:
+      - REDIS_URL
+    cli_via_docker: "docker exec mac-redis redis-cli"
+    verification:
+      command: "docker exec mac-redis redis-cli ping"
+      expected: "PONG"
+    modes: ["home", "travel", "ooo"]
+    required: true
+
+  mac_ollama:
+    name: "Mac Ollama"
+    category: "local"
+    description: "Mac Metal LLM inference"
+    container: "mac-ollama"
+    port: 11435
+    config:
+      - MAC_OLLAMA_URL
+    verification:
+      command: "curl -s http://host.docker.internal:11435/api/version"
+    modes: ["home", "travel", "ooo"]
+    required: true
+
+  mac_transformers:
+    name: "Mac Transformers"
+    category: "local"
+    description: "Mac embedding service"
+    container: "mac-transformers"
+    port: 8093
+    config:
+      - MAC_TRANSFORMERS_URL
+    verification:
+      command: "curl -s http://host.docker.internal:8093/.well-known/ready"
+    modes: ["home", "travel", "ooo"]
+    required: true
 
   mac_weaviate:
-    name: Weaviate (Mac)
-    container: mac-weaviate
-    port: 8080                    # HTTP API
-    grpc_port: 50051              # gRPC API
-    type: weaviate
-    healthcheck: /v1/.well-known/ready
-    auto_start: true
-    description: Local vector database on Mac (single source of truth)
+    name: "Mac Weaviate"
+    category: "local"
+    description: "Mac-local vector database"
+    container: "mac-weaviate"
+    port: 8080
+    config:
+      - MAC_WEAVIATE_URL
+    verification:
+      command: "curl -s http://mac-weaviate:8080/v1/.well-known/ready"
+    modes: ["travel", "ooo"]
+    notes: "Primary in travel/ooo modes"
+    required: true
 
-  spark_weaviate:
-    name: Weaviate (Spark)
-    container: spark-weaviate
-    port: 8080                    # HTTP API (on Spark host)
-    grpc_port: 50051              # gRPC API
-    type: weaviate
-    healthcheck: /v1/.well-known/ready
-    auto_start: true
-    location: spark
-    description: High-memory vector database on Spark
+  browser_pool:
+    name: "Browser Pool"
+    category: "local"
+    description: "Puppeteer/Playwright browser automation"
+    container: "mac-browser-pool"
+    port: 3001
+    config:
+      - BROWSER_POOL_URL
+    verification:
+      command: "curl -s http://localhost:3001/health"
+    modes: ["home", "travel", "ooo"]
+    required: false
 
-  mac_redis:
-    name: Redis (Mac)
-    container: mac-redis
-    port: 6379
-    type: redis
-    healthcheck: redis-cli ping
-    auto_start: true
-    description: Cache and queue on Mac
-
+  # ===========================================================================
+  # LOCAL INFRASTRUCTURE - SPARK
+  # ===========================================================================
   spark_redis:
-    name: Redis (Spark)
-    container: spark-redis
+    name: "Spark Redis"
+    category: "spark"
+    description: "Spark Redis for distributed caching"
+    host: "spark-65d6.local"
     port: 6379
-    type: redis
-    healthcheck: redis-cli ping
-    auto_start: true
-    location: spark
-    description: Cache and queue on Spark
-
-# =============================================================================
-# AI SERVICES
-# =============================================================================
-ai_services:
-
-  ollama_lb:
-    name: Ollama Load Balancer
-    container: ollama-lb
-    port: 11430                   # External port
-    internal_port: 80             # nginx internal port
-    type: nginx
-    healthcheck: null             # nginx process check only
-    auto_start: true
-    description: Routes LLM requests to Spark GPU (HOME) or Mac Metal (TRAVEL)
-
-  mac_ollama_native:
-    name: Ollama (Mac Native)
-    container: null               # Native process, not Docker
-    port: 11435
-    type: ollama
-    healthcheck: /api/tags
-    auto_start: false             # Manual start with ./scripts/mac-ollama-metal.sh
-    description: Native Mac Metal Ollama - 87 tok/s (vs 12 tok/s in Docker)
+    config:
+      - SPARK_REDIS_URL
+    verification:
+      command: "redis-cli -h spark-65d6.local ping"
+      expected: "PONG"
+    modes: ["home", "remote"]
+    required: false
 
   spark_ollama:
-    name: Ollama (Spark GPU)
-    container: spark-ollama
-    port: 11434                   # On Spark host
-    type: ollama
-    healthcheck: /api/tags
-    auto_start: true
-    location: spark
-    description: CUDA GPU Ollama with 32 parallel threads
+    name: "Spark Ollama"
+    category: "spark"
+    description: "Spark GPU LLM inference (RTX 4090)"
+    host: "spark-65d6.local"
+    port: 11434
+    config:
+      - SPARK_OLLAMA_URL
+    verification:
+      command: "curl -s http://spark-65d6.local:11434/api/version"
+    modes: ["home", "remote"]
+    notes: "Primary LLM in home mode - GPU accelerated"
+    required: false
 
-  mac_transformers_native:
-    name: Transformers (Mac Native)
-    container: null               # Native process, not Docker
-    port: 8093
-    type: transformers
-    healthcheck: /health
-    auto_start: false             # Manual start with ./scripts/mac-transformers-metal.sh
-    description: Native Mac Metal embeddings service
+  spark_transformers:
+    name: "Spark Transformers"
+    category: "spark"
+    description: "Spark GPU embedding service"
+    host: "spark-65d6.local"
+    port: 8090
+    config:
+      - TRANSFORMERS_URL
+      - SPARK_TRANSFORMERS_URL
+    verification:
+      command: "curl -s http://spark-65d6.local:8090/.well-known/ready"
+    modes: ["home", "remote"]
+    notes: "Primary embeddings in home mode - GPU accelerated"
+    required: false
+
+  spark_weaviate:
+    name: "Spark Weaviate"
+    category: "spark"
+    description: "Spark vector database (production)"
+    host: "spark-65d6.local"
+    port: 8080
+    config:
+      - WEAVIATE_URL
+      - WEAVIATE_SPARK_URL
+    verification:
+      command: "curl -s http://spark-65d6.local:8080/v1/.well-known/ready"
+    modes: ["home", "remote"]
+    notes: "Primary Weaviate in home mode"
+    required: false
 
   spark_transformers_lb:
-    name: Transformers Load Balancer (Spark)
-    container: spark-transformers-lb
-    port: 80                      # Internal only on Spark
-    type: nginx
-    healthcheck: /health
-    auto_start: true
-    location: spark
-    description: Load balancer for GPU transformer instances on Spark
+    name: "Spark Transformers LB"
+    category: "spark"
+    description: "Load-balanced embedding service"
+    host: "spark-65d6.local"
+    port: 80
+    verification:
+      command: "curl -s http://spark-65d6.local:80/.well-known/ready"
+    modes: ["home"]
+    notes: "Traefik load balancer for transformers replicas"
+    required: false
+
+  # ===========================================================================
+  # NETWORK MONITORING
+  # ===========================================================================
+  omada:
+    name: "Omada Network Controller"
+    category: "network"
+    description: "TP-Link network monitoring"
+    credentials:
+      - OMADA_USERNAME
+      - OMADA_PASSWORD
+    config:
+      - OMADA_CONTROLLER_URL
+      - OMADA_SITE
+    docs: "https://www.tp-link.com/us/omada-sdn/"
+    notes: "Internal network only - for Spark bandwidth monitoring"
+    required: false
 
 # =============================================================================
-# OBSERVABILITY
+# CREDENTIAL LOADING GUIDE
 # =============================================================================
-observability:
-
-  mac_loki:
-    name: Loki (Mac)
-    container: mac-loki
-    port: 3102                    # Changed from 3100 to avoid Supabase Studio
-    type: loki
-    auto_start: true
-    description: Log aggregation
-
-  mac_tempo:
-    name: Tempo (Mac)
-    container: mac-tempo
-    port: 3200                    # API port
-    otlp_grpc_port: 4317          # OTLP gRPC
-    otlp_http_port: 4318          # OTLP HTTP
-    type: tempo
-    auto_start: true
-    description: Distributed tracing
-
-  mac_jaeger:
-    name: Jaeger (Mac)
-    container: mac-jaeger
-    port: 16686                   # UI port
-    type: jaeger
-    healthcheck: /
-    auto_start: true
-    description: Tracing UI
-
-  spark_prometheus:
-    name: Prometheus (Spark)
-    container: prometheus
-    port: 9095
-    type: prometheus
-    location: spark
-    auto_start: true
-    description: Metrics collection on Spark
-
-  spark_grafana:
-    name: Grafana (Spark)
-    container: grafana
-    port: 3002
-    type: grafana
-    location: spark
-    auto_start: true
-    description: Monitoring dashboard on Spark
-
+#
+# For Bash scripts:
+#   source ~/Projects/PomSpark/scripts/lib/common.sh
+#   # Credentials auto-loaded via load_credentials()
+#
+# For Python (via pom-core):
+#   from pom_core.config.settings import OPENAI_API_KEY, WEAVIATE_CLOUD_URL
+#
+# For Docker containers:
+#   env_file in docker-compose mounts secrets.env
+#
+# Verification:
+#   cd ~/Projects/PomSpark && ./scripts/check-credentials.sh
 # =============================================================================
-# DEVELOPMENT TOOLS
-# =============================================================================
-dev_tools:
-
-  mac_redis_insight:
-    name: Redis Insight
-    container: mac-redis-insight
-    port: 5540
-    type: web
-    auto_start: true
-    description: Redis GUI
-
-  mac_minio:
-    name: MinIO
-    container: mac-minio
-    port: 9000                    # S3 API
-    console_port: 9001            # Web console
-    type: minio
-    auto_start: true
-    description: S3-compatible storage
-
-  mac_mailhog:
-    name: MailHog
-    container: mac-mailhog
-    port: 8025                    # Web UI
-    smtp_port: 1025               # SMTP
-    type: mailhog
-    auto_start: true
-    description: Email testing
-
-# =============================================================================
-# SUPABASE (Local Auth & Database)
-# =============================================================================
-supabase:
-
-  mac_supabase_studio:
-    name: Supabase Studio
-    container: mac-supabase-studio
-    port: 3100
-    type: web
-    auto_start: true
-    description: Supabase admin UI
-
-  mac_supabase_kong:
-    name: Supabase Kong
-    container: mac-supabase-kong
-    port: 8100                    # API gateway
-    type: kong
-    auto_start: true
-    description: Supabase API gateway
-
-  mac_supabase_db:
-    name: Supabase PostgreSQL
-    container: mac-supabase-db
-    port: 5432
-    type: postgresql
-    auto_start: true
-    description: Supabase database
-
-  mac_supabase_auth:
-    name: Supabase Auth (GoTrue)
-    container: mac-supabase-auth
-    port: 9999
-    type: gotrue
-    auto_start: true
-    description: Supabase authentication
-
-# =============================================================================
-# RESERVED PORTS (DO NOT USE)
-# =============================================================================
-reserved_ports:
-  - port: 4000
-    reason: Cursor MCP Server
-    severity: critical
-  - port: 5000
-    reason: macOS ControlCenter / AirPlay
-    severity: critical
-  - port: 3000
-    reason: Common dev server default (React, Next.js)
-    severity: warning
-  - port: 8080
-    reason: Already used by Weaviate
-    severity: info
