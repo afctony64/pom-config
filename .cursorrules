@@ -3,10 +3,15 @@
 ## IDENTITY
 ```
 Repo: pom-config
+<<<<<<< HEAD
 Type: Shared repository (no resident agent)
+=======
+>>>>>>> f9e0a41 (docs: add Home Repo to identity in cursorrules)
 Role: Shared configuration - schemas, prompts, models, profiles
 Home Repo: afctony64/pom-config
+Shared By: All Pom agents (check OWNERSHIP.yaml for write access)
 ```
+<<<<<<< HEAD
 **IMPORTANT**: When you work in pom-config, you keep your original agent identity
 (PomSpark, pom-core, PomAI, or Pomothy). Check OWNERSHIP.yaml for your write access.
 ## VISITING AGENT GUIDE
@@ -17,6 +22,9 @@ Home Repo: afctony64/pom-config
 | **pom-core** | schemas/, llm_models/, tools/, data_cards/, tenants/ | everything else |
 | **PomAI** | prompts/, researcher_ai/ | everything else |
 | **Pomothy** | ux_configs/ | everything else |
+=======
+
+>>>>>>> f9e0a41 (docs: add Home Repo to identity in cursorrules)
 ## ⚠️ SHARED REPO - CHECK OWNERSHIP FIRST
 This repo is shared by multiple AI agents. Before modifying any file:
 1. Check `OWNERSHIP.yaml` to verify you have write access
