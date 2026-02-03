@@ -30,15 +30,19 @@ Add to `shared-config.env`:
 # To switch modes, change this line and copy relevant values
 ```
 
-### Option 3: PomSpark Mode Switching
+### Option 3: PomSpark Mode Switching (Recommended)
 
-Use PomSpark's dev.sh to switch modes (updates local environment):
+Use PomSpark's dev.sh to switch modes. This updates:
+- Local environment (`PomSpark/configs/.env`)
+- Tenant routing (`PomSpark/configs/tenant-config.json`)
+- **Shared config (`pom-config/shared-config.env`)** - single source of truth for all repos
 
 ```bash
 cd ~/Projects/PomSpark
 ./scripts/dev.sh home    # Switch to home mode
-./scripts/dev.sh travel  # Switch to travel mode
-./scripts/dev.sh ooo     # Switch to OOO mode
+./scripts/dev.sh travel  # Switch to travel mode (requires confirmation)
+./scripts/dev.sh ooo     # Switch to OOO mode (requires confirmation)
+./scripts/dev.sh status  # Show current mode and services
 ```
 
 ## Profile Comparison
@@ -67,3 +71,8 @@ When adding a new setting:
 2. Document the setting with comments
 3. Update this README if it's a significant setting
 4. Update VERSION and CHANGELOG in parent directory
+
+## Related Documentation
+
+- [SERVICE_ACCESS_SOP.md](https://github.com/afctony64/pom-docs/blob/main/docs/infrastructure/SERVICE_ACCESS_SOP.md) - Comprehensive service access and credential management guide
+- [SHARED_CONFIG_GUIDE.md](https://github.com/afctony64/pom-docs/blob/main/docs/infrastructure/SHARED_CONFIG_GUIDE.md) - Configuration architecture

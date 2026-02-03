@@ -1,0 +1,16 @@
+# <type>(<scope>): <subject>
+#
+# Type: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# Scope: Optional, component affected (e.g., database, api, cli)
+# Subject: Brief description (50 chars or less)
+#
+# Examples:
+#   feat(database): Add connection pooling
+#   fix(api): Handle null response from Weaviate
+#   docs(readme): Update installation instructions
+#
+# Body: Explain WHAT and WHY (wrap at 72 chars)
+#
+# Footer: Reference issues, breaking changes
+#   Closes #123
+#   BREAKING CHANGE: <description>
