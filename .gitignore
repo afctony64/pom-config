@@ -1,11 +1,46 @@
+# Python
 __pycache__/
 *.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
 .venv/
 venv/
+
+# IDE
 .idea/
 .vscode/
 *.swp
+*.sublime-*
+
+# OS files
 .DS_Store
-.pytest_cache/
+Thumbs.db
+*~
+
+# Environment files
 .env
+.env.*
 *.local.yaml
+
+# Node (if any frontend tooling)
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+.cache/
+temp/
+
+# Build artifacts
+dist/
+build/
+
+# Local overrides
+*.local
+*.local.*
