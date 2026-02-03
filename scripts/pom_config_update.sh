@@ -31,40 +31,40 @@ usage() {
 
 update_config() {
     local version="$1"
-    
+
     echo "📦 Updating pom-config to $version..."
-    
+
     # Create temp directory
     local tmp_dir=$(mktemp -d)
     trap "rm -rf $tmp_dir" EXIT
-    
+
     if [ "$version" = "latest" ]; then
         # Get latest release tag
         version=$(curl -s "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
         echo "   Latest version: $version"
     fi
-    
+
     # Download release tarball
     local tarball_url="https://github.com/$REPO_OWNER/$REPO_NAME/archive/refs/tags/$version.tar.gz"
     echo "   Downloading from $tarball_url..."
-    
+
     curl -sL "$tarball_url" -o "$tmp_dir/pom-config.tar.gz"
-    
+
     # Extract
     tar -xzf "$tmp_dir/pom-config.tar.gz" -C "$tmp_dir"
-    
+
     # Remove old config
     rm -rf "$CONFIG_PKG_DIR"
-    
+
     # Move new config into place
     mv "$tmp_dir/$REPO_NAME-${version#v}" "$CONFIG_PKG_DIR"
-    
+
     # Write version file
     echo "$version" > "$CONFIG_PKG_DIR/.version"
-    
+
     echo "✅ pom-config updated to $version"
     echo "   Location: $CONFIG_PKG_DIR"
-    
+
     # Clear pom-core config caches to avoid stale schema warnings
     echo ""
     echo "🧹 Clearing pom-core config caches..."
