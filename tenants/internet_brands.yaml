@@ -88,7 +88,7 @@ collections:
 
   # Source collection (master entity/contact record - physical presence)
   Source: "cloud"
-  
+
   # Domain collection (digital presence - websites, pages)
   Domain: "cloud"
 
@@ -114,6 +114,19 @@ collections:
   Page_content: "spark"
   Page_source: "spark"
 
+# Mode overrides - JUST THE CHANGES from default (HOME) routing
+modes:
+  travel:
+    Page_intelligence: "mac"
+    Page_facts: "mac"
+    Page_content: "mac"
+    Page_source: "mac"
+  ooo:
+    Page_intelligence: "mac"
+    Page_facts: "mac"
+    Page_content: "mac"
+    Page_source: "mac"
+
 # ══════════════════════════════════════════════════════════════════════════════
 # URL PATTERNS - Legal Services Domain-Specific
 # ══════════════════════════════════════════════════════════════════════════════
@@ -129,7 +142,7 @@ url_patterns:
         product: 0.6
         risk: 0.7
         industry: 0.5
-        
+
     # Legal Services: Practice Areas
     - pattern: "/(practice.?area|specialization|service|expertise|focus|area.?of.?law)s?(/|$)"
       default_weight: 0.9
@@ -137,7 +150,7 @@ url_patterns:
         product: 1.0
         industry: 0.85
         competitor: 0.7
-        
+
     # Legal Services: Case Results
     - pattern: "/(case.?result|verdict|settlement|outcome|success|win|award)s?(/|$)"
       default_weight: 0.85
@@ -145,7 +158,7 @@ url_patterns:
         customer: 0.9
         competitor: 0.7
         product: 0.6
-        
+
     # Legal Services: Bar Admissions & Credentials
     - pattern: "/(bar.?admission|admission|credential|license|certification|bar.?member)s?(/|$)"
       default_weight: 0.8
@@ -153,7 +166,7 @@ url_patterns:
         leadership: 0.9
         risk: 0.7
         industry: 0.6
-        
+
     # Legal Services: Court Admissions
     - pattern: "/(court.?admission|federal.?court|state.?court|jurisdiction)s?(/|$)"
       default_weight: 0.75
@@ -170,7 +183,7 @@ url_patterns:
         journalist: 0.9
         industry: 0.7
         risk: 0.6
-        
+
     # Legal Services: Resources & Guides
     - pattern: "/(resource|guide|faq|help|information|learn)s?(/|$)"
       default_weight: 0.55
@@ -188,7 +201,7 @@ url_antipatterns:
   - pattern: "/(disclaimer|terms-of-service|privacy-policy|legal-notice)/"
     score: 0.1
     reason: "Legal boilerplate - low research value"
-    
+
   # Legal Services: Consultation Forms
   - pattern: "/(consultation|request|contact-form|free-consultation)/"
     score: 0.2

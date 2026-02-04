@@ -57,3 +57,18 @@ collections:
 
   # API caches (spark)
   API_intelligence: "spark"
+
+# Mode overrides - JUST THE CHANGES from default (HOME) routing
+modes:
+  travel:
+    Page_intelligence: "mac"
+    Page_facts: "mac"
+    Page_content: "mac"
+    Page_source: "mac"
+    API_intelligence: "mac"
+  ooo:
+    Page_intelligence: "mac"
+    Page_facts: "mac"
+    Page_content: "mac"
+    Page_source: "mac"
+    API_intelligence: "mac"
