@@ -231,15 +231,12 @@ collections:
   # Domain collection (primary entity for Entity Model) - on Cloud
   Domain: "cloud"
 
-  # Page collections (group: url)
-  # TEMPORARY: Routing to mac until pom-core#854 fixes mode override support
-  # Original: "spark" - revert when pom-core applies modes.ooo overrides
-  Page_facts: "mac"
-  Page_intelligence: "mac"
+  # Page collections (group: url) - GPU-accelerated on Spark
+  Page_facts: "spark"
+  Page_intelligence: "spark"
 
-  # API cache (external API responses)
-  # TEMPORARY: Routing to mac until pom-core#854 fixes mode override support
-  API_intelligence: "mac"
+  # API cache (external API responses) - on Spark
+  API_intelligence: "spark"
 
 # Mode overrides - JUST THE CHANGES from default (HOME) routing
 # pom-core reads POMSPARK_MODE and applies these overrides
