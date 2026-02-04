@@ -1,30 +1,36 @@
 # Tenant Routing Configuration
 
-This directory contains mode-specific tenant routing configurations that define how tenants and collections are routed to different Weaviate instances.
+**DEPRECATED**: This directory is no longer used.
 
-## Files
+## New Architecture
 
-| File | Mode | Description |
-|------|------|-------------|
-| `home.yaml` | HOME | Mac + Spark mode - full functionality |
-| `travel.yaml` | TRAVEL | Mac only - offline mode |
-| `ooo.yaml` | OOO | Out-of-Office - remote access via tunnels |
-| `remote.yaml` | REMOTE | Remote development via Cloudflare tunnel |
+Mode-specific routing is now defined directly in each tenant's YAML file using a `modes:` section.
 
-## Structure
+Example from `tenants/prismatic.yaml`:
 
-Each file defines:
+```yaml
+collections:
+  # Default routing (HOME mode)
+  Page_facts: "spark"
+  Page_intelligence: "spark"
+  API_intelligence: "spark"
 
-- `mode` - The mode name
-- `defaults` - Default routing behavior
-- `weaviate_instances` - Available Weaviate instances and their URLs
-- `tenants` - Per-tenant routing overrides
-- `collection_routing` - Per-collection routing overrides
+# Mode overrides - JUST THE CHANGES from default (HOME) routing
+modes:
+  travel:
+    Page_facts: "mac"
+    Page_intelligence: "mac"
+    API_intelligence: "mac"
+  ooo:
+    Page_facts: "mac"
+    Page_intelligence: "mac"
+    API_intelligence: "mac"
+```
 
-## Usage
+## How It Works
 
-pom-core's tenant routing service loads these configurations based on `POMSPARK_MODE` environment variable.
+1. `collections:` defines default routing (HOME mode)
+2. `modes:` defines overrides for other modes (only the changes)
+3. pom-core reads `POMSPARK_MODE` and applies the appropriate overrides
 
-## Migration from PomSpark
-
-These configs were migrated from `PomSpark/configs/tenant-config*.json` to provide centralized, version-controlled tenant routing across all Pom ecosystem apps.
+This is declarative - one source of truth per tenant, no duplication.

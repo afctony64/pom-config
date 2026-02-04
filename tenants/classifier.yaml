@@ -57,4 +57,13 @@ collections:
   Page_intelligence: "spark"
   Page_content: "spark"
 
-  # Knowledge and fact collections (deprecated)
+# Mode overrides - JUST THE CHANGES from default (HOME) routing
+modes:
+  travel:
+    Page_facts: "mac"
+    Page_intelligence: "mac"
+    Page_content: "mac"
+  ooo:
+    Page_facts: "mac"
+    Page_intelligence: "mac"
+    Page_content: "mac"
