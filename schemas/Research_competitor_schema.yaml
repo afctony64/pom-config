@@ -219,6 +219,8 @@ properties:
   dataType:
   - text[]
   description: 'Primary domain for {subject}. Example: "competitor.com" (no https://, no www). Use "Not disclosed" if unknown.'
+  # Issue #868: Pattern constraint for LLM validation - prevents garbage like "domain.com (subdomain)"
+  pattern: '^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$|^Not disclosed$'
   parallel_to: keyCompetitors
   tags:
   - research

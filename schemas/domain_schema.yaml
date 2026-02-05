@@ -1069,7 +1069,22 @@ properties:
 - name: page_count
   dataType:
   - int
-  description: Count of Page_intelligence records (pages) discovered for this domain
+  # Issue #869: Clarified to mean actionable pages only (for completion metrics)
+  description: Count of actionable Page_Intelligence records (scrape_status IN ['scraped', 'pending'])
+  indexFilterable: true
+  sets:
+  - status_update
+  - system
+  tags:
+  - pipeline
+  - processing
+  - count
+
+# Issue #869: New field for total page count (no filtering)
+- name: raw_page_count
+  dataType:
+  - int
+  description: Total count of ALL Page_Intelligence records for this domain (no filtering by status)
   indexFilterable: true
   sets:
   - status_update
