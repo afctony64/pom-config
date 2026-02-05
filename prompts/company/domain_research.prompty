@@ -69,7 +69,7 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model_card_id: qwen3:14b
+    model_card_id: gpt-5-mini
   parameters:
     temperature: 0.3
     response_format:
