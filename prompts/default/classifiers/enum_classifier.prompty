@@ -1,4 +1,5 @@
 ---
+$schema: ../../openai-chat-schema.yaml
 name: Enum Classifier
 description: |
   Prompt Tool for enum Cat field classification.
@@ -13,6 +14,16 @@ description: |
 
   AI Tool Type: Prompt
   Modes: standalone, post_execution, function_calling
+
+prompt_type:
+  name: cat_classifier
+  priority: 30
+  mode: chain
+  uses_execution_artifacts: true
+  outputs:
+    field_sets:
+      - EnumCat
+    include_cat_fields: true
 
 # === MODEL SELECTION CLASSIFICATION ===
 classification:

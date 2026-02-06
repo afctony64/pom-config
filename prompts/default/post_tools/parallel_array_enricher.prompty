@@ -1,4 +1,5 @@
 ---
+$schema: ../../openai-chat-schema.yaml
 name: Parallel Array Enricher
 id: parallel_array_enricher
 description: "Schema-driven enricher for parallel array elements. Uses field descriptions to guide searches."
@@ -6,6 +7,16 @@ description: "Schema-driven enricher for parallel array elements. Uses field des
 stage: post_execution
 reusable: true
 category: enrich
+
+prompt_type:
+  name: array_enricher
+  priority: 10
+  mode: chain
+  uses_execution_artifacts: true
+  outputs:
+    field_sets:
+      - post
+    allow_post_fields: true
 
 classification:
   task_type: extraction

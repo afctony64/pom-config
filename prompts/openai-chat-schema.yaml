@@ -1,0 +1,74 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: OpenAI Chat Prompty Frontmatter
+description: >
+  Schema for chat prompty frontmatter metadata. This is intentionally permissive
+  while listing common fields used in PomFlow templates.
+type: object
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  stage:
+    type: string
+  reusable:
+    type: boolean
+  category:
+    type: string
+  version:
+    type: string
+  authors:
+    type: array
+    items:
+      type: string
+  prompt_type:
+    type: object
+    additionalProperties: true
+  classification:
+    type: object
+    additionalProperties: true
+  inputs:
+    type: object
+    additionalProperties: true
+  outputs:
+    type: object
+    additionalProperties: true
+  tools:
+    type: array
+    items:
+      type: string
+  tool_guidance:
+    type: object
+    additionalProperties: true
+  data_requirements:
+    type: object
+    additionalProperties: true
+  processing_config:
+    type: object
+    additionalProperties: true
+  defaults:
+    type: object
+    additionalProperties: true
+  model:
+    type: object
+    properties:
+      api:
+        type: string
+      configuration:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: ["openai", "openai_chat", "azure_openai", "serverless"]
+          connection:
+            type: string
+          model_card_id:
+            type: string
+        additionalProperties: true
+      parameters:
+        type: object
+        additionalProperties: true
+    additionalProperties: true
+additionalProperties: true

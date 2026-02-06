@@ -470,7 +470,6 @@ properties:
   - benchmark
   sets:
   - standard
-  - prompt
   - system
   - standard
   - EnumCat
@@ -499,7 +498,6 @@ properties:
   - Cat
   sets:
   - standard
-  - prompt
   - system
   - standard
   - EnumCat
