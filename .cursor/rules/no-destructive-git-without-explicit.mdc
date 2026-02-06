@@ -1,0 +1,10 @@
+---
+description: Block destructive git commands unless explicitly requested
+alwaysApply: true
+---
+
+# Destructive Git Safety
+
+- Never run destructive git commands unless explicitly requested in the user's message.
+- Destructive commands include: `git reset --hard`, `git checkout --`, `git clean -fd`, `git checkout --force`, `git push --force`, `git push -f`.
+- If a user requests such a command, confirm the exact repo and target before running it.
