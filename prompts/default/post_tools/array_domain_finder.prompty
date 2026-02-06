@@ -1,0 +1,124 @@
+---
+$schema: ../../openai-chat-schema.yaml
+name: Array Domain Finder
+id: array_domain_finder
+description: "Resolve domains for parallel array subjects (domain-only)."
+
+stage: post_execution
+reusable: true
+category: enrich
+
+prompt_type:
+  name: array_domain_finder
+  priority: 5
+  mode: chain
+  uses_execution_artifacts: true
+  outputs:
+    field_sets:
+      - post
+    allow_post_fields: true
+
+classification:
+  task_type: extraction
+  complexity: low
+  context_size: small
+  priority: speed
+
+version: 1.0.0
+authors:
+  - AI Assistant
+
+inputs:
+  subject:
+    description: "The anchor subject to resolve a domain for (e.g., 'Boomi')"
+    type: string
+  anchor_field:
+    description: "The anchor field name (e.g., 'keyCompetitors')"
+    type: string
+  post_fields:
+    description: "Array of {name, description} for fields to fill (domain-only)"
+    type: array
+  tenant:
+    description: "TenantConfig object (injected from tenant_id)"
+    type: object
+  researcher_ai:
+    description: "ResearcherAIConfig with researcher_identity (injected from researcher_id)"
+    type: object
+  record:
+    description: "Source record being enriched (Domain or Research_* record)"
+    type: object
+  execution_artifacts:
+    description: "Canonical execution artifacts (prompt, llm_context, llm_response, tools)"
+    type: object
+
+tools:
+  - brave_search
+
+tool_guidance:
+  brave_search:
+    priority: medium
+    max_calls: 3
+    when_to_use: |
+      Use brave_search ONLY to resolve the official domain.
+      Prefer the official company site; avoid linkedin/crunchbase unless no official site exists.
+
+data_requirements:
+  include_enrichment_data: true
+  injectors:
+    - injector_template: mcp
+      template_vars:
+        tool: brave_search
+        params:
+          query: "{{ subject }} official website"
+          count: 5
+        inject_as: domain_candidates
+
+outputs:
+  fields:
+    type: object
+    description: "Object with field values keyed by field name"
+
+model:
+  api: chat
+  configuration:
+    connection: openai_conn
+    model_card_id: gpt-5-mini
+    type: openai_chat
+  parameters:
+    response_format:
+      type: json_object
+    max_completion_tokens: 1200
+    timeout: 120
+    max_retries: 2
+    max_turns: 3
+
+---
+
+system:
+{% set props = record.get('properties') or record if record else {} %}
+{% set entity_name = props.get('entityName') or props.get('domain') or 'Unknown' %}
+{% set tenant_name = tenant.name|default(tenant.id) if tenant else 'Unknown' %}
+{% set tenant_desc = tenant.description|default('') if tenant else '' %}
+
+You are resolving the official domain for **{{ subject }}**, a related entity of **{{ entity_name }}** for {{ tenant_name }}{% if tenant_desc %}, {{ tenant_desc }}{% endif %}.
+
+Fields to fill:
+{% for field in post_fields %}
+- {{ field.name }}: {{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}
+{% endfor %}
+
+Rules:
+- Pick the official company domain (no https://, no www).
+- Do NOT return the source entity's domain ({{ entity_name }}).
+- If uncertain, return "Not disclosed".
+- Return JSON with ONLY the fields listed above.
+
+user:
+**SUBJECT:** {{ subject }}
+
+{% if domain_candidates is defined and domain_candidates and domain_candidates.results is defined %}
+**DOMAIN CANDIDATES FOR {{ subject }}:**
+{% for result in domain_candidates.results[:5] %}
+- {{ result.url }} | {{ result.title }}{% if result.description %} | {{ result.description }}{% endif %}
+{% endfor %}
+{% endif %}

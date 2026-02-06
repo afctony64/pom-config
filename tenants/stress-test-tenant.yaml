@@ -1,0 +1,25 @@
+id: stress-test-tenant
+name: Stress Test Tenant
+type: tenant
+description: Tenant for Weaviate stress and performance tests
+
+# User/persona information (configuration data)
+user:
+  name: Stress Test Runner
+  email: stress-test@pom.ai
+  role: Performance Testing
+
+# Analysis configuration - minimal guidance for stress runs
+analysis_config:
+  mission: "Exercise high-volume Weaviate operations for performance validation"
+  industry_focus: ["performance_testing", "stress_testing"]
+
+# Data sources configuration (infrastructure only)
+data_sources:
+  data_dir: "Data"
+  upload_dir: "Data/uploads"
+
+# Collection routing - stress tests target local/mac Weaviate by default
+# Maps collection names to Weaviate instances: "cloud", "spark", "local", "mac"
+collections:
+  StressTestCollection: "mac"

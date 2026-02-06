@@ -352,7 +352,6 @@ properties:
   - benchmark
   sets:
   - standard
-  - prompt
   - EnumCat
   metadata:
     order: 121
@@ -387,7 +386,6 @@ properties:
   - industry
   sets:
   - standard
-  - prompt
   - EnumCat
   metadata:
     order: 122
@@ -486,7 +484,6 @@ properties:
   - region
   - geography
   sets:
-  - prompt
   - system
   - standard
   - EnumCat
