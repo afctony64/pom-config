@@ -1,0 +1,131 @@
+name: Auto-merge owned PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-ownership:
+    runs-on: ubuntu-latest
+    outputs:
+      all_owned: ${{ steps.check.outputs.all_owned }}
+      contributor: ${{ steps.check.outputs.contributor }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: files
+        run: |
+          FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract contributor from branch
+        id: contributor
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          # Extract contributor from branch name (e.g., contrib/PomSpark/20260205_123456)
+          if [[ "$BRANCH" =~ ^contrib/([^/]+)/ ]]; then
+            CONTRIBUTOR="${BASH_REMATCH[1]}"
+          else
+            # Try PR title format [AgentName]
+            TITLE="${{ github.event.pull_request.title }}"
+            if [[ "$TITLE" =~ ^\[([^\]]+)\] ]]; then
+              CONTRIBUTOR="${BASH_REMATCH[1]}"
+            else
+              CONTRIBUTOR="unknown"
+            fi
+          fi
+          echo "contributor=$CONTRIBUTOR" >> $GITHUB_OUTPUT
+          echo "Detected contributor: $CONTRIBUTOR"
+
+      - name: Check ownership
+        id: check
+        run: |
+          CONTRIBUTOR="${{ steps.contributor.outputs.contributor }}"
+          echo "Checking ownership for contributor: $CONTRIBUTOR"
+
+          ALL_OWNED=true
+          UNOWNED_FILES=""
+
+          # Parse OWNERSHIP.yaml to get owned paths for this contributor
+          # Using simple grep/awk since we don't have yq
+          OWNED_PATHS=$(awk "/^  $CONTRIBUTOR:$/,/^  [A-Za-z]/" OWNERSHIP.yaml | grep -E "^\s+- " | sed 's/.*- //' | tr -d ' ')
+          CAN_WRITE_PATHS=$(awk "/^  $CONTRIBUTOR:$/,/^  [A-Za-z]/" OWNERSHIP.yaml | awk '/can_write:/,/read_only:/' | grep -E "^\s+- " | sed 's/.*- //' | tr -d ' ')
+
+          echo "Owned paths: $OWNED_PATHS"
+          echo "Can write paths: $CAN_WRITE_PATHS"
+
+          # Combine owned and can_write paths
+          ALL_WRITABLE="$OWNED_PATHS $CAN_WRITE_PATHS"
+
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+
+            FILE_OWNED=false
+            for path in $ALL_WRITABLE; do
+              # Remove trailing slash for comparison
+              path="${path%/}"
+              if [[ "$file" == "$path"* ]] || [[ "$file" == "$path" ]]; then
+                FILE_OWNED=true
+                break
+              fi
+            done
+
+            if [ "$FILE_OWNED" = false ]; then
+              echo "❌ Unowned: $file"
+              ALL_OWNED=false
+              UNOWNED_FILES="$UNOWNED_FILES $file"
+            else
+              echo "✅ Owned: $file"
+            fi
+          done <<< "${{ steps.files.outputs.files }}"
+
+          echo "all_owned=$ALL_OWNED" >> $GITHUB_OUTPUT
+          echo "contributor=$CONTRIBUTOR" >> $GITHUB_OUTPUT
+
+          if [ "$ALL_OWNED" = true ]; then
+            echo "🎉 All files are owned by $CONTRIBUTOR - eligible for auto-merge"
+          else
+            echo "⚠️ Some files are not owned by $CONTRIBUTOR:$UNOWNED_FILES"
+          fi
+
+  auto-merge:
+    needs: check-ownership
+    if: needs.check-ownership.outputs.all_owned == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-merge PR
+        run: |
+          echo "🚀 Auto-merging PR from ${{ needs.check-ownership.outputs.contributor }}"
+          gh pr merge ${{ github.event.pull_request.number }} --squash --auto
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  require-review:
+    needs: check-ownership
+    if: needs.check-ownership.outputs.all_owned == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request review
+        run: |
+          echo "⚠️ PR contains files not owned by ${{ needs.check-ownership.outputs.contributor }}"
+          echo "Requesting review from code owner..."
+          gh pr comment ${{ github.event.pull_request.number }} --body "⚠️ **Review Required**
+
+          This PR contains files not owned by **${{ needs.check-ownership.outputs.contributor }}**.
+
+          A code owner must review and approve before merge.
+
+          See [OWNERSHIP.yaml](../blob/main/OWNERSHIP.yaml) for ownership rules."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
