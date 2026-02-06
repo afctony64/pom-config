@@ -1,0 +1,10 @@
+---
+description: Never offer or ask to clean up local uncommitted changes
+alwaysApply: true
+---
+
+# Local Changes Rule
+
+- Never offer to clean up, reset, or delete local uncommitted changes.
+- Never ask whether to clean up local uncommitted changes.
+- Always leave local uncommitted changes untouched unless the user explicitly requests cleanup in that message.
