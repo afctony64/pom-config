@@ -9,14 +9,13 @@ import yaml
 # Add pom-core to path for model imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "pom-core"))
 
-from pom_core.models.ai_config_models import ResearcherAIConfig
-from pom_core.models.config_models import LLMModelCard, ToolCard
-from pom_core.models.data_model import DataCardConfig
-from pom_core.models.tenant_group_models import TenantGroupConfig
-from pom_core.models.tenant_routing_models import TenantRoutingConfig
-from pom_core.models.ux_config_model import UXConfig
-from pom_core.models.weaviate_config_model import WeaviateClassConfig
-from pom_core.services.core_prompty_service import CorePromptyService
+from pom_core.models.ai_config_models import ResearcherAIConfig  # noqa: E402
+from pom_core.models.config_models import LLMModelCard, ToolCard  # noqa: E402
+from pom_core.models.data_model import DataCardConfig  # noqa: E402
+from pom_core.models.tenant_group_models import TenantGroupConfig  # noqa: E402
+from pom_core.models.ux_config_model import UXConfig  # noqa: E402
+from pom_core.models.weaviate_config_model import WeaviateClassConfig  # noqa: E402
+from pom_core.services.core_prompty_service import CorePromptyService  # noqa: E402
 
 CONFIG_ROOT = Path(__file__).parent.parent
 
@@ -28,7 +27,6 @@ YAML_VALIDATORS = [
     ("tenant_groups", TenantGroupConfig, None),
     ("researcher_ai", ResearcherAIConfig, "researcher_ai"),
     ("ux_configs", UXConfig, "ux_config"),
-    ("tenant-routing", TenantRoutingConfig, None),
 ]
 
 
@@ -38,14 +36,14 @@ def validate_directory(
     """Validate all YAML files in a directory."""
     errors = []
     config_dir = CONFIG_ROOT / dir_name
-    
+
     if not config_dir.exists():
         return []
-    
+
     for yaml_file in config_dir.rglob("*.yaml"):
         if yaml_file.name.startswith("_"):
             continue  # Skip templates
-        
+
         try:
             with open(yaml_file) as f:
                 data = yaml.safe_load(f)
@@ -56,7 +54,7 @@ def validate_directory(
         except Exception as e:
             errors.append(f"{yaml_file.name}: {e}")
             print(f"  ✗ {yaml_file.name}: {e}")
-    
+
     return errors
 
 
@@ -113,7 +111,7 @@ def validate_prompts() -> list[str]:
 def main():
     """Run validation on all config directories."""
     all_errors = []
-    
+
     for dir_name, model_class, type_value in YAML_VALIDATORS:
         print(f"\n📁 Validating {dir_name}/")
         errors = validate_directory(dir_name, model_class, type_value)
@@ -121,7 +119,7 @@ def main():
 
     print("\n📁 Validating prompts/")
     all_errors.extend(validate_prompts())
-    
+
     if all_errors:
         print(f"\n❌ {len(all_errors)} validation errors found")
         sys.exit(1)

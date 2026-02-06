@@ -32,10 +32,8 @@ ai_agents:
     identity_file: "/Users/tonyeales/Projects/PomSpark/.cursorrules"
     owns:
       - profiles/              # Mode environment files (home.env, travel.env, etc.)
-      - tenant-routing/        # Weaviate routing per mode
     can_write:
       - profiles/
-      - tenant-routing/
       - shared-config.env      # Non-secret environment variables
       - .pom_config_pkg/       # Package configuration
     read_only:
@@ -73,7 +71,6 @@ ai_agents:
       - prompts/               # Allowed by human request
     read_only:
       - profiles/              # Owned by PomSpark
-      - tenant-routing/        # Owned by PomSpark
       - ux_configs/            # Owned by Pomothy
       - researcher_ai/         # Owned by PomAI
 
@@ -94,7 +91,6 @@ ai_agents:
       - schemas/               # Owned by pom-core
       - llm_models/            # Owned by pom-core
       - profiles/              # Owned by PomSpark
-      - tenant-routing/        # Owned by PomSpark
       - ux_configs/            # Owned by Pomothy
       - tools/                 # Owned by pom-core
       - data_cards/            # Owned by pom-core
@@ -114,7 +110,6 @@ ai_agents:
       - schemas/               # Owned by pom-core
       - llm_models/            # Owned by pom-core
       - profiles/              # Owned by PomSpark
-      - tenant-routing/        # Owned by PomSpark
       - researcher_ai/         # Owned by PomAI
       - data_cards/            # Owned by PomAI
       - tools/                 # Owned by pom-core

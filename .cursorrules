@@ -14,7 +14,7 @@ Shared By: All Pom agents (check OWNERSHIP.yaml for write access)
 
 | Your Agent | You Can Write | Read Only |
 |------------|---------------|-----------|
-| **PomSpark** | profiles/, tenant-routing/, shared-config.env | everything else |
+| **PomSpark** | profiles/, shared-config.env | everything else |
 | **pom-core** | schemas/, llm_models/, tools/, data_cards/, tenants/ | everything else |
 | **PomAI** | prompts/, researcher_ai/ | everything else |
 | **Pomothy** | ux_configs/ | everything else |
@@ -28,7 +28,6 @@ This repo is shared by multiple AI agents. Before modifying any file:
 | Path | Owner |
 |------|-------|
 | `profiles/` | PomSpark |
-| `tenant-routing/` | PomSpark |
 | `shared-config.env` | PomSpark |
 | `schemas/` | pom-core |
 | `llm_models/` | pom-core |

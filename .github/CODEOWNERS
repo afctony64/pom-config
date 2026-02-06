@@ -37,7 +37,6 @@ shared-config.env @afctony64
 
 # PomSpark owns
 /profiles/ @afctony64
-/tenant-routing/ @afctony64
 
 # Pomothy owns
 /ux_configs/ @afctony64
