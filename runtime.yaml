@@ -2,17 +2,16 @@
 # POM ECOSYSTEM RUNTIME CONFIGURATION
 # =============================================================================
 #
-# SINGLE SOURCE OF TRUTH for mode and workload profile settings.
+# SINGLE SOURCE OF TRUTH for service discovery and workload profile settings.
 #
 # This file defines:
-#   - Default mode (home/travel/ooo) and profile (data_pipeline/ai/balanced)
-#   - Valid modes and profiles with descriptions
-#   - Validation rules for each mode/profile combination
-#   - Service requirements per mode/profile
+#   - Default workload profile (data_pipeline/ai/balanced)
+#   - Valid profiles with descriptions
+#   - Validation rules for profile operations
 #
 # USAGE:
-#   - On startup/recreate: Defaults to home mode + data_pipeline profile
-#   - Switching is MANUAL: ./scripts/dev.sh <mode> or ./scripts/workload.sh <profile>
+#   - On startup/recreate: Defaults to data_pipeline profile
+#   - Switching is MANUAL: ./scripts/workload.sh <profile>
 #   - After switch: Automatic validation confirms consistent configuration
 #
 # =============================================================================
@@ -21,131 +20,13 @@
 # DEFAULTS (Applied on fresh startup/recreate)
 # =============================================================================
 defaults:
-  mode: home
   profile: data_pipeline
 
   # When true, startup will validate all services after starting
   validate_on_startup: true
 
-  # When true, mode/profile switch will require validation to pass
+  # When true, profile switch will require validation to pass
   require_validation_on_switch: true
-
-# =============================================================================
-# EXCEPTIONAL MODES (Require explicit user confirmation)
-# =============================================================================
-# travel and ooo are exceptional cases - NOT for regular use.
-# They require explicit confirmation and will prompt the user before switching.
-# All automatic recovery, restart, and default behaviors return to HOME mode.
-exceptional_modes:
-  - travel
-  - ooo
-
-# Recovery behavior: If mode is travel/ooo and system restarts, prompt to return to home
-auto_recovery_to_home: true
-
-# =============================================================================
-# MODES
-# =============================================================================
-modes:
-  home:
-    description: "Full development with Mac + Spark GPU"
-    spark_required: true
-    cloud_enabled: true
-
-    # Services that MUST be running in this mode
-    required_services:
-      mac:
-        - mac-weaviate
-        - mac-redis
-        - pomothy-backend
-        - pomothy-frontend
-        - pomai-frontend
-        - ollama-lb
-        - mac-report-server
-      spark:
-        - spark-weaviate
-        - spark-ollama
-        - spark-transformers-lb
-        - pomai-backend-spark
-
-    # Environment variables that MUST be set for this mode
-    required_env:
-      POMSPARK_MODE: home
-      WEAVIATE_MODE: spark
-
-    # Health endpoints to validate
-    health_checks:
-      - url: http://localhost:8080/v1/.well-known/ready
-        service: mac-weaviate
-      - url: http://localhost:8001/health/ready
-        service: pomothy-backend
-      - url: http://localhost:5174
-        service: pomothy-frontend
-      - url: http://localhost:5173
-        service: pomai-frontend
-      - url: http://localhost:8886/health
-        service: mac-report-server
-      - url: http://localhost:8093/.well-known/ready
-        service: mac-transformers-metal
-      - url: http://localhost:4100/health
-        service: browser-proxy
-      - url: http://spark-65d6.local:8080/v1/.well-known/ready
-        service: spark-weaviate
-      - url: http://spark-65d6.local:11434/api/version
-        service: spark-ollama
-      - url: http://spark-65d6.local:8090/.well-known/ready
-        service: spark-transformers-lb
-
-  travel:
-    description: "Mac-only mode (Spark offline, offline capable)"
-    spark_required: false
-    cloud_enabled: false
-
-    required_services:
-      mac:
-        - mac-weaviate
-        - mac-redis
-        - pomothy-backend
-        - pomothy-frontend
-        - pomai-frontend
-        - mac-report-server
-      # Mac-only profile
-      native:
-        - mac-ollama-metal
-        - mac-transformers-metal
-
-    required_env:
-      POMSPARK_MODE: travel
-      WEAVIATE_MODE: local
-
-    health_checks:
-      - url: http://localhost:8080/v1/.well-known/ready
-        service: mac-weaviate
-      - url: http://localhost:8001/health/ready
-        service: pomothy-backend
-      - url: http://localhost:5174
-        service: pomothy-frontend
-      - url: http://localhost:11435/api/version
-        service: mac-ollama-metal
-      - url: http://localhost:8093/.well-known/ready
-        service: mac-transformers-metal
-
-  ooo:
-    description: "Out-of-office mode (Spark via tunnel + Cloud)"
-    spark_required: false  # Via tunnel, not direct
-    cloud_enabled: true
-
-    required_services:
-      mac:
-        - mac-weaviate
-        - mac-redis
-
-    required_env:
-      POMSPARK_MODE: ooo
-
-    health_checks:
-      - url: http://localhost:8080/v1/.well-known/ready
-        service: mac-weaviate
 
 # =============================================================================
 # WORKLOAD PROFILES
@@ -259,28 +140,6 @@ profiles:
 
     override_file: overrides/spark/docker-compose.spark.query-only.yml
 
-  travel:
-    description: "Mac-only mode (Spark offline)"
-    priority_service: none
-
-    resource_allocation:
-      mac_weaviate: 24G
-      mac_redis: 4G
-
-    required_services:
-      mac:
-        - mac-weaviate
-        - mac-redis
-      native:
-        - mac-transformers-metal
-        - mac-ollama-metal
-
-    validation:
-      mac_ollama_running: true
-      mac_transformers_running: true
-
-    override_file: null  # No Spark override
-
 # =============================================================================
 # VALIDATION RULES
 # =============================================================================
@@ -294,18 +153,15 @@ validation:
   # Retry count for failed health checks
   health_check_retries: 3
 
-  # Files that MUST exist after mode switch
+  # Files that MUST exist after profile switch
   required_files:
     - path: ${CONFIGS_DIR}/.env
       description: "Environment configuration"
-    - path: ${CONFIGS_DIR}/tenant-config.json
-      description: "Tenant routing configuration"
     - path: ${CONFIGS_DIR}/.current-workload-profile
       description: "Current workload profile marker"
 
   # Environment variables that must match across all containers
   consistent_env_vars:
-    - POMSPARK_MODE
     - WEAVIATE_MODE
     - DEFAULT_WORKLOAD_PROFILE
 
@@ -319,10 +175,6 @@ validation:
 # STATUS FILE LOCATIONS
 # =============================================================================
 status_files:
-  # Current mode marker (written by dev.sh)
-  mode_file: ${CONFIGS_DIR}/.env
-  mode_variable: POMSPARK_MODE
-
   # Current profile marker (written by workload.sh)
   profile_file: ${CONFIGS_DIR}/.current-workload-profile
 
@@ -347,19 +199,4 @@ display:
     info: blue
     header: cyan
 
-# =============================================================================
-# INCOMPATIBLE COMBINATIONS
-# =============================================================================
-incompatible:
-  # Mode + Profile combinations that are invalid
-  - mode: travel
-    profile: ai
-    reason: "Travel mode has no Spark GPU for heavy LLM workloads"
-
-  - mode: travel
-    profile: data_pipeline
-    reason: "Travel mode has limited resources for full data pipeline"
-
-  - mode: ooo
-    profile: data_pipeline
-    reason: "OOO mode over tunnel is too slow for heavy embedding workloads"
+ 

@@ -18,7 +18,6 @@
 #
 # UTILITY PROFILES:
 #   - query_only     → Read-only exploration (minimal resources)
-#   - travel         → Mac-only mode (Spark offline)
 #
 # =============================================================================
 
@@ -424,50 +423,6 @@ profiles:
         pool_size: 2                 # Minimal for network-friendly mode
         memory_limit: 2G
 
-  # ===========================================================================
-  # TRAVEL - Mac-only mode (Spark offline)
-  # ===========================================================================
-  travel:
-    description: "Mac-only mode when Spark is unavailable"
-    use_case: "Working offline, Spark unreachable, travel"
-    warning: "⚠️ No GPU LLM - using Mac Metal (slower for large models)"
-
-    spark:
-      # All Spark services disabled
-      ollama:
-        enabled: false
-      transformers:
-        enabled: false
-      weaviate:
-        enabled: false
-      backend:
-        enabled: false
-      browser_pool:
-        enabled: false
-        note: "Spark offline - browser pool unavailable"
-
-    mac:
-      weaviate:
-        memory_limit: 48G        # No GPU contention - native services run separately
-        memory_reserved: 24G
-        gomemlimit: 46GiB
-        gogc: 50
-        note: "Full 48GB available - native services don't compete"
-      transformers_metal:
-        enabled: true
-        note: "CRITICAL - Only embedding service available"
-      ollama_metal:
-        enabled: true
-        memory_limit: 48G
-        memory_reserved: 32G
-        num_parallel: 4
-        max_loaded_models: 2
-      redis:
-        memory_limit: 4G
-        maxmemory: 2G
-      browser_pool:
-        enabled: false
-
 # -----------------------------------------------------------------------------
 # QUICK REFERENCE - Resource totals by profile
 # -----------------------------------------------------------------------------
@@ -484,7 +439,6 @@ profiles:
 # web_scraping     | 12 GB  | 72 GB    | 12 GB   | 5 instances  | 800 contexts★| 3000      | Bulk scraping
 # network_friendly | 48 GB  | 72 GB    | 32 GB   | 3 instances  | 5 contexts   | 500       | Shared network
 # query_only       | OFF    | 72 GB    | OFF     | 1 instance   | Disabled     | N/A       | Search/exploration
-# travel           | N/A    | N/A      | N/A     | N/A          | Disabled     | N/A       | Offline work
 #
 # MAC RESOURCES (ALL PROFILES):
 # Service          | Limit  | Reserved | GOMEMLIMIT | GOGC | Notes
