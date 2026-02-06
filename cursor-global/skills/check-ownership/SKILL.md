@@ -65,7 +65,6 @@ If you need to modify a path you don't own:
 | Path | Owner | Others Can Write? |
 |------|-------|-------------------|
 | `profiles/` | PomSpark | No |
-| `tenant-routing/` | PomSpark | No |
 | `schemas/` | pom-core | No |
 | `llm_models/` | pom-core | No |
 | `prompts/` | PomAI | Pomothy |

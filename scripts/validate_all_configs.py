@@ -13,7 +13,6 @@ from pom_core.models.ai_config_models import ResearcherAIConfig
 from pom_core.models.config_models import LLMModelCard, ToolCard
 from pom_core.models.data_model import DataCardConfig
 from pom_core.models.tenant_group_models import TenantGroupConfig
-from pom_core.models.tenant_routing_models import TenantRoutingConfig
 from pom_core.models.ux_config_model import UXConfig
 from pom_core.models.weaviate_config_model import WeaviateClassConfig
 from pom_core.services.core_prompty_service import CorePromptyService
@@ -28,7 +27,6 @@ YAML_VALIDATORS = [
     ("tenant_groups", TenantGroupConfig, None),
     ("researcher_ai", ResearcherAIConfig, "researcher_ai"),
     ("ux_configs", UXConfig, "ux_config"),
-    ("tenant-routing", TenantRoutingConfig, None),
 ]
 
 

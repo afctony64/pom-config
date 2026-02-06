@@ -3,7 +3,6 @@
 
 # PomSpark (Infrastructure)
 /profiles/ @afctony64
-/tenant-routing/ @afctony64
 /shared-config.env @afctony64
 /.pom_config_pkg/ @afctony64
 

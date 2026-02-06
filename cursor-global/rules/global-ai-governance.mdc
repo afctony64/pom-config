@@ -37,7 +37,6 @@ You are an AI assistant in Tony's Pom ecosystem. These rules apply to ALL worksp
 | Path | Owner | Others |
 |------|-------|--------|
 | `profiles/` | PomSpark | - |
-| `tenant-routing/` | PomSpark | - |
 | `shared-config.env` | PomSpark | pom-core |
 | `schemas/` | pom-core | - |
 | `llm_models/` | pom-core | - |
@@ -70,7 +69,7 @@ You are an AI assistant in Tony's Pom ecosystem. These rules apply to ALL worksp
 
 | Agent | pom-config writes | pom-docs writes |
 |-------|-------------------|-----------------|
-| PomSpark | profiles/, tenant-routing/ | docs/infrastructure/, docs/modes/ |
+| PomSpark | profiles/ | docs/infrastructure/, docs/modes/ |
 | pom-core | schemas/, llm_models/, tools/ | docs/api/, docs/development/ |
 | PomAI | prompts/, researcher_ai/, data_cards/ | docs/research/ |
 | Pomothy | ux_configs/, prompts/ | docs/ux/ |
