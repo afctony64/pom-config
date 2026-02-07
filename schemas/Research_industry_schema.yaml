@@ -185,7 +185,8 @@ properties:
   - score
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: businessModelLLM
     order: 111
@@ -198,9 +199,10 @@ properties:
   - LLM
   - score
   sets:
-  - prompt
   - array
   - standard
+  prompt:
+  - main
   metadata:
     order: 112
 - name: businessModelCIT
@@ -213,8 +215,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: businessModelLLM
     order: 113
@@ -239,7 +241,8 @@ properties:
   - score
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: deliveryModelLLM
     order: 121
@@ -252,9 +255,10 @@ properties:
   - LLM
   - score
   sets:
-  - prompt
   - array
   - standard
+  prompt:
+  - main
   metadata:
     order: 122
 - name: deliveryModelCIT
@@ -267,8 +271,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: deliveryModelLLM
     order: 123
@@ -285,7 +289,8 @@ properties:
   - score
   sets:
   - standard
-  - VecCat
+  prompt:
+  - vec_classifier
   metadata:
     order: 131
     source_llm: industrySegmentLLM
@@ -298,9 +303,10 @@ properties:
   - LLM
   - score
   sets:
-  - prompt
   - array
   - standard
+  prompt:
+  - main
   metadata:
     order: 132
 - name: industrySegmentCIT
@@ -313,8 +319,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: industrySegmentLLM
     order: 133
@@ -341,8 +347,8 @@ properties:
   - research
   - contextual
   - extractable
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 301
 - name: entityId
@@ -409,7 +415,8 @@ properties:
   - score
   sets:
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 303
 - name: naicsCode
@@ -424,7 +431,8 @@ properties:
   - score
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 201
 - name: naicsDescription
@@ -437,7 +445,8 @@ properties:
   - score
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 202
 - name: sector
@@ -468,7 +477,8 @@ properties:
   - score
   sets:
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 304
 - name: valueChainPosition
@@ -477,8 +487,8 @@ properties:
   description: Entity's position in the value chain
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 305
 - name: analysisConfidence
@@ -487,7 +497,8 @@ properties:
   description: Confidence level of analysis (high/medium/low/inferred/web_verified)
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -513,7 +524,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: page_facts_count
@@ -536,7 +548,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: processedDate
@@ -570,7 +583,8 @@ properties:
   description: Review flag for human validation (none/for_review/needs_verification)
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 912
 - name: updated_at

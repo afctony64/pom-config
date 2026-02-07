@@ -132,7 +132,8 @@ properties:
   - research
   sets:
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 131
 - name: financialHealth
@@ -145,7 +146,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 112
 - name: revenueProfile
@@ -156,7 +158,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 111
 - name: fundingRounds
@@ -172,7 +175,8 @@ properties:
   sets:
   - array
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 201
     parallel_anchor: true
@@ -186,8 +190,9 @@ properties:
   sets:
   - array
   - standard
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     parallel_to: fundingRounds
     order: 202
@@ -201,8 +206,9 @@ properties:
   sets:
   - array
   - standard
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     parallel_to: fundingRounds
     order: 203
@@ -217,8 +223,9 @@ properties:
   sets:
   - array
   - standard
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     parallel_to: fundingRounds
     order: 204
@@ -233,7 +240,8 @@ properties:
   sets:
   - array
   - system
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 902
 - name: growthVelocityLLM
@@ -245,7 +253,8 @@ properties:
   - LLM
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 126
 - name: growthVelocityCIT
@@ -258,8 +267,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: growthVelocityLLM
     order: 127
@@ -272,9 +281,10 @@ properties:
   - LLM
   sets:
   - standard
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 128
 - name: profitabilityProfileCIT
@@ -287,8 +297,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: profitabilityProfileLLM
     order: 129
@@ -301,9 +311,10 @@ properties:
   - LLM
   sets:
   - standard
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 122
 - name: revenueSizeCIT
@@ -316,8 +327,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: revenueSizeLLM
     order: 123
@@ -367,9 +378,10 @@ properties:
   - LLM
   sets:
   - standard
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 124
 - name: fundingStageCIT
@@ -382,8 +394,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: fundingStageLLM
     order: 125
@@ -395,7 +407,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 132
 - name: revenueGrowthRate
@@ -406,7 +419,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 133
 - name: totalFunding
@@ -417,7 +431,8 @@ properties:
   - research
   sets:
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 134
 - name: keyInvestors
@@ -431,8 +446,9 @@ properties:
   sets:
   - array
   - standard
-  - prompt
   - extended
+  prompt:
+  - main
   metadata:
     order: 203
 - name: valuation
@@ -443,7 +459,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 135
 - name: fundingStageCat
@@ -472,7 +489,8 @@ properties:
   - standard
   - system
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: fundingStageLLM
     order: 123
@@ -500,8 +518,9 @@ properties:
   - standard
   - system
   - standard
-  - EnumCat
   - extended
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: revenueSizeLLM
     order: 121
@@ -554,7 +573,8 @@ properties:
   - growth
   sets:
   - extended
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: growthVelocityLLM
     order: 125
@@ -604,7 +624,8 @@ properties:
   - profitability
   sets:
   - extended
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: profitabilityProfileLLM
     order: 127
@@ -618,7 +639,8 @@ properties:
   sets:
   - standard
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 141
 - name: headcountGrowthCat
@@ -655,7 +677,8 @@ properties:
   - headcount
   sets:
   - extended
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 142
 - name: processedDate
@@ -694,7 +717,8 @@ properties:
   sets:
   - system
   - standard
-  - prompt
+  prompt:
+  - main
   tags:
   - confidence
   metadata:
@@ -722,7 +746,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: reviewFlag
@@ -746,7 +771,8 @@ properties:
   sets:
   - system
   - standard
-  - prompt
+  prompt:
+  - main
   tags:
   - review
   metadata:
@@ -771,7 +797,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: researcher_model_id

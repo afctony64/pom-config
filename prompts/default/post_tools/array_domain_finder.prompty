@@ -10,13 +10,6 @@ category: enrich
 
 prompt_type:
   name: array_domain_finder
-  priority: 5
-  mode: chain
-  uses_execution_artifacts: true
-  outputs:
-    field_sets:
-      - post
-    allow_post_fields: true
 
 classification:
   task_type: extraction

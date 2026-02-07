@@ -162,7 +162,8 @@ properties:
   tokenization: word
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   tags:
   - identity
   - metadata
@@ -176,7 +177,8 @@ properties:
   tokenization: word
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   tags:
   - content
   - metadata
@@ -189,7 +191,8 @@ properties:
   indexFilterable: true
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - identity
   - metadata
@@ -202,7 +205,8 @@ properties:
   tokenization: word
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - identity
   - location
@@ -218,7 +222,8 @@ properties:
   tokenization: field
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - contact
   - physical
@@ -231,7 +236,8 @@ properties:
   tokenization: field
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - contact
   - physical
@@ -244,7 +250,8 @@ properties:
   tokenization: word
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - location
   - physical
@@ -257,7 +264,8 @@ properties:
   tokenization: field
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - location
   - physical
@@ -270,7 +278,8 @@ properties:
   tokenization: field
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - location
   - physical
@@ -283,7 +292,8 @@ properties:
   tokenization: field
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - location
   - physical
@@ -296,7 +306,8 @@ properties:
   tokenization: field
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - location
   - physical
@@ -307,7 +318,8 @@ properties:
   description: Geographic coordinates (latitude, longitude)
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - location
   - physical
@@ -1134,7 +1146,8 @@ properties:
   sets:
   - status_update
   - system
-  - prompt
+  prompt:
+  - main
   tags:
   - pipeline
   - processing
@@ -1499,7 +1512,8 @@ properties:
   tokenization: field
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   tags:
   - identity
   - financial
