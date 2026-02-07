@@ -190,7 +190,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 112
 - name: socialPlatforms
@@ -203,8 +204,9 @@ properties:
   - research
   sets:
   - array
-  - prompt
   - extended
+  prompt:
+  - main
   metadata:
     order: 201
 - name: socialEngagementScore
@@ -214,8 +216,8 @@ properties:
   tags:
   - research
   - score
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 113
 - name: hasSocialAuth
@@ -224,8 +226,8 @@ properties:
   description: Has social authentication features
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 114
 - name: hasSocialSharing
@@ -236,7 +238,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 115
 - name: hasCommunityFeatures
@@ -247,7 +250,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 116
 - name: socialPresenceTier
@@ -258,7 +262,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 117
 - name: contentThemes
@@ -271,7 +276,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 202
 - name: socialProofIndicators
@@ -282,7 +288,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 203
 - name: platformPresenceLLM
@@ -294,9 +301,10 @@ properties:
   - LLM
   - score
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 122
 - name: platformPresenceCIT
@@ -309,8 +317,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: platformPresenceLLM
     order: 123
@@ -323,9 +331,10 @@ properties:
   - LLM
   - research
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 124
 - name: socialContentCIT
@@ -338,8 +347,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: socialContentLLM
     order: 125
@@ -351,9 +360,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 126
 - name: communityEngagementCIT
@@ -366,8 +376,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: communityEngagementLLM
     order: 127
@@ -383,7 +393,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 111
 - name: platformPresenceCat
@@ -405,8 +416,9 @@ properties:
   - social
   sets:
   - standard
-  - EnumCat
   - extended
+  prompt:
+  - cat_classifier
   metadata:
     order: 121
 - name: socialContentCat
@@ -431,7 +443,8 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 123
 - name: communityEngagementCat
@@ -454,7 +467,8 @@ properties:
   - social
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 125
 - name: processedDate
@@ -471,7 +485,8 @@ properties:
   description: Review flag for human validation (none/for_review/needs_verification)
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 910
 - name: analysisConfidence
@@ -480,7 +495,8 @@ properties:
   description: Confidence level of analysis (high/medium/low/inferred/web_verified)
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -506,7 +522,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: page_facts_count
@@ -529,7 +546,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: researcher_model_id

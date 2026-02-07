@@ -93,7 +93,8 @@ properties:
   - competitive
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 131
   label: Competitor Analysis
@@ -107,7 +108,8 @@ properties:
   sets:
   - standard
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 132
 - name: competitorAnalysisCIT
@@ -120,8 +122,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: competitorAnalysisLLM
     order: 133
@@ -147,7 +149,8 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 133
   label: Market Position
@@ -162,7 +165,8 @@ properties:
   sets:
   - standard
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 134
 - name: marketPositionCIT
@@ -175,8 +179,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: marketPositionLLM
     order: 135
@@ -193,7 +197,8 @@ properties:
   - array
   - standard
   - spawn
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 201
     placeholder_values:
@@ -211,7 +216,8 @@ properties:
   sets:
   - array
   - standard
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 207
   label: Advantages
@@ -229,7 +235,8 @@ properties:
   - array
   - standard
   - spawn
-  - post
+  prompt:
+  - array_domain_finder
   metadata:
     order: 202
   label: Domain
@@ -243,7 +250,8 @@ properties:
   sets:
   - array
   - standard
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 206
   label: Gaps
@@ -257,7 +265,8 @@ properties:
   sets:
   - array
   - standard
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 203
   label: Positioning
@@ -271,7 +280,8 @@ properties:
   sets:
   - array
   - standard
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 205
   label: Price
@@ -285,7 +295,8 @@ properties:
   sets:
   - array
   - standard
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 204
   label: Target Market
@@ -297,7 +308,8 @@ properties:
   sets:
   - array
   - extended
-  - post
+  prompt:
+  - array_enricher
   tags:
   - score
   metadata:
@@ -317,7 +329,8 @@ properties:
   sets:
   - array
   - system
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 209
 - name: marketStrengthScore
@@ -328,7 +341,8 @@ properties:
   sets:
   - array
   - extended
-  - post
+  prompt:
+  - array_enricher
   tags:
   - score
   metadata:
@@ -342,7 +356,8 @@ properties:
   sets:
   - array
   - extended
-  - post
+  prompt:
+  - array_enricher
   tags:
   - score
   metadata:
@@ -358,7 +373,8 @@ properties:
   sets:
   - array
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 122
   label: Competitive Advantages
@@ -370,7 +386,8 @@ properties:
   - research
   sets:
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 111
 - name: competitivePositioning
@@ -381,7 +398,8 @@ properties:
   - research
   sets:
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 121
 - name: competitiveThreats
@@ -394,7 +412,8 @@ properties:
   sets:
   - array
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 124
 - name: differentiationFactors
@@ -407,7 +426,8 @@ properties:
   sets:
   - array
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 123
   label: Differentiation Factors
@@ -435,7 +455,8 @@ properties:
   sets:
   - standard
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - score
   metadata:
@@ -448,7 +469,8 @@ properties:
   sets:
   - standard
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - score
   metadata:
@@ -461,7 +483,8 @@ properties:
   sets:
   - standard
   - extended
-  - prompt
+  prompt:
+  - main
   tags:
   - score
   metadata:
@@ -474,7 +497,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 113
 - name: marketSize
@@ -485,7 +509,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 112
 - name: marketTrends
@@ -498,7 +523,8 @@ properties:
   sets:
   - array
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 114
   label: Market Trends
@@ -529,7 +555,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -555,7 +582,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: page_facts_count
@@ -579,7 +607,8 @@ properties:
   sets:
   - array
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: domain
@@ -614,7 +643,8 @@ properties:
   sets:
   - array
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 907
 - name: processedDate
@@ -666,7 +696,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 911
 - name: updated_at

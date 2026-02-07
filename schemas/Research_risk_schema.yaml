@@ -135,9 +135,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 122
 - name: securityPostureCIT
@@ -150,8 +151,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: securityPostureLLM
     order: 123
@@ -165,7 +166,8 @@ properties:
   - security
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 123
 - name: securityCertifications
@@ -180,7 +182,8 @@ properties:
   - security
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 201
 - name: securityDocumentation
@@ -193,7 +196,8 @@ properties:
   - security
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 124
 - name: expectedSecurityPosture
@@ -206,7 +210,8 @@ properties:
   - security
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 125
 - name: securityGap
@@ -219,7 +224,8 @@ properties:
   - security
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 126
 - name: complianceCertificationLLM
@@ -230,9 +236,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 132
 - name: complianceCertificationCIT
@@ -245,8 +252,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: complianceCertificationLLM
     order: 133
@@ -262,7 +269,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 202
 - name: privacyPolicy
@@ -275,7 +283,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 133
 - name: expectedCompliance
@@ -288,7 +297,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 134
 - name: complianceGap
@@ -301,7 +311,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 135
 - name: regulatoryEnvironmentLLM
@@ -312,9 +323,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 142
 - name: regulatoryEnvironmentCIT
@@ -327,8 +339,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: regulatoryEnvironmentLLM
     order: 143
@@ -342,7 +354,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 203
 - name: regulatoryBurden
@@ -355,7 +368,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 143
 - name: industryRiskFactors
@@ -369,7 +383,8 @@ properties:
   - risk
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 204
 - name: marketRiskFactors
@@ -382,7 +397,8 @@ properties:
   - risk
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 205
 - name: riskProfile
@@ -395,7 +411,8 @@ properties:
   - risk
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 111
 - name: securityPostureCat
@@ -417,7 +434,8 @@ properties:
   - security
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 121
 - name: complianceCertificationCat
@@ -431,7 +449,8 @@ properties:
   - compliance
   sets:
   - standard
-  - VecCat
+  prompt:
+  - vec_classifier
   metadata:
     order: 131
 - name: regulatoryEnvironmentCat
@@ -451,7 +470,8 @@ properties:
   - regulatory
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 141
 - name: processedDate
@@ -468,7 +488,8 @@ properties:
   description: Review flag for human validation (none/for_review/needs_verification)
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 910
 - name: analysisConfidence
@@ -477,7 +498,8 @@ properties:
   description: Confidence level of analysis (high/medium/low/inferred/web_verified)
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -503,7 +525,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: page_facts_count
@@ -526,7 +549,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: researcher_model_id

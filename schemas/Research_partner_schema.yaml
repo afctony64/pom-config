@@ -119,9 +119,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 111
 - name: partnerTypeCIT
@@ -134,8 +135,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: partnerTypeLLM
     order: 112
@@ -152,8 +153,9 @@ properties:
   sets:
   - standard
   - array
-  - prompt
   - spawn
+  prompt:
+  - main
   metadata:
     order: 201
     placeholder_values:
@@ -187,7 +189,8 @@ properties:
   sets:
   - array
   - system
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 916
 - name: partnerTypes
@@ -201,7 +204,8 @@ properties:
   - web
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 202
 - name: partnerValue
@@ -214,7 +218,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 204
 - name: partnerDomain
@@ -234,7 +239,8 @@ properties:
   sets:
   - array
   - spawn
-  - post
+  prompt:
+  - array_domain_finder
   metadata:
     order: 205
 - name: integrationLLM
@@ -245,9 +251,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 113
 - name: integrationCIT
@@ -260,8 +267,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: integrationLLM
     order: 114
@@ -275,7 +282,8 @@ properties:
   - technical
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 203
 - name: marketplacePresence
@@ -288,7 +296,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 205
 - name: ecosystemRole
@@ -301,7 +310,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 114
 - name: revenueImpactLLM
@@ -312,9 +322,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 115
 - name: revenueImpactCIT
@@ -327,8 +338,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: revenueImpactLLM
     order: 116
@@ -338,8 +349,8 @@ properties:
   description: Partnership revenue model and monetization approach
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 115
 - name: partnerEcosystem
@@ -348,8 +359,8 @@ properties:
   description: Overall partner ecosystem analysis including network effects and ecosystem value
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 116
 - name: partnerTypeCat
@@ -372,7 +383,8 @@ properties:
   - partner
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 121
 - name: integrationCat
@@ -394,7 +406,8 @@ properties:
   - technical
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 122
 - name: revenueImpactCat
@@ -416,7 +429,8 @@ properties:
   - revenue
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 123
 - name: processedDate
@@ -447,7 +461,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 910
 - name: analysisConfidence
@@ -477,7 +492,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -503,7 +519,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: page_facts_count
@@ -526,7 +543,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: researcher_model_id

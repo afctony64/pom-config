@@ -210,7 +210,8 @@ properties:
   sets:
   - standard
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 111
 - name: productTypeLLM
@@ -221,9 +222,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - array
   - standard
+  prompt:
+  - main
   metadata:
     order: 122
 - name: productTypeCIT
@@ -236,8 +238,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: productTypeLLM
     order: 123
@@ -255,53 +257,10 @@ properties:
   - score
   sets:
   - standard
-  - VecCat
+  prompt:
+  - vec_classifier
   metadata:
     order: 121
-- name: productTypeSimilarities
-  dataType:
-  - number[]
-  description: Similarity scores for each classified product type (ordered highest to lowest,
-    [0] is primary)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - metadata
-  - classification
-  - score
-  sets:
-  - system
-  metadata:
-    order: 916
-- name: productTypeMatchedSeeds
-  dataType:
-  - text[]
-  description: Names of seed records matched for each product type ([0] is primary)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - metadata
-  - classification
-  sets:
-  - system
-  metadata:
-    order: 917
-- name: productTypeThreshold
-  dataType:
-  - number
-  description: Similarity threshold used for multi-product-type classification (typically 0.15)
-  moduleConfig:
-    text2vec-weaviate:
-      skip: true
-  tags:
-  - metadata
-  - classification
-  sets:
-  - system
-  metadata:
-    order: 918
 - name: productDomain
   dataType:
   - text[]
@@ -322,7 +281,8 @@ properties:
   - product
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: productTypeLLM
     order: 123
@@ -335,9 +295,10 @@ properties:
   - LLM
   - score
   sets:
-  - prompt
   - array
   - standard
+  prompt:
+  - main
   metadata:
     order: 125
 - name: technologyStackCIT
@@ -350,8 +311,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: technologyStackLLM
     order: 126
@@ -375,7 +336,8 @@ properties:
   - technology
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: technologyStackLLM
     order: 124
@@ -387,9 +349,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 132
 - name: pricingModelCIT
@@ -402,8 +365,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: pricingModelLLM
     order: 133
@@ -456,8 +419,9 @@ properties:
   - pricing
   sets:
   - standard
-  - EnumCat
   - extended
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: pricingModelLLM
     order: 131
@@ -469,9 +433,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 134
 - name: integrationProfileCIT
@@ -484,8 +449,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: integrationProfileLLM
     order: 135
@@ -535,8 +500,9 @@ properties:
   - integration
   sets:
   - standard
-  - EnumCat
   - extended
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: integrationProfileLLM
     order: 133
@@ -550,7 +516,8 @@ properties:
   sets:
   - standard
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 112
 - name: products
@@ -571,7 +538,8 @@ properties:
   sets:
   - standard
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 201
 - name: productsIds
@@ -603,7 +571,8 @@ properties:
   sets:
   - array
   - system
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 219
 - name: productCategories
@@ -619,7 +588,8 @@ properties:
   sets:
   - standard
   - array
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 202
 - name: productPricing
@@ -635,7 +605,8 @@ properties:
   sets:
   - standard
   - array
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 203
 - name: productFeatures
@@ -651,7 +622,8 @@ properties:
   sets:
   - standard
   - array
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 204
 - name: productMaturityLLM
@@ -662,9 +634,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 136
 - name: productMaturityCIT
@@ -677,8 +650,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: productMaturityLLM
     order: 137
@@ -727,8 +700,9 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
   - extended
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: productMaturityLLM
     order: 135
@@ -740,9 +714,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 138
 - name: goToMarketCIT
@@ -755,8 +730,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: goToMarketLLM
     order: 139
@@ -800,7 +775,8 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: goToMarketLLM
     order: 137
@@ -845,7 +821,8 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     source_llm: goToMarketLLM
     order: 138
@@ -877,7 +854,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 911
 - name: analysisConfidence
@@ -907,7 +885,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -933,7 +912,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: page_facts_count
@@ -956,7 +936,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: researcher_model_id
@@ -983,8 +964,9 @@ properties:
   description: Overall product portfolio strength score (1-10)
   sets:
   - standard
-  - prompt
   - extended
+  prompt:
+  - main
   tags:
   - score
   metadata:
@@ -994,8 +976,8 @@ properties:
   - number[]
   description: 'Market fit score for {subject} (1-10). Assess product-market alignment based on target audience clarity and value proposition strength. Use 0 if insufficient data.'
   parallel_to: products
-  sets:
-  - post
+  prompt:
+  - array_enricher
   tags:
   - score
   metadata:
@@ -1005,8 +987,8 @@ properties:
   - number[]
   description: 'Product maturity/adoption score for {subject} (1-10). Assess lifecycle stage and adoption signals. Use 0 if insufficient data.'
   parallel_to: products
-  sets:
-  - post
+  prompt:
+  - array_enricher
   tags:
   - score
   metadata:
@@ -1016,8 +998,8 @@ properties:
   - number[]
   description: 'Revenue contribution score for {subject} (1-10). Estimate based on pricing visibility, customer traction signals, and product prominence. Use 0 if insufficient data.'
   parallel_to: products
-  sets:
-  - post
+  prompt:
+  - array_enricher
   tags:
   - score
   metadata:

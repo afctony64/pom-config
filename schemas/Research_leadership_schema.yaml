@@ -122,9 +122,10 @@ properties:
   - LLM
   - research
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 122
 - name: founderProfileCIT
@@ -137,8 +138,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: founderProfileLLM
     order: 123
@@ -152,8 +153,9 @@ properties:
   - research
   sets:
   - extended
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     order: 111
 - name: ceoBackground
@@ -163,8 +165,9 @@ properties:
   tags:
   - research
   sets:
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     order: 112
 - name: ceoTenure
@@ -174,8 +177,9 @@ properties:
   tags:
   - research
   sets:
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     order: 113
 - name: founderStatus
@@ -185,8 +189,9 @@ properties:
   tags:
   - research
   sets:
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     order: 114
 - name: executiveTeamSize
@@ -196,8 +201,9 @@ properties:
   tags:
   - research
   sets:
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     order: 115
 - name: employeeCount
@@ -227,7 +233,8 @@ properties:
   - headcount
   sets:
   - standard
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 116
 - name: employeeSizeCat
@@ -271,7 +278,8 @@ properties:
   - headcount
   sets:
   - extended
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 117
 - name: executiveExperienceLLM
@@ -283,9 +291,10 @@ properties:
   - LLM
   - research
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 124
 - name: executiveExperienceCIT
@@ -298,8 +307,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: executiveExperienceLLM
     order: 125
@@ -319,8 +328,9 @@ properties:
   - research
   sets:
   - array
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     order: 201
     placeholder_values:
@@ -355,7 +365,8 @@ properties:
   sets:
   - array
   - system
-  - post
+  prompt:
+  - array_enricher
   metadata:
     order: 916
 - name: executiveBackgrounds
@@ -369,8 +380,9 @@ properties:
   - research
   sets:
   - array
-  - post
   - standard
+  prompt:
+  - array_enricher
   metadata:
     order: 203
 - name: executiveRoles
@@ -384,8 +396,9 @@ properties:
   - research
   sets:
   - array
-  - post
   - standard
+  prompt:
+  - array_enricher
   metadata:
     order: 202
 - name: executiveTenure
@@ -399,8 +412,9 @@ properties:
   - research
   sets:
   - array
-  - post
   - standard
+  prompt:
+  - array_enricher
   metadata:
     order: 204
 - name: executiveLinkedIn
@@ -413,9 +427,10 @@ properties:
   - linkedin
   sets:
   - array
-  - post
   - extended
   - standard
+  prompt:
+  - array_enricher
   metadata:
     order: 205
 - name: leadershipStyleLLM
@@ -427,9 +442,10 @@ properties:
   - LLM
   - research
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 126
 - name: leadershipStyleCIT
@@ -442,8 +458,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: leadershipStyleLLM
     order: 127
@@ -457,7 +473,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 127
 - name: advisors
@@ -476,7 +493,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 206
     placeholder_values:
@@ -505,7 +523,8 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 121
 - name: executiveExperienceCat
@@ -529,7 +548,8 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 123
 - name: leadershipStyleCat
@@ -554,7 +574,8 @@ properties:
   - research
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 125
 - name: processedDate
@@ -592,7 +613,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -618,7 +640,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: reviewFlag
@@ -641,7 +664,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 910
 - name: page_facts_count
@@ -664,7 +688,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: researcher_model_id
@@ -702,7 +727,8 @@ properties:
   - number[]
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -716,7 +742,8 @@ properties:
   - number[]
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -730,8 +757,9 @@ properties:
   - number
   sets:
   - extended
-  - prompt
   - standard
+  prompt:
+  - main
   tags:
   - research
   metadata:
@@ -742,7 +770,8 @@ properties:
   - number[]
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   moduleConfig:
     text2vec-weaviate:
       skip: true

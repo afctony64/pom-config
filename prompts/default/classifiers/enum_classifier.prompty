@@ -17,13 +17,6 @@ description: |
 
 prompt_type:
   name: cat_classifier
-  priority: 30
-  mode: chain
-  uses_execution_artifacts: true
-  outputs:
-    field_sets:
-      - EnumCat
-    include_cat_fields: true
 
 # === MODEL SELECTION CLASSIFICATION ===
 classification:

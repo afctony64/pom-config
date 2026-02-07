@@ -128,8 +128,8 @@ properties:
   description: Type of media content (press-release, news-article, interview, media-kit)
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 115
 - name: mediaOutlets
@@ -144,7 +144,8 @@ properties:
   - research
   sets:
   - array
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 201
 - name: pressReleaseCount
@@ -153,8 +154,8 @@ properties:
   description: Number of press releases found
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 124
 - name: newsArticleCount
@@ -163,8 +164,8 @@ properties:
   description: Number of news articles found
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 125
 - name: latestNewsDate
@@ -177,7 +178,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 121
 - name: recentNewsCount
@@ -190,7 +192,8 @@ properties:
   - volume
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 122
 - name: newsRecency
@@ -203,7 +206,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 123
 - name: mediaCoverageScore
@@ -213,8 +217,8 @@ properties:
   tags:
   - research
   - score
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 116
 - name: hasMediaKit
@@ -224,8 +228,9 @@ properties:
   tags:
   - research
   sets:
-  - prompt
   - extended
+  prompt:
+  - main
   metadata:
     order: 117
 - name: hasNewsroom
@@ -234,8 +239,8 @@ properties:
   description: Has dedicated newsroom section
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 118
 - name: mediaSentiment
@@ -244,8 +249,8 @@ properties:
   description: Overall sentiment of media coverage (positive, neutral, negative)
   tags:
   - research
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 111
 - name: mediaTypeLLM
@@ -256,9 +261,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 132
 - name: mediaTypeCIT
@@ -271,8 +277,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: mediaTypeLLM
     order: 133
@@ -284,9 +290,10 @@ properties:
   tags:
   - LLM
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 134
 - name: coverageLevelCIT
@@ -299,8 +306,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: coverageLevelLLM
     order: 135
@@ -313,9 +320,10 @@ properties:
   - LLM
   - research
   sets:
-  - prompt
   - extended
   - standard
+  prompt:
+  - main
   metadata:
     order: 136
 - name: mediaSentimentCIT
@@ -328,8 +336,8 @@ properties:
   tags:
   - CIT
   - provenance
-  sets:
-  - prompt
+  prompt:
+  - main
   metadata:
     source_llm: mediaSentimentLLM
     order: 137
@@ -349,8 +357,9 @@ properties:
   - research
   sets:
   - extended
-  - prompt
   - standard
+  prompt:
+  - main
   metadata:
     order: 112
 - name: newsMomentum
@@ -369,7 +378,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 113
 - name: credibilitySignals
@@ -388,7 +398,8 @@ properties:
   - research
   sets:
   - extended
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 114
 - name: mediaTypeCat
@@ -411,7 +422,8 @@ properties:
   - media
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 131
 - name: coverageLevelCat
@@ -432,7 +444,8 @@ properties:
   - coverage
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 133
 - name: mediaSentimentCat
@@ -455,7 +468,8 @@ properties:
   - sentiment
   sets:
   - standard
-  - EnumCat
+  prompt:
+  - cat_classifier
   metadata:
     order: 135
 - name: processedDate
@@ -486,7 +500,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 910
 - name: analysisConfidence
@@ -516,7 +531,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 901
 - name: sourceQuality
@@ -542,7 +558,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 902
 - name: page_facts_count
@@ -565,7 +582,8 @@ properties:
       skip: true
   sets:
   - system
-  - prompt
+  prompt:
+  - main
   metadata:
     order: 904
 - name: researcher_model_id
