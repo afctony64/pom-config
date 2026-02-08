@@ -559,7 +559,7 @@ properties:
   dataType:
   - text[]
   description: Evidence/context found for each product from page facts search. Stores the factual
-    basis for classifications and extracted values.
+    basis for classifications and extracted values. Use "No specific evidence available" if none found.
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
@@ -626,6 +626,24 @@ properties:
   - array_enricher
   metadata:
     order: 204
+- name: productURL
+  dataType:
+  - text[]
+  description: 'Primary website or landing page URL for {subject}. Find the product homepage, documentation site, or main marketing page. Example: https://www.example.com/product-name. Use "Not disclosed" if unknown.'
+  parallel_to: products
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  tags:
+  - research
+  - web
+  sets:
+  - array
+  - standard
+  prompt:
+  - array_domain_finder
+  metadata:
+    order: 205
 - name: productMaturityLLM
   dataType:
   - text

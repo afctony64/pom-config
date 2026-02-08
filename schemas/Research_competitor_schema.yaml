@@ -258,7 +258,7 @@ properties:
 - name: competitorPositioning
   dataType:
   - text[]
-  description: 'Concise market positioning for {subject}. Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging Player". No citations or URLs; use evidence/CIT fields for sources.'
+  description: 'Concise market positioning for {subject}. Examples: "Market Leader", "Strong Challenger", "Niche Specialist", "Emerging Player". No citations or URLs; use evidence/CIT fields for sources. Use "Unknown" if insufficient data.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -288,7 +288,7 @@ properties:
 - name: competitorTargetMarket
   dataType:
   - text[]
-  description: 'Concise target market for {subject}. Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical". No citations or URLs; use evidence/CIT fields for sources.'
+  description: 'Concise target market for {subject}. Examples: "Enterprise", "SMB", "Mid-market", "Startups", "Healthcare vertical". No citations or URLs; use evidence/CIT fields for sources. Use "Unknown" if insufficient data.'
   parallel_to: keyCompetitors
   tags:
   - research
@@ -303,7 +303,7 @@ properties:
 - name: innovationScore
   dataType:
   - number[]
-  description: Each competitor's innovation capability (1-10)
+  description: Each competitor's innovation capability (1-10). Use 0 if insufficient data.
   parallel_to: keyCompetitors
   sets:
   - array
@@ -318,7 +318,7 @@ properties:
 - name: keyCompetitorEvidence
   dataType:
   - text[]
-  description: 'Evidence/context snippets for {subject} used to justify competitive positioning, pricing, and feature claims. Store source text or notes for this subject; keep summaries in the LLM fields.'
+  description: 'Evidence/context snippets for {subject} used to justify competitive positioning, pricing, and feature claims. Store source text or notes for this subject; keep summaries in the LLM fields. Use "No specific evidence available" if none found.'
   parallel_to: keyCompetitors
   moduleConfig:
     text2vec-weaviate:
@@ -336,7 +336,7 @@ properties:
 - name: marketStrengthScore
   dataType:
   - number[]
-  description: Each competitor's market strength (1-10)
+  description: Each competitor's market strength (1-10). Use 0 if insufficient data.
   parallel_to: keyCompetitors
   sets:
   - array
@@ -351,7 +351,7 @@ properties:
 - name: threatLevelScore
   dataType:
   - number[]
-  description: Competitive threat level per competitor (1-10)
+  description: Competitive threat level per competitor (1-10). Use 0 if insufficient data.
   parallel_to: keyCompetitors
   sets:
   - array
