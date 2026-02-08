@@ -163,3 +163,7 @@ tool_guidance:
       ⚠️ Only works for public companies with SEC filings
 
 citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
+
+# Dependency-resolved tool chain. enum_cat only (no spawn, no vec_classifier).
+chain:
+  - enum_cat  # Classifies all Cat fields (cat_classifier)

@@ -113,3 +113,7 @@ tool_guidance:
       primary: "{company_name} LinkedIn Twitter GitHub community"
 
 citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
+
+# Dependency-resolved tool chain. enum_cat only (no spawn, no vec_classifier).
+chain:
+  - enum_cat  # Classifies all Cat fields (cat_classifier)

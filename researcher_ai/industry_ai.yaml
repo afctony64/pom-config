@@ -93,3 +93,7 @@ tool_guidance:
       primary: "{company_name} industry SaaS B2B market category"
 
 citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
+
+# Dependency-resolved tool chain. enum_cat handles both cat_classifier + vec_classifier.
+chain:
+  - enum_cat  # Classifies all Cat fields (cat_classifier + vec_classifier)

@@ -168,9 +168,7 @@ parallel_array_enrichment:
   search_query_template: >
     "{subject}" {executiveRoles} "{entityName}" site:linkedin.com/in
 
-# Prompt chain: prompt types executed in list order after the main researcher prompt.
-# Each link receives execution artifacts from the main prompt and prior links.
-# This is a chain definition — the list order defines implicit dependencies.
-post_execution_tools:
-  - parallel_array_enricher  # Enrich array_enricher fields (uses parallel_array_enrichment config above)
-  - enum_cat                 # Classify cat_classifier fields (leadershipStyleCat, etc.)
+# Dependency-resolved tool chain. Both run in parallel (no inter-dependencies).
+chain:
+  - parallel_array_enricher  # Enrich array fields + resolve LinkedIn URLs
+  - enum_cat                 # Classifies all Cat fields (cat_classifier + vec_classifier)
