@@ -95,6 +95,14 @@ tool_guidance:
   brave_search:
     priority: medium
     max_calls: 2
+    usage_instructions: |
+      ⚠️ QUERY FORMAT RULES (prevent API errors):
+      - Keep queries under 80 characters total
+      - Use 3-6 focused keywords maximum
+      - NEVER repeat the company name or keywords in the same query
+      - ONE search intent per query — do NOT concatenate multiple searches
+      - BAD: "Gophr headquarters address location Gophr company address Gophr UK office"
+      - GOOD: "Gophr headquarters address location"
     when_to_use: |
       🔍 USE BRAVE SEARCH FOR LOCATION DATA (MAX 2 SEARCHES):
 

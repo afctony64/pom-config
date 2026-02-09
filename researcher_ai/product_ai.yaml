@@ -91,6 +91,14 @@ tool_guidance:
   brave_search:
     priority: medium
     max_calls: 1  # LIMIT: Only 1 search - product info usually on website
+    usage_instructions: |
+      ⚠️ QUERY FORMAT RULES (prevent API errors):
+      - Keep queries under 80 characters total
+      - Use 3-6 focused keywords maximum
+      - NEVER repeat the company name or keywords in the same query
+      - ONE search intent per query — do NOT concatenate multiple searches
+      - BAD: "Acme product features pricing Acme SaaS product announcement Acme platform"
+      - GOOD: "Acme product feature announcement"
     when_to_use: |
       🔍 SEARCH ONLY IF page content lacks product details
 

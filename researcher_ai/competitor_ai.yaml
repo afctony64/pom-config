@@ -127,6 +127,14 @@ tool_guidance:
     priority: high
     max_calls: 2  # LIMIT: Only 2 searches for competitors
     tool_choice: required  # Competitor data from G2/Capterra is essential (company pages are biased)
+    usage_instructions: |
+      ⚠️ QUERY FORMAT RULES (prevent API errors):
+      - Keep queries under 80 characters total
+      - Use 3-6 focused keywords maximum
+      - NEVER repeat the company name or keywords in the same query
+      - ONE search intent per query — do NOT concatenate multiple searches
+      - BAD: "Acme G2 capterra alternatives competitors reviews Acme.com competitors Acme SaaS G2 Capterra alternatives"
+      - GOOD: "Acme G2 capterra alternatives competitors"
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 2 SEARCHES):
 

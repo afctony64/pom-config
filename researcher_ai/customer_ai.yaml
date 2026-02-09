@@ -84,6 +84,14 @@ tool_guidance:
   brave_search:
     priority: low
     max_calls: 2  # LIMIT: Mainly used by enricher for domain resolution
+    usage_instructions: |
+      ⚠️ QUERY FORMAT RULES (prevent API errors):
+      - Keep queries under 80 characters total
+      - Use 3-6 focused keywords maximum
+      - NEVER repeat the company name or keywords in the same query
+      - ONE search intent per query — do NOT concatenate multiple searches
+      - BAD: "Acme customer case study success story Acme customers reviews Acme clients"
+      - GOOD: "Acme customer case study success story"
     when_to_use: |
       🔍 SEARCH ONLY IF page content lacks customer examples
 

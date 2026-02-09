@@ -102,6 +102,14 @@ tool_guidance:
     max_calls: 3  # LIMIT: 3 searches for leadership
     # Force brave_search - employee count and LinkedIn URLs are rarely on company pages
     tool_choice: required
+    usage_instructions: |
+      ⚠️ QUERY FORMAT RULES (prevent API errors):
+      - Keep queries under 80 characters total
+      - Use 3-6 focused keywords maximum
+      - NEVER repeat the company name or keywords in the same query
+      - ONE search intent per query — do NOT concatenate multiple searches
+      - BAD: "Acme CEO founders leadership team linkedin Acme executives Acme leadership"
+      - GOOD: "Acme CEO founders leadership team linkedin"
     when_to_use: |
       🔍 SMART SEARCH STRATEGY (MAX 3 SEARCHES):
 
