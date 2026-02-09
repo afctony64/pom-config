@@ -86,6 +86,21 @@ properties:
   - main
   metadata:
     order: 111
+- name: entityId
+  dataType:
+  - text
+  description: Unique entity identifier from source record
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - identifier
+  - extended
+  tags:
+  - identity
+  metadata:
+    order: 905
 - name: entityName
   dataType:
   - text
