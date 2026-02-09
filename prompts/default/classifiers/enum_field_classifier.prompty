@@ -36,9 +36,11 @@ model:
   api: chat
   configuration:
     type: openai_chat
-    model_card_id: gpt-5-nano
+    model_card_id: gpt-5-mini
   parameters:
-    max_tokens: 500
+    max_tokens: 2000
+    response_format:
+      type: json_object
 
 ---
 
@@ -62,18 +64,22 @@ You are a **Classification Specialist**. Your task is to classify a company base
 5. **AVOID Not Available/Unknown**: Only use these if context is truly empty or ambiguous. If the context describes what the entity IS (e.g., "water utility", "municipal government", "software company"), you MUST classify it.
 
 {% if researcher_example %}
-## Example Output
+## Example
 
-Given context with similar characteristics, the expected classification would be:
+For a similar company the correct classification was:
 
 ```json
-{{ researcher_example | tojson(indent=2) }}
+{"value": "{{ researcher_example.values() | first if researcher_example is mapping else researcher_example }}"}
 ```
 {% endif %}
 
 ## Response Format
 
-Return ONLY the exact option value. No explanations. No markdown. Just the value.
+Return a JSON object with a single "value" key containing the exact option value:
+
+```json
+{"value": "<exact option value>"}
+```
 
 user:
 ## Research Context
@@ -92,4 +98,4 @@ user:
 
 ## Your Classification
 
-Return ONLY the exact option value:
+Return JSON:
