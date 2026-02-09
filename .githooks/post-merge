@@ -1,18 +1,35 @@
 #!/usr/bin/env bash
-set -euo pipefail
+# pom-config post-merge hook: validate configs when YAML/prompty files change.
+# Requires pom-core venv for pyyaml + pom_core model imports.
 
 echo "[pom-config] post-merge hook: repository updated."
 
-if git diff --name-only HEAD@{1}..HEAD | grep -E '\.ya?ml$|\.prompty$|\.env$|^OWNERSHIP\.yaml$' >/dev/null; then
-  echo "[pom-config] Detected config or ownership changes; running validations."
-  if command -v python3 >/dev/null 2>&1; then
-    python3 scripts/validate_all_configs.py
-    python3 scripts/validate-ownership.py
-  else
-    echo "[pom-config] python3 not found; please run:"
-    echo "  python3 scripts/validate_all_configs.py"
-    echo "  python3 scripts/validate-ownership.py"
-  fi
-else
+if ! git diff --name-only HEAD@{1}..HEAD | grep -qE '\.ya?ml$|\.prompty$|\.env$|^OWNERSHIP\.yaml$'; then
   echo "[pom-config] No config/ownership changes detected."
+  exit 0
 fi
+
+echo "[pom-config] Detected config or ownership changes; running validations."
+
+# Resolve Python: prefer pom-core venv (has pyyaml + pom_core models)
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+POM_CORE_VENV="${REPO_ROOT}/../pom-core/venv/bin/python"
+
+if [ -x "$POM_CORE_VENV" ]; then
+  PYTHON="$POM_CORE_VENV"
+elif command -v python3 >/dev/null 2>&1; then
+  PYTHON="python3"
+else
+  echo "[pom-config] ⚠️  No python3 found; skipping validation."
+  echo "  Run manually: python3 scripts/validate_all_configs.py"
+  exit 0
+fi
+
+# Run validations (non-blocking: warn on failure, don't abort merge)
+for script in scripts/validate_all_configs.py scripts/validate-ownership.py; do
+  if [ -f "$REPO_ROOT/$script" ]; then
+    if ! "$PYTHON" "$REPO_ROOT/$script"; then
+      echo "[pom-config] ⚠️  $script failed (non-blocking). Review output above."
+    fi
+  fi
+done

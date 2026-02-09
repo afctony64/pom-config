@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """Validate all pom-config YAML files against pom-core Pydantic models."""
 
+import os
 import sys
 from pathlib import Path
 
 import yaml
+
+# Set required env vars so pom_core imports without error (validation only,
+# no real connections are made).
+os.environ.setdefault("WEAVIATE_URL", "http://localhost:8080")
+os.environ.setdefault("WEAVIATE_API_KEY", "dummy-validation-key")
 
 # Add pom-core to path for model imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "pom-core"))
