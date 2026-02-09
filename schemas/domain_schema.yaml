@@ -1042,6 +1042,54 @@ properties:
   tags:
   - filtering
 
+- name: is_unreachable
+  dataType:
+  - boolean
+  description: Whether the domain is marked unreachable after repeated failures
+  indexFilterable: true
+  sets:
+  - system
+  - status_update
+  tags:
+  - filtering
+  - processing
+
+- name: unreachable_attempts
+  dataType:
+  - int
+  description: Count of runs that hit the domain error threshold
+  indexFilterable: true
+  sets:
+  - system
+  - status_update
+  tags:
+  - processing
+  - metrics
+
+- name: unreachable_reason
+  dataType:
+  - text
+  description: Last error category that triggered an unreachable attempt
+  indexFilterable: true
+  tokenization: field
+  sets:
+  - system
+  - status_update
+  tags:
+  - processing
+  - errors
+
+- name: unreachable_at
+  dataType:
+  - date
+  description: Timestamp when the domain was marked unreachable
+  sets:
+  - system
+  - status_update
+  tags:
+  - temporal
+  - processing
+
 - name: enrichment_attempts
   dataType:
   - int
