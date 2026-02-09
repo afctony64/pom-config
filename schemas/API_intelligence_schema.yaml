@@ -30,6 +30,8 @@ multiTenancyConfig:
   autoTenantActivation: true
   autoTenantCreation: true
   enabled: true
+replication_config:
+  factor: 1
 invertedIndexConfig:
   bm25:
     b: 0.75
