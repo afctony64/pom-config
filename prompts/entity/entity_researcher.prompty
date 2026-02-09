@@ -76,7 +76,7 @@ data_requirements:
         researcher_type: "{{ record._researcher_id }}"
         # search_queries read from researcher_ai config (Issue #384)
         alpha: 0.3  # Lower = more BM25 (keyword), higher = more vector. BM25 ranks funding pages better
-        min_certainty: 0.15
+        min_certainty: 0.12
         limit: 100
         inject_as: pageData
     # 📊 SEC Edgar data for public companies (optional)
