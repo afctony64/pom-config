@@ -34,6 +34,8 @@ search_queries:
 
 # BM25 keyword queries - used by page_facts_vector injector (supplements vector)
 keyword_queries:
+  - "pricing"
+  - "features"
   - "alternatives"
   - "competitors"
   - "comparison"
@@ -47,6 +49,8 @@ keyword_queries:
 
 # URL boost patterns - used by page_facts_vector injector
 url_boost_patterns:
+  - "/pricing"
+  - "/features"
   - "/compare"
   - "/comparison"
   - "/how-we-compare"

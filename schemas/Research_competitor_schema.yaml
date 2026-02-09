@@ -624,6 +624,21 @@ properties:
   - web
   metadata:
     order: 905
+- name: entityId
+  dataType:
+  - text
+  description: Unique entity identifier from source record
+  moduleConfig:
+    text2vec-weaviate:
+      skip: true
+  sets:
+  - system
+  - identifier
+  - extended
+  tags:
+  - identity
+  metadata:
+    order: 906
 - name: entityName
   dataType:
   - text
@@ -633,7 +648,7 @@ properties:
   tags:
   - identity
   metadata:
-    order: 906
+    order: 907
 - name: keyCompetitorsIds
   dataType:
   - text[]
@@ -646,7 +661,7 @@ properties:
   prompt:
   - main
   metadata:
-    order: 907
+    order: 908
 - name: processedDate
   dataType:
   - text
@@ -657,7 +672,17 @@ properties:
   sets:
   - system
   metadata:
-    order: 908
+    order: 909
+- name: dataSource
+  dataType:
+  - text
+  description: Source of this record (e.g., Salesforce, Import, Manual, API)
+  sets:
+  - system
+  tags:
+  - provenance
+  metadata:
+    order: 910
 - name: researcher_model_id
   dataType:
   - text
