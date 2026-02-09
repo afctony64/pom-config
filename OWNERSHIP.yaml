@@ -31,9 +31,8 @@ ai_agents:
     description: "Infrastructure manager - Docker, networking, modes, profiles"
     identity_file: "/Users/tonyeales/Projects/PomSpark/.cursorrules"
     owns:
-      - profiles/              # Mode environment files (home.env, travel.env, etc.)
+      - shared-config.env      # Non-secret environment variables
     can_write:
-      - profiles/
       - shared-config.env      # Non-secret environment variables
       - .pom_config_pkg/       # Package configuration
     read_only:
@@ -66,11 +65,7 @@ ai_agents:
       - tenant_groups/         # Can define tenant groupings
       - tenants/               # Can define tenant configurations
       - prompts/               # Allowed by human request
-      - tenant_groups/         # Can define tenant groupings
-      - tenants/               # Can define tenant configurations
-      - prompts/               # Allowed by human request
     read_only:
-      - profiles/              # Owned by PomSpark
       - ux_configs/            # Owned by Pomothy
       - researcher_ai/         # Owned by PomAI
 
@@ -90,7 +85,6 @@ ai_agents:
     read_only:
       - schemas/               # Owned by pom-core
       - llm_models/            # Owned by pom-core
-      - profiles/              # Owned by PomSpark
       - ux_configs/            # Owned by Pomothy
       - tools/                 # Owned by pom-core
       - data_cards/            # Owned by pom-core
@@ -109,9 +103,8 @@ ai_agents:
     read_only:
       - schemas/               # Owned by pom-core
       - llm_models/            # Owned by pom-core
-      - profiles/              # Owned by PomSpark
       - researcher_ai/         # Owned by PomAI
-      - data_cards/            # Owned by PomAI
+      - data_cards/            # Owned by pom-core
       - tools/                 # Owned by pom-core
 
 # =============================================================================
@@ -165,5 +158,5 @@ enforcement:
 # =============================================================================
 # VERSION
 # =============================================================================
-version: "1.0.0"
-last_updated: "2026-01-23"
+version: "1.1.0"
+last_updated: "2026-02-09"
