@@ -119,8 +119,7 @@ processing_config:
   source_collection: Domain
   target_collections:
     - Research_industry
-  required_processing_flags:
-    researcher_processing_status: null
+  required_processing_flags: {}
   max_turns: 15  # Multi-turn for tool calling conversations
   iteration_parameter: researcher_id
   iteration_values: "TENANT_GROUP_RESEARCHERS"
@@ -130,6 +129,7 @@ processing_config:
 
 # 🔧 POST-EXECUTION TOOLS
 post_execution_tools:
+  - parallel_array_enricher
   - enum_cat
 ---
 {# ══════════════════════════════════════════════════════════════════════════════
