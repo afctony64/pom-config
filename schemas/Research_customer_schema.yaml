@@ -236,7 +236,7 @@ properties:
 - name: keyCustomerEvidence
   dataType:
   - text[]
-  description: 'Brief description of {subject}: what type of organization, what industry/sector, what they do. Used for classification context.'
+  description: 'Brief description of {subject}: what type of organization, what industry/sector, what they do. Used for classification context. Use "No description available" if unknown.'
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -744,7 +744,7 @@ properties:
   dataType:
   - text[]
   description: |
-    Industry segment for each key customer: specific vertical, niche, or specialization.
+    Industry segment for each key customer: specific vertical, niche, or specialization. Use "Unknown" if insufficient data.
   parallel_to: keyCustomers
   moduleConfig:
     text2vec-weaviate:
@@ -763,7 +763,7 @@ properties:
 - name: keyCustomerIndustrySegmentCIT
   dataType:
   - text[]
-  description: Source URLs supporting the keyCustomerIndustrySegmentLLM analysis. Cite page URLs from pageData or web_search.
+  description: Source URLs supporting the keyCustomerIndustrySegmentLLM analysis. Cite page URLs from pageData or web_search. Use empty string if no sources available.
   moduleConfig:
     text2vec-weaviate:
       skip: true
@@ -953,7 +953,7 @@ properties:
 - name: accountSizeScore
   dataType:
   - number[]
-  description: Account size/revenue potential score per key customer (1-10)
+  description: Account size/revenue potential score per key customer (1-10). Use 0 if insufficient data.
   parallel_to: keyCustomers
   prompt:
   - array_enricher
@@ -964,7 +964,7 @@ properties:
 - name: strategicValueScore
   dataType:
   - number[]
-  description: Strategic value score per key customer (1-10)
+  description: Strategic value score per key customer (1-10). Use 0 if insufficient data.
   parallel_to: keyCustomers
   prompt:
   - array_enricher
@@ -975,7 +975,7 @@ properties:
 - name: expansionPotentialScore
   dataType:
   - number[]
-  description: Expansion potential score per key customer (1-10)
+  description: Expansion potential score per key customer (1-10). Use 0 if insufficient data.
   parallel_to: keyCustomers
   prompt:
   - array_enricher

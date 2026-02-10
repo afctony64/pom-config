@@ -99,3 +99,7 @@ tool_guidance:
 
 citation_note: "No inline URLs in field values; put sources in CIT/evidence fields."
 # page_categories_of_interest: REMOVED - not implemented in pom-core (dead code)
+
+# Dependency-resolved tool chain. enum_cat only (no spawn, no vec_classifier).
+chain:
+  - enum_cat  # Classifies all Cat fields (cat_classifier)

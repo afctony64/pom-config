@@ -247,7 +247,7 @@ properties:
 - name: keyFinancialMetrics
   dataType:
   - text[]
-  description: Key Financial Metrics - evidence extracted from sources
+  description: Key Financial Metrics - evidence extracted from sources. Use "No financial metrics available" if none found.
   tags:
   - financial
   - metrics

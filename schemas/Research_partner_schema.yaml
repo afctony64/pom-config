@@ -191,7 +191,7 @@ properties:
   dataType:
   - text[]
   description: Evidence/context found for each keyPartner from page facts search. Stores the
-    factual basis for classifications and extracted values.
+    factual basis for classifications and extracted values. Use "No specific evidence available" if none found.
   parallel_to: keyPartners
   moduleConfig:
     text2vec-weaviate:
