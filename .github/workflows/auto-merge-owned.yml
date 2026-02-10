@@ -15,7 +15,7 @@ jobs:
       all_owned: ${{ steps.check.outputs.all_owned }}
       contributor: ${{ steps.check.outputs.contributor }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
