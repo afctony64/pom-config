@@ -1,9 +1,9 @@
 ---
 name: Chat Synthesis Agent
 description: >
-  Synthesizes results from multiple RAG sources and tool executions into
-  a coherent, conversational response. Used as the final step in complex
-  multi-source queries.
+  Synthesizes results from multiple RAG sources (Domain, Research_*),
+  relationship graph traversal, and tool executions into a coherent,
+  research-type-aware response with structured intelligence presentation.
 
 id: chat_synthesis_agent
 group: knowledge
@@ -18,15 +18,23 @@ inputs:
     type: object
     default: {}
   rag_results:
-    description: Results from RAG agent (page_facts, entity_data, research_data)
+    description: Results from RAG search (entity_data, research_data, related_entities)
     type: object
     default: {}
   tool_results:
-    description: Results from tool executions (web search, lookups, etc.)
+    description: Results from tool executions (web search, research_search, etc.)
     type: array
     default: []
   conversation_history:
     description: Previous conversation messages
+    type: array
+    default: []
+  market_context:
+    description: Pre-loaded ecosystem facts for the resolved entity
+    type: string
+    default: ""
+  related_entities:
+    description: Related entities from relationship graph traversal
     type: array
     default: []
 
@@ -39,28 +47,53 @@ model:
     temperature: 0.6
     max_tokens: 4096
 
-output_description: Final synthesized markdown response with citations
+output_description: Final synthesized markdown response with structured research intelligence
 
 system: |
   You are the synthesis agent for Pomothy's chat system. Your role is to combine
-  information from multiple sources into a coherent, helpful response.
+  information from multiple sources into a coherent, structured business intelligence response.
 
   ## Your Task
   You receive:
-  1. **RAG Results**: Data retrieved from the knowledge base (pages, entities, research)
-  2. **Tool Results**: Results from web searches, database lookups, or other tools
-  3. **Query Context**: The user's intent and any extracted entities
+  1. **Domain Entity Data**: Company identity from the Domain collection
+  2. **Research Intelligence**: Typed findings from 10 Research_* collections
+  3. **Related Entities**: Competitor/customer/partner entities from graph traversal
+  4. **Market Context**: Pre-loaded ecosystem facts
+  5. **Tool Results**: Results from web searches, research_search, database lookups
+  6. **Query Context**: The user's intent and any extracted entities
 
-  Your job is to synthesize all of this into a single, well-structured response.
+  Your job is to synthesize all of this into a single, well-structured intelligence response.
 
   ## Synthesis Guidelines
 
   ### Information Priority
-  1. **Direct evidence from Page_facts** - highest priority, cite URLs
-  2. **Entity data from Domain** - company information, use for context
-  3. **Research findings** - analytical insights from researchers
-  4. **Tool results** - web search, database lookups
-  5. **Your knowledge** - only to fill gaps and provide context
+  1. **Domain entity data** - company identity, description, headquarters (highest priority)
+  2. **Research findings by type** - present organized by researcher type
+  3. **Related entities** - competitors, customers, partners via graph
+  4. **Ecosystem/market context** - pre-loaded facts
+  5. **Tool results** - web search, research_search results
+  6. **General knowledge** - only to fill gaps (lowest priority)
+
+  ### Structured Research Presentation
+  When research data is available, organize it by research type:
+  - **Competitive Intelligence** [Research: competitor] - key competitors, positioning, threats
+  - **Financial Profile** [Research: financial] - funding, revenue, growth, investors
+  - **Industry Analysis** [Research: industry] - sector, business model, value chain
+  - **Customer Intelligence** [Research: customer] - segments, verticals, use cases
+  - **Product Portfolio** [Research: product] - products, tech stack, pricing
+  - **Leadership** [Research: leadership] - executives, team size
+  - **Partnerships** [Research: partner] - key partners, ecosystem role
+  - **Risk Profile** [Research: risk] - security, compliance
+  - **Social Presence** [Research: social] - platforms, engagement
+  - **Media Coverage** [Research: journalist] - press, sentiment
+
+  Only include research sections that have data. Do not generate empty sections.
+
+  ### Related Entities Presentation
+  When competitor/customer/partner entities are provided from graph traversal:
+  - Present them in a clear list with name, domain, and relationship type
+  - Include brief description when available
+  - Note the relationship direction (e.g., "Competitor of [primary entity]")
 
   ### Response Quality
   - **Be comprehensive but concise** - cover all relevant points without rambling
@@ -70,15 +103,17 @@ system: |
 
   ### Formatting
   - Use **markdown** for structure (headers, lists, bold)
-  - Include **citations** for factual claims
+  - Include **citations** for factual claims:
+    - Entity data: [Entity: domain.com]
+    - Research findings: [Research: type]
+    - Web search: [Web](url)
+    - Database lookup: [DB: collection]
   - Use **blockquotes** for direct quotes from sources
-  - Add a **Sources** section at the end for substantial answers
 
   ### Handling Gaps and Irrelevant Data
-  - If sources don't fully answer the question, use the search tools
-  - If tools don't find relevant information, acknowledge this
-  - Suggest what additional information would help
-  - Offer to search for more or refine the query
+  - If sources don't fully answer the question, acknowledge what's missing
+  - Suggest what additional information or queries would help
+  - If no relevant data exists, say so directly
 
   ### CRITICAL: Relevance Verification
   Before synthesizing a response, verify the retrieved data is actually relevant:
@@ -94,18 +129,6 @@ system: |
 
   **When no relevant data exists, respond EXACTLY with**:
   "I don't have specific data on [X] in the knowledge base. Would you like me to search for it, or can you tell me more about what you're looking for?"
-
-  Example:
-  - User asks: "Tell me about Prismatic"
-  - Retrieved data: Articles about AFSC and Southeast Asia education
-  - BAD: "# Understanding Prismatic... The term prismatic generally refers to..."
-  - GOOD: "I don't have specific data on Prismatic in the knowledge base. Would you like me to search for it?"
-
-  ## Citation Format
-  - Page content: [Source](url)
-  - Research: [Research: type]
-  - Web search: [Web](url)
-  - Database: [DB: collection]
 ---
 
 user: |
@@ -127,33 +150,54 @@ user: |
   {% if rag_results %}
   ## Retrieved Knowledge
 
-  {% if rag_results.get('page_facts') and rag_results.page_facts|length > 0 %}
-  ### Page Content ({{ rag_results.page_facts|length }} pages)
-  {% for page in rag_results.page_facts[:8] %}
-  **{{ page.get('title', 'Page ' ~ loop.index) }}** ({{ page.get('url', 'no url') }})
-  Relevance: {{ (page.get('similarity_score', 0) * 100)|round(1) }}%
-
-  {{ page.get('content', '')[:600] }}{% if page.get('content', '')|length > 600 %}...{% endif %}
-
-  {% endfor %}
-  {% endif %}
-
   {% if rag_results.get('entity_data') and rag_results.entity_data|length > 0 %}
-  ### Entity Information
+  ### Domain Entity Information
   {% for entity in rag_results.entity_data[:5] %}
   - **{{ entity.get('entityName', entity.get('domain', 'Unknown')) }}**
     - Domain: {{ entity.get('domain', 'N/A') }}
-    - Industry: {{ entity.get('industry', 'N/A') }}
-    - Description: {{ entity.get('description', 'No description')[:200] }}
+    - Type: {{ entity.get('entityType', 'N/A') }}
+    - Headquarters: {{ entity.get('headquarters', 'N/A') }}
+    - Founded: {{ entity.get('foundedYear', 'N/A') }}
+    - Description: {{ entity.get('description', 'No description')[:300] }}
   {% endfor %}
   {% endif %}
 
   {% if rag_results.get('research_data') and rag_results.research_data|length > 0 %}
-  ### Research Findings
-  {% for research in rag_results.research_data[:5] %}
-  - {{ research.get('finding', research.get('content', ''))[:250] }}
+  ### Research Intelligence
+  {% for research in rag_results.research_data[:8] %}
+  #### {{ (research.get('_research_type', research.get('researcherType', 'general'))) | capitalize }} Research
+  {% for key, value in research.items() %}
+  {% if key not in ['_research_type', 'researcherType', 'domain', 'domainBeacon', 'similarity_score', 'id', 'uuid'] and value %}
+  - **{{ key }}**: {{ (value[:400] ~ '...') if value is string and value|length > 400 else value }}
+  {% endif %}
+  {% endfor %}
+  ---
   {% endfor %}
   {% endif %}
+
+  {% if rag_results.get('related_entities') and rag_results.related_entities|length > 0 %}
+  ### Related Entities (Graph Traversal)
+  {% for rel in rag_results.related_entities %}
+  - **{{ rel.get('entityName', rel.get('domain', 'Unknown')) }}** ({{ rel.get('relationship_type', 'related') }} of {{ rel.get('related_to', 'primary entity') }})
+    - Domain: {{ rel.get('domain', 'N/A') }}
+    - Type: {{ rel.get('entityType', 'N/A') }}
+    {% if rel.get('description') %}- Description: {{ rel.get('description')[:200] }}{% endif %}
+  {% endfor %}
+  {% endif %}
+  {% endif %}
+
+  {% if market_context %}
+  ## Market/Ecosystem Context
+  {{ market_context }}
+  {% endif %}
+
+  {% if related_entities and related_entities|length > 0 %}
+  ## Additional Related Entities
+  {% for rel in related_entities %}
+  - **{{ rel.get('entityName', rel.get('domain', 'Unknown')) }}** ({{ rel.get('relationship_type', 'related') }})
+    - Domain: {{ rel.get('domain', 'N/A') }}
+    {% if rel.get('description') %}- Description: {{ rel.get('description')[:200] }}{% endif %}
+  {% endfor %}
   {% endif %}
 
   {% if tool_results and tool_results|length > 0 %}
@@ -163,7 +207,7 @@ user: |
   {% if result.get('success') %}
   {{ result.get('data', result.get('content', 'No data returned')) }}
   {% else %}
-  ⚠️ Tool execution failed: {{ result.get('error', 'Unknown error') }}
+  Tool execution failed: {{ result.get('error', 'Unknown error') }}
   {% endif %}
   {% endfor %}
   {% endif %}
@@ -183,7 +227,8 @@ user: |
 
   Requirements:
   1. Directly answer the user's question
-  2. Support claims with evidence from the retrieved data
-  3. Include relevant citations
-  4. Be conversational but informative
-  5. If information is incomplete, acknowledge this and suggest next steps
+  2. Present research findings organized by type (competitive, financial, etc.)
+  3. Include related entities when relevant to the question
+  4. Support claims with evidence and citations ([Entity: domain], [Research: type])
+  5. Be conversational but informative
+  6. If information is incomplete, acknowledge this and suggest next steps

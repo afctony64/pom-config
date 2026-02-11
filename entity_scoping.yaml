@@ -1,46 +1,42 @@
 id: entity_scope_registry
-version: 1
+version: 2
 description: >
   Schema-driven entity scoping for chat RAG. Defines how to resolve entities
-  and map them to collection filters. Supports composite scoping (e.g. segment + category)
-  and relationship expansion for next-turn performance.
+  and map them to collection filters using Domain + Research_* knowledge base.
+  Supports composite scoping and relationship expansion for next-turn performance.
 
 entity_types:
   domain_entity:
     label: Domain Entity
-    primary_collection: Page_facts  # Use Page_facts which has all the data
+    primary_collection: Domain
 
     lookup:
-      collection: Page_facts
+      collection: Domain
       limit: 5
       query_properties:
         - domain
-        - title
+        - entityName
         - description
-        - content
+        - title
       return_properties:
         - domain
-        - title
+        - entityName
         - description
-        - url
-        - page_type
-      # No filter - let hybrid search find best matches
+        - entityType
+        - headquarters
+        - foundedYear
+        - spawnedFrom
+        - spawnedBy
+        - seed
 
     scope:
       collections:
-        Page_facts:
+        Domain:
           combine: or
           filters:
             - field: domain
               operator: equal
               from_entity: domain
-        Knowledge_base:
-          combine: or
-          filters:
-            - field: domain
-              operator: contains_any
-              from_entity: domain_scope
-        # Research collections may have domain field for scoping
         Research_*:
           combine: or
           filters:
@@ -58,36 +54,32 @@ entity_types:
 
   market_segment:
     label: Market Segment
-    primary_collection: Page_facts  # Use Page_facts which has all data in prismatic
+    primary_collection: Domain
 
     lookup:
-      collection: Page_facts
+      collection: Domain
       limit: 8
       query_properties:
-        - title
+        - entityName
         - description
-        - content
-        - keywords
+        - title
       return_properties:
         - domain
-        - title
+        - entityName
         - description
-        - keywords
-        - page_type
-      # No filter - let hybrid search find best matches
+        - entityType
+        - headquarters
+        - spawnedFrom
 
     scope:
       collections:
-        Page_facts:
+        Domain:
           combine: or
           filters:
-            - field: keywords
-              operator: contains_any
-              from_entity: market_keywords
             - field: domain
               operator: contains_any
               from_entity: domain_scope
-        Knowledge_base:
+        Research_*:
           combine: or
           filters:
             - field: domain
