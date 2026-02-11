@@ -81,6 +81,9 @@ data_requirements:
         inject_as: pageData
     # 📊 SEC Edgar data for public companies (optional)
     - injector_template: mcp
+      # Skip Edgar entirely when we do not have a ticker/symbol.
+      # This avoids unnecessary MCP calls for private entities.
+      skip_if: "{{ 'true' if not ((record.get('properties') or record).get('stockSymbol', '')|trim) else 'false' }}"
       template_vars:
         tool: edgar_filing_sections
         params:
