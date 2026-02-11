@@ -45,16 +45,13 @@ inputs:
     description: "Canonical execution artifacts (prompt, llm_context, llm_response, tools)"
     type: object
 
-# Tools available for additional field enrichment (NOT for domain resolution)
-# Domain is resolved via: 1) pre-resolved subject_domain OR 2) pre-injected domain_candidates
-tools:
-  - brave_search
+# Throughput mode: disable runtime brave_search tool-calling in this post-tool prompt.
 
 tool_guidance:
   brave_search:
     priority: medium
-    # Balance: allow brave_search fallback when page_facts insufficient
-    max_calls: 4
+    # Throughput-first default: allow only one fallback search per subject.
+    max_calls: 1
     when_to_use: |
       **ALWAYS check page_facts FIRST** before calling brave_search.
 
@@ -77,12 +74,12 @@ data_requirements:
     # Domain candidates - pre-search for official domain before LLM runs
     # Only runs if subject_domain is not already resolved (skips if we have the domain)
     - injector_template: mcp
-      skip_if: "{{ 'true' if (subject_domain is defined and subject_domain) else 'false' }}"
+      skip_if: "true"
       template_vars:
         tool: brave_search
         params:
           query: "{{ subject }} official website"
-          count: 5
+          count: 3
         inject_as: domain_candidates
     # Page facts - search using field descriptions
     # Use resolved_domains (all resolved competitor domains) as market filter
@@ -90,7 +87,7 @@ data_requirements:
       template_vars:
         data_card_id: page_facts_search
         inject_as: page_facts_response
-        limit: 20
+        limit: 10
         search_query: "{% set props = record.get('properties') or record if record else {} %}{% set entity_name = props.get('entityName') or props.get('domain') or '' %}{% for field in post_fields %}{{ field.description|replace('{subject}', subject)|replace('{entity}', entity_name) }}{% if not loop.last %} | {% endif %}{% endfor %}"
         search_strategy: hybrid
         # Use resolved_domains list (all resolved entity domains) for market-wide filter
@@ -125,9 +122,9 @@ model:
     max_completion_tokens: 4000
     timeout: 120
     max_retries: 2
-    # Issue #798 fix: 4 turns allows page_facts check + brave_search fallback
+    # Throughput-first default: keep turns tight for lower tail latency.
     # Domain is pre-resolved via injectors; brave_search enabled for field enrichment
-    max_turns: 4
+    max_turns: 2
 
 ---
 
@@ -232,6 +229,18 @@ user:
 1. Use page_facts if available, otherwise brave_search.
 {% if domain_field_name %}2. For {{ domain_field_name }}: Extract official domain from search results.
    - **NEVER use {{ source_domain }}** - that is the source entity{% endif %}
+{% endif %}
+
+Return JSON with ONLY these exact field names (use fallback values from descriptions, never null):
+```json
+{
+{% for field in post_fields %}
+  "{{ field.name }}": "value"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+}
+```
+ndif %}
 {% endif %}
 
 Return JSON with ONLY these exact field names (use fallback values from descriptions, never null):

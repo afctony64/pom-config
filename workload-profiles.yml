@@ -155,7 +155,7 @@ profiles:
       backend:
         memory_limit: 16G        # Reduced from 56G - browser pool is separate service!
         memory_reserved: 8G      # Reduced from 40G - still 2x base allocation
-        playwright_max_parallel: 20  # Maximum browser parallelism
+        playwright_max_parallel: 100  # Maximum browser parallelism (raised from 20 - pool has 18 CPUs/56GB)
         pids: 4096               # High PID limit for concurrent workers
         http_connection_limit: 2500  # 250 domains × 10 connections (Jan 2026)
         http_limit_per_host: 10      # Max per-domain connections

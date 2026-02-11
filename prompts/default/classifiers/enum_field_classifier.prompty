@@ -39,11 +39,8 @@ model:
     model_card_id: gpt-5-mini
   parameters:
     max_tokens: 2000
-<<<<<<< Updated upstream
     response_format:
       type: json_object
-=======
->>>>>>> Stashed changes
 
 ---
 
