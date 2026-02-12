@@ -37,15 +37,20 @@ parameters:
     - field: entityId
       operator: is_not_null
     - field: industry
-      operator: is_not_null
+      operator: ref_count_gt
+      value: 0
     - field: financial
-      operator: is_not_null
+      operator: ref_count_gt
+      value: 0
     - field: leadership
-      operator: is_not_null
+      operator: ref_count_gt
+      value: 0
     - field: customer
-      operator: is_not_null
+      operator: ref_count_gt
+      value: 0
     - field: product
-      operator: is_not_null
+      operator: ref_count_gt
+      value: 0
 
   relationship_traversal: true
   dynamic_templates: true
