@@ -122,9 +122,10 @@ model:
     max_completion_tokens: 4000
     timeout: 120
     max_retries: 2
-    # Throughput-first default: keep turns tight for lower tail latency.
-    # Domain is pre-resolved via injectors; brave_search enabled for field enrichment
-    max_turns: 2
+    # Allow 4 turns: LLM needs 1 for page_facts analysis, 1 for brave_search call,
+    # 1 for processing results, 1 for final JSON generation. Evidence: 2 and 3 both
+    # consistently exceeded during product enrichment runs.
+    max_turns: 4
 
 ---
 
@@ -229,18 +230,6 @@ user:
 1. Use page_facts if available, otherwise brave_search.
 {% if domain_field_name %}2. For {{ domain_field_name }}: Extract official domain from search results.
    - **NEVER use {{ source_domain }}** - that is the source entity{% endif %}
-{% endif %}
-
-Return JSON with ONLY these exact field names (use fallback values from descriptions, never null):
-```json
-{
-{% for field in post_fields %}
-  "{{ field.name }}": "value"{% if not loop.last %},{% endif %}
-
-{% endfor %}
-}
-```
-ndif %}
 {% endif %}
 
 Return JSON with ONLY these exact field names (use fallback values from descriptions, never null):
