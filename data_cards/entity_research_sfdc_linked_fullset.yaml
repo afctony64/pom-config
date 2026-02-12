@@ -1,0 +1,119 @@
+id: entity_research_sfdc_linked_fullset
+collection: Domain
+name: SFDC Linked Full-Set
+type: data_card
+file: entity_research_sfdc_linked_fullset.yaml
+description: >
+  Sales-ready gate: fetch Domain records that have ALL 5 core researcher links
+  (industry, financial, leadership, customer, product) present on Domain.
+  Ensures every returned record has the full research set needed for SFDC export.
+
+tags:
+  - research
+  - cat-fields
+  - llm-fields
+  - research-fields
+  - entity-intelligence
+  - sfdc
+  - fullset
+
+target_scope: entity_intelligence
+executor: fetch
+
+display: false  # Backend-only card for SFDC export gating
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: fetch
+  collection: Domain
+
+  # Safe query envelope - prevent gRPC RST_STREAM on heavy multi-ref queries
+  chunk_size: 25
+  parallel_chunks: 1
+
+  # Sales-ready gate:
+  # Must be review-ready AND have all 5 core researcher links on Domain.
+  filters:
+    - field: ready_for_review
+      operator: equal
+      value: true
+    - field: entityId
+      operator: is_not_null
+    - field: industry
+      operator: is_not_null
+    - field: financial
+      operator: is_not_null
+    - field: leadership
+      operator: is_not_null
+    - field: customer
+      operator: is_not_null
+    - field: product
+      operator: is_not_null
+
+  relationship_traversal: true
+  dynamic_templates: true
+
+  traversal:
+    max_depth: 1
+    max_complexity: 100
+    use_default_policies: false
+    policies:
+      domainBeacon: skip
+      spawnedFromRef: skip
+
+  limit: 10000
+  limit_default: 10000
+
+  field_set: [standard, extended, array]
+
+fields: {}
+
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+# Only the 5 core research collections needed for SFDC export
+collections:
+  - collection: Domain
+    required: true
+    field_set: [standard, extended, array]
+
+  - collection: Research_industry
+    field_set: [standard, extended, array]
+  - collection: Research_financial
+    field_set: [standard, extended, array]
+  - collection: Research_product
+    field_set: [standard, extended, array]
+  - collection: Research_customer
+    field_set: [standard, extended, array]
+  - collection: Research_leadership
+    field_set: [standard, extended, array]
+
+response_structure:
+  root_object: Domain
+  includes_relationships: true
+  relationship_style: reverse_traversal
+  field_focus: sfdc_fullset
+  expected_collections:
+    - Domain
+    - Research_industry
+    - Research_financial
+    - Research_product
+    - Research_leadership
+    - Research_customer
+
+documentation:
+  overview: |
+    SFDC Full-Set Gate Card — only returns Domain records where ALL 5 core
+    researcher references (industry, financial, leadership, customer, product)
+    are linked. This guarantees every record has the complete research data
+    required for Salesforce export.
+
+  usage_examples:
+    - name: "Count sales-ready entities"
+      query: "data_card_id: entity_research_sfdc_linked_fullset, limit: 10000"
+      notes: "Returns only entities with all 5 research links"
