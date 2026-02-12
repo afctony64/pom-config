@@ -510,7 +510,7 @@ Analyze **{{ get_display_name(record) }}** and return structured JSON output.
 {% else %}
 1. Page Content - PRIMARY SOURCE
 {% endif %}
-{% if edgarData is defined and edgarData and edgarData.available %}
+{% if edgarData is defined and edgarData and (edgarData.get('available', false) if edgarData is mapping else (edgarData.available | default(false))) %}
 2. SEC Edgar Data - Financial metrics
 {% endif %}
 3. Web Search (if tools available) - For gaps
