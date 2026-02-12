@@ -1,0 +1,92 @@
+id: entity_research_sfdc_linked_fullset
+collection: Domain
+name: SFDC Research Linked Full Set
+type: data_card
+file: entity_research_sfdc_linked_fullset.yaml
+description: >
+  Fetch Domain records for SFDC export with strict link gating:
+  require Domain to have all 5 core researcher references populated
+  (industry, financial, leadership, customer, product).
+  This card is for sales-ready minimum-set exports and audits.
+
+tags:
+  - research
+  - sfdc-export
+  - full-set
+  - link-gated
+  - entity-model
+
+target_scope: entity_intelligence
+executor: fetch
+display: true
+relationship_support: true
+
+personas:
+  - "*"
+
+parameters:
+  type: fetch
+  collection: Domain
+
+  # Sales-ready gate:
+  # must be review-ready and have all 5 core researcher links on Domain.
+  filters:
+    - field: ready_for_review
+      operator: equal
+      value: true
+    - field: entityId
+      operator: is_not_null
+    - field: industry
+      operator: is_not_null
+    - field: financial
+      operator: is_not_null
+    - field: leadership
+      operator: is_not_null
+    - field: customer
+      operator: is_not_null
+    - field: product
+      operator: is_not_null
+
+  relationship_traversal: true
+  dynamic_templates: true
+  traversal:
+    max_depth: 1
+    max_complexity: 150
+    use_default_policies: false
+    policies:
+      domainBeacon: skip
+      spawnedFromRef: skip
+
+  limit: 10000
+  limit_default: 10000
+  field_set: [standard, extended, array]
+
+fields: {}
+field_tags:
+  - Cat
+  - LLM
+  - research
+
+collections:
+  - collection: Domain
+    field_set: [standard, extended, array]
+  - collection: Research_industry
+    field_set: [standard, extended, array]
+  - collection: Research_financial
+    field_set: [standard, extended, array]
+  - collection: Research_leadership
+    field_set: [standard, extended, array]
+  - collection: Research_customer
+    field_set: [standard, extended, array]
+  - collection: Research_product
+    field_set: [standard, extended, array]
+
+documentation:
+  overview: |
+    This card enforces a strict "actual links exist" rule on Domain before
+    returning records. It is intended for SFDC minimum-set readiness checks.
+  usage_examples:
+    - name: "Count linked full-set records"
+      query: "data_card_id: entity_research_sfdc_linked_fullset, limit: 10000"
+    - name: "Sample first 100 linked full-set records"
+      query: "data_card_id: entity_research_sfdc_linked_fullset, limit: 100"
