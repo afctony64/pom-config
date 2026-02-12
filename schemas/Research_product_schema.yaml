@@ -644,7 +644,7 @@ properties:
 - name: productURL
   dataType:
   - text[]
-  description: 'Primary website or landing page URL for {subject}. Find the product homepage, documentation site, or main marketing page. Example: https://www.example.com/product-name. Use "Not disclosed" if unknown.'
+  description: 'Primary website or landing page URL for {subject}. Find the product page, docs site, or marketing page. If no specific product page exists, use the parent company homepage (e.g. https://example.com). Always provide at least the company URL, never "Not disclosed".'
   parallel_to: products
   moduleConfig:
     text2vec-weaviate:
