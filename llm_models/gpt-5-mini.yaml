@@ -11,7 +11,7 @@ adapter_config:
   base_url: null
   base_url_env: OPENAI_API_KEY
 parameters:
-  max_tokens: 16384
+  max_tokens: 128000  # OpenAI docs: 128K max output tokens for gpt-5-mini
 capabilities:
   structured_output: json_strict  # OpenAI supports strict JSON schema enforcement
   reasoning: true

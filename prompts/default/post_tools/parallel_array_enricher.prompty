@@ -72,9 +72,11 @@ data_requirements:
   include_enrichment_data: true
   injectors:
     # Domain candidates - pre-search for official domain before LLM runs
-    # Only runs if subject_domain is not already resolved (skips if we have the domain)
+    # Only runs when we do NOT already have a resolved subject_domain.
+    # This is critical because the prompt instructs the LLM to avoid using brave_search
+    # for domain resolution unless it has either subject_domain or domain_candidates.
     - injector_template: mcp
-      skip_if: "true"
+      skip_if: "{{ 'true' if (subject_domain is defined and subject_domain) or (person_domain is defined and person_domain) else 'false' }}"
       template_vars:
         tool: brave_search
         params:

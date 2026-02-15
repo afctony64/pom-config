@@ -98,7 +98,7 @@ model:
     type: openai_chat
     model_card_id: gpt-5-mini
   parameters:
-    max_output_tokens: 16000  # Reduced: no reasoning tokens with chat API
+    max_output_tokens: 48000  # gpt-5-mini supports 128K; 48K gives ample headroom
     response_format:
       type: json_schema
       json_schema:
