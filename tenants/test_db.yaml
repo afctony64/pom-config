@@ -3,6 +3,10 @@ name: Test Database
 type: tenant
 description: Test database tenant for validation and integration tests
 
+# Align test_db with the entity model routing used by production tenants.
+tenant_group: corporate
+entity_collection: Domain
+
 # Groups: company (Domain + Research_* collections), url (Page_* collections only, excludes Domain)
 # Note: Knowledge_base access is granted separately if needed
 groups: ["company", "url"]
