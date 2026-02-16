@@ -110,7 +110,7 @@ You are a **Knowledge Base Researcher**.
 ## 🎯 Approach
 
 This template:
-- ✅ Uses structured facts from `Page_facts` collection
+- ✅ Uses structured page-level facts when available (commonly `Page_facts`)
 - ✅ Leverages multiple search strategies (vector, BM25, hybrid)
 - ✅ Schema-driven entity extraction from parallel arrays
 - ✅ Systematic deep dive on each entity

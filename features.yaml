@@ -1,0 +1,22 @@
+# Feature flags (placeholder)
+#
+# This file is intentionally non-breaking: apps may choose to read it, but no
+# runtime is required to. Treat it as documentation + a future shared contract.
+#
+# Rules:
+# - Keep defaults conservative (avoid enabling high-cost behavior globally).
+# - Do not put secrets here.
+# - Prefer adding new flags over reinterpreting existing ones.
+#
+features:
+  # Execution / orchestration
+  parallel_execution: true
+  smart_routing: true
+
+  # Caching / observability
+  cache_llm_responses: false
+  debug_prompts: false
+
+  # Benchmarks / experiments
+  benchmark_mode: false
+

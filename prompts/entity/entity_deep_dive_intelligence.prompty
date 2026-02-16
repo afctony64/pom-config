@@ -18,7 +18,7 @@ type: standard
 # ══════════════════════════════════════════════════════════════════════════════
 # - Source: Domain (the URL IS the entity)
 # - Research Data: Research_* collections
-# - Page Data: Page_facts (via vector search)
+# - Page Data: page-level facts/content (commonly Page_facts via vector search; may be empty in some runtimes)
 # - Entity-agnostic: Works with any TenantGroup
 
 inputs:
@@ -49,7 +49,7 @@ inputs:
     type: boolean
   # Injected data
   pageData:
-    description: Page content from Page_facts vector search
+    description: Page content from page-level vector search (may be empty depending on runtime/RAG mode)
     type: array
     default: []
   research_data:

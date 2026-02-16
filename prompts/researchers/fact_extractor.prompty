@@ -17,7 +17,7 @@ inputs:
     type: string
     default: "balanced"
 
-# 🔧 Data injection - fetch semantic chunks from Page_facts for domain
+# 🔧 Data injection - fetch semantic chunks from page-level facts for domain (commonly Page_facts)
 # NOTE: skip_if prevents re-fetch when context manager has pre-injected data
 data_requirements:
   injectors:
