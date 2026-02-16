@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `features.yaml` placeholder for ecosystem-wide feature flags (documented; not yet wired into runtime loaders).
 
+### Changed
+- Prompts and post-tools updated to treat page-level context (e.g., Page_facts/pageData) as optional when missing.
+
+### Removed
+- `central_reach` tenant configuration removed from `tenants/`.
+- Deprecated `Page_source` routing removed from `test_db` tenant.
+
 ## [1.7.17] - 2026-01-29
 
 ### Added
