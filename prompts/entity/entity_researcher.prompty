@@ -7,7 +7,7 @@ description: >
   ENTITY MODEL:
   - Source: Domain (the URL IS the entity)
   - Output: Research_* collections
-  - Page_facts for evidence (vectorized semantic search)
+  - Page-level context for evidence (may be empty depending on runtime/RAG mode)
 
 # NOTE: classification section removed - see docs/architecture/FUTURE_PROMPT_FEATURES.md
 # NOTE: quality_control section removed - see docs/architecture/FUTURE_PROMPT_FEATURES.md
@@ -51,7 +51,7 @@ inputs:
 
   # === DATA INJECTION (via data_requirements.injectors) ===
   pageData:
-    description: Injected page content from Page_facts (vectorized, searchable)
+    description: Injected page context (page-level facts/content). May be empty depending on runtime/RAG mode.
     type: array
     default: null
   edgarData:
@@ -82,8 +82,9 @@ data_requirements:
     # see edgarData if it was already cached.
     - injector_template: api_cache_warmup
 
-    # 📄 PRIMARY: Page Facts Injection
-    # Uses semantic search on Page_facts vectors to find relevant content
+    # 📄 PRIMARY: Page Context Injection
+    # Uses semantic search on page-level vectors to find relevant content.
+    # NOTE: In some runtimes, pageData may be empty; the prompt must still run.
     # NOTE: search_queries are read from researcher_ai config automatically
     - injector_template: page_facts_vector
       template_vars:
@@ -117,7 +118,8 @@ model:
 # PROCESSING CONFIG - ENTITY MODEL (Standard)
 # ══════════════════════════════════════════════════════════════════════════════
 processing_config:
-  # 🔧 Only process domains that have page_facts (content extracted)
+  # For PomAI pipeline runs we typically require page-level context to be present.
+  # Other runtimes may render/run this prompt without pageData (prompt must stay robust).
   filters:
     - field: page_facts
       operator: equal
@@ -255,13 +257,18 @@ Example: `keyCompetitors[0]` pairs with `keyCompetitorDomains[0]`
 
 When analyzing an entity, prioritize sources in this order:
 
-1. **Page Content (pageData)**: Primary source of truth - web pages from the entity's site
+1. **Page Content (pageData)**: Primary source of truth when available (may be empty in some runtimes)
 2. **SEC Edgar Data**: Financial filings for public companies (when available)
 3. **Pre-fetched Web Search (webSearchData)**: Third-party results already in context (when available)
 4. **Web Search Tool**: Only for remaining gaps not covered by pre-fetched results
 5. **Training Knowledge**: Background context and industry norms only
 
 Always cite the source of information. If a claim cannot be supported by provided data, mark it as inferred with low confidence.
+
+If `pageData` is empty or missing:
+- Treat this as "no on-site page context available" for this run.
+- Prefer returning conservative defaults (Unknown/Not disclosed/empty arrays) rather than guessing.
+- Set `sourceQuality` to "minimal" unless `webSearchData` provides strong coverage.
 
 ## BEHAVIORAL GUIDELINES
 

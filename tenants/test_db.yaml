@@ -56,7 +56,6 @@ collections:
   # Page collections
   Page_facts: "mac"
   Page_intelligence: "mac"
-  Page_source: "mac"
   Page_content: "mac"
   Page_researcher: "mac"
 
