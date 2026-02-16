@@ -22,7 +22,6 @@ Each tenant has a YAML file defining:
 | `prismatic` | corporate | B2B SaaS integration platform |
 | `prismatic_corporate` | corporate | Prismatic with explicit corporate config |
 | `internet_brands` | corporate | Professional services research |
-| `central_reach` | corporate | Healthcare marketing |
 | `fortune_1000` | corporate | Enterprise research |
 | `classifier` | - | Global classifier (seeds) |
 | `knowledge` | - | Knowledge base tenant |
