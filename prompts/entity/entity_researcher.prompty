@@ -55,8 +55,16 @@ inputs:
     type: array
     default: null
   edgarData:
-    description: SEC Edgar financial data (for public companies only)
+    description: SEC Edgar filing sections (cache warmup, for public companies only)
     type: object
+    default: null
+  edgarCompanyData:
+    description: SEC Edgar company facts (cache warmup, for public companies only)
+    type: object
+    default: null
+  webSearchData:
+    description: Web search results from recommended_searches (injected before LLM turn 1)
+    type: array
     default: null
 
   # === COMPRESSION CONFIG (optional - via ContextManager) ===
@@ -67,6 +75,13 @@ inputs:
 
 data_requirements:
   injectors:
+    # 🔥 CACHE WARMUP: Hydrate context from API cache for all configured tools.
+    # Reads researcher_ai.tools, does cache-only lookups (zero API calls).
+    # Injects: edgarData, edgarCompanyData (when cached for this entity).
+    # Must run before page_facts_vector so skip_if on brave_prefetch can
+    # see edgarData if it was already cached.
+    - injector_template: api_cache_warmup
+
     # 📄 PRIMARY: Page Facts Injection
     # Uses semantic search on Page_facts vectors to find relevant content
     # NOTE: search_queries are read from researcher_ai config automatically
@@ -79,18 +94,6 @@ data_requirements:
         min_certainty: 0.12
         limit: 100
         inject_as: pageData
-    # 📊 SEC Edgar data for public companies (optional)
-    - injector_template: mcp
-      # Skip Edgar entirely when we do not have a ticker/symbol.
-      # This avoids unnecessary MCP calls for private entities.
-      skip_if: "{{ 'true' if not ((record.get('properties') or record).get('stockSymbol', '')|trim) else 'false' }}"
-      template_vars:
-        tool: edgar_filing_sections
-        params:
-          cik: "{{ (record.get('properties') or record).get('stockSymbol', '') }}"
-          researcher_type: "{{ record._researcher_id }}"
-        inject_as: edgarData
-      optional: true
 
 model:
   api: chat  # chat = /v1/chat/completions (cheaper), responses = /v1/responses
@@ -177,18 +180,25 @@ Your role is to extract factual information from web pages and other sources, th
 You MUST return JSON matching the structured output schema exactly. All fields are required.
 The schema is provided via the response_format parameter and enforces strict compliance.
 
+### Schema-First Rule (Critical)
+
+- The structured output schema (field types + field descriptions) is the source of truth.
+- If any generic guidance in this prompt conflicts with a specific field's schema description, follow the schema description.
+- Never invent additional keys/fields beyond the schema.
+
 ### Field Type Definitions
 
 **LLM Fields** (suffix `*LLM`):
-- Text arrays containing 1-3 analytical items
-- Each item should be 50-100 words of focused analysis
-- State facts directly, no elaboration or background context
-- Always populate with analysis; if speculative, note low confidence
+- Most `*LLM` fields are single text values (not arrays). Keep them concise and information-dense.
+- Default length: 2-5 sentences, <= 700 characters total (prefer <= 400).
+- No bullet lists, no section headings, no long enumerations, no quotes of long passages.
+- If the schema defines a `*LLM` field as an array, use 1-2 items (default: 1), 25-60 words per item.
+- If speculative, explicitly mark as "inferred" with low confidence.
 
 **CIT Fields** (suffix `*CIT`):
 - URL arrays parallel to matching LLM fields
 - Each URL should support the corresponding LLM field analysis
-- Multiple URLs per field are allowed and encouraged
+- Keep citations lean: 1-3 URLs per item (default: 1). Prefer primary sources.
 
 **String Fields**:
 - Single text values for categorical or identifier data
@@ -196,7 +206,8 @@ The schema is provided via the response_format parameter and enforces strict com
 
 **Array Fields**:
 - Lists of items as specified by the schema
-- Never return empty arrays; include at least one item explaining why data unavailable
+- Follow the schema's instructions for whether `[]` is allowed.
+- Do NOT put explanations/sentences inside arrays unless the schema explicitly asks for that.
 
 **Numeric Fields**:
 - Scores, metrics, and quantitative data
@@ -206,8 +217,16 @@ The schema is provided via the response_format parameter and enforces strict com
 
 - **Required fields**: Must always appear in output JSON
 - **null value**: Use ONLY when no data found after searching all provided sources
-- **Empty arrays []**: NEVER use empty arrays - include explanatory item instead
+- **Empty arrays []**: Allowed when the schema says to return `[]`. Otherwise, use the smallest valid value.
 - **Confidence**: Always note when analysis is based on inference vs direct evidence
+
+### Brevity Rules (Critical)
+
+- Output a single JSON object only (no markdown, no commentary, no prose outside JSON).
+- Do not restate the same claim in multiple fields; write it once in the most relevant field
+- Prefer fewer items over longer items (1 strong item beats 3 weak items)
+- Do not quote long passages from sources; summarize in one sentence
+- If you are approaching token limits, shorten *LLM items first and reduce citation counts
 
 ### Parallel Array Alignment
 
@@ -218,8 +237,8 @@ Example: `keyCompetitors[0]` pairs with `keyCompetitorDomains[0]`
 ### Citation Format Rules
 
 **Global Citations Field**:
-- The `citations` array must contain ALL source URLs used anywhere in the analysis
-- This is a comprehensive list of every page referenced
+- The `citations` array must contain ALL URLs that appear in any `*CIT` field.
+- Do not add extra URLs that you did not cite in a `*CIT` field.
 
 **Field-Specific CIT Arrays**:
 - Each LLM field has a matching CIT field (e.g., `businessModelLLM` → `businessModelCIT`)
@@ -238,8 +257,9 @@ When analyzing an entity, prioritize sources in this order:
 
 1. **Page Content (pageData)**: Primary source of truth - web pages from the entity's site
 2. **SEC Edgar Data**: Financial filings for public companies (when available)
-3. **Web Search Results**: Third-party information to fill gaps (when tools available)
-4. **Training Knowledge**: Background context and industry norms only
+3. **Pre-fetched Web Search (webSearchData)**: Third-party results already in context (when available)
+4. **Web Search Tool**: Only for remaining gaps not covered by pre-fetched results
+5. **Training Knowledge**: Background context and industry norms only
 
 Always cite the source of information. If a claim cannot be supported by provided data, mark it as inferred with low confidence.
 
@@ -255,23 +275,12 @@ Always cite the source of information. If a claim cannot be supported by provide
 
 ## QUALITY STANDARDS
 
-### Analysis Depth
-- Provide substantive analysis, not surface-level observations
-- Include specific details, numbers, and evidence when available
-- Connect findings to business implications and strategic context
-- Identify patterns and relationships across data sources
+These standards apply primarily to narrative `*LLM` fields. Do not add narrative text to structured fields (counts, enums, arrays) unless the schema explicitly asks for it.
 
-### Accuracy Requirements
-- Verify claims against multiple sources when possible
-- Distinguish between stated facts and inferred conclusions
-- Note contradictions or inconsistencies in source data
-- Prefer conservative estimates over speculative claims
-
-### Completeness Guidelines
-- Address all required schema fields systematically
-- Explain gaps in data rather than leaving fields unexplained
-- Provide context that helps interpret the findings
-- Include both positive and negative observations when relevant
+### Accuracy (All Fields)
+- Prefer schema compliance and correctness over verbosity
+- Distinguish stated facts vs inferred conclusions
+- Prefer conservative/unknown over guessing
 
 ## QUALITY METADATA FIELDS
 
@@ -499,6 +508,18 @@ Use web search tools if available. Mark analysisConfidence as "low" or "inferred
 ```
 {% endif %}
 
+{# === PRE-FETCHED WEB SEARCH RESULTS === #}
+{% if webSearchData and webSearchData|length > 0 %}
+### Web Search Results ({{ webSearchData|length }} results, pre-fetched)
+
+These are third-party web search results relevant to this entity. Use them to supplement page content when information is missing or to cross-reference claims.
+
+{% for result in webSearchData %}
+- **{{ result.get('title', 'No title') }}** ({{ result.get('url', '') }})
+  {{ result.get('description', '') }}
+{% endfor %}
+{% endif %}
+
 ## YOUR TASK
 
 Analyze **{{ get_display_name(record) }}** and return structured JSON output.
@@ -513,7 +534,10 @@ Analyze **{{ get_display_name(record) }}** and return structured JSON output.
 {% if edgarData is defined and edgarData and (edgarData.get('available', false) if edgarData is mapping else (edgarData.available | default(false))) %}
 2. SEC Edgar Data - Financial metrics
 {% endif %}
-3. Web Search (if tools available) - For gaps
-4. Training Knowledge - Context and industry norms
+{% if webSearchData is defined and webSearchData and webSearchData|length > 0 %}
+3. Pre-fetched Web Search Results - Third-party context already provided above
+{% endif %}
+4. Web Search Tool (if above data has gaps) - For remaining gaps only
+5. Training Knowledge - Context and industry norms
 
 Return flat JSON matching the schema. Focus on **{{ get_display_name(record) }}**.

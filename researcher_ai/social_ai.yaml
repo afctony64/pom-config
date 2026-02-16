@@ -42,6 +42,21 @@ url_boost_patterns:
   - "/blog"
   - "/podcast"
 
+# page_facts_vector tuning (declarative injector behavior)
+# Social cares about footer/header link chunks that may include "follow us on".
+page_facts_vector_boilerplate_exclude_patterns:
+  - "follow us on"
+  - "let's connect"
+
+# Split the broad multi-platform query into narrower probes (entity-agnostic).
+# The original query remains in search_queries for cached-vector usage.
+page_facts_vector_extra_search_queries_max: 4
+page_facts_vector_extra_search_queries:
+  - "LinkedIn company page profile"
+  - "GitHub organization repositories"
+  - "YouTube channel videos"
+  - "Twitter X account"
+
 # Focus areas for this researcher (prompt guidance, not used by injector)
 focus_areas:
   - Social media platforms (LinkedIn, Twitter, YouTube, etc.)
