@@ -62,9 +62,18 @@ tool_guidance:
 
       **DO NOT use brave_search for domain resolution** - use subject_domain or domain_candidates instead.
 
+      ⚠️ QUERY FORMAT RULES (prevent API errors):
+      - ALWAYS start the query with the subject name
+      - Keep queries under 80 characters total
+      - Use 3-5 focused keywords after the subject name
+      - NEVER repeat the subject name within the same query
+      - ONE search intent per query — pick the most important gap field
+      - BAD: "QuickBooks UK features payroll integrations accounting small business QuickBooks vs Wave"
+      - GOOD: "QuickBooks UK pricing features competitors"
+
       Search strategy:
       1. Check page_facts first - if they answer the field, use them
-      2. If page_facts are empty/irrelevant for a field, search: "{subject} [key terms from field description]"
+      2. If page_facts are empty/irrelevant, search: "{subject} [2-3 key terms]"
       3. For well-known subjects, general knowledge is acceptable as fallback
       For common names, add the tenant name and industry vertical to disambiguate.
 
