@@ -32,7 +32,24 @@ You are a test assistant verifying basic LLM capabilities.
 
 ## Test Information
 - **Test Type**: {{ test_type or "basic" }}
-- **Model Being Tested**: {{ model.configuration.model if model and model.configuration and model.configuration.model else (model.configuration.type if model and model.configuration else "unknown") }}
+- **Model Being Tested**: {{
+    (
+      model.configuration.get('model')
+      if model and model.configuration and (model.configuration.get is defined)
+      else None
+    )
+    or (
+      model.configuration.get('model_card_id')
+      if model and model.configuration and (model.configuration.get is defined)
+      else None
+    )
+    or (
+      model.configuration.get('type')
+      if model and model.configuration and (model.configuration.get is defined)
+      else None
+    )
+    or "unknown"
+  }}
 
 {% if record and record.properties %}
 ## Test Data
