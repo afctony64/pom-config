@@ -57,7 +57,7 @@ defaults:
 inputs:                       # Required/optional parameters
   record: { type: object }    # The entity being analyzed
   researcher_id: { type: string }
-  
+
 data_requirements:            # Data injection configuration
   injectors:
     - injector_template: page_facts_vector
@@ -197,10 +197,10 @@ tool_guidance:
     max_calls: 1
     when_to_use: |
       🔍 SEARCH ONLY IF page content lacks product details
-      
+
       **SEARCH (IF NEEDED): Product announcements**
       → "{company} product feature announcement"
-      
+
       **DON'T SEARCH FOR:**
       - Basic product info (on website)
       - Feature lists (check docs)
@@ -289,19 +289,19 @@ entity_collection: Domain
 # Analysis configuration (injected as tenant.analysis_config)
 analysis_config:
   mission: "Find B2B SaaS with APIs, 100+ customers asking for integrations"
-  
-  industry_focus: 
+
+  industry_focus:
     - b2b_saas
     - fintech
     - ecommerce_platforms
-  
+
   # Researcher-specific guidance (supplements researcher_ai)
   researcher_guidance:
     product:
       key_indicators: ["API documentation", "Integration marketplace"]
       tech_stack_emphasis: "Extract from engineering blog, job posts"
       critical_fields: ["technologyStack", "coreProducts"]
-    
+
     industry:
       naics_focus: ["518210", "511210"]
       market_signals: ["SaaS metrics", "API subdomain patterns"]
@@ -338,8 +338,8 @@ properties:
     dataType:
       - text[]
     description: >
-      Product type description - detailed narrative explaining the product's 
-      nature, capabilities, and how it delivers value. Single-element array 
+      Product type description - detailed narrative explaining the product's
+      nature, capabilities, and how it delivers value. Single-element array
       containing one comprehensive description paragraph.
     sets:
       - prompt      # ← Included in LLM JSON schema
@@ -384,9 +384,9 @@ Field descriptions are **the primary guidance** for the LLM. They should be:
 ```yaml
 - name: technologyStackLLM
   description: >
-    Technology Stack Description - detailed descriptions for each classified 
-    technology stack. Array supports multi-stack classification (ordered by 
-    similarity score, [0] is primary). Include: frameworks, languages, 
+    Technology Stack Description - detailed descriptions for each classified
+    technology stack. Array supports multi-stack classification (ordered by
+    similarity score, [0] is primary). Include: frameworks, languages,
     infrastructure, deployment model. 100-200 words per element.
 ```
 

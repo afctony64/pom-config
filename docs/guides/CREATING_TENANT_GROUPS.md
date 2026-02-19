@@ -156,7 +156,7 @@ entity:
   source_collection: Domain           # Where entities come FROM
   research_schema_prefix: ""          # Output: Research_* (no prefix)
   domain_schema: Domain
-  
+
   page_research:
     page_intelligence_schema: Page_intelligence
     page_facts_schema: Page_facts
@@ -189,12 +189,12 @@ assembly:
     - facebook.com
     - twitter.com
     - wikipedia.org
-  
+
   suitability:
     min_content_quality: 0.3
     require_readable: true
     reject_blacklisted: true
-  
+
   auto_page_discovery: true
   auto_page_facts: true
   auto_researchers: true
@@ -237,7 +237,7 @@ domain_context: |
   - Brand partnerships and sponsorships
   - Audience demographics and engagement patterns
   - Platform presence across TikTok, YouTube, Instagram
-  
+
   Key analysis dimensions:
   - Follower demographics and geographic reach
   - Content categories and posting patterns
@@ -278,7 +278,7 @@ entity:
   source_collection: Domain
   research_schema_prefix: ""
   domain_schema: Domain
-  
+
   page_research:
     page_intelligence_schema: Page_intelligence
     page_facts_schema: Page_facts
@@ -305,12 +305,12 @@ assembly:
     - tiktok.com
     - youtube.com
     - wikipedia.org
-  
+
   suitability:
     min_content_quality: 0.3
     require_readable: true
     reject_blacklisted: true
-  
+
   auto_page_discovery: true
   auto_page_facts: true
   auto_researchers: true
@@ -337,23 +337,23 @@ class TenantGroupConfig(BaseModel):
     type: str | None = Field("tenant_group", description="Type identifier")
     display_name: str = Field(..., description="Human-readable name")
     description: str | None = Field(None, description="Description of this domain")
-    
+
     # Domain context
     domain_context: str | None = Field(None, description="Domain expertise context")
     industry_focus: dict[str, list[str]] | None = Field(None)
-    
+
     # Researchers - THE KEY FIELD
     researchers: list[str] = Field(..., description="List of researcher IDs")
     researcher_mappings: list[ResearcherMapping] | None = Field(None)
-    
+
     # Entity configuration
     entity: EntitySchemaConfig | None = Field(None)
     schema_pattern: str | None = Field(None)
-    
+
     # Self-assembly
     assembly: AssemblyConfig | None = Field(None)
     entity_spawn_sources: list[EntitySpawnSource] | None = Field(None)
-    
+
     # Display names
     display_names: dict[str, str] | None = Field(None)
 ```

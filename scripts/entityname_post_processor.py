@@ -4,12 +4,13 @@ Strips web title patterns like "Company | Tagline" → "Company"
 """
 import re
 
-SEPARATORS = [' | ', ' - ', ' :: ', ' – ', ' — ']
+SEPARATORS = [" | ", " - ", " :: ", " – ", " — "]
 
-def clean_entity_name(name: str, domain: str = '') -> str:
+
+def clean_entity_name(name: str, domain: str = "") -> str:
     """
     Clean an entityName by stripping taglines and marketing text.
-    
+
     Examples:
         "Boomi | Connect everything..." → "Boomi"
         "Acme Corp - Leading Provider" → "Acme Corp"
@@ -17,29 +18,38 @@ def clean_entity_name(name: str, domain: str = '') -> str:
     """
     if not name:
         return name
-    
+
     # Strip separators and take the first part
     for sep in SEPARATORS:
         if sep in name:
             name = name.split(sep)[0].strip()
             break
-    
+
     # Also handle single character separators at the end
-    name = re.sub(r'\s*[|–—]\s*.*$', '', name).strip()
-    
+    name = re.sub(r"\s*[|–—]\s*.*$", "", name).strip()
+
     # Remove trademark symbols at the end
-    name = re.sub(r'[™®©]+$', '', name).strip()
-    
+    name = re.sub(r"[™®©]+$", "", name).strip()
+
     # If result is just the domain or generic, return empty to trigger re-extraction
-    generic_names = ['home', 'welcome', 'official', 'please', 'error', '404', 'not found']
+    generic_names = [
+        "home",
+        "welcome",
+        "official",
+        "please",
+        "error",
+        "404",
+        "not found",
+    ]
     if name.lower() in generic_names:
-        return ''
+        return ""
     if domain and name.lower() == domain.lower():
-        return ''
-    
+        return ""
+
     return name
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Test cases
     tests = [
         ("Boomi | Connect everything to achieve anything.™", "boomi.com", "Boomi"),
@@ -49,7 +59,7 @@ if __name__ == '__main__':
         ("Home", "example.com", ""),
         ("example.com", "example.com", ""),
     ]
-    
+
     for input_val, domain, expected in tests:
         result = clean_entity_name(input_val, domain)
         status = "✅" if result == expected else "❌"

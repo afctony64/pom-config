@@ -75,7 +75,7 @@ id: Research_audience
 name: Research Audience
 description: |
   Audience demographics and engagement intelligence.
-  
+
 vectorizer: none
 multiTenancyConfig:
   enabled: true
@@ -149,12 +149,12 @@ properties:
 - name: followerCount
   dataType: [number]
   description: Total follower count
-  
+
   # Skip vectorization for this field
   moduleConfig:
     text2vec-weaviate:
       skip: true
-  
+
   # Field categorization
   tags:
     - research
@@ -162,7 +162,7 @@ properties:
   sets:
     - standard
     - prompt
-  
+
   # Enum values (for Cat fields)
   enum:
     - Micro
@@ -189,7 +189,7 @@ namedVectors:
         model: Snowflake/snowflake-arctic-embed-l-v2.0
         dimensions: 1024
         vectorizeClassName: false
-  
+
   engagementVector:
     vectorizer: text2vec-weaviate
     sourceProperties:
@@ -280,10 +280,10 @@ id: Research_audience
 name: Research Audience
 description: |
   Audience Demographics & Engagement Intelligence Repository
-  
+
   RESEARCHER: Audience Demographics Analyst
   KNOWLEDGE TYPE: Entity-specific audience analysis
-  
+
   REPOSITORY CONTENTS:
   - Follower counts and growth metrics
   - Audience demographics (age, gender, location)
@@ -317,7 +317,7 @@ namedVectors:
         model: Snowflake/snowflake-arctic-embed-l-v2.0
         dimensions: 1024
         vectorizeClassName: false
-  
+
   engagementVector:
     vectorizer: text2vec-weaviate
     sourceProperties:
@@ -343,7 +343,7 @@ properties:
     description: Entity name (influencer/creator name)
     sets: [extended, system]
     tags: [identity]
-  
+
   - name: domain
     dataType: [text]
     description: Entity domain (website URL)
@@ -359,7 +359,7 @@ properties:
     description: Total follower count across all platforms
     tags: [metrics, research]
     sets: [standard, prompt]
-  
+
   - name: followersByPlatform
     dataType: [object]
     description: Follower breakdown by platform
@@ -380,7 +380,7 @@ properties:
     description: Detailed analysis of audience size and reach
     tags: [LLM]
     sets: [prompt]
-  
+
   - name: audienceSizeCat
     dataType: [text]
     description: Audience size category based on total followers
@@ -402,7 +402,7 @@ properties:
     description: Average engagement rate (likes + comments / followers)
     tags: [metrics, research]
     sets: [standard, prompt]
-  
+
   - name: engagementPatternLLM
     dataType: [text]
     description: Analysis of engagement patterns and quality
@@ -415,7 +415,7 @@ properties:
     description: Detailed audience demographics analysis
     tags: [LLM]
     sets: [prompt]
-  
+
   - name: primaryAgeGroup
     dataType: [text]
     description: Primary audience age group
@@ -428,13 +428,13 @@ properties:
       - Unknown
     tags: [Cat]
     sets: [standard, EnumCat]
-  
+
   - name: audienceInterestsLLM
     dataType: [text]
     description: Analysis of audience interests and affinities
     tags: [LLM]
     sets: [prompt]
-  
+
   - name: geographicReach
     dataType: [text[]]
     description: Primary geographic regions of audience
@@ -447,7 +447,7 @@ properties:
     description: Monthly follower growth rate (percentage)
     tags: [metrics]
     sets: [extended]
-  
+
   - name: growthAnalysisLLM
     dataType: [text]
     description: Analysis of growth trajectory and trends
@@ -460,7 +460,7 @@ properties:
     description: Estimated audience authenticity score (0-100)
     tags: [metrics]
     sets: [extended]
-  
+
   - name: authenticityIndicators
     dataType: [text[]]
     description: Indicators of audience authenticity
@@ -472,7 +472,7 @@ properties:
     dataType: [text]
     description: Date when analysis was processed
     sets: [system, metadata]
-  
+
   - name: sourceQuality
     dataType: [text]
     description: Quality rating of source data [high, medium, low, minimal]
@@ -480,7 +480,7 @@ properties:
     moduleConfig:
       text2vec-weaviate:
         skip: true
-  
+
   - name: analysisConfidence
     dataType: [text]
     description: Confidence level [high, web_verified, medium, low, inferred]
@@ -488,7 +488,7 @@ properties:
     moduleConfig:
       text2vec-weaviate:
         skip: true
-  
+
   - name: citations
     dataType: [text[]]
     description: URLs of sources used for analysis
@@ -540,20 +540,20 @@ class WeaviateClassConfig(BaseModel):
     id: str | None = None
     name: str | None = None
     description: str | None = None
-    
+
     # Vectorizer configuration
     vectorizer: str = "none"
     namedVectors: dict[str, NamedVectorConfig] | None = None
-    
+
     # Index configuration
     invertedIndexConfig: InvertedIndexConfig | None = None
-    
+
     # Multi-tenancy
     multiTenancyConfig: MultiTenancyConfig | None = None
-    
+
     # Properties
     properties: list[PropertyConfig] = Field(default_factory=list)
-    
+
     # References
     references: list[ReferenceConfig] | None = None
     reverse_references: list[ReverseReferenceConfig] | None = None
@@ -566,20 +566,20 @@ class PropertyConfig(BaseModel):
     name: str
     dataType: list[str]
     description: str | None = None
-    
+
     # Field organization
     tags: list[str] | None = None
     sets: list[str] | None = None
-    
+
     # Enum values
     enum: list[str] | None = None
-    
+
     # Nested properties (for object type)
     nestedProperties: list[PropertyConfig] | None = None
-    
+
     # Module configuration
     moduleConfig: dict[str, Any] | None = None
-    
+
     # Metadata
     metadata: dict[str, Any] | None = None
 ```

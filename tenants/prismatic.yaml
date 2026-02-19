@@ -231,6 +231,9 @@ collections:
   # Domain collection (primary entity for Entity Model) - on Cloud
   Domain: "cloud"
 
+  # Stage 1: tenant workspace long-term memory (Weaviate-backed) - on Cloud
+  TenantMemory: "cloud"
+
   # Page collections (group: url) - GPU-accelerated on Spark
   Page_facts: "spark"
   Page_intelligence: "spark"

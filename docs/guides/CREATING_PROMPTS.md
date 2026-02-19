@@ -142,7 +142,7 @@ inputs:
   researcher_id:
     description: Dynamic researcher ID (industry, audience, etc.)
     type: string
-  
+
   # Context injection (automatic)
   tenant:
     description: TenantConfig object
@@ -156,7 +156,7 @@ inputs:
     description: ResearcherAIConfig
     type: object
     required: true  # Fail if missing
-  
+
   # Data injection
   pageData:
     description: Injected page content from Page_facts
@@ -180,7 +180,7 @@ data_requirements:
         min_certainty: 0.15
         limit: 100
         inject_as: pageData
-    
+
     # Optional MCP tool injection
     - injector_template: mcp
       template_vars:
@@ -344,7 +344,7 @@ inputs:
   researcher_id:
     description: Researcher type
     type: string
-  
+
   # Injected context
   tenant:
     type: object
@@ -352,7 +352,7 @@ inputs:
   researcher_ai:
     type: object
     required: true
-  
+
   # Injected data
   pageData:
     type: array

@@ -9,7 +9,7 @@
 
 ## Why This Archive Exists
 
-These prompts were previously in `prompts/default/` as legacy copies from pom-core. 
+These prompts were previously in `prompts/default/` as legacy copies from pom-core.
 They have been superseded by canonical versions in the proper pom-config directories.
 
 **DO NOT USE prompts from this archive.** Use the canonical versions instead.
@@ -89,7 +89,7 @@ _archive/
 
 ## Deletion Schedule
 
-These archived prompts may be permanently deleted in a future release once all 
+These archived prompts may be permanently deleted in a future release once all
 applications have been verified to use the canonical locations.
 
 **Target deletion:** v2.0.0 or later

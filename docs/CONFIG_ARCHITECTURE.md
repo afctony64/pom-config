@@ -161,16 +161,16 @@ class TenantGroupConfig(BaseModel):
     type: str | None = "tenant_group"          # Type marker
     display_name: str                          # Required: human-readable name
     description: str | None = None             # Optional description
-    
+
     # Core configuration
     researchers: list[str]                     # Required: list of researcher IDs
-    
+
     # Entity configuration
     entity: EntitySchemaConfig | None = None   # Source/output schema config
-    
+
     # Self-assembly
     assembly: AssemblyConfig | None = None     # URL discovery config
-    
+
     # Display names for templates
     display_names: dict[str, str] | None = None
 ```
@@ -182,12 +182,12 @@ class TenantConfig(BaseModel):
     id: str                                    # Required: unique identifier
     name: str                                  # Required: human-readable name
     type: str = "tenant"                       # Type marker
-    
+
     tenant_group: str | None = None            # Links to TenantGroupConfig
-    
+
     collections: dict[str, str] | None = None  # Weaviate routing
     # Example: {"Research_product": "cloud", "Page_facts": "spark"}
-    
+
     analysis_config: dict[str, Any] | None = None  # Research guidance
     classifier_tenant: str | None = None       # Vec classification tenant
 ```
@@ -199,17 +199,17 @@ class ResearcherAIConfig(BaseModel):
     id: str | None = None                      # For CoreModelService lookup
     researcher_type: str                       # Required: researcher identifier
     display_name: str | None = None            # Human-readable name
-    
+
     # Identity for prompt injection
     researcher_identity: ResearcherIdentityConfig | None = None
-    
+
     # Data retrieval
     search_query: str                          # Required: keywords for page search
     page_categories: list[str] | None = None   # Page types of interest
-    
+
     # Tool usage
     tool_guidance: dict[str, ToolGuidanceConfig] | None = None
-    
+
     # Output formatting
     output_preferences: OutputPreferencesConfig | None = None
 ```

@@ -15,7 +15,7 @@ description: >
   Searches Page_facts records using vector (semantic), BM25 (keyword), or hybrid search strategies.
   Supports domain filtering and configurable search parameters.
   Used by Knowledge Base prompt for multi-strategy fact extraction.
-  
+
   Routes to Spark Weaviate instance (has text2vec-transformers vectorizer).
 
 # Tagging system
@@ -55,41 +55,41 @@ parameters:
   # Determines which search method to use
   # Options: "vector" (semantic), "bm25" (keyword), "hybrid" (both)
   search_strategy: vector  # Default: vector search
-  
+
   # Search query text (REQUIRED for all search strategies)
   # This is passed via user_input.query_text in DataFactory
   # Example: "company products services information"
-  
+
   # Hybrid search configuration
   hybrid_alpha: 0.5  # Balance between vector (1.0) and BM25 (0.0)
                      # 0.5 = balanced, 0.7 = favor vector, 0.3 = favor BM25
-  
+
   # BM25 keyword search configuration
   bm25_properties:  # Optional: Target specific fields for BM25
     - content
     - title
     - description
     - domain
-  
+
   # Vector search configuration (Note: min_certainty for fetch queries)
   # Fetch executor uses hybrid with alpha=0.9 for "vector" strategy
   # For true nearText, use search modules directly
-  
+
   # Domain filter (common use case for Page_facts)
   # Example: domain="yoco.com" to search only Yoco pages
   domain: ""  # Optional: filter by domain
-  
+
   # Relationship traversal configuration
   relationship_traversal: false  # No references available
   dynamic_templates: true
-  
+
   # No references (Page_facts has empty references array)
   references: []
-  
+
   # Limits
   limit: 30
   limit_default: 30
-  
+
   # Field set configuration
   field_set: standard
   field_set_default: standard
@@ -106,52 +106,52 @@ field_sets:
         type: text
         source: property
         description: Canonical URL of the page
-      
+
       - name: url_with_fragment
         type: text
         source: property
         description: URL with fragment for chunk navigation
-      
+
       - name: domain
         type: text
         source: property
         description: Primary domain of the page
-      
+
       - name: title
         type: text
         source: property
         description: Page title
-      
+
       - name: description
         type: text
         source: property
         description: Page description
-      
+
       - name: content
         type: text
         source: property
         description: Main page content
-      
+
       - name: chunk_index
         type: int
         source: property
         description: Position of chunk in page (0 = overview)
-      
+
       - name: chunk_type
         type: text
         source: property
         description: Semantic chunk type
-      
+
       - name: content_length
         type: int
         source: property
         description: Character length of extracted content
-      
+
       - name: content_quality_score
         type: number
         source: property
         description: Overall content quality score (0-1)
-      
+
       - name: has_rich_content
         type: boolean
         source: property
@@ -165,92 +165,92 @@ field_sets:
         type: text
         source: property
         description: Canonical URL of the page
-      
+
       - name: url_with_fragment
         type: text
         source: property
         description: URL with fragment for chunk navigation
-      
+
       - name: domain
         type: text
         source: property
         description: Primary domain of the page
-      
+
       - name: title
         type: text
         source: property
         description: Page title
-      
+
       - name: description
         type: text
         source: property
         description: Page description
-      
+
       - name: content
         type: text
         source: property
         description: Main page content
-      
+
       - name: chunk_index
         type: int
         source: property
         description: Position of chunk in page (0 = overview)
-      
+
       - name: chunk_type
         type: text
         source: property
         description: Semantic chunk type
-      
+
       - name: is_primary_chunk
         type: boolean
         source: property
         description: True for overview chunk (index 0)
-      
+
       - name: content_length
         type: int
         source: property
         description: Character length of extracted content
-      
+
       - name: content_quality_score
         type: number
         source: property
         description: Overall content quality score (0-1)
-      
+
       - name: has_rich_content
         type: boolean
         source: property
         description: Whether page has substantial content
-      
+
       - name: language
         type: text
         source: property
         description: Detected content language
-      
+
       - name: status_code
         type: int
         source: property
         description: HTTP status code
-      
+
       - name: accessible
         type: boolean
         source: property
         description: Whether page is accessible
-      
+
       - name: page_type
         type: text
         source: property
         description: Page classification
-      
+
       - name: source_sitemap
         type: text
         source: property
         description: Source sitemap URL where page was discovered
-      
+
       - name: processed_at
         type: date
         source: property
         description: Timestamp when page was processed
-      
+
       - name: source_collection
         type: text
         source: property
@@ -278,7 +278,7 @@ examples:
     code: |
       from pom_core.database.data_factory import DataFactory
       from pom_core.models.data_model import DataRequest
-      
+
       result = await data_factory.get_data(
           data_card_id="page_facts_search",
           user_input=DataRequest(
@@ -344,34 +344,34 @@ examples:
 # Implementation notes
 notes: |
   ⚠️  TENANT ROUTING IMPORTANT:
-  
+
   Page_facts routes to Spark Weaviate (has vectorizer).
   Ensure DataFactory uses tenant-aware routing:
-  
+
   from pom_core.utils.schema_router import get_factory_config_for_tenant_collection
-  
+
   factory_config = get_factory_config_for_tenant_collection(tenant_id, "Page_facts")
   if factory_config:
       factory = WeaviateDatabaseFactory(config=factory_config)
   else:
       factory = WeaviateDatabaseFactory()
-  
+
   data_factory = DataFactory(factory=factory, tenant_id=tenant_id)
-  
+
   ---
-  
+
   SEARCH STRATEGY IMPLEMENTATION:
-  
+
   - Vector: Uses hybrid with alpha=0.9 (90% vector, 10% BM25)
   - BM25: Pure keyword search
   - Hybrid: Configurable alpha balance
-  
+
   Query generation handled automatically by DataFactory.
-  
+
   ---
-  
+
   GENERATED QUERY EXAMPLES:
-  
+
   BM25:
     Get {
       Page_facts(
@@ -381,7 +381,7 @@ notes: |
         limit: 20
       ) { url content title domain }
     }
-  
+
   Hybrid:
     Get {
       Page_facts(
@@ -391,4 +391,3 @@ notes: |
         limit: 25
       ) { url content title domain }
     }
-

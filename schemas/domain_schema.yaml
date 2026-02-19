@@ -1019,6 +1019,45 @@ properties:
   - processing
 
 # ============================================================================
+# MATERIALIZED RELATIONSHIP DEPTH (batch-computed by materialize_depth_cli)
+# depth=1 means source (spawnedBy is null), depth=2..5 means N-1 hops from
+# a source via the typed relationship refs (competitorOf/customerOf/partnerOf).
+# Null means unknown or unreachable within max_depth.
+# ============================================================================
+- name: competitor_depth
+  dataType:
+  - int
+  description: Materialized depth via competitorOf refs. 1=source, 2-5=hops from source. Null=unknown.
+  indexFilterable: true
+  sets:
+  - system
+  tags:
+  - relationship
+  - materialized
+
+- name: customer_depth
+  dataType:
+  - int
+  description: Materialized depth via customerOf refs. 1=source, 2-5=hops from source. Null=unknown.
+  indexFilterable: true
+  sets:
+  - system
+  tags:
+  - relationship
+  - materialized
+
+- name: partner_depth
+  dataType:
+  - int
+  description: Materialized depth via partnerOf refs. 1=source, 2-5=hops from source. Null=unknown.
+  indexFilterable: true
+  sets:
+  - system
+  tags:
+  - relationship
+  - materialized
+
+# ============================================================================
 # PROCESSING FLAGS - SYSTEM FIELDS (pipeline-managed, except domain_research)
 # ============================================================================
 - name: domain_enriched
