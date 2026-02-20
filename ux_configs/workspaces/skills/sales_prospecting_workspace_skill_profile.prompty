@@ -1,0 +1,89 @@
+---
+name: Sales Prospecting Workspace Skill Profile
+description: >
+  Default workspace-scoped assistant behavior for SDR/prospecting. This is a UX
+  config (not an LLM prompt) expressed in prompty-style frontmatter + docs.
+
+id: sales_prospecting_workspace_skill_profile
+group: workspaces.skills
+type: ux_config
+version: 1
+
+# Stable identifier used by runtime routing/planning.
+workspace_skill_id: sales_prospecting
+
+defaults:
+  # The "persona" / operating mode for this workspace.
+  mode: sales_prospecting
+
+  # Output preferences (interpreted by the control plane; NOT a hard constraint).
+  response_style:
+    verbosity: concise          # one of [concise, normal, detailed]
+    structure: bullet_first     # one of [bullet_first, narrative_first]
+    include_next_steps: true
+    include_risks: true
+
+  # What we optimize for in this workspace.
+  priorities:
+    - speed
+    - accuracy
+    - actionability
+
+  # Progressive help: quick answer first, background hydration for follow-ups.
+  depth_preference: progressive # one of [fast, progressive, deep]
+
+  followup_policy:
+    verify_user_goal_first: true
+    ask_max_questions: 1
+    default_call_to_action: "Want a 60-second summary or a deeper competitor map?"
+
+  hydration_preferences:
+    enable_background_hydration: true
+    max_primary_research_types_per_turn: 3
+    competitor_top_k: 5
+
+learned_schema:
+  # Learned fields are optional; they should be stored in user/workspace memory,
+  # not written back into this file.
+  preferred_industries:
+    type: array
+    items: string
+    default: []
+  preferred_regions:
+    type: array
+    items: string
+    default: []
+  outreach_style:
+    type: string
+    default: ""
+
+guardrails:
+  # Control-plane invariant: personal memory can influence planning, but must
+  # never be copied into tenant+domain ecosystem caches.
+  never_store_user_private_memory_in_ecosystem: true
+  require_user_id_for_personal_memory_reads: true
+
+ui:
+  label: "Sales Prospecting (SDR)"
+  short_label: "SDR"
+  icon: "briefcase"
+---
+
+# Sales Prospecting Workspace Skill Profile
+
+This file defines the default behavior for an SDR/prospecting workspace.
+
+## Intended behavior
+
+- Fast first response: brief, actionable, and oriented around next steps.
+- Ask at most one clarifying question when the user goal is unclear.
+- Trigger background hydration so follow-up questions (competitors, customers,
+  product) become cheaper and faster.
+
+## Notes
+
+- This config is interpreted by Pomothy’s control-plane shim.
+- The router intent strings come from `prompts/knowledge/chat_query_router.prompty`.
+- Any learned preferences should be stored in workspace/user memory, not persisted
+  back into this file.
+

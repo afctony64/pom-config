@@ -1,0 +1,108 @@
+---
+name: Sales Prospecting Hydration Policy
+description: >
+  Background retrieve-only hydration rules for SDR/prospecting workspaces.
+  This is a UX config (not an LLM prompt) expressed in prompty-style frontmatter.
+
+id: sales_prospecting_hydration_policy
+group: workspaces.hydration
+type: ux_config
+version: 1
+
+applies_to_workspace_skill_ids:
+  - sales_prospecting
+
+# Must match the router intent enum exactly.
+supported_intents:
+  - entity_lookup
+  - entity_profile
+  - competitor_analysis
+  - financial_analysis
+  - market_analysis
+  - customer_analysis
+  - product_analysis
+  - leadership_analysis
+  - risk_analysis
+  - comparison
+  - exploration
+  - report_request
+  - general
+
+budgets:
+  # Hard budgets enforced by the runner.
+  max_domains_per_turn: 6          # includes the primary domain
+  max_primary_collections: 3       # top-N research types for the primary domain
+  max_competitor_domains: 5        # top-K competitor domains to hydrate
+  max_competitor_collections: 2    # collections per competitor domain
+  max_total_fetches_per_turn: 20   # safety cap across all domains/collections
+  concurrency: 3
+
+defaults:
+  include_domain_collection: true
+  relationship_traversal_depth: 1
+
+# Primary hydration rules: choose up to top-3 research types for the primary domain.
+intent_rules:
+  competitor_analysis:
+    primary_collections:
+      - Research_competitor
+      - Research_product
+      - Research_customer
+    relationship_traversal_depth: 2
+    competitor_seed:
+      enabled: true
+      # Seed competitor domains from structured fields in Research_competitor.
+      source_field: competitorDomain
+      top_k: 5
+      competitor_collections:
+        - Research_product
+        - Research_customer
+
+  customer_analysis:
+    primary_collections: [Research_customer, Research_product, Research_industry]
+    relationship_traversal_depth: 1
+
+  product_analysis:
+    primary_collections: [Research_product, Research_industry, Research_competitor]
+    relationship_traversal_depth: 1
+
+  market_analysis:
+    primary_collections: [Research_industry, Research_competitor, Research_customer]
+    relationship_traversal_depth: 2
+
+  comparison:
+    primary_collections: [Research_product, Research_customer, Research_competitor]
+    relationship_traversal_depth: 1
+
+  entity_profile:
+    primary_collections: [Research_industry, Research_product, Research_customer]
+    relationship_traversal_depth: 1
+
+  entity_lookup:
+    primary_collections: [Research_industry]
+    relationship_traversal_depth: 0
+
+  exploration:
+    primary_collections: [Research_industry, Research_product, Research_customer]
+    relationship_traversal_depth: 1
+
+  general:
+    primary_collections: [Research_industry]
+    relationship_traversal_depth: 0
+---
+
+# Sales Prospecting Hydration Policy
+
+This policy is designed to support a fast SDR workflow:
+
+- Hydrate only a small top-N set of research types for the primary entity.
+- When the intent indicates competitors/market landscape, seed competitor domains
+  from `Research_competitor.competitorDomain` and hydrate a small top-K set.
+- Enforce strict budgets so hydration never dominates the request latency.
+
+## Runner expectations
+
+- Hydration is best-effort and retrieve-only.
+- Hydration must never run without a resolved primary domain.
+- Personal memory can influence planning, but must not be stored into ecosystem caches.
+
