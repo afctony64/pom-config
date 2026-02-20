@@ -86,4 +86,3 @@ This file defines the default behavior for an SDR/prospecting workspace.
 - The router intent strings come from `prompts/knowledge/chat_query_router.prompty`.
 - Any learned preferences should be stored in workspace/user memory, not persisted
   back into this file.
-
