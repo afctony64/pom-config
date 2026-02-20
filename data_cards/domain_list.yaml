@@ -29,7 +29,7 @@ personas:
 
 parameters:
   type: fetch  # Legacy parameter format (for compatibility)
-  
+
   # Root collection - Domain IS the entity in entity model
   collection: Domain
 
@@ -38,15 +38,15 @@ parameters:
     - field: ready_for_review
       operator: equal
       value: true
-  
+
   # No traversal needed - simple Domain listing
   relationship_traversal: false
   dynamic_templates: false
-  
+
   # Fetch limits
   limit: 1000
   limit_default: 1000
-  
+
   # Field set configuration
   field_set: standard
   field_set_default: standard
@@ -76,17 +76,17 @@ field_sets:
         type: text
         source: property
         description: Domain name
-        
+
       - name: url
         type: text
         source: property
         description: Primary URL
-        
+
       - name: title
         type: text
         source: property
         description: Page title
-        
+
       - name: description
         type: text
         source: property
@@ -100,43 +100,43 @@ field_sets:
         type: text
         source: property
         description: Domain name
-        
+
       - name: url
         type: text
         source: property
         description: Primary URL
-        
+
       - name: title
         type: text
         source: property
         description: Page title
-        
+
       - name: description
         type: text
         source: property
         description: Page description
-      
+
       # Additional extended fields
       - name: content
         type: text
         source: property
         description: Page content
-      
+
       - name: site_readable
         type: boolean
         source: property
         description: Site readability status
-      
+
       - name: analysis_type
         type: text
         source: property
         description: Analysis type
-      
+
       - name: page_processing_status
         type: text
         source: property
         description: Processing status
-      
+
       - name: is_blacklisted
         type: boolean
         source: property

@@ -25,6 +25,11 @@ repos:
         entry: python scripts/hooks/block_root_markdown.py
         language: python
         files: '^[^/]+\\.md$'
+      - id: check-python-command-shim
+        name: "🐍 Enforce python/python3 in Dockerfiles [BLOCKING]"
+        entry: python scripts/hooks/check_python_command_shim.py
+        language: python
+        files: '(^|/)(Dockerfile|Dockerfile\..*)$'
 
   # ═══════════════════════════════════════════════════
   # TIER 2: YAML/CONFIG VALIDATION

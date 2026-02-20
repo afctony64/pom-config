@@ -80,7 +80,7 @@ field_tags:
 
 # ✅ FIX: Explicit list of all collections - direct parallel queries
 # No traversal, no auto-discovery - just 11 simple queries in parallel
-# 
+#
 # WORKAROUND: Until pom-core Issue #370 is fixed (parameters.field_set priority),
 # we need to explicitly set field_set on each collection.
 # Once Issue #370 is fixed, collections will inherit from parameters.field_set.

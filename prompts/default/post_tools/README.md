@@ -46,7 +46,7 @@ Tools from both sources are automatically merged and executed in priority order.
 
 **Purpose:** Enriches parallel array elements with additional context from web search and page_facts.
 
-**When Used:** 
+**When Used:**
 - Main prompt outputs parallel arrays (e.g., `keyCompetitors`, `keyExecutives`)
 - Schema has `post` fields that need enrichment (e.g., `competitorDomain`, `competitorEvidence`)
 

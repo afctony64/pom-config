@@ -82,7 +82,7 @@ domain_context: |
   - Brand partnerships and sponsorships
   - Audience demographics and engagement patterns
   - Platform presence across TikTok, YouTube, Instagram
-  
+
   Key analysis dimensions:
   - Follower demographics and geographic reach
   - Content categories and posting patterns
@@ -121,7 +121,7 @@ entity:
   source_collection: Domain
   research_schema_prefix: ""
   domain_schema: Domain
-  
+
   page_research:
     page_intelligence_schema: Page_intelligence
     page_facts_schema: Page_facts
@@ -149,12 +149,12 @@ assembly:
     - tiktok.com
     - youtube.com
     - wikipedia.org
-  
+
   suitability:
     min_content_quality: 0.3
     require_readable: true
     reject_blacklisted: true
-  
+
   auto_page_discovery: true
   auto_page_facts: true
   auto_researchers: true
@@ -197,7 +197,7 @@ user:
 # Analysis configuration
 analysis_config:
   mission: "Find emerging influencers with engaged audiences for brand partnerships"
-  
+
   industry_focus:
     - lifestyle
     - tech
@@ -206,7 +206,7 @@ analysis_config:
     - fitness
     - travel
     - food
-  
+
   researcher_guidance:
     audience:
       key_indicators:
@@ -217,14 +217,14 @@ analysis_config:
         - followerCount
         - engagementRate
         - audienceDemographics
-    
+
     content:
       focus: "Identify content themes, posting frequency, and content quality"
       critical_fields:
         - contentCategories
         - postingFrequency
         - contentStyle
-    
+
     brand:
       key_indicators:
         - "Past brand partnerships"
@@ -247,15 +247,15 @@ collections:
   Research_brand: "cloud"
   Research_engagement: "cloud"
   Research_platform: "cloud"
-  
+
   # Entity source - Cloud
   Domain: "cloud"
-  
+
   # Page collections - Spark (GPU)
   Page_facts: "spark"
   Page_intelligence: "spark"
   Page_content: "spark"
-  
+
   # Knowledge base - Spark
   Knowledge_base: "spark"
 ```
@@ -317,7 +317,7 @@ tool_guidance:
     when_to_use: |
       **SEARCH #1**: Audience demographics
       → "{name} audience demographics followers"
-      
+
       **SEARCH #2**: Engagement statistics
       → "{name} engagement rate analytics"
 
@@ -379,7 +379,7 @@ tool_guidance:
     when_to_use: |
       **SEARCH #1**: Content themes
       → "{name} content creator niche topics"
-      
+
       **SEARCH #2**: Content style
       → "{name} content style format type"
 
@@ -406,9 +406,9 @@ id: Research_audience
 name: Research Audience
 description: |
   Audience Demographics & Engagement Intelligence
-  
+
   RESEARCHER: Audience Demographics Analyst
-  
+
   CONTENTS:
   - Follower counts and growth metrics
   - Audience demographics
@@ -449,7 +449,7 @@ properties:
     description: Influencer/creator name
     sets: [extended, system]
     tags: [identity]
-  
+
   - name: domain
     dataType: [text]
     description: Website domain
@@ -465,7 +465,7 @@ properties:
     description: Total follower count
     tags: [metrics, research]
     sets: [standard, prompt]
-  
+
   - name: engagementRate
     dataType: [number]
     description: Average engagement rate
@@ -478,7 +478,7 @@ properties:
     description: Analysis of audience size and reach
     tags: [LLM]
     sets: [prompt]
-  
+
   - name: audienceSizeCat
     dataType: [text]
     description: Audience size category
@@ -494,13 +494,13 @@ properties:
     description: Detailed demographics analysis
     tags: [LLM]
     sets: [prompt]
-  
+
   - name: audienceInterestsLLM
     dataType: [text]
     description: Audience interests and affinities
     tags: [LLM]
     sets: [prompt]
-  
+
   - name: primaryAgeGroup
     dataType: [text]
     description: Primary audience age group
@@ -527,7 +527,7 @@ properties:
     dataType: [text]
     description: Analysis date
     sets: [system, metadata]
-  
+
   - name: analysisConfidence
     dataType: [text]
     description: Confidence level

@@ -186,4 +186,3 @@ properties:
     description: "Domain passed to PomFlow (e.g., yoco.com, may be same as entity)"
     index_filterable: true
     index_searchable: false
-

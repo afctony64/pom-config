@@ -33,25 +33,25 @@ personas:
 
 parameters:
   type: fetch  # Legacy parameter format (for compatibility)
-  
+
   # Default collection (fallback - search will use all collections)
   collection: Research_product
-  
+
   # ✅ KEY PARAMETER: query_text is required for search
   query_text: ""  # Required - user must provide search query
-  
+
   # ✅ KEY PARAMETER: researcher_types filters which researchers to search
   # Empty list [] = search all researchers
   # Specific list ["product", "financial"] = search only those researchers
   researcher_types: []  # Default: empty list = all researchers
-  
+
   # Search strategy: bm25, hybrid, vector
   search_strategy: hybrid  # Default: hybrid search
-  
+
   # No traversal needed - search operation
   relationship_traversal: false
   dynamic_templates: false
-  
+
   # Search limits
   limit: 100
   limit_default: 100

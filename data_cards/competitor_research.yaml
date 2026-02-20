@@ -152,7 +152,7 @@ response_structure:
 documentation:
   overview: |
     Full competitive intelligence data card with deep traversal.
-    
+
     TRAVERSAL PATHS:
     1. Research_competitor → Domain (source entity info)
     2. Research_competitor → Domain[] (via keyCompetitorRefs = competitor entities)
@@ -163,7 +163,7 @@ documentation:
     7. CompetitorDomain → Research_customer (competitor's customer intel)
     8. CompetitorDomain → Research_competitor (competitor's own competitor intel!)
     9. CompetitorDomain → Research_risk (competitor's risk intel)
-    
+
     RESULT: For each competitor in keyCompetitors, you get their FULL research dossier:
     - Domain metadata (title, description, url)
     - Industry classification and analysis

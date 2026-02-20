@@ -137,14 +137,14 @@ Tenant-specific research guidance:
 ```yaml
 analysis_config:
   mission: "Find emerging influencers with 10K-100K engaged followers in lifestyle and tech niches"
-  
+
   industry_focus: ["lifestyle", "tech", "gaming", "beauty", "fitness"]
-  
+
   researcher_guidance:
     audience:
       key_indicators: ["Engagement rate", "Follower growth", "Audience demographics"]
       critical_fields: ["followerCount", "engagementRate", "audienceDemographics"]
-    
+
     content:
       focus: "Identify content themes, posting frequency, and platform preferences"
       critical_fields: ["contentCategories", "postingFrequency", "platformMix"]
@@ -176,15 +176,15 @@ collections:
   Research_platform: "cloud"
   Research_competitor: "cloud"
   Research_journalist: "cloud"
-  
+
   # Entity source - on Cloud
   Domain: "cloud"
-  
+
   # Page collections - GPU-accelerated on Spark
   Page_facts: "spark"
   Page_intelligence: "spark"
   Page_content: "spark"
-  
+
   # Knowledge base - on Spark
   Knowledge_base: "spark"
 ```
@@ -240,7 +240,7 @@ user:
 # Analysis configuration
 analysis_config:
   mission: "Find emerging influencers with 10K-100K engaged followers in lifestyle and tech niches"
-  
+
   industry_focus:
     - lifestyle
     - tech
@@ -248,7 +248,7 @@ analysis_config:
     - beauty
     - fitness
     - travel
-  
+
   researcher_guidance:
     audience:
       key_indicators:
@@ -261,7 +261,7 @@ analysis_config:
         - engagementRate
         - audienceDemographics
         - growthRate
-    
+
     content:
       focus: "Identify content themes, posting frequency, and cross-platform presence"
       critical_fields:
@@ -269,7 +269,7 @@ analysis_config:
         - postingFrequency
         - platformMix
         - contentStyle
-    
+
     brand:
       key_indicators:
         - "Past brand partnerships"
@@ -295,23 +295,23 @@ collections:
   Research_platform: "cloud"
   Research_competitor: "cloud"
   Research_journalist: "cloud"
-  
+
   # Entity source - Cloud
   Domain: "cloud"
-  
+
   # Page collections - Spark for GPU acceleration
   Page_facts: "spark"
   Page_intelligence: "spark"
   Page_content: "spark"
   Page_researcher: "spark"
   Page_source: "spark"
-  
+
   # Knowledge base - Spark
   Knowledge_base: "spark"
-  
+
   # Fact base - Spark
   Fact_base: "spark"
-  
+
   # API cache - Spark
   API_intelligence: "spark"
 ```
@@ -330,37 +330,37 @@ class TenantConfig(BaseModel):
     name: str = Field(..., description="Human-readable tenant name")
     type: str = Field(default="tenant", description="Object type")
     description: str | None = Field(None, description="Tenant description")
-    
+
     # Tenant Group link
     tenant_group: str | None = Field(
         None,
         description="TenantGroup this tenant belongs to (e.g., 'corporate', 'influencer')"
     )
-    
+
     # Collection access
     groups: list[str] | None = Field(None, description="Collection groups")
-    
+
     # User information
     user: dict[str, Any] | None = Field(None, description="User/persona information")
-    
+
     # Analysis configuration
     analysis_config: dict[str, Any] | None = Field(None)
-    
+
     # Data sources
     data_sources: dict[str, Any] | None = Field(None)
-    
+
     # Classifier tenant for Vec classification
     classifier_tenant: str | None = Field(
         None,
         description="Tenant to use for Vec classification seed data"
     )
-    
+
     # Collection routing
     collections: dict[str, str] | None = Field(
         None,
         description="Collection routing: maps collection name to Weaviate instance"
     )
-    
+
     class Config:
         extra = "allow"  # Allow extra fields for flexibility
 ```

@@ -31,7 +31,7 @@ performance:
   tokens_per_second: 88.1  # Mac Metal benchmark (December 2025)
   context_window: 16384  # Practical for Spark (theoretical: 131072)
   context_window_max: 131072  # Official max context varies by deployment (commonly ~128K)
-  
+
   # Backend-specific benchmarks (December 2025)
   backends:
     mac_metal:

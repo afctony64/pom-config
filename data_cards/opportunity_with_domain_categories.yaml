@@ -66,7 +66,7 @@ collections:
   - collection: Opportunity
     field_set: standard  # Opportunity fields (stage, amount, probability)
     primary: true
-    
+
     # Reference to Domain (Entity Model) via domainBeacon
     references:
       domainBeacon:

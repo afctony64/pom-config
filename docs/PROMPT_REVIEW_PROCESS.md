@@ -51,7 +51,7 @@ done
 ```bash
 # Token estimates and schema field counts
 for researcher in product industry competitor customer leadership financial social partner journalist risk; do
-  echo "=== $researcher ===" 
+  echo "=== $researcher ==="
   docker exec pomai-backend-spark python -m pom_core.cli.prompt_preview_cli \
     --prompt entity/entity_researcher \
     --tenant-id prismatic \
@@ -96,7 +96,7 @@ done
 ```bash
 # Find duplicate sections
 for f in researcher_ai/*.yaml; do
-  echo "=== $f ===" 
+  echo "=== $f ==="
   grep -c "citation_format:" $f
   grep -c "tool_guidance:" $f
 done

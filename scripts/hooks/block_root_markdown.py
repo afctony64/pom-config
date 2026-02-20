@@ -10,11 +10,7 @@ ROOT_ALLOWLIST = {
 
 
 def is_blocked(path: str) -> bool:
-    return (
-        "/" not in path
-        and path.endswith(".md")
-        and path not in ROOT_ALLOWLIST
-    )
+    return "/" not in path and path.endswith(".md") and path not in ROOT_ALLOWLIST
 
 
 def main(argv: list[str]) -> int:

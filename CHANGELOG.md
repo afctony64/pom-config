@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - `central_reach` tenant configuration removed from `tenants/`.
 - Deprecated `Page_source` routing removed from `test_db` tenant.
+- `core_test_db` tenant removed (consolidated into `test_db`).
 
 ## [1.7.17] - 2026-01-29
 

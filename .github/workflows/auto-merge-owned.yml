@@ -120,7 +120,7 @@ jobs:
         run: |
           echo "⚠️ PR contains files not owned by ${{ needs.check-ownership.outputs.contributor }}"
           echo "Requesting review from code owner..."
-          gh pr comment ${{ github.event.pull_request.number }} --body "⚠️ **Review Required**
+          gh pr comment ${{ github.event.pull_request.number }} -R ${{ github.repository }} --body "⚠️ **Review Required**
 
           This PR contains files not owned by **${{ needs.check-ownership.outputs.contributor }}**.
 

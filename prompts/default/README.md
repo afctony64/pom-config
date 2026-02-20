@@ -71,7 +71,7 @@ Classifiers are:
 2. **Infrastructure-level** - Not app-specific business logic
 3. **Stable** - Rarely change once defined
 
-All other prompts (researchers, company, etc.) are **application-level** and belong 
+All other prompts (researchers, company, etc.) are **application-level** and belong
 in their canonical locations where they can be versioned and evolved appropriately.
 
 ---

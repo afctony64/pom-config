@@ -183,7 +183,7 @@ tool_guidance:
     when_to_use: |
       **SEARCH #1**: Follower demographics
       → "{influencer_name} audience demographics followers"
-      
+
       **SEARCH #2**: Engagement metrics
       → "{influencer_name} engagement rate statistics"
     recommended_searches:
@@ -283,10 +283,10 @@ tool_guidance:
     when_to_use: |
       **SEARCH #1**: Audience demographics
       → "{name} audience demographics followers age gender"
-      
+
       **SEARCH #2**: Engagement statistics
       → "{name} engagement rate statistics analytics"
-      
+
       **SEARCH #3**: Growth and reach
       → "{name} follower growth history reach impressions"
     recommended_searches:
@@ -330,25 +330,25 @@ class ResearcherAIConfig(BaseModel):
     id: str | None = Field(None, description="For CoreModelService lookup")
     researcher_type: str = Field(..., description="Researcher identifier")
     display_name: str | None = Field(None, description="Human-readable name")
-    
+
     # Researcher identity for prompt injection
     researcher_identity: ResearcherIdentityConfig | None = Field(None)
-    
+
     # Data retrieval
     search_query: str = Field(..., description="Keywords for page search")
     page_categories: list[str] | None = Field(None)
     fact_types: list[str] | None = Field(None)
-    
+
     # Tool guidance
     tool_guidance: dict[str, ToolGuidanceConfig] | None = Field(None)
-    
+
     # Analysis focus
     focus_areas: list[str] | None = Field(None)
     avoid: list[str] | None = Field(None)
-    
+
     # Output formatting
     output_preferences: OutputPreferencesConfig | None = Field(None)
-    
+
     class Config:
         extra = "allow"
 ```
