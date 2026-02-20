@@ -1019,15 +1019,15 @@ properties:
   - processing
 
 # ============================================================================
-# MATERIALIZED RELATIONSHIP DEPTH (batch-computed by materialize_depth_cli)
-# depth=1 means source (spawnedBy is null), depth=2..5 means N-1 hops from
-# a source via the typed relationship refs (competitorOf/customerOf/partnerOf).
-# Null means unknown or unreachable within max_depth.
+# MATERIALIZED RELATIONSHIP DEPTH (computed by materialize_depth_cli)
+# depth=1 means source (spawnedBy is null/empty)
+# depth=2..5 means N-1 hops from a source via typed relationship refs
+# depth=0 means processed but unreachable under homogeneous traversal rules
 # ============================================================================
 - name: competitor_depth
   dataType:
   - int
-  description: Materialized depth via competitorOf refs. 1=source, 2-5=hops from source. Null=unknown.
+  description: Materialized competitor depth. 0=unreachable(processed), 1=source, 2-5=hops from source.
   indexFilterable: true
   sets:
   - system
@@ -1038,7 +1038,7 @@ properties:
 - name: customer_depth
   dataType:
   - int
-  description: Materialized depth via customerOf refs. 1=source, 2-5=hops from source. Null=unknown.
+  description: Materialized customer depth. 0=unreachable(processed), 1=source, 2-5=hops from source.
   indexFilterable: true
   sets:
   - system
@@ -1049,7 +1049,7 @@ properties:
 - name: partner_depth
   dataType:
   - int
-  description: Materialized depth via partnerOf refs. 1=source, 2-5=hops from source. Null=unknown.
+  description: Materialized partner depth. 0=unreachable(processed), 1=source, 2-5=hops from source.
   indexFilterable: true
   sets:
   - system
