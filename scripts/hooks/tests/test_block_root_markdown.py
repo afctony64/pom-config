@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 
-from hooks.block_root_markdown import is_blocked
+from hooks.block_root_markdown import is_blocked  # noqa: E402
 
 
 class TestBlockRootMarkdown(unittest.TestCase):

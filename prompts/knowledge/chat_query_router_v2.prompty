@@ -1,0 +1,180 @@
+---
+name: Chat Query Router V2
+description: >
+  Strict schema router for chat classification and lane/delegation planning.
+
+id: chat_query_router_v2
+group: knowledge
+type: standard
+
+inputs:
+  user_question:
+    description: The user's question to classify
+    type: string
+  tenant_id:
+    description: Current tenant context
+    type: string
+    default: ""
+  available_collections:
+    description: List of available Weaviate collections for this tenant
+    type: array
+    default: []
+  conversation_history:
+    description: Recent conversation messages for context
+    type: array
+    default: []
+
+model:
+  api: chat
+  configuration:
+    type: openai_chat
+    model_card_id: groq-llama3.1-8b
+  parameters:
+    temperature: 0.0
+    max_tokens: 2000
+    response_format:
+      type: json_schema
+      json_schema:
+        name: chat_query_router_v2
+        strict: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            intent:
+              type: string
+              enum:
+                - entity_lookup
+                - entity_profile
+                - competitor_analysis
+                - financial_analysis
+                - market_analysis
+                - customer_analysis
+                - product_analysis
+                - leadership_analysis
+                - risk_analysis
+                - comparison
+                - exploration
+                - report_request
+                - general
+            confidence:
+              type: number
+              minimum: 0.0
+              maximum: 1.0
+            entities:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  type:
+                    type: string
+                  value:
+                    type: string
+                  normalized:
+                    type: string
+                required:
+                  - type
+                  - value
+                  - normalized
+            collections:
+              type: array
+              items:
+                type: string
+              minItems: 1
+            search_strategy:
+              type: string
+              enum:
+                - vector
+                - hybrid
+                - bm25
+            search_queries:
+              type: array
+              items:
+                type: string
+              minItems: 1
+            tools_needed:
+              type: array
+              items:
+                type: string
+            relationship_traversal:
+              type: boolean
+            response_lane:
+              type: string
+              enum:
+                - chat_core
+                - chat_with_tools
+                - report_intent
+                - delegated_agent
+            selected_agent:
+              type: string
+              enum:
+                - information_retrieval
+                - data_analysis
+                - intelligence_synthesis
+                - ""
+            prompt_id:
+              type: string
+              enum:
+                - chat_rag_agent
+                - chat_synthesis_agent
+                - ""
+            delegation_plan:
+              type: object
+              additionalProperties: false
+              properties:
+                selected_agent:
+                  type: string
+                prompt_id:
+                  type: string
+                lane:
+                  type: string
+                reasoning:
+                  type: string
+              required:
+                - selected_agent
+                - prompt_id
+                - lane
+                - reasoning
+            reasoning:
+              type: string
+          required:
+            - intent
+            - confidence
+            - entities
+            - collections
+            - search_strategy
+            - search_queries
+            - tools_needed
+            - relationship_traversal
+            - response_lane
+            - selected_agent
+            - prompt_id
+            - delegation_plan
+            - reasoning
+
+output_description: Strict JSON router contract for classification and delegation
+
+system: |
+  Output ONLY JSON matching the response_format schema.
+  No markdown, prose, or extra keys.
+
+  Rules:
+  - Include all keys every time.
+  - `delegation_plan.selected_agent` == `selected_agent`
+  - `delegation_plan.prompt_id` == `prompt_id`
+  - `delegation_plan.lane` == `response_lane`
+  - Always include "Domain" in collections.
+
+  Routing guidance:
+  - report_intent for explicit report requests.
+  - delegated_agent for deep comparison/strategy/synthesis.
+  - chat_with_tools when tools are needed without delegated synthesis.
+  - chat_core for direct responses without tools.
+---
+
+user: |
+  Classify this query and return ONLY the required JSON object.
+
+  Question: {{ user_question }}
+  {% if tenant_id %}Tenant: {{ tenant_id }}{% endif %}
