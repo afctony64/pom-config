@@ -1,0 +1,86 @@
+---
+name: Chat Prompt Topography
+description: >
+  Canonical prompt dependency graph for Pomothy chat runtime. This is a UX config
+  artifact consumed by control-plane tooling and documentation, not a model prompt.
+
+id: chat_prompt_topography
+group: workspaces.topography
+type: ux_config
+version: 1
+
+scope:
+  app: Pomothy
+  domain: chat
+  graph_type: prompt_dependency
+
+entrypoints:
+  - id: chat_query_router_v2
+    role: router
+    description: Classifies question and emits lane/agent/prompt contract fields.
+
+prompt_nodes:
+  - id: chat_query_router_v2
+    role: router
+    required_outputs:
+      - intent
+      - confidence
+      - entities
+      - collections
+      - search_strategy
+      - search_queries
+      - tools_needed
+      - relationship_traversal
+      - response_lane
+      - selected_agent
+      - prompt_id
+      - delegation_plan
+      - reasoning
+
+  - id: chat_rag_agent
+    role: synthesizer_light
+    used_when:
+      lane: [chat_core, chat_with_tools, report_intent]
+      context_profile: light
+
+  - id: chat_synthesis_agent
+    role: synthesizer_heavy
+    used_when:
+      lane: [chat_core, chat_with_tools, report_intent, delegated_agent]
+      context_profile: rich_or_delegated
+
+edges:
+  - from: chat_query_router_v2
+    to: chat_rag_agent
+    condition: >
+      response_lane is not delegated_agent and selected synthesis prompt_id resolves
+      to chat_rag_agent.
+  - from: chat_query_router_v2
+    to: chat_synthesis_agent
+    condition: >
+      response_lane is delegated_agent OR selected synthesis prompt_id resolves to
+      chat_synthesis_agent.
+
+resolution:
+  prompt_path_precedence:
+    - local_override_pomothy_core_config_prompts_knowledge
+    - model_service_registry_path
+    - shared_config_prompts_knowledge
+
+contracts:
+  router_contract:
+    source_prompt_id: chat_query_router_v2
+    strict_json_schema: true
+    enforcement_location: prompt_response_format
+---
+
+# Chat Prompt Topography
+
+This file is the canonical prompt dependency graph for chat.
+
+## Notes
+
+- The router is the only decision prompt in this topology.
+- Final response generation is executed by one synthesis prompt per turn.
+- This topology intentionally excludes tool/data dependencies; those belong to the
+  control/runtime topology.
