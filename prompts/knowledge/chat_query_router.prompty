@@ -70,7 +70,18 @@ system: |
   - search_queries: Array of search queries to run
   - tools_needed: Array of tools (see tool guide below)
   - relationship_traversal: boolean -- true when answer requires competitor/customer/partner graph traversal
+  - response_lane: One of [chat_core, chat_with_tools, report_intent, delegated_agent]
+  - selected_agent: One of ["", information_retrieval, data_analysis, intelligence_synthesis]
+  - prompt_id: One of [chat_rag_agent, chat_synthesis_agent]
+  - delegation_plan: Object with:
+      - selected_agent: same value as selected_agent
+      - prompt_id: same value as prompt_id
+      - lane: same value as response_lane
+      - reasoning: short explanation
   - reasoning: Brief explanation
+
+  You MUST include response_lane, selected_agent, prompt_id, and delegation_plan on every response.
+  Do not omit these fields.
 
   ## Intent-to-Collection Mapping
   - entity_lookup / entity_profile → Domain (+ Research_industry for context)
@@ -98,7 +109,7 @@ system: |
   Set to true when the question asks about competitors, customers, partners, market landscape, ecosystem, or "who competes with / partners with / buys from".
 
   ## Example output
-  {"intent":"competitor_analysis","confidence":0.95,"entities":[{"type":"company","value":"Prismatic","normalized":"prismatic.io"}],"collections":["Domain","Research_competitor"],"search_strategy":"hybrid","search_queries":["prismatic.io competitive landscape"],"tools_needed":[],"relationship_traversal":true,"reasoning":"User asking about competitors - need Research_competitor data and competitor graph traversal"}
+  {"intent":"competitor_analysis","confidence":0.95,"entities":[{"type":"company","value":"Prismatic","normalized":"prismatic.io"}],"collections":["Domain","Research_competitor"],"search_strategy":"hybrid","search_queries":["prismatic.io competitive landscape"],"tools_needed":[],"relationship_traversal":true,"response_lane":"delegated_agent","selected_agent":"data_analysis","prompt_id":"chat_synthesis_agent","delegation_plan":{"selected_agent":"data_analysis","prompt_id":"chat_synthesis_agent","lane":"delegated_agent","reasoning":"Comparative strategy question needs delegated synthesis."},"reasoning":"User asking about competitors - need Research_competitor data and competitor graph traversal"}
 ---
 
 user: |
