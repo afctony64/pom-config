@@ -15,7 +15,7 @@ description: 'LOCAL PROCESSING FACTORY - Page facts with embeddings generated lo
 
   2. Local processing: Local Page_intelligence → Page_facts (with embeddings)
 
-  3. FREE embeddings: Uses local Snowflake arctic-embed-l-v2.0 transformers
+  3. FREE embeddings: Uses local BGE-small transformers
 
   4. Scale: Process millions of pages locally with zero API costs
 
@@ -24,7 +24,7 @@ description: 'LOCAL PROCESSING FACTORY - Page facts with embeddings generated lo
 
   ✅ Zero API costs for embeddings (local transformers)
 
-  ✅ Same quality as cloud (Snowflake arctic-embed-l-v2.0)
+  ✅ Fast local embeddings optimized for retrieval quality
 
   ✅ Process 700K+ pages without cloud limits
 
@@ -33,19 +33,19 @@ description: 'LOCAL PROCESSING FACTORY - Page facts with embeddings generated lo
   ✅ Can run semantic search/classification locally
 
 
-  VECTORIZER: text2vec-transformers (Snowflake Arctic Embed L)
+  VECTORIZER: text2vec-transformers (BGE-small)
 
-  - Service: http://transformers-lb:80 (load-balanced across GPU instances)
+  - Service: http://spark-transformers-ab-384:8080 (Spark BGE endpoint)
 
-  - Model: Snowflake/snowflake-arctic-embed-l (1024 dimensions)
+  - Model: BAAI/bge-small-en-v1.5 (384 dimensions)
 
-  - Production-ready local embeddings with high quality
+  - Production-ready local embeddings with lower vector footprint
 
   '
 vectorizer: text2vec-transformers
 moduleConfig:
   text2vec-transformers:
-    inferenceUrl: http://transformers-lb:80
+    inferenceUrl: http://spark-transformers-ab-384:8080
     vectorizeClassName: false
     vectorizePropertyName: false
 multiTenancyConfig:
