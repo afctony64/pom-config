@@ -1,0 +1,115 @@
+---
+name: Chat Control Topography
+description: >
+  Canonical runtime orchestration graph for Pomothy chat. This captures control
+  flow, contracts, lanes, and observability boundaries across the unified pipeline.
+
+id: chat_control_topography
+group: workspaces.topography
+type: ux_config
+version: 1
+
+scope:
+  app: Pomothy
+  domain: chat
+  graph_type: runtime_control
+
+layers:
+  - id: ingress
+    label: Ingress
+    nodes: [chat_conversation_handler]
+
+  - id: orchestration
+    label: Orchestration
+    nodes:
+      - master_query_orchestrator
+      - chat_stream_pipeline_service
+      - chat_pipeline_service
+
+  - id: routing
+    label: LLM Routing
+    nodes:
+      - classification_service
+      - response_lane_service
+      - orchestration_planner_service
+
+  - id: execution
+    label: Data and Tools
+    nodes:
+      - entity_scope_service
+      - rag_search_service
+      - relationship_graph_service
+      - chat_tool_service
+      - adapter_tool_execution_service
+
+  - id: synthesis
+    label: Response Synthesis
+    nodes:
+      - synthesis_service
+      - agent_delegate_service
+
+  - id: delivery
+    label: Delivery and Telemetry
+    nodes:
+      - sse_stream_events
+      - diagnostics_timeline
+
+runtime_lanes:
+  - id: chat_core
+    delegated: false
+    synth_path: synthesis_service
+  - id: chat_with_tools
+    delegated: false
+    synth_path: synthesis_service
+  - id: report_intent
+    delegated: false
+    synth_path: synthesis_service
+  - id: delegated_agent
+    delegated: true
+    synth_path: agent_delegate_service
+
+contracts:
+  router_output_contract:
+    source: chat_query_router_v2
+    required_fields:
+      - intent
+      - confidence
+      - entities
+      - collections
+      - search_strategy
+      - search_queries
+      - tools_needed
+      - relationship_traversal
+      - response_lane
+      - selected_agent
+      - prompt_id
+      - delegation_plan
+      - reasoning
+  lane_selection:
+    source_of_truth: response_lane
+    ownership: llm_emitted
+    app_policy: no_keyword_or_intent_heuristics
+
+diagnostics:
+  stream_events:
+    - chat.prep.classification.started
+    - chat.prep.classification.finished
+    - chat.prep.complete
+    - chat.synthesis.started
+    - chat.synthesis.first_token
+    - chat.synthesis.finished
+  final_payload:
+    default_mode: response_only
+    diagnostics_mode: include_classification_and_metadata
+---
+
+# Chat Control Topography
+
+This file is the canonical runtime control graph for chat orchestration.
+
+## Notes
+
+- Prompt choice is represented here as lane + synthesis path, not as an independent
+  dependency tree.
+- The prompt dependency graph is defined separately in
+  `chat_prompt_topography.prompty`.
